@@ -49,15 +49,19 @@ jobs:
             cd ..
 
             # Копируем собранный фронтенд в публичную папку
-            # Предполагаем, что нужно скопировать в public_html/
-            echo "Копируем файлы из frontend/dist/ в публичную папку..."
+            # На Beget используем правильные пути и права
+            echo "Копируем файлы из frontend/dist/ в public_html..."
 
-            # rm -rf public_html/*
-            # cp -r frontend/dist/* public_html/
+            # Очищаем папку public_html (если нужно)
+            rm -rf ~/public_html/*
 
-            # Настраиваем права доступа
-            chmod -R 755 public_html/
-            chown -R dennistp:dennistp public_html/
+            # Копируем файлы с сохранением прав
+            cp -r frontend/dist/* ~/public_html/
+
+            # На Beget достаточно настроить только права доступа (без chown)
+            # Устанавливаем правильные права для файлов и папок
+            find ~/public_html -type d -exec chmod 755 {} \;
+            find ~/public_html -type f -exec chmod 644 {} \;
 
             echo "Деплой завершен успешно!"
             echo "Сайт доступен: https://test.dennistp.beget.tech"
