@@ -1,7 +1,7 @@
 services:
     laravel.test:
         build:
-            context: './vendor/laravel/sail/runtimes/8.4'
+            context: './backend/vendor/laravel/sail/runtimes/8.4'
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
@@ -10,15 +10,14 @@ services:
             - 'host.docker.internal:host-gateway'
         ports:
             - '${APP_PORT:-80}:80'
-            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
             XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
-            IGNITION_LOCAL_SITES_PATH: '${PWD}'
+            IGNITION_LOCAL_SITES_PATH: '/var/www/html'
         volumes:
-            - '.:/var/www/html'
+            - './backend:/var/www/html'
         networks:
             - sail
         depends_on:
@@ -27,6 +26,17 @@ services:
             - meilisearch
             - mailpit
             - selenium
+
+    nuxt:
+        image: node:18
+        working_dir: /app
+        volumes:
+            - './frontend:/app'
+        ports:
+            - '3000:3000'
+        command: npm run dev
+        networks:
+            - sail
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
@@ -41,7 +51,7 @@ services:
             MYSQL_EXTRA_OPTIONS: '${MYSQL_EXTRA_OPTIONS}'
         volumes:
             - 'sail-mysql:/var/lib/mysql'
-            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+            - './backend/vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
         networks:
             - sail
         healthcheck:

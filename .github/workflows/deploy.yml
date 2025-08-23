@@ -21,6 +21,9 @@ jobs:
             set -e
             echo "Сборка..."
             git pull origin main
+
+            # Backend commands
+            cd backend
             php8.4 artisan down
             php8.4 composer.phar install --no-dev --optimize-autoloader
             php8.4 artisan migrate --force
@@ -29,4 +32,11 @@ jobs:
             php8.4 artisan route:cache
             php8.4 artisan view:cache
             php8.4 artisan up
+
+            # Frontend commands
+            cd ../frontend
+            npm install
+            npm run build
+
+            cd ..
             echo "Сборка завершена!"
