@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         with:
@@ -17,15 +20,23 @@ jobs:
           username: ${{ secrets.BEGET_USER }}
           key: ${{ secrets.BEGET_PRIVATE_KEY }}
           script: |
+            set -e  # Прерывать при ошибках
             cd /home/d/dennistp/test.dennistp.beget.tech
-            set -e
-            echo "Сборка..."
+
+            echo "Обновляем код из репозитория..."
             git pull origin main
 
-            # Backend commands
+            echo "Запускаем backend обновление..."
             cd backend
+
+            # Проверяем существование composer.phar
+            if [ ! -f "composer.phar" ]; then
+                echo "Composer не найден, устанавливаем..."
+                curl -sS https://getcomposer.org/installer | php8.4
+            fi
+
             php8.4 artisan down
-            php8.4 composer.phar install --no-dev --optimize-autoloader
+            php8.4 composer.phar install --no-dev --optimize-autoloader --no-interaction
             php8.4 artisan migrate --force
             php8.4 artisan config:cache
             php8.4 artisan event:cache
@@ -33,10 +44,19 @@ jobs:
             php8.4 artisan view:cache
             php8.4 artisan up
 
-            # Frontend commands
+            echo "Запускаем frontend обновление..."
             cd ../frontend
-            npm install
-            npm run build
+
+            # Проверяем существование node_modules и package-lock.json
+            if [ ! -d "node_modules" ] || [ ! -f "package-lock.json" ]; then
+                echo "Полная установка npm пакетов..."
+                npm ci
+            else
+                echo "Обновляем npm пакеты..."
+                npm install
+            fi
+
+            npm run generate
 
             cd ..
-            echo "Сборка завершена!"
+            echo "Деплой завершен успешно!"
