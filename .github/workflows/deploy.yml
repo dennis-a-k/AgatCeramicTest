@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.BEGET_USER }}
           key: ${{ secrets.BEGET_PRIVATE_KEY }}
           script: |
-            set -e  # Прерывать при ошибках
+            set -e
             cd /home/d/dennistp/test.dennistp.beget.tech
 
             echo "Обновляем код из репозитория..."
@@ -35,7 +35,7 @@ jobs:
                 curl -sS https://getcomposer.org/installer | php8.4
             fi
 
-            # php8.4 artisan down
+            php8.4 artisan down
             php8.4 composer.phar install --no-dev --optimize-autoloader --no-interaction
             php8.4 artisan migrate --force
             php8.4 artisan config:cache
@@ -47,16 +47,22 @@ jobs:
             echo "Запускаем frontend обновление..."
             cd ../frontend
 
-            # Проверяем существование node_modules и package-lock.json
-            if [ ! -d "node_modules" ] || [ ! -f "package-lock.json" ]; then
-                echo "Полная установка npm пакетов..."
-                npm ci
-            else
-                echo "Обновляем npm пакеты..."
-                npm install
+            # Вариант 1: Используем полный путь к Node.js на Beget
+            export PATH=$PATH:/home/d/dennistp/nodejs/bin
+            export NODE_PATH=/home/d/dennistp/nodejs/lib/node_modules
+
+            # Проверяем доступность Node.js
+            if ! command -v node &> /dev/null; then
+                echo "Node.js не найден! Собираем фронтенд локально или пропускаем..."
+                exit 1
             fi
 
-            npm run generate
+            echo "Node version: $(node -v)"
+            echo "NPM version: $(npm -v)"
+
+            # Устанавливаем и собираем фронтенд
+            npm install --no-audit --no-fund
+            npm run build
 
             cd ..
             echo "Деплой завершен успешно!"
