@@ -35,7 +35,7 @@ jobs:
                 curl -sS https://getcomposer.org/installer | php8.4
             fi
 
-            php8.4 artisan down
+            # php8.4 artisan down
             php8.4 composer.phar install --no-dev --optimize-autoloader --no-interaction
             php8.4 artisan migrate --force
             php8.4 artisan config:cache
