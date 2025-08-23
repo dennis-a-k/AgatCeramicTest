@@ -12,31 +12,48 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Clean npm cache and reinstall
-        run: |
-          cd frontend
-          # Удаляем проблемные файлы
-          rm -rf node_modules package-lock.json
-          npm cache clean --force
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: frontend/package-lock.json
+          # Убираем кеширование, так как package-lock.json может отсутствовать
 
-      - name: Install frontend dependencies with retry
+      - name: Check frontend structure
+        run: |
+          echo "Проверяем структуру frontend папки:"
+          cd frontend
+          ls -la
+          echo "package-lock.json exists: $(test -f package-lock.json && echo 'YES' || echo 'NO')"
+          echo "yarn.lock exists: $(test -f yarn.lock && echo 'YES' || echo 'NO')"
+          echo "npm-shrinkwrap.json exists: $(test -f npm-shrinkwrap.json && echo 'YES' || echo 'NO')"
+
+      - name: Clean npm cache and remove lock files
         run: |
           cd frontend
-          # Первая попытка установки
-          npm install --no-audit --no-fund || true
-          # Если первая попытка неудачна, чистим и пробуем снова
+          # Удаляем все lock файлы чтобы избежать конфликтов
+          rm -f package-lock.json
+          rm -f yarn.lock
+          rm -f npm-shrinkwrap.json
+          rm -rf node_modules
+          npm cache clean --force
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          echo "Устанавливаем зависимости..."
+          npm install --no-audit --no-fund --prefer-offline --no-optional
+
+          # Если есть ошибки, пробуем с флагом --legacy-peer-deps
           if [ $? -ne 0 ]; then
-            echo "Первая попытка неудачна, очищаем и пробуем снова..."
-            rm -rf node_modules package-lock.json
-            npm install --no-audit --no-fund
+            echo "Пробуем установку с --legacy-peer-deps..."
+            npm install --no-audit --no-fund --legacy-peer-deps --no-optional
           fi
+
+      - name: Create lock file for future caching
+        run: |
+          cd frontend
+          # Создаем package-lock.json для будущих кеширований
+          npm install --package-lock-only --no-audit --no-fund
 
       - name: Build frontend
         run: |
@@ -53,9 +70,15 @@ jobs:
           elif [ -d "build" ]; then
             echo "Build успешно создан в папке build"
             ls -la build/
+          elif [ -d "out" ]; then
+            echo "Build успешно создан в папке out"
+            ls -la out/
+          elif [ -d "public" ]; then
+            echo "Build успешно создан в папке public"
+            ls -la public/
           else
-            echo "Ошибка: папка сборки не найдена"
-            ls -la
+            echo "Ищем папку сборки..."
+            find . -type d -name "*dist*" -o -name "*build*" -o -name "*out*" | head -10
             exit 1
           fi
 
@@ -66,6 +89,8 @@ jobs:
           path: |
             frontend/dist/
             frontend/build/
+            frontend/out/
+            frontend/public/
           if-no-files-found: error
 
   deploy:
@@ -79,7 +104,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: frontend-build
-          path: frontend-dist
+          path: frontend-artifacts
 
       - name: Deploy to server
         uses: appleboy/ssh-action@master
@@ -116,23 +141,33 @@ jobs:
             echo "Обновляем фронтенд..."
             cd ..
 
-            # Определяем папку сборки
-            if [ -d "frontend-dist/dist" ]; then
-                echo "Копируем собранный фронтенд из dist..."
+            # Копируем собранные файлы фронтенда
+            echo "Копируем артефакты сборки..."
+            if [ -d "frontend-artifacts/dist" ]; then
                 rm -rf frontend/dist
-                cp -r frontend-dist/dist frontend/
-            elif [ -d "frontend-dist/build" ]; then
-                echo "Копируем собранный фронтенд из build..."
+                cp -r frontend-artifacts/dist frontend/
+                echo "Скопирована папка dist"
+            elif [ -d "frontend-artifacts/build" ]; then
                 rm -rf frontend/build
-                cp -r frontend-dist/build frontend/
+                cp -r frontend-artifacts/build frontend/
+                echo "Скопирована папка build"
+            elif [ -d "frontend-artifacts/out" ]; then
+                rm -rf frontend/out
+                cp -r frontend-artifacts/out frontend/
+                echo "Скопирована папка out"
+            elif [ -d "frontend-artifacts/public" ]; then
+                rm -rf frontend/public
+                cp -r frontend-artifacts/public frontend/
+                echo "Скопирована папка public"
             else
+                echo "Содержимое frontend-artifacts:"
+                ls -la frontend-artifacts/
                 echo "Ошибка: не найдена папка сборки фронтенда"
-                ls -la frontend-dist/
                 exit 1
             fi
 
             # Очищаем временные файлы
-            rm -rf frontend-dist
+            rm -rf frontend-artifacts
 
             echo "Деплой завершен успешно!"
             echo "Приложение доступно по ссылке: https://test.dennistp.beget.tech"
@@ -142,5 +177,5 @@ jobs:
     needs: deploy
     if: always()
     steps:
-      - name: Cleanup
+      - name: Cleanup completed
         run: echo "Workflow завершен"
