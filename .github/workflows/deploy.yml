@@ -6,38 +6,12 @@ on:
       - main
 
 jobs:
-  build-frontend:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install and build frontend
-        run: |
-          cd frontend
-          npm install --no-audit --no-fund
-          npm run generate  # или npm run build
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-dist
-          path: frontend/dist/
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build-frontend
-    steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-dist
-          path: dist-files
 
       - name: Deploy to server
         uses: appleboy/ssh-action@master
@@ -47,17 +21,43 @@ jobs:
           key: ${{ secrets.BEGET_PRIVATE_KEY }}
           script: |
             set -e
-            echo "Начинаем деплой статического фронтенда..."
+            echo "Начинаем деплой..."
             cd /home/d/dennistp/test.dennistp.beget.tech
 
-            # Только обновляем статические файлы
-            echo "Копируем собранные файлы..."
-            rm -rf public_html/*  # или ваша папка для сайта
-            cp -r dist-files/* public_html/
+            echo "Обновляем код из репозитория..."
+            git pull origin main
+
+            echo "Запускаем backend обновление..."
+            cd backend
+
+            # Проверяем существование composer.phar
+            if [ ! -f "composer.phar" ]; then
+                echo "Composer не найден, устанавливаем..."
+                curl -sS https://getcomposer.org/installer | php8.4
+            fi
+
+            php8.4 artisan down
+            php8.4 composer.phar install --no-dev --optimize-autoloader --no-interaction
+            php8.4 artisan migrate --force
+            php8.4 artisan config:cache
+            php8.4 artisan event:cache
+            php8.4 artisan route:cache
+            php8.4 artisan view:cache
+            php8.4 artisan up
+
+            echo "Обновляем фронтенд (копируем собранные файлы)..."
+            cd ..
+
+            # Копируем собранный фронтенд в публичную папку
+            # Предполагаем, что нужно скопировать в public_html/
+            echo "Копируем файлы из frontend/dist/ в публичную папку..."
+
+            # rm -rf public_html/*
+            # cp -r frontend/dist/* public_html/
 
             # Настраиваем права доступа
-            chmod -R 755 public_html
-            chown -R dennistp:dennistp public_html
+            chmod -R 755 public_html/
+            chown -R dennistp:dennistp public_html/
 
             echo "Деплой завершен успешно!"
-            echo "Статический сайт доступен по ссылке: https://test.dennistp.beget.tech"
+            echo "Сайт доступен: https://test.dennistp.beget.tech"
