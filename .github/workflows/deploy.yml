@@ -55,6 +55,11 @@ jobs:
             # Очищаем папку public_html (если нужно)
             rm -rf ~/public_html/*
 
+            if [ ! -d "~/public_html" ]; then
+            echo "Создаем public_html в домашней директории..."
+            mkdir -p ~/public_html
+            fi
+
             # Копируем файлы с сохранением прав
             cp -r frontend/.output/public/* ~/public_html/
 
