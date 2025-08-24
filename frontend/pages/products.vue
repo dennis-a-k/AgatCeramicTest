@@ -1,0 +1,49 @@
+<template>
+  <div>
+    <h1>All Products</h1>
+    <ul v-if="products.length">
+      <li v-for="product in products" :key="product.id">
+        <h2>{{ product.name }}</h2>
+        <p>{{ product.description }}</p>
+        <p>Price: {{ product.price }}</p>
+        <img v-if="product.image" :src="product.image" :alt="product.name" style="width: 100px; height: auto;"/>
+      </li>
+    </ul>
+    <p v-else>No products found.</p>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+
+const products = ref([]);
+const runtimeConfig = useRuntimeConfig(); // Добавляем useRuntimeConfig
+
+onMounted(async () => {
+  try {
+    const response = await fetch(`${runtimeConfig.public.apiBaseUrl}products`); // Используем apiBaseUrl
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    products.value = data.products;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+  }
+});
+</script>
+
+<style scoped>
+/* Scoped styles for the page will go here */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+</style>

@@ -634,6 +634,12 @@ const _inlineRuntimeConfig = {
       "/__nuxt_error": {
         "cache": false
       },
+      "/api/**": {
+        "proxy": {
+          "to": "http://127.0.0.1:8000/api/**",
+          "_proxyStripBase": "/api"
+        }
+      },
       "/_nuxt/builds/meta/**": {
         "headers": {
           "cache-control": "public, max-age=31536000, immutable"
@@ -646,7 +652,9 @@ const _inlineRuntimeConfig = {
       }
     }
   },
-  "public": {}
+  "public": {
+    "apiBaseUrl": "http://127.0.0.1:8000/api/"
+  }
 };
 const envOptions = {
   prefix: "NITRO_",
