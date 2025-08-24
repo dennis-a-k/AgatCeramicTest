@@ -1,1 +1,0 @@
-import{_ as t,y as r,A as n,z as s}from"./BcCSWUb1.js";const o={};function l(a,e){return s(),r("div",null,[...e[0]||(e[0]=[n("h1",null,"Добро пожаловать в Nuxt.js!",-1),n("p",null,"Это стартовая страница вашего приложения",-1)])])}const u=t(o,[["render",l]]);export{u as default};
