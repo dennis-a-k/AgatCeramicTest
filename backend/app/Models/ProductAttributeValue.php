@@ -13,7 +13,7 @@ class ProductAttributeValue extends Model
         'string_value',
         'number_value',
         'boolean_value',
-        'text_value'
+        'text_value',
     ];
 
     protected $casts = [

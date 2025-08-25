@@ -11,7 +11,7 @@ class Attribute extends Model
     protected $fillable = [
         'name',
         'slug',
-        'type'
+        'type',
     ];
 
     public function productValues(): HasMany

@@ -27,7 +27,7 @@ class Product extends Model
         'texture',
         'pattern',
         'country',
-        'collection'
+        'collection',
     ];
 
     protected $casts = [
