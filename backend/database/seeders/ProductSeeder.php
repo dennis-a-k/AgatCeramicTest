@@ -121,18 +121,22 @@ class ProductSeeder extends Seeder
         // Создание цветов
         $color1 = Color::create([
             'name' => 'Белый',
+            'slug' => Str::slug('Белый'),
             'hex' => '#FFFFFF',
         ]);
         $color2 = Color::create([
             'name' => 'Серый',
+            'slug' => Str::slug('Серый'),
             'hex' => '#808080',
         ]);
         $color3 = Color::create([
             'name' => 'Бежевый',
+            'slug' => Str::slug('Бежевый'),
             'hex' => '#F5F5DC',
         ]);
         $color4 = Color::create([
             'name' => 'Хром',
+            'slug' => Str::slug('Хром'),
             'hex' => '#E4E5E6',
         ]);
 

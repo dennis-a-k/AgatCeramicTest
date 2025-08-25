@@ -9,7 +9,8 @@ class Color extends Model
 {
     protected $fillable = [
         'name',
-        'hex'
+        'slug',
+        'hex',
     ];
 
     public function products(): HasMany
