@@ -50,13 +50,13 @@ jobs:
 
             # Копируем собранный фронтенд в публичную папку
             # На Beget используем правильные пути и права
-            echo "Копируем файлы из frontend/.output/public/ в public_html..."
+            echo "Копируем файлы из frontend/client/.output/public/ в public_html..."
 
             # Очищаем папку public_html (если нужно)
             rm -rf public_html/*
 
             # Копируем файлы с сохранением прав
-            cp -r frontend/.output/public/* public_html/
+            cp -r frontend/client/.output/public/* public_html/
 
             # На Beget достаточно настроить только права доступа (без chown)
             # Устанавливаем правильные права для файлов и папок
