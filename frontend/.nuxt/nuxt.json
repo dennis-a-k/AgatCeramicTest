@@ -1,7 +1,7 @@
 {
-  "_hash": "QYA3RQyR-pyRYSKU5ZenUVri2188lAi2vf8GwqeagpE",
+  "_hash": "P4UlvoyQBMl66qaQtb0CXzuwSq4C8D2pt2WDRPXOo-U",
   "project": {
-    "rootDir": "/Users/dennis.a.k/Downloads/AgatCeramicTest/frontend"
+    "rootDir": "C:/MAMP/htdocs/AgatCeramicTest/frontend"
   },
   "versions": {
     "nuxt": "4.0.3"

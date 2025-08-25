@@ -1,1 +1,1 @@
-export { default } from "file:///Users/dennis.a.k/Downloads/AgatCeramicTest/frontend/node_modules/@nuxt/vite-builder/dist/runtime/client.manifest.mjs"
+export { default } from "file:///C:/MAMP/htdocs/AgatCeramicTest/frontend/node_modules/@nuxt/vite-builder/dist/runtime/client.manifest.mjs"
