@@ -1,14 +1,5 @@
 {
-  "name": "frontend",
-  "private": true,
-  "scripts": {
-    "dev": "nuxt dev",
-    "build": "nuxt build",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview"
-  },
   "dependencies": {
-    "@nuxt/content": "^2.7.2",
-    "nuxt": "^4.0.3"
+    "better-sqlite3": "^12.2.0"
   }
 }
