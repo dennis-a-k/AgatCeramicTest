@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory, SoftDeletes;
+    use SoftDeletes;
 
     protected $fillable = [
         'article',
@@ -25,10 +24,16 @@ class Product extends Model
         'brand_id',
         'is_published',
         'is_sale',
-        'surface',
+        'texture',
         'pattern',
-        'country_of_origin',
+        'country',
         'collection'
+    ];
+
+    protected $casts = [
+        'price' => 'decimal:2',
+        'is_published' => 'boolean',
+        'is_sale' => 'boolean',
     ];
 
     public function category(): BelongsTo
@@ -36,14 +41,14 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function color(): BelongsTo
-    {
-        return $this->belongsTo(Color::class);
-    }
-
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
+    }
+
+    public function color(): BelongsTo
+    {
+        return $this->belongsTo(Color::class);
     }
 
     public function attributeValues(): HasMany
@@ -51,10 +56,22 @@ class Product extends Model
         return $this->hasMany(ProductAttributeValue::class);
     }
 
-    public function getProductAttributeValue(string $attributeSlug)
+    public function scopePublished($query)
     {
-        return $this->attributeValues
-            ->where('attribute.slug', $attributeSlug)
-            ->first()?->value;
+        return $query->where('is_published', true);
+    }
+
+    public function scopeOnSale($query)
+    {
+        return $query->where('is_sale', true);
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where(function ($q) use ($search) {
+            $q->where('article', 'like', "%{$search}%")
+              ->orWhere('name', 'like', "%{$search}%")
+              ->orWhere('product_code', 'like', "%{$search}%");
+        });
     }
 }

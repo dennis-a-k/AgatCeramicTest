@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductAttributeValue extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'product_id',
         'attribute_id',
@@ -17,6 +14,11 @@ class ProductAttributeValue extends Model
         'number_value',
         'boolean_value',
         'text_value'
+    ];
+
+    protected $casts = [
+        'number_value' => 'decimal:4',
+        'boolean_value' => 'boolean',
     ];
 
     public function product(): BelongsTo

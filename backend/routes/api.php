@@ -1,4 +1,4 @@
 <?php
 
-// require __DIR__ . '/backend/backend.php';
-require __DIR__ . '/frontend/frontend.php';
+// require __DIR__ . '/admin/api.php';
+require __DIR__ . '/client/api.php';
