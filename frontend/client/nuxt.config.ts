@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://yourdomain.com/api'
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'http://test.dennistp.beget.tech/api'
     }
   },
   nitro: {
@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     routeRules: {
       '/api/**': {
         proxy: {
-          to: process.env.NUXT_PUBLIC_API_BASE_URL ? `${process.env.NUXT_PUBLIC_API_BASE_URL}**` : 'https://yourdomain.com/api/**'
+          to: process.env.NUXT_PUBLIC_API_BASE_URL ? `${process.env.NUXT_PUBLIC_API_BASE_URL}**` : 'http://test.dennistp.beget.tech/api/**'
         }
       }
     }

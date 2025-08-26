@@ -3,7 +3,7 @@
 return [
     'paths' => ['api/*'],
     'allowed_methods' => ['*'],
-    'allowed_origins' => [env('FRONTEND_URL', 'https://yourdomain.com')],
+    'allowed_origins' => [env('FRONTEND_URL', 'http://test.dennistp.beget.tech')],
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
     'exposed_headers' => [],
