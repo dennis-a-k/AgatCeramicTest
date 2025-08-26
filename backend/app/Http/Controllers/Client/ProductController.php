@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Attribute;
+use App\Models\Color;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -133,7 +134,7 @@ class ProductController extends Controller
             ->get();
 
         // Получаем доступные цвета
-        $colors = \App\Models\Color::whereHas('products', function ($q) use ($baseQuery) {
+        $colors = Color::whereHas('products', function ($q) use ($baseQuery) {
                 $q->whereIn('products.id', $baseQuery->select('id'));
             })
             ->withCount(['products' => function ($q) use ($baseQuery) {
