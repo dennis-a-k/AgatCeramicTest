@@ -48,3 +48,36 @@ li {
   border-radius: 5px;
 }
 </style>
+
+<script setup lang="ts">
+const { data: products, error } = await useFetch('/api/products', {
+  baseURL: useRuntimeConfig().public.apiBaseUrl,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  },
+  credentials: 'include', // Для передачи кук при аутентификации
+  onResponseError({ response }) {
+    console.error('API error:', response.status, response.statusText)
+  }
+})
+</script>
+
+<template>
+  <div>
+    <h1>Products</h1>
+    <div v-if="error">
+      Error loading products: {{ error.message }}
+    </div>
+    <div v-else-if="products">
+      <ul>
+        <li v-for="product in products" :key="product.id">
+          {{ product.name }} - {{ product.price }}
+        </li>
+      </ul>
+    </div>
+    <div v-else>
+      Loading...
+    </div>
+  </div>
+</template>
