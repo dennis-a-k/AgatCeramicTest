@@ -22,25 +22,26 @@
 </template>
 
 <script setup lang="ts">
-// Для Nuxt 4 используем прокси через /api/
-const { data: productsData, error } = await useFetch('/api/products', {
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  },
-  credentials: 'include',
-  onResponseError({ response }) {
-    console.error('API error:', response.status, response.statusText)
-  }
-})
+const products = ref([])
+const error = ref(null)
 
-// Преобразуем данные в нужный формат
-const products = computed(() => {
-  if (productsData.value && productsData.value.products && productsData.value.products.data) {
-    return productsData.value.products.data;
+try {
+  // Используем проксированный путь
+  const response = await $fetch('/api/products', {
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    credentials: 'include'
+  })
+  
+  if (response.products && response.products.data) {
+    products.value = response.products.data
   }
-  return [];
-})
+} catch (err) {
+  error.value = err
+  console.error('API error:', err)
+}
 </script>
 
 <style scoped>
