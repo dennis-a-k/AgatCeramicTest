@@ -12,8 +12,8 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'http://test.dennistp.beget.tech/api'
-    }
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api',
+    },
   },
   nitro: {
     compatibilityDate: '2025-08-24',

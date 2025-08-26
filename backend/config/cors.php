@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'paths' => ['api/*'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
     'allowed_methods' => ['*'],
-    'allowed_origins' => [env('FRONTEND_URL', 'http://test.dennistp.beget.tech')],
+    'allowed_origins' => [env('FRONTEND_URL', 'http://test.dennistp.beget.tech/')],
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
     'exposed_headers' => [],
