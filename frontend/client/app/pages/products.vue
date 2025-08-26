@@ -22,8 +22,22 @@
 </template>
 
 <script setup lang="ts">
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  image: string | null;
+}
+
+interface ProductResponse {
+  products: {
+    data: Product[];
+  };
+}
+
 // Для Nuxt 4 используем прокси через /api/
-const { data: productsData, error } = await useFetch('/api/products', {
+const { data: productsData, error } = await useFetch<ProductResponse>('/api/products', {
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
