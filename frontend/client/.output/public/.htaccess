@@ -1,0 +1,11 @@
+RewriteEngine On
+
+# Маршрутизация API к бэкенду (ПЕРВЫМ правилом)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/(.*)$ ../backend/public/index.php?route=api/$1 [L,QSA]
+
+# Статические файлы фронтенда
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.html [L]

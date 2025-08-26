@@ -22,9 +22,8 @@
 </template>
 
 <script setup lang="ts">
-const runtimeConfig = useRuntimeConfig();
-const { data: productsData, error } = await useFetch('/products', {
-  baseURL: runtimeConfig.public.apiBaseUrl,
+// Для Nuxt 4 используем прокси через /api/
+const { data: productsData, error } = await useFetch('/api/products', {
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
