@@ -3,26 +3,31 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
+use App\Services\CategoryService;
+use Illuminate\Http\JsonResponse;
 
 class CategoryController extends Controller
 {
-    public function index()
-    {
-        $categories = Category::with('children')
-            ->whereNull('parent_id')
-            ->where('is_active', true)
-            ->orderBy('order')
-            ->get();
+    protected $categoryService;
 
+    public function __construct(CategoryService $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }
+
+    public function index(): JsonResponse
+    {
+        $categories = $this->categoryService->getAllCategories();
         return response()->json($categories);
     }
 
-    public function show($id)
+    public function show($id): JsonResponse
     {
-        $category = Category::with(['children', 'filterableAttributes'])
-            ->where('is_active', true)
-            ->findOrFail($id);
+        $category = $this->categoryService->getCategoryById($id);
+
+        if (!$category) {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
 
         return response()->json($category);
     }

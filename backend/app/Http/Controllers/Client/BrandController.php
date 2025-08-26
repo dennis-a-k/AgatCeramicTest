@@ -3,23 +3,31 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Models\Brand;
+use App\Services\BrandService;
+use Illuminate\Http\JsonResponse;
 
 class BrandController extends Controller
 {
-    public function index()
-    {
-        $brands = Brand::where('is_active', true)
-            ->orderBy('name')
-            ->get();
+    protected $brandService;
 
+    public function __construct(BrandService $brandService)
+    {
+        $this->brandService = $brandService;
+    }
+
+    public function index(): JsonResponse
+    {
+        $brands = $this->brandService->getAllBrands();
         return response()->json($brands);
     }
 
-    public function show($id)
+    public function show($id): JsonResponse
     {
-        $brand = Brand::where('is_active', true)
-            ->findOrFail($id);
+        $brand = $this->brandService->getBrandById($id);
+
+        if (!$brand) {
+            return response()->json(['message' => 'Brand not found'], 404);
+        }
 
         return response()->json($brand);
     }
