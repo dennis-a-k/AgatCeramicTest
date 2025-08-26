@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>All Products</h1>
-    <nuxt-link to="/">Home</nuxt-link>
+    <h1>Все товары</h1>
+    <nuxt-link to="/">Главная страница</nuxt-link>
     <div v-if="error">
       Error loading products: {{ error.message }}
     </div>
