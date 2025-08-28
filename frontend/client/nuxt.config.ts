@@ -8,6 +8,18 @@ export default defineNuxtConfig({
     '@nuxt/scripts',
     '@nuxtjs/sitemap',
   ],
+  
+  // Добавьте эти настройки
+  app: {
+    baseURL: '/', // Убедитесь, что это правильный базовый путь
+    buildAssetsDir: '_nuxt/',
+  },
+  
+  // Настройки для генерации
+  generate: {
+    fallback: '404.html'
+  },
+  
   runtimeConfig: {
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000',
