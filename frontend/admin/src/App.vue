@@ -5,20 +5,20 @@ const products = ref([])
 const loading = ref(false)
 const error = ref(null)
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
 const fetchProducts = async () => {
   loading.value = true
   error.value = null
   
   try {
-    const response = await fetch('http://test.dennistp.beget.tech/api/products')
+    const response = await fetch(`${API_BASE_URL}/api/products`)
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
     
     const data = await response.json()
-    console.log(data);
-    
     products.value = data.products.data
   } catch (err) {
     error.value = err.message
