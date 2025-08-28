@@ -10,13 +10,15 @@ const fetchProducts = async () => {
   error.value = null
   
   try {
-    const response = await fetch('/api/products')
+    const response = await fetch('http://test.dennistp.beget.tech/api/products')
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
     
     const data = await response.json()
+    console.log(data);
+    
     products.value = data.products.data
   } catch (err) {
     error.value = err.message
