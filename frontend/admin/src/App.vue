@@ -17,7 +17,7 @@ const fetchProducts = async () => {
     }
     
     const data = await response.json()
-    products.value = data
+    products.value = data.products.data
   } catch (err) {
     error.value = err.message
     console.error('Error fetching products:', err)
