@@ -1,3 +1,5 @@
+import { defineNuxtConfig } from 'nuxt/config'
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
@@ -22,6 +24,7 @@ export default defineNuxtConfig({
     strict: true
   },
   nitro: {
+    compatibilityDate: '2025-08-24',
     routeRules: {
       '/api/**': {
         proxy: `${process.env.NUXT_PUBLIC_API_BASE_URL}/api/**`
