@@ -53,14 +53,20 @@ jobs:
             # echo "Копируем файлы из frontend/client/.output/public/ в public_html..."
 
             # Очищаем папку public_html (если нужно)
-            # rm -rf public_html/*
+            rm -rf public_html/*
 
             # Копируем файлы с сохранением прав
-            # cp -r frontend/client/.output/public/* public_html/
-
+            cp -r frontend/client/.output/public/* public_html/
+            cd public_html
+            # Симлинк на Laravel (для API)
+            ln -s ../backend/public backend
+            # Симлинк на админку
+            ln -s ../frontend/admin/dist admin
+            cd ..
+            
             # На Beget достаточно настроить только права доступа (без chown)
             # Устанавливаем правильные права для файлов и папок
-            # find public_html -type d -exec chmod 755 {} \;
-            # find public_html -type f -exec chmod 644 {} \;
+            find public_html -type d -exec chmod 755 {} \;
+            find public_html -type f -exec chmod 644 {} \;
 
             echo "Деплой завершен успешно!"
