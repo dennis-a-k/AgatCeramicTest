@@ -3,7 +3,7 @@
     <h1 class="text-3xl font-bold mb-8">Наши товары</h1>
 
     <NuxtLink to="/"
-      class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-lg font-medium transition-colors">
+      class="btn btn-primary">
       Главная страница
     </NuxtLink>
     <hr>

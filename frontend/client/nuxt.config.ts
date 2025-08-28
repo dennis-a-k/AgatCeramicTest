@@ -1,42 +1,39 @@
-import { defineNuxtConfig } from 'nuxt/config'
-
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  ssr: true,
   modules: [
-    '@nuxt/image',
-    '@nuxt/ui',
-    '@nuxt/scripts',
-    '@nuxtjs/sitemap',
+    '@nuxtjs/sitemap'
   ],
-  runtimeConfig: {
-    public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE_URL,
-    },
-  },
+  plugins: [
+    './plugins/bootstrap.client.ts'
+  ],
+
+  // Настройки Sitemap
   sitemap: {
-    exclude: ['/admin/**', '/api/**'],
-    xsl: false,
-  },
-  typescript: {
-    typeCheck: false,
-    strict: true
-  },
-  nitro: {
-    compatibilityDate: '2025-08-24',
-    routeRules: {
-      '/api/**': {
-        proxy: `${process.env.NUXT_PUBLIC_API_BASE_URL}/api/**`
-      }
+    hostname: 'https://yourdomain.com', // Замените на ваш домен
+    gzip: true,
+    routes: async () => {
+      // Здесь можно динамически генерировать routes для sitemap
+      return [
+        '/',
+        '/about',
+        '/contact'
+        // Добавьте свои маршруты
+      ]
     }
   },
-  vite: {
-    css: {
-      devSourcemap: false
-    },
-    build: {
-      sourcemap: false
+
+  // Настройки сборки
+  build: {
+    transpile: ['bootstrap']
+  },
+
+  // Настройки для SEO
+  app: {
+    head: {
+      charset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1',
     }
   }
+
 })
