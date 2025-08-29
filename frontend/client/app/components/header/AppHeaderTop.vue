@@ -2,18 +2,36 @@
     <div class="header-top">
         <div class="container">
             <div class="row justify-content-between align-items-center">
-                <div class="col">
+                <div class="col-auto">
                     <div class="welcome-text">
-                        <p>World Wide Completely Free Returns and Shipping</p>
+                        <p>Москва (Пн.-Пт. 10:00-18:00)</p>
                     </div>
                 </div>
                 <div class="col d-none d-lg-block">
                     <div class="top-nav">
                         <ul>
-                            <li><a href="tel:0123456789"><i class="fa fa-phone"></i> +012 3456 789</a></li>
-                            <li><a href="mailto:demo@example.com"><i class="fa fa-envelope-o"></i> demo@example.com</a>
+                            <li><a href="#">
+                                    Оплата и доставка
+                                </a>
                             </li>
-                            <li><a href="my-account.html"><i class="fa fa-user"></i> Account</a></li>
+                            <li><a href="#">
+                                    Возврат и замена
+                                </a>
+                            </li>
+                            <li><a href="#">
+                                    Заказать звонок
+                                </a>
+                            </li>
+                            <li><a href="tel:+79999999999">
+                                    <FontAwesomeIcon :icon="['fas', 'phone']" :style="{ color: iconColor }" />
+                                    &nbsp;&nbsp;+7 (999) 999-99-99
+                                </a>
+                            </li>
+                            <li><a href="mailto:zakaz@agatceramic.ru">
+                                    <FontAwesomeIcon :icon="['far', 'envelope']" :style="{ color: iconColor }" />
+                                    &nbsp;&nbsp;zakaz@agatceramic.ru
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -21,3 +39,7 @@
         </div>
     </div>
 </template>
+
+<script setup>
+const iconColor = '#788da3'
+</script>

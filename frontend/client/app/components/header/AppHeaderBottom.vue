@@ -12,7 +12,7 @@
                         <form action="#">
                             <input type="text" placeholder="Search">
                             <button>
-                                <FontAwesomeIcon :icon="['fas', 'home']" />
+                                <FontAwesomeIcon :icon="['fas', 'magnifying-glass']" />
                             </button>
                         </form>
                     </div>
