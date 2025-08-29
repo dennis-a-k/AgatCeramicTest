@@ -5,9 +5,11 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap'
   ],
   plugins: [
-    './plugins/bootstrap.client.ts'
+    '~/plugins/bootstrap.client.ts'
   ],
-
+  css: [
+    '~/assets/scss/main.scss'
+  ],
   // Настройки Sitemap
   sitemap: {
     hostname: 'https://yourdomain.com', // Замените на ваш домен
