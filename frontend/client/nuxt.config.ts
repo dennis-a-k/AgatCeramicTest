@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     '@nuxtjs/sitemap',
+    '@nuxt/image',
   ],
   plugins: [
     '~/plugins/bootstrap.client.ts',

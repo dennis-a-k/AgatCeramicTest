@@ -4,7 +4,7 @@
             <div class="row justify-content-between align-items-center">
                 <div class="col-lg-3 col">
                     <div class="header-logo">
-                        <a href="index.html"><img src="" alt="Site Logo"></a>
+                        <NuxtLink to="/"><NuxtImg src="/images/logo.svg" alt="Site Logo" /></NuxtLink>
                     </div>
                 </div>
                 <div class="col-lg-6 d-none d-lg-block">
