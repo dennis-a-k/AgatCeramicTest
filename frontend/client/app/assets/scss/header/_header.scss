@@ -40,7 +40,7 @@ header {
 						margin-right: 30px;
 
 						@media #{$desktop-device} {
-							margin-right: 20px;
+							margin-right: 10px;
 						}
 					}
 
@@ -87,7 +87,9 @@ header {
 
 			&>* {
 				&+* {
-					margin-left: 15px;
+					& {
+						margin-left: 15px;
+					}
 
 					@media #{$desktop-device} {}
 
@@ -180,7 +182,9 @@ header {
 
 			& li {
 				&+li {
-					margin-left: 50px;
+					& {
+						margin-left: 50px;
+					}
 
 					@media #{$desktop-device} {
 						margin-left: 40px;
@@ -208,6 +212,12 @@ header {
 							text-align: left;
 							opacity: 0;
 							visibility: hidden;
+							min-width: 250px;
+							left: auto !important;
+							background: #fff;
+							display: block;
+							padding: 20px 0;
+							box-shadow: -1px 10px 80px -15px rgba(0, 0, 0, 0.3);
 							-o-transform-origin: 0% 0%;
 							-ms-transform-origin: 0% 0%;
 							-moz-transform-origin: 0% 0%;
@@ -220,16 +230,10 @@ header {
 							-o-transform: rotateX(-75deg);
 							-moz-transform: rotateX(-75deg);
 							-webkit-transform: rotateX(-75deg);
-							min-width: 250px;
-							left: auto !important;
-							background: #fff;
-							display: block;
 							-o-transition: -o-transform 0.3s, opacity 0.3s;
 							-ms-transition: -ms-transform 0.3s, opacity 0.3s;
 							-moz-transition: -moz-transform 0.3s, opacity 0.3s;
 							-webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
-							padding: 20px 0;
-							box-shadow: -1px 10px 80px -15px rgba(0, 0, 0, 0.3);
 						}
 
 						& li {
@@ -302,10 +306,12 @@ header {
 
 						& ul {
 							&.sub-menu.sub-menu-2 {
-								left: 100% !important;
-								transform: translateY(-30px);
-								opacity: 0;
-								visibility: hidden;
+								& {
+									left: 100% !important;
+									transform: translateY(-30px);
+									opacity: 0;
+									visibility: hidden;
+								}
 
 								@media #{$laptop-device} {
 									left: 95% !important;
@@ -335,6 +341,10 @@ header {
 					padding: 30px 0px 30px 30px;
 					opacity: 0;
 					visibility: hidden;
+					left: 0;
+					width: 100%;
+					z-index: 2;
+					box-shadow: -1px 10px 80px -15px rgba(0, 0, 0, 0.3);
 					-o-transform-origin: 0% 0%;
 					-ms-transform-origin: 0% 0%;
 					-moz-transform-origin: 0% 0%;
@@ -347,21 +357,19 @@ header {
 					-o-transform: rotateX(-75deg);
 					-moz-transform: rotateX(-75deg);
 					-webkit-transform: rotateX(-75deg);
-					left: 0;
-					width: 100%;
-					z-index: 2;
 					-o-transition: -o-transform 0.3s, opacity 0.3s;
 					-ms-transition: -ms-transform 0.3s, opacity 0.3s;
 					-moz-transition: -moz-transform 0.3s, opacity 0.3s;
 					-webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
 					z-index: 15;
-					box-shadow: -1px 10px 80px -15px rgba(0, 0, 0, 0.3);
 
 					& li {
 						& ul {
-							width: 25%;
-							margin-right: 30px;
-							border-right: 1px solid #ebebeb;
+							& {
+								width: 25%;
+								margin-right: 30px;
+								border-right: 1px solid #ebebeb;
+							}
 
 							& li {
 								&.title {
@@ -453,8 +461,6 @@ header {
 			&:hover {
 				background-color: $theme-color;
 			}
-
-			i {}
 		}
 	}
 
