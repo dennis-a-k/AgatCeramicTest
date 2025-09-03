@@ -23,12 +23,12 @@
                                 </a>
                             </li>
                             <li><a href="tel:+79999999999">
-                                    <FontAwesomeIcon :icon="['fas', 'phone']" :style="{ color: iconColor }" />
+                                    <i class="fa fa-phone"></i>
                                     &nbsp;&nbsp;+7 (999) 999-99-99
                                 </a>
                             </li>
                             <li><a href="mailto:zakaz@agatceramic.ru">
-                                    <FontAwesomeIcon :icon="['far', 'envelope']" :style="{ color: iconColor }" />
+                                    <i class="fa fa-envelope-o"></i>
                                     &nbsp;&nbsp;zakaz@agatceramic.ru
                                 </a>
                             </li>
@@ -39,7 +39,3 @@
         </div>
     </div>
 </template>
-
-<script setup>
-const iconColor = '#788da3'
-</script>

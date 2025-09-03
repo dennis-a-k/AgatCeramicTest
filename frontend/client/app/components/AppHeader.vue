@@ -4,20 +4,13 @@
 
     <AppHeaderBottom />
 
+    <AppHeaderBottomMobile />
+
     <AppNavbar />
 
-    <div class="mobile-search-box d-lg-none">
-      <div class="container">
-        <!-- mobile search start -->
-        <div class="search-element max-width-100">
-          <form action="#">
-            <input type="text" placeholder="Search">
-            <button><i class="pe-7s-search"></i></button>
-          </form>
-        </div>
-        <!-- mobile search start -->
-      </div>
-    </div>
+    <AppNavAlphabet />
+
+    <SearchMobileForm />
   </header>
 </template>
 
@@ -25,7 +18,10 @@
 import { onMounted, onUnmounted } from 'vue'
 import AppHeaderTop from '~/components/header/AppHeaderTop.vue'
 import AppHeaderBottom from '~/components/header/AppHeaderBottom.vue'
+import AppHeaderBottomMobile from '~/components/header/AppHeaderBottomMobile.vue'
 import AppNavbar from '~/components/navbar/AppNavbar.vue'
+import AppNavAlphabet from '~/components/navbar/AppNavAlphabet.vue'
+import SearchMobileForm from '~/components/ui/SearchMobileForm.vue'
 
 // Проверка на клиентское окружение
 const isClient = typeof window !== 'undefined'
