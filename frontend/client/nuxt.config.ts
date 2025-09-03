@@ -10,7 +10,8 @@ export default defineNuxtConfig({
   ],
   css: [
     '~/assets/scss/main.scss',
-    '@fortawesome/fontawesome-svg-core/styles.css',
+    '~/assets/css/font.awesome.css',
+    '~/assets/css/pe-icon-7-stroke.css',
   ],
   // Настройки Sitemap
   sitemap: {
