@@ -10,9 +10,8 @@
                 <div class="col d-none d-lg-block">
                     <div class="top-nav">
                         <ul>
-                            <li><a href="#">
-                                    Оплата и доставка
-                                </a>
+                            <li>
+                                <NuxtLink to="/delivery">Оплата и доставка</NuxtLink>
                             </li>
                             <li><a href="#">
                                     Возврат и замена
