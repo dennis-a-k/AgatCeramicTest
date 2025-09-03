@@ -5,10 +5,8 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
     '@nuxt/image',
   ],
-  plugins: [
-    '~/plugins/bootstrap.client.ts',
-  ],
   css: [
+    'bootstrap/dist/css/bootstrap.min.css',
     '~/assets/scss/main.scss',
     '~/assets/css/font.awesome.css',
     '~/assets/css/pe-icon-7-stroke.css',
@@ -28,10 +26,7 @@ export default defineNuxtConfig({
     }
   },
 
-  // Настройки сборки
-  build: {
-    transpile: ['bootstrap']
-  },
+
 
   // Настройки для SEO
   app: {
