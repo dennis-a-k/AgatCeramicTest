@@ -1,9 +1,11 @@
-@use "variables" as *;
+@use 'variables' as *;
 // @use "mixins";
-@use "common";
+@use 'common';
 
-@use "buttons/button";
+@use 'buttons/button';
 
-@use "header/header";
-@use "header/mobile-header";
-@use "header/offcanvas";
+@use 'header/header';
+@use 'header/mobile-header';
+@use 'header/offcanvas';
+
+@use 'page-contacts/contact';

@@ -35,7 +35,7 @@
             <li><a href="about.html">Плитка</a></li>
             <li><a href="about.html">Мозаика</a></li>
             <li><a href="about.html">Дизайнерам</a></li>
-            <li><a href="about.html">Контакты</a></li>
+            <li><NuxtLink to="/contacts">Контакты</NuxtLink></li>
             <li><a href="about.html" class="sail">Распродажа</a></li>
           </ul>
         </div>
