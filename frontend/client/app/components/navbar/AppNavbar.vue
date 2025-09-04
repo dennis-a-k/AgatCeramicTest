@@ -34,7 +34,11 @@
             <li><a href="about.html">Керамогранит</a></li>
             <li><a href="about.html">Плитка</a></li>
             <li><a href="about.html">Мозаика</a></li>
-            <li><a href="about.html">Дизайнерам</a></li>
+            <li>
+              <NuxtLink to="/partnerships" target="_blank"
+                >Дизайнерам</NuxtLink
+              >
+            </li>
             <li><NuxtLink to="/contacts">Контакты</NuxtLink></li>
             <li><a href="about.html" class="sail">Распродажа</a></li>
           </ul>
