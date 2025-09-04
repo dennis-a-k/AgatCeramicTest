@@ -13,7 +13,9 @@
               <li>
                 <NuxtLink to="/delivery">Оплата и доставка</NuxtLink>
               </li>
-              <li><a href="#"> Возврат и замена </a></li>
+              <li>
+                <NuxtLink to="/return">Возврат и замена</NuxtLink>
+              </li>
               <li><a href="#"> Заказать звонок </a></li>
               <li>
                 <a href="tel:+79999999999">
