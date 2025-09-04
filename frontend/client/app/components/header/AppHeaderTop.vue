@@ -20,13 +20,13 @@
               <li>
                 <a href="tel:+79999999999">
                   <i class="fa fa-phone"></i>
-                  &nbsp;&nbsp;+7 (999) 999-99-99
+                  +7 (999) 999-99-99
                 </a>
               </li>
               <li>
                 <a href="mailto:zakaz@agatceramic.ru">
                   <i class="fa fa-envelope-o"></i>
-                  &nbsp;&nbsp;zakaz@agatceramic.ru
+                  zakaz@agatceramic.ru
                 </a>
               </li>
             </ul>

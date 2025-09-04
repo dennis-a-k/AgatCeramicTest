@@ -58,12 +58,9 @@ header {
             }
 
             i {
-              font-size: 18px;
+              font-size: 15px;
               color: $theme-color;
-
-              @media #{$desktop-device} {
-                margin-right: 5px;
-              }
+              margin-right: 5px;
             }
           }
         }
