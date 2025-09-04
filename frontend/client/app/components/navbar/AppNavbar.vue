@@ -28,7 +28,7 @@
               <a href="#">Услуги <i class="fa fa-angle-down"></i></a>
               <ul class="sub-menu">
                 <li><NuxtLink to="/rezka">Резка</NuxtLink></li>
-                <li><a href="index-2.html">Роспись плитки</a></li>
+                <li><NuxtLink to="/rospis">Роспись плитки</NuxtLink></li>
               </ul>
             </li>
             <li><a href="about.html">Керамогранит</a></li>
