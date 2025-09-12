@@ -33,7 +33,7 @@
 
   <section class="fullscreen-section" id="hero">
     <NuxtImg
-      src="/images/page-partnerships/main.png"
+      src="/images/page-partnerships/section-1.png"
       alt="Дизайн интерьера"
       class="section-bg"
     />
