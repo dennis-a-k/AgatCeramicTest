@@ -168,15 +168,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
-
-useHead({
-  link: [
-    {
-      rel: 'stylesheet',
-      href: '/assets/css/font-awesome/css/all.min.css'
-    }
-  ]
-});
+import '~/assets/css/font-awesome/css/all.min.css';
 
 definePageMeta({
   layout: 'partnerships',
