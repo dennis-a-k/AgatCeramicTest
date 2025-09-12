@@ -1,29 +1,15 @@
 <template>
   <div class="scroll-nav">
-    <div
-      v-for="section in sectionsData"
-      :key="section.id"
-      class="nav-dot"
-      :class="{ active: activeSectionId === section.id }"
-      :data-title="section.title"
-      @click="scrollToSection(section.id)"
-    ></div>
+    <div v-for="section in sectionsData" :key="section.id" class="nav-dot"
+      :class="{ active: activeSectionId === section.id }" :data-title="section.title"
+      @click="scrollToSection(section.id)"></div>
   </div>
 
-  <header
-    id="mainHeader"
-    :class="{ scrolled: isHeaderScrolled }"
-    ref="mainHeader"
-  >
+  <header id="mainHeader" :class="{ scrolled: isHeaderScrolled }" ref="mainHeader">
     <div class="header-container">
       <NuxtLink to="/">
         <div class="row align-items-center logo">
-          <NuxtImg
-            src="/images/logo.svg"
-            class="col-3 pe-0"
-            alt="logo"
-            style="filter: invert(1) brightness(2)"
-          />
+          <NuxtImg src="/images/logo.svg" class="col-3 pe-0" alt="logo" style="filter: invert(1) brightness(2)" />
           <h3 class="col-9 m-0">Agat<span>Ceramic</span></h3>
         </div>
       </NuxtLink>
@@ -32,11 +18,7 @@
   </header>
 
   <section class="fullscreen-section" id="hero">
-    <NuxtImg
-      src="/images/page-partnerships/section-1.png"
-      alt="Дизайн интерьера"
-      class="section-bg"
-    />
+    <NuxtImg src="/images/page-partnerships/section-1.png" alt="Дизайн интерьера" class="section-bg" />
     <div class="section-overlay"></div>
     <div class="section-content">
       <h1>Превратите ваши проекты в источник дохода</h1>
@@ -51,11 +33,7 @@
   </section>
 
   <section class="fullscreen-section" id="commission">
-    <NuxtImg
-      src="/images/page-partnerships/section-2.png"
-      alt="Высокие комиссионные"
-      class="section-bg"
-    />
+    <NuxtImg src="/images/page-partnerships/section-2.png" alt="Высокие комиссионные" class="section-bg" />
     <div class="section-overlay"></div>
     <div class="section-content">
       <div class="benefit-card">
@@ -76,11 +54,7 @@
   </section>
 
   <section class="fullscreen-section" id="exclusive">
-    <NuxtImg
-      src="/images/page-partnerships/section-3.png"
-      alt="Эксклюзивные материалы"
-      class="section-bg"
-    />
+    <NuxtImg src="/images/page-partnerships/section-3.png" alt="Эксклюзивные материалы" class="section-bg" />
     <div class="section-overlay"></div>
     <div class="section-content">
       <div class="benefit-card">
@@ -102,11 +76,7 @@
   </section>
 
   <section class="fullscreen-section" id="manager">
-    <NuxtImg
-      src="/images/page-partnerships/section-4.png"
-      alt="Персональный менеджер"
-      class="section-bg"
-    />
+    <NuxtImg src="/images/page-partnerships/section-4.png" alt="Персональный менеджер" class="section-bg" />
     <div class="section-overlay"></div>
     <div class="section-content">
       <div class="benefit-card">
@@ -125,11 +95,7 @@
   </section>
 
   <section class="fullscreen-section" id="content">
-    <NuxtImg
-      src="/images/page-partnerships/section-5.png"
-      alt="Готовый контент"
-      class="section-bg"
-    />
+    <NuxtImg src="/images/page-partnerships/section-5.png" alt="Готовый контент" class="section-bg" />
     <div class="section-overlay"></div>
     <div class="section-content">
       <div class="benefit-card">
@@ -148,19 +114,10 @@
   </section>
 
   <section class="fullscreen-section" id="contact">
-    <NuxtImg
-      src="/images/page-partnerships/section-6.png"
-      alt="Присоединиться"
-      class="section-bg"
-    />
+    <NuxtImg src="/images/page-partnerships/section-6.png" alt="Присоединиться" class="section-bg" />
     <div class="section-overlay"></div>
     <div class="section-content">
-      <form
-        class="contact-form"
-        id="partnerForm"
-        ref="partnerForm"
-        @submit.prevent="handleSubmit"
-      >
+      <form class="contact-form" id="partnerForm" ref="partnerForm" @submit.prevent="handleSubmit">
         <h2 style="text-align: center">
           Стать партнером
           <span style="color: #b8860b">AgatCeramic</span>
@@ -191,18 +148,11 @@
   </section>
 
   <footer>
-    <div class="container">
-      <p>&copy; 2025 AgatCeramic. Все права защищены.</p>
-      <p>Сотрудничество с лучшими дизайнерами интерьеров</p>
-    </div>
+    <p>&copy; 2025 AgatCeramic. Все права защищены.</p>
+    <p>Сотрудничество с лучшими дизайнерами интерьеров</p>
   </footer>
 
-  <div
-    id="successModal"
-    class="modal"
-    :class="{ show: showSuccessModal }"
-    ref="successModal"
-  >
+  <div id="successModal" class="modal" :class="{ show: showSuccessModal }" ref="successModal">
     <div class="modal-content">
       <span class="close-modal" @click="closeModalHandler">&times;</span>
       <h3>Спасибо за вашу заявку!</h3>
@@ -210,12 +160,7 @@
     </div>
   </div>
 
-  <div
-    id="loader"
-    class="loader"
-    :style="{ display: showLoader ? 'flex' : 'none' }"
-    ref="loader"
-  >
+  <div id="loader" class="loader" :style="{ display: showLoader ? 'flex' : 'none' }" ref="loader">
     <div class="spinner"></div>
     <p>Отправка заявки...</p>
   </div>
@@ -223,6 +168,15 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
+
+useHead({
+  link: [
+    {
+      rel: 'stylesheet',
+      href: '/assets/css/font-awesome/css/all.min.css'
+    }
+  ]
+});
 
 definePageMeta({
   layout: 'partnerships',
@@ -391,6 +345,7 @@ onUnmounted(() => {
   window.removeEventListener('click', handleWindowClick);
 });
 </script>
+
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
@@ -462,6 +417,8 @@ h3 {
   transform: scale(0.95);
   opacity: 0;
   transition: all 0.6s ease-out 0.3s;
+  width: auto;
+  height: auto;
 }
 
 .btn.visible {
@@ -568,6 +525,7 @@ header {
   padding: 20px 0;
   z-index: 1000;
   transition: all 0.3s;
+  background: none;
 }
 
 header.scrolled {
@@ -591,6 +549,7 @@ header.scrolled {
   font-weight: 700;
   color: #fff;
   transition: all 0.3s;
+  padding-left: 10px;
 }
 
 header.scrolled .logo {
@@ -626,6 +585,7 @@ header.scrolled .logo {
   font-size: 64px;
   margin-bottom: 20px;
   line-height: 1.2;
+  color: #fff;
 }
 
 #hero p {
@@ -798,6 +758,7 @@ footer {
 
 /* Animations */
 @keyframes float {
+
   0%,
   100% {
     transform: translateY(0);
@@ -917,6 +878,7 @@ footer {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
