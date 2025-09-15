@@ -13,7 +13,7 @@
                 itemscope
                 itemtype="http://schema.org/Organization"
               >
-                <link itemprop="url" href="{{ route('home') }}" />
+                <link itemprop="url" href="/" />
                 <div class="single-contact">
                   <div class="icon-box" style="font-size: xxx-large">
                     <i class="fa fa-phone"></i>
