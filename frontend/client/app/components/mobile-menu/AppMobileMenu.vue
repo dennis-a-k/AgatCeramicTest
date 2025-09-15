@@ -111,3 +111,73 @@
         </div>
     </div>
 </template>
+
+<script setup>
+import { onMounted } from 'vue';
+
+onMounted(() => {
+  // Get mobile menu elements
+  const mobileMenu = document.getElementById('offcanvas-mobile-menu');
+  const offCanvasOverlay = document.querySelector(".offcanvas-overlay");
+  
+  // Open menu when clicked
+  const menuToggle = document.querySelector('a[href="#offcanvas-mobile-menu"]');
+  if (menuToggle) {
+    menuToggle.addEventListener("click", function(e) {
+      e.preventDefault();
+      document.body.classList.add("offcanvas-open");
+      mobileMenu.classList.add("offcanvas-open");
+      offCanvasOverlay.style.display = "block";
+      
+      // Add close class to toggle button
+      if (this.parentElement.classList.contains("mobile-menu-toggle")) {
+        this.classList.add("close");
+      }
+    });
+  }
+
+  // Close menu when clicked
+  const closeButton = mobileMenu.querySelector('.offcanvas-close');
+  closeButton.addEventListener("click", function(e) {
+    e.preventDefault();
+    document.body.classList.remove("offcanvas-open");
+    mobileMenu.classList.remove("offcanvas-open");
+    offCanvasOverlay.style.display = "none";
+    
+    // Remove close class from toggle button
+    const mobileMenuToggle = document.querySelector(".mobile-menu-toggle");
+    if (mobileMenuToggle) {
+      mobileMenuToggle.querySelectorAll("a").forEach(a => a.classList.remove("close"));
+    }
+  });
+  
+  // Initialize mobile menu submenus
+  const offCanvasNav = mobileMenu.querySelectorAll(".offcanvas-menu, .overlay-menu");
+  
+  offCanvasNav.forEach(nav => {
+    const subMenus = nav.querySelectorAll(".sub-menu");
+    
+    subMenus.forEach(subMenu => {
+      const expander = document.createElement("span");
+      expander.className = "menu-expand";
+      subMenu.parentNode.insertBefore(expander, subMenu);
+    });
+    
+    nav.addEventListener("click", function(e) {
+      const target = e.target;
+      
+      if (target.getAttribute("href") === "#" || target.classList.contains("menu-expand")) {
+        e.preventDefault();
+        
+        if (target.nextElementSibling && target.nextElementSibling.style.display === "block") {
+          target.parentNode.classList.remove("active");
+          target.nextElementSibling.style.display = "none";
+        } else {
+          target.parentNode.classList.add("active");
+          target.nextElementSibling.style.display = "block";
+        }
+      }
+    });
+  });
+});
+</script>

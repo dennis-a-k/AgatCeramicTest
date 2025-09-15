@@ -45,3 +45,33 @@
         </div>
     </div>
 </template>
+
+<script setup>
+import { onMounted } from 'vue';
+
+onMounted(() => {
+  // Get cart-specific elements
+  const cartOffcanvas = document.getElementById('offcanvas-cart');
+  const offCanvasOverlay = document.querySelector(".offcanvas-overlay");
+  
+  // Open cart when clicked (handle both href and class selectors)
+  const cartToggles = document.querySelectorAll('a[href="#offcanvas-cart"], .offcanvas-toggle[href="#offcanvas-cart"]');
+  cartToggles.forEach(toggle => {
+    toggle.addEventListener("click", function(e) {
+      e.preventDefault();
+      document.body.classList.add("offcanvas-open");
+      cartOffcanvas.classList.add("offcanvas-open");
+      offCanvasOverlay.style.display = "block";
+    });
+  });
+
+  // Close cart when clicked
+  const closeButton = cartOffcanvas.querySelector('.offcanvas-close');
+  closeButton.addEventListener("click", function(e) {
+    e.preventDefault();
+    document.body.classList.remove("offcanvas-open");
+    cartOffcanvas.classList.remove("offcanvas-open");
+    offCanvasOverlay.style.display = "none";
+  });
+});
+</script>
