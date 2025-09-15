@@ -27,7 +27,13 @@ onMounted(() => {
       e.preventDefault();
       const target = this.getAttribute("href");
       document.body.classList.add("offcanvas-open");
-      document.querySelector(target).classList.add("offcanvas-open");
+      const targetElement = document.querySelector(target);
+      targetElement.classList.add("offcanvas-open");
+      
+      // Добавляем класс offcanvas-open к мобильному меню
+      if (target === "#offcanvas-mobile-menu") {
+        document.getElementById("offcanvas-mobile-menu").classList.add("offcanvas-open");
+      }
       offCanvasOverlay.style.display = "block";
       
       if (this.parentElement.classList.contains("mobile-menu-toggle")) {
@@ -40,9 +46,14 @@ onMounted(() => {
     el.addEventListener("click", function(e) {
       e.preventDefault();
       document.body.classList.remove("offcanvas-open");
-      offCanvas.classList.remove("offcanvas-open");
+      // Удаляем класс offcanvas-open со всех оффканвасов
+      document.querySelectorAll('.offcanvas').forEach(el => {
+        el.classList.remove("offcanvas-open");
+      });
       offCanvasOverlay.style.display = "none";
-      mobileMenuToggle.querySelectorAll("a").forEach(a => a.classList.remove("close"));
+      if (mobileMenuToggle) {
+        mobileMenuToggle.querySelectorAll("a").forEach(a => a.classList.remove("close"));
+      }
     });
   });
   
