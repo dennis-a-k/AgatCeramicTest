@@ -134,11 +134,15 @@ body.offcanvas-open {
 					& a {
 						display: block;
 						padding: 10px 0px;
-						text-transform: capitalize;
+						text-transform: lowercase;
 						color: $body-color;
 						border-top: 1px solid #eee;
 						font-size: 16px;
 						font-weight: 500;
+
+						&::first-letter {
+							text-transform: uppercase;
+						}
 					}
 
 					.sub-menu {
@@ -161,7 +165,7 @@ body.offcanvas-open {
 							position: relative;
 
 							& a {
-								text-transform: capitalize;
+								text-transform: lowercase;
 								font-weight: 400;
 								padding-left: 10px;
 								padding-right: 0px;
