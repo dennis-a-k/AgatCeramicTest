@@ -7,9 +7,11 @@ export default defineNuxtConfig({
   ],
   css: [
     'bootstrap/dist/css/bootstrap.min.css',
-    '~/assets/scss/main.scss',
+    'swiper/swiper-bundle.css',
     '~/assets/css/font.awesome.css',
     '~/assets/css/pe-icon-7-stroke.css',
+    '~/assets/css/animate.min.css',
+    '~/assets/scss/main.scss',
   ],
   // Настройки Sitemap
   sitemap: {
