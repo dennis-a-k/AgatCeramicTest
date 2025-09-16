@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 d-none d-lg-block">
-                    <SearchForm />
+                    <UiSearchForm />
                 </div>
                 <div class="col-lg-3 col">
                     <div class="header-actions">
@@ -30,7 +30,3 @@
         </div>
     </div>
 </template>
-
-<script setup>
-import SearchForm from '~/components/ui/SearchForm.vue';
-</script>

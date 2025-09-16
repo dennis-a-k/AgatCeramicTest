@@ -1,27 +1,21 @@
 <template>
   <header>
-    <AppHeaderTop />
+    <HeaderAppHeaderTop />
 
-    <AppHeaderBottom />
+    <HeaderAppHeaderBottom />
 
-    <AppHeaderBottomMobile />
+    <HeaderAppHeaderBottomMobile />
 
-    <AppNavbar />
+    <NavbarAppNavbar />
 
-    <AppNavAlphabet />
+    <NavbarAppNavAlphabet />
 
-    <SearchMobileForm />
+    <UiSearchMobileForm />
   </header>
 </template>
 
 <script setup>
 import { onMounted, onUnmounted } from 'vue'
-import AppHeaderTop from '~/components/header/AppHeaderTop.vue'
-import AppHeaderBottom from '~/components/header/AppHeaderBottom.vue'
-import AppHeaderBottomMobile from '~/components/header/AppHeaderBottomMobile.vue'
-import AppNavbar from '~/components/navbar/AppNavbar.vue'
-import AppNavAlphabet from '~/components/navbar/AppNavAlphabet.vue'
-import SearchMobileForm from '~/components/ui/SearchMobileForm.vue'
 
 // Проверка на клиентское окружение
 const isClient = typeof window !== 'undefined'

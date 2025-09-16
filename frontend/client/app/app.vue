@@ -4,19 +4,16 @@
 
     <div class="offcanvas-overlay"></div>
 
-    <AppOffcanvasCart />
+    <CartAppOffcanvasCart />
 
-    <AppMobileMenu />
+    <MobileMenuAppMobileMenu />
   </NuxtLayout>
 </template>
 
 <script setup>
-import AppOffcanvasCart from '~/components/cart/AppOffcanvasCart.vue';
-import AppMobileMenu from '~/components/mobile-menu/AppMobileMenu.vue';
 import { onMounted } from 'vue';
 
 onMounted(() => {
-  // Only keep overlay toggle logic
   const offCanvasOverlay = document.querySelector(".offcanvas-overlay");
   
   document.querySelectorAll(".offcanvas-overlay").forEach(el => {
