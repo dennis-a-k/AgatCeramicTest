@@ -150,3 +150,13 @@
 .slider-nav-style-1.small-nav:hover .swiper-buttons .swiper-button-prev {
     left: 0px;
 }
+
+.swiper-pagination-horizontal .swiper-pagination-bullet-active {
+    background: $white;
+}
+
+.swiper-button-prev, .swiper-button-next {
+    svg {
+        display: none;
+    }
+}
