@@ -1,5 +1,5 @@
 <template>
-    <section class="section">
+    <section class="section slider-nav-style-1">
         <Swiper
             class="hero-slider"
             :modules="[Autoplay, EffectFade, Pagination, Navigation]"
@@ -42,7 +42,7 @@
                             class="col-xl-6 col-lg-6 col-md-6 col-sm-6 d-flex justify-content-center position-relative align-items-end">
                             <div class="show-case">
                                 <div class="hero-slide-image">
-                                    <img :src="slide.image" :alt="slide.alt">
+                                    <NuxtImg :src="slide.image" :alt="slide.alt" />
                                 </div>
                             </div>
                         </div>

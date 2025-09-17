@@ -133,6 +133,7 @@
 .swiper-slide-active {
     & .hero-slide-image {
         & img {
+            width: 12rem;
             animation-name: fadeInUp;
             animation-delay: 1s;
         }
