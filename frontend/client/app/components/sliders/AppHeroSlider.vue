@@ -5,11 +5,7 @@
             :modules="[Autoplay, EffectFade, Pagination, Navigation]"
             :effect="'fade'"
             :speed="2500"
-            :loop="true"
-            :autoplay="{
-                delay: 5000,
-                disableOnInteraction: false,
-            }"
+
             :pagination="{
                 clickable: true,
                 el: '.swiper-pagination',
