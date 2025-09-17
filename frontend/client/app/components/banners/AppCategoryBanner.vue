@@ -21,35 +21,35 @@
 <script setup>
 const banners = [
     {
-        href: "/keramogranit",
+        href: "/",
         imgSrc: "/images/page-index/banners/keramogranit.jpeg",
         imgAlt: "keramogranit",
         title: "Керамогранит",
         category: "От ведущих<br>производителей"
     },
     {
-        href: "/plitka",
+        href: "/",
         imgSrc: "/images/page-index/banners/plitka.jpg",
         imgAlt: "plitka",
         title: "Керамическая плитка",
         category: ""
     },
     {
-        href: "/mozaika",
+        href: "/",
         imgSrc: "/images/page-index/banners/mozaika.jpeg",
         imgAlt: "mozaika",
         title: "Керамическая мозаика",
         category: ""
     },
     {
-        href: "/zatirka",
+        href: "/",
         imgSrc: "/images/page-index/banners/zatirka.jpg",
         imgAlt: "zatirka",
         title: "Затирка для керамической плитки",
         category: ""
     },
     {
-        href: "/santekhnika",
+        href: "/",
         imgSrc: "/images/page-index/banners/santekhnika.jpeg",
         imgAlt: "santekhnika",
         title: "Сантехника",

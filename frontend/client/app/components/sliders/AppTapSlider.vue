@@ -60,7 +60,7 @@
                                             </a>
                                         </div>
                                         <div class="content text-center">
-                                            <span class="category"><a href="{{product.href}}">{{ product.category
+                                            <span class="category"><a :href="product.href">{{ product.category
                                                     }}</a></span>
 
                                             <span class="price">
@@ -101,7 +101,7 @@ const formatter = new Intl.NumberFormat('ru-RU', {
 const products = [
     {
         id: 1,
-        href: "/keramogranit",
+        href: "/",
         imgSrc: "/images/page-index/banners/keramogranit.jpeg",
         imgAlt: "keramogranit",
         title: "Керамогранит Керамогранит Керамогранит Керамогранит Керамогранит Керамогранит Керамогранит Керамогранит",
@@ -111,7 +111,7 @@ const products = [
     },
     {
         id: 2,
-        href: "/plitka",
+        href: "/",
         imgSrc: "/images/page-index/banners/plitka.jpg",
         imgAlt: "plitka",
         title: "Керамическая плитка",
@@ -121,7 +121,7 @@ const products = [
     },
     {
         id: 3,
-        href: "/mozaika",
+        href: "/",
         imgSrc: "/images/page-index/banners/mozaika.jpeg",
         imgAlt: "mozaika",
         title: "Керамическая мозаика",
@@ -131,7 +131,7 @@ const products = [
     },
     {
         id: 4,
-        href: "/zatirka",
+        href: "/",
         imgSrc: "/images/page-index/banners/zatirka.jpg",
         imgAlt: "zatirka",
         title: "Затирка для керамической плитки",
@@ -141,7 +141,7 @@ const products = [
     },
     {
         id: 5,
-        href: "/santekhnika",
+        href: "/",
         imgSrc: "",
         imgAlt: "santekhnika",
         title: "Сантехника",
