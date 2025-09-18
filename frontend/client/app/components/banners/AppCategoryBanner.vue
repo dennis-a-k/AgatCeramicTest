@@ -103,7 +103,7 @@ const banners = [
             .category {
                 display: block;
                 text-transform: uppercase;
-                color: #fff;
+                color: $white;
                 font-size: 24px;
                 font-weight: 500;
                 margin: 0 0 0px;
@@ -120,7 +120,7 @@ const banners = [
             }
 
             .title {
-                color: #fff;
+                color: $white;
                 text-transform: uppercase;
                 font-size: 36px;
                 line-height: 46px;
