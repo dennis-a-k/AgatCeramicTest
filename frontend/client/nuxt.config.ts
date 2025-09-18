@@ -13,6 +13,15 @@ export default defineNuxtConfig({
     'swiper/swiper-bundle.css',
     '~/assets/scss/main.scss',
   ],
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@use "~/assets/scss/variables.scss" as *;`
+        }
+      },
+    },
+  },
   plugins: [
     'plugins/bootstrap.client.js',
   ],
