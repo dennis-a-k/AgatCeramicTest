@@ -433,15 +433,6 @@ input {
         }
       }
     }
-
-    & a:hover {
-      background-color: $theme-color;
-    }
-
-    & a:active {
-      border-color: $theme-color;
-      background-color: $theme-color;
-    }
   }
 }
 
