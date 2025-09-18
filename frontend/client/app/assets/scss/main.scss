@@ -10,9 +10,11 @@
 
 @use 'sliders/hero';
 @use 'sliders/slider-nav';
-@use 'banners/banner';
-@use 'product/product';
-@use 'banners/fashion';
 @use 'sliders/brand-slider';
+@use 'banners/banner';
+@use 'banners/fashion';
+@use 'product/product';
+
+@use 'footer/footer';
 
 @use 'page-contacts/contact';
