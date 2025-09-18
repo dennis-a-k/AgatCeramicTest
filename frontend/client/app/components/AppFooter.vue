@@ -3,91 +3,86 @@
     <div class="footer-container">
       <div class="footer-top">
         <div class="container">
-          <div class="row">
-            <div class="col-md-6 col-lg-6 mb-md-30px mb-lm-30px">
+          <div class="footer-grid">
+            <!-- Навигация -->
+            <div class="footer-column footer-nav">
               <div class="single-wedge">
-                <div class="footer-logo">
-                  <NuxtLink to="/" class="footer-logo-text">AgatCeramic</NuxtLink>
-                </div>
-                <p class="about-text lh-base" style="text-align: justify; color: #8a8a8a">
-                  Интернет-магазин керамической плитки, керамогранита и мозаики в Москве и Московской области. В
-                  интернет-магазине Agat Ceramic вы найдете премиальную
-                  керамическую плитку, керамогранит и мозаику от ведущих мировых производителей. Мы предлагаем
-                  эксклюзивные коллекции для создания уникального дизайна интерьера:
-                  напольную и настенную плитку, износостойкий керамогранит для коммерческих и жилых помещений, а также
-                  стильную мозаику для акцентных решений.
-                </p>
-              </div>
-            </div>
-
-            <div class="col-md-6 col-lg-3 col-sm-6 mb-lm-30px pl-lg-40px">
-              <div class="single-wedge">
-                <h4 class="footer-herading">Меню сайта</h4>
+                <h4 class="footer-heading">Меню сайта</h4>
                 <div class="footer-links">
-                  <div class="footer-row">
-                    <ul class="align-items-center">
-                      <li class="li">
-                        <NuxtLink class="single-link" to="/">
-                          Керамогранит
-                        </NuxtLink>
-                      </li>
-                      <li class="li">
-                        <NuxtLink class="single-link" to="/">
-                          Плитка
-                        </NuxtLink>
-                      </li>
-                      <li class="li">
-                        <NuxtLink class="single-link" to="/">
-                          Мозаика
-                        </NuxtLink>
-                      </li>
-                      <li class="li">
-                        <NuxtLink class="single-link" to="/partnerships" target="_blank">
-                          Дизайнерам
-                        </NuxtLink>
-                      </li>
-                      <li class="li">
-                        <NuxtLink class="single-link" to="/delivery">Доставка</NuxtLink>
-                      </li>
-                      <li class="li">
-                        <NuxtLink class="single-link" to="/'return">Возврат</NuxtLink>
-                      </li>
-                    </ul>
-                  </div>
+                  <ul class="footer-menu">
+                    <li>
+                      <NuxtLink class="single-link" to="/">
+                        Керамогранит
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink class="single-link" to="/">
+                        Плитка
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink class="single-link" to="/">
+                        Мозаика
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink class="single-link" to="/partnerships" target="_blank">
+                        Дизайнерам
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink class="single-link" to="/delivery">Доставка</NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink class="single-link" to="/return">Возврат</NuxtLink>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
 
-            <div class="col-md-6 col-lg-3 col-sm-12">
+            <!-- Контакты -->
+            <div class="footer-column footer-contacts">
               <div class="single-wedge">
-                <h4 class="footer-herading">Контакты</h4>
+                <h4 class="footer-heading">Контакты</h4>
                 <div class="footer-links">
-                  <p class="mail">
+                  <p class="contact-item">
                     <NuxtLink to="#" class="modal-call" data-link-action="modal-call" data-bs-toggle="modal"
                       data-bs-target="#modalCall">
                       Заказать звонок
                     </NuxtLink>
                   </p>
-                  <p class="phone">
-                    <i class="fa fa-phone"></i>
+                  <p class="contact-item">
+                    <i class="icon fa fa-phone"></i>
                     <NuxtLink to="tel:+79999999999" class="phone-link"> +7 (999) 999-99-99</NuxtLink>
                   </p>
-                  <p class="mail">
-                    <i class="fa fa-envelope-o"></i>
+                  <p class="contact-item">
+                    <i class="icon fa fa-envelope-o"></i>
                     <NuxtLink to="mailto:zakaz@agatceramic.ru">zakaz@agatceramic.ru</NuxtLink>
                   </p>
                 </div>
-                <ul class="link-follow">
-                  <li>
-                    <NuxtLink class="m-0" target="_blank" rel="noopener noreferrer" to="https://t.me"><i
-                        class="fa fa-telegram" aria-hidden="true"></i></NuxtLink>
-                  </li>
-                  <li>
-                    <NuxtLink target="_blank" rel="noopener noreferrer" to="https://wa.me/"><i class="fa fa-whatsapp"
-                        aria-hidden="true"></i>
-                    </NuxtLink>
-                  </li>
-                </ul>
+                <div class="social-links">
+                  <NuxtLink class="social-link" target="_blank" rel="noopener noreferrer" to="https://t.me">
+                    <i class="fa fa-telegram" aria-hidden="true"></i>
+                  </NuxtLink>
+                  <NuxtLink class="social-link" target="_blank" rel="noopener noreferrer" to="https://wa.me/">
+                    <i class="fa fa-whatsapp" aria-hidden="true"></i>
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
+
+            <!-- Блок с логотипом и описанием -->
+            <div class="footer-column footer-about">
+              <div class="single-wedge">
+                <div class="footer-logo">
+                  <NuxtLink to="/" class="footer-logo-text">Agat<span>Ceramic</span></NuxtLink>
+                </div>
+                <p class="about-text">
+                  Интернет-магазин керамической плитки, керамогранита и мозаики в Москве и Московской области.
+                  В интернет-магазине AgatCeramic вы найдете премиальную керамическую плитку, керамогранит
+                  и мозаику от ведущих мировых производителей.
+                </p>
               </div>
             </div>
           </div>
@@ -95,10 +90,10 @@
       </div>
       <div class="footer-bottom">
         <div class="container">
-          <p class="copy-text"> ©
-            {{ currentYear }} <strong>AgatCeramic</strong>&nbsp;
-            <NuxtLink to="/policy" class="company-name">Политика конфиденциальности</NuxtLink>
-          </p>
+          <div class="footer-bottom-content">
+            <p class="copy-text">© {{ currentYear }} <strong>AgatCeramic</strong></p>
+            <NuxtLink to="/policy" class="policy-link">Политика конфиденциальности</NuxtLink>
+          </div>
         </div>
       </div>
     </div>
@@ -108,3 +103,217 @@
 <script setup>
 const currentYear = ref(new Date().getFullYear())
 </script>
+
+<style scoped lang="scss">
+// Переменные
+$bg-color: #1a1a1a;
+$text-color: #e0e0e0;
+$text-secondary: #8a8a8a;
+$border-color: #2c2c2c;
+$social-bg: #2c2c2c;
+
+// Основные стили футера
+.footer-area {
+  background-color: $bg-color;
+  color: $text-color;
+  padding: 50px 0 0;
+
+  .footer-container {
+    width: 100%;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+}
+
+// Сетка для колонок
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 30px;
+  margin-bottom: 40px;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr 2fr;
+  }
+
+  @media (min-width: 992px) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.footer-column {
+  padding: 0 15px;
+}
+
+// Логотип
+.footer-logo-text {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 20px;
+  transition: color 0.3s;
+
+  &:hover {
+    color: $theme-color;
+  }
+}
+
+// Заголовки секций
+.footer-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 20px;
+  position: relative;
+  padding-bottom: 10px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background-color: $theme-color;
+  }
+}
+
+// Текст описания
+.about-text {
+  line-height: 1.6;
+  color: $text-secondary;
+  text-align: justify;
+  margin-bottom: 20px;
+}
+
+// Навигационное меню
+.footer-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    margin-bottom: 12px;
+  }
+}
+
+.single-link {
+  color: $text-secondary;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  padding-left: 0;
+
+  &:hover {
+    color: $theme-color;
+    padding-left: 5px;
+  }
+}
+
+// Контакты
+.contact-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  color: $text-secondary;
+
+  a {
+    color: $text-secondary;
+    text-decoration: none;
+    transition: color 0.3s;
+
+    &:hover {
+      color: $theme-color;
+    }
+  }
+
+  .icon {
+    margin-right: 10px;
+    color: $theme-color;
+    min-width: 16px;
+  }
+}
+
+.modal-call {
+  color: $theme-color !important;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
+
+// Социальные сети
+.social-links {
+  display: flex;
+  margin-top: 20px;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $social-bg;
+  color: #fff;
+  margin-right: 10px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 25px;
+  height: 36px;
+  width: 36px;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: $theme-color;
+    transform: translateY(-3px);
+  }
+}
+
+// Нижняя часть футера
+.footer-bottom {
+  border-top: 1px solid $border-color;
+  padding: 20px 0;
+
+  .footer-bottom-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+    }
+  }
+}
+
+.copy-text {
+  color: $text-secondary;
+  margin: 0;
+
+  strong {
+    color: #fff;
+  }
+}
+
+.policy-link {
+  color: $text-secondary;
+  text-decoration: none;
+  transition: color 0.3s;
+  margin-top: 10px;
+
+  @media (min-width: 768px) {
+    margin-top: 0;
+  }
+
+  &:hover {
+    color: $theme-color;
+    text-decoration: underline;
+  }
+}
+</style>

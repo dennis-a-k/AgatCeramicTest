@@ -1,5 +1,5 @@
 @use 'variables' as *;
-// @use "mixins";
+
 @use 'common';
 
 @use 'buttons/button';
@@ -14,7 +14,5 @@
 @use 'banners/banner';
 @use 'banners/fashion';
 @use 'product/product';
-
-@use 'footer/footer';
 
 @use 'page-contacts/contact';
