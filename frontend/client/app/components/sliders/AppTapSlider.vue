@@ -31,17 +31,57 @@
                         <div class="tab-pane fade show active" id="keramogranit">
                             <div class="row mb-n-30px">
 
+                                                                <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-30px"
+                                    v-for="(product, index) in products" :key="index">
+                                    <div class="product card h-100" style="border: none">
+                                        <span class="badges" v-if="product.sale">
+                                            <span class="new">Распродажа</span>
+                                        </span>
+
+                                        <div class="thumb d-flex justify-content-center align-items-center"
+                                            style="aspect-ratio: 1 / 1;">
+                                            <a href="/" class="image">
+                                                <NuxtImg :src="(product.imgSrc && product.imgSrc.trim() !== '') ? product.imgSrc : '/images/stock/stock-image.png'" :alt="product.title" />
+                                                <NuxtImg :src="(product.imgSrc && product.imgSrc.trim() !== '') ? product.imgSrc : '/images/stock/stock-image.png'" :alt="product.title"
+                                                    class="hover-image" />
+                                            </a>
+                                        </div>
+                                        <div class="content text-center">
+                                            <span class="category"><a :href="product.href">{{ product.category
+                                                    }}</a></span>
+
+                                            <span class="price">
+                                                <span class="new">{{ formatter.format(product.price) }}</span>
+                                            </span>
+
+                                            <h5 class="title">
+                                                <a href="/">{{ product.title.slice(0, 80) }}</a>
+                                            </h5>
+                                        </div>
+                                        <div class="actions">
+                                            <button class="action add-cart" data-product-id="{{product.id}}">
+                                                <i class="pe-7s-cart"></i>
+                                            </button>
+
+                                            <button class="action quickview" data-link-action="quickview"
+                                                title="Посмотреть" data-id="{{ product.id ?? null }}"
+                                                data-bs-toggle="modal" data-bs-target="#modalProduct">
+                                                <i class="pe-7s-look"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="tab-pane fade show active" id="plitka">
+                        <div class="tab-pane fade" id="plitka">
                             <div class="row mb-n-30px">
 
 
                             </div>
                         </div>
 
-                        <div class="tab-pane fade show active" id="mozaika">
+                        <div class="tab-pane fade" id="mozaika">
                             <div class="row mb-n-30px">
 
                                 <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-30px"
