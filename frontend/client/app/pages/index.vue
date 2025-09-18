@@ -5,5 +5,6 @@
     <BannersAppCategoryBanner />
     <SlidersAppTapSlider />
     <BannersAppSaleBanner />
+    <SlidersAppBrandsSlider />
   </div>
 </template>
