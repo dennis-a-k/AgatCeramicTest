@@ -36,3 +36,78 @@
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+$font-size-base: 14px;
+$font-size-small: 12px;
+$line-height: 38px;
+$spacing-between-items: 30px;
+$spacing-between-items-mobile: 10px;
+
+.header-top {
+  background-color: $secondary;
+
+  .welcome-text {
+    display: flex;
+    align-items: flex-start;
+
+    @media #{$tablet-device, $large-mobile} {
+      justify-content: center;
+    }
+
+    p {
+      font-size: $font-size-base;
+      color: $black;
+      line-height: $line-height;
+
+      @media #{$extra-small-mobile} {
+        font-size: $font-size-small;
+      }
+    }
+  }
+
+  .top-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1;
+
+    ul {
+      align-items: flex-end;
+      display: flex;
+      padding-left: 0;
+      margin-bottom: 0;
+
+      li {
+        &:not(:last-child) {
+          margin-right: $spacing-between-items;
+
+          @media #{$desktop-device} {
+            margin-right: $spacing-between-items-mobile;
+          }
+        }
+
+        a {
+          font-size: $font-size-base;
+          color: $black;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          line-height: 1;
+          text-decoration: none;
+
+          &:hover {
+            color: $theme-color;
+          }
+
+          i {
+            font-size: 15px;
+            color: $theme-color;
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+  }
+}
+</style>

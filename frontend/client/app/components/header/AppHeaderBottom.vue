@@ -30,3 +30,96 @@
         </div>
     </div>
 </template>
+
+<style scoped lang="scss">
+$logo-secondary-color: #8a8a8a;
+
+.header-bottom {
+    padding: 30px 0;
+    background-color: $secondary;
+
+    @media #{$tablet-device, $large-mobile} {
+        padding: 15px 0;
+    }
+
+    .header-logo {
+        & a {
+            font-family: $heading-font;
+            color: $black;
+            text-decoration: none;
+
+            & img {
+                @media #{$tablet-device} {
+                    width: 18%;
+                }
+            }
+
+            & p {
+                font-weight: 600;
+                font-size: 1.75rem;
+
+                @media #{$desktop-device, $large-mobile} {
+                    font-size: 1.5rem;
+                }
+            }
+        }
+
+        & span {
+            color: $logo-secondary-color;
+        }
+    }
+
+    //header action
+    .header-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        & .header-action-btn {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: $black;
+            transition: $baseTransition;
+
+            &:hover {
+                color: $theme-color;
+            }
+
+            & i {
+                transition: 0s;
+                font-size: 27px;
+
+                &:hover {
+                    color: $theme-color;
+                }
+            }
+
+            & .header-action-num {
+                font-size: 14px;
+                font-weight: 400;
+                position: absolute;
+                z-index: 2;
+                top: -10px;
+                right: -7px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                color: $white;
+                border-radius: 50%;
+                background-color: $theme-color;
+                width: 21px;
+                height: 21px;
+            }
+
+            & .header-action-order {
+                font-size: 13px;
+                line-height: 1px;
+                color: $theme-color;
+            }
+        }
+    }
+}
+</style>
