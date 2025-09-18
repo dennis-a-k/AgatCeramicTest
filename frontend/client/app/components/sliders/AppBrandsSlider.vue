@@ -11,8 +11,7 @@
                 :autoplay="{
                     delay: 2000,
                     disableOnInteraction: false,
-                }"
-                :breakpoints="{
+                }" :breakpoints="{
                     0: {
                         slidesPerView: 1,
                     },
@@ -28,8 +27,7 @@
                     1200: {
                         slidesPerView: 4,
                     },
-                }"
-            >
+                }">
                 <SwiperSlide class="swiper-slide brand-slider-item text-center px-2" v-for="(img, index) in brandsImg"
                     :key="index">
                     <a href="/">
@@ -87,3 +85,44 @@ const brandsImg = [
     },
 ];
 </script>
+
+<style scoped lang="scss">
+.brand-slider {
+    padding: 70px 0;
+
+    @media #{$desktop-device} {
+        padding: 60px 0;
+    }
+
+    @media #{$tablet-device} {
+        padding: 50px 0;
+    }
+
+    @media #{$large-mobile} {
+        padding: 40px 0;
+    }
+
+    .brand-slider-item {
+        & img {
+            align-items: center;
+            filter: gray;
+            -webkit-filter: grayscale(1);
+            -webkit-transition: all 300ms linear;
+            -moz-transition: all 300ms linear;
+            -ms-transition: all 300ms linear;
+            -o-transition: all 300ms linear;
+            transition: all 300ms linear;
+            margin: auto;
+            opacity: 0.8;
+        }
+
+        &:hover {
+            & img {
+                filter: none;
+                -webkit-filter: grayscale(0);
+                opacity: 1;
+            }
+        }
+    }
+}
+</style>
