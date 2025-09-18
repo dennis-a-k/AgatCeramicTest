@@ -1,6 +1,9 @@
 @use 'variables' as *;
-
 @use 'common';
+@use 'swiper/slider-nav';
+
+
+
 
 @use 'buttons/button';
 
@@ -8,9 +11,7 @@
 @use 'header/mobile-header';
 @use 'header/offcanvas';
 
-@use 'swiper/slider-nav';
 
-@use 'banners/banner';
 @use 'banners/fashion';
 @use 'product/product';
 
