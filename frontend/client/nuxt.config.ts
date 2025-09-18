@@ -13,6 +13,9 @@ export default defineNuxtConfig({
     'swiper/swiper-bundle.css',
     '~/assets/scss/main.scss',
   ],
+  plugins: [
+    'plugins/bootstrap.client.js',
+  ],
   // Настройки Sitemap
   sitemap: {
     hostname: 'https://yourdomain.com', // Замените на ваш домен
