@@ -92,7 +92,7 @@ onMounted(() => {
     -webkit-transform: translateX(100%);
     -ms-transform: translateX(100%);
     transform: translateX(100%);
-    background-color: #fff;
+    background-color: $white;
     -webkit-box-shadow: none;
     box-shadow: none;
     overflow: auto;
@@ -214,7 +214,7 @@ onMounted(() => {
                     font-weight: 500;
                     font-size: 16px;
                     border: none;
-                    color: #fff;
+                    color: $white;
                     box-shadow: none;
                     padding: 10px 15px;
                     line-height: 26px;
@@ -256,7 +256,7 @@ onMounted(() => {
         flex-wrap: wrap;
         margin-bottom: 30px;
         padding-bottom: 30px;
-        border-bottom: 1px solid #ebebeb;
+        border-bottom: 1px solid $border-color;
 
         .image {
             -webkit-box-flex: 1;
@@ -266,7 +266,7 @@ onMounted(() => {
 
             img {
                 max-width: 100%;
-                border: 1px solid#ebebeb;
+                border: 1px solid $border-color;
             }
 
             @media (max-width: 767.98px) {
@@ -315,7 +315,7 @@ onMounted(() => {
                 font-size: 16px;
 
                 &:hover {
-                    color: #eb2606;
+                    color: $red;
                 }
             }
 

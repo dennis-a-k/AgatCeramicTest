@@ -202,7 +202,7 @@
 
 <style scoped lang="scss">
 .nav-alphabet {
-    border-top: 1px solid #ebebeb;
+    border-top: 1px solid $border-color;
     background-color: $secondary;
 
     .second-menu {
@@ -238,7 +238,7 @@
                     font-weight: 400;
                     text-decoration: none;
                     text-transform: uppercase;
-                    color: #000;
+                    color: $black;
                     display: block;
                     position: relative;
                     line-height: 50px;
@@ -266,7 +266,7 @@
                                 padding: 12px 0px 12px 20px;
                                 font-weight: 400;
                                 font-size: 14px;
-                                color: #2d2d2d;
+                                color: $link-secondary-color;
                                 text-transform: none;
 
                                 &:hover {
@@ -305,7 +305,7 @@
 
                 & .mega-menu {
                     position: absolute;
-                    background: #fff;
+                    background: $white;
                     padding: 30px 0px 30px 30px;
                     opacity: 0;
                     visibility: hidden;
@@ -334,12 +334,12 @@
                     & li {
                         width: 25%;
                         margin-right: 30px;
-                        border-right: 1px solid #ebebeb;
+                        border-right: 1px solid $border-color;
 
                         & li {
                             &.title {
                                 & a {
-                                    color: #000000;
+                                    color: $black;
                                     font-size: 16px;
                                     font-weight: 500;
                                     display: block;
@@ -354,7 +354,7 @@
                             }
 
                             & a {
-                                color: #2d2d2d;
+                                color: $link-secondary-color;
                                 text-transform: capitalize;
                                 line-height: 30px;
                                 font-weight: 400;

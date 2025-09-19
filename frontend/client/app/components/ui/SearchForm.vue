@@ -24,7 +24,7 @@
         input {
             height: 35px;
             width: 100%;
-            background-color: #fff;
+            background-color: $white;
             border: 0;
             border-radius: 5px;
             padding-right: 80px;
@@ -37,7 +37,7 @@
             width: 55px;
             height: 35px;
             font-size: 25px;
-            color: #fff;
+            color: $white;
             display: flex;
             flex-direction: column;
             justify-content: center;

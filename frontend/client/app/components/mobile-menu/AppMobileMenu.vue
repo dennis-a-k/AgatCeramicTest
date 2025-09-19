@@ -209,7 +209,7 @@ onMounted(() => {
     -webkit-transform: translateX(-100%);
     -ms-transform: translateX(-100%);
     transform: translateX(-100%);
-    background-color: #fff;
+    background-color: $white;
     -webkit-box-shadow: none;
     box-shadow: none;
     overflow: auto;
@@ -291,7 +291,7 @@ onMounted(() => {
 
     .user-panel {
         padding: 20px 0;
-        border-top: 1px solid #ebebeb;
+        border-top: 1px solid $border-color;
 
         ul {
             li {
@@ -361,7 +361,7 @@ onMounted(() => {
                         padding: 10px 0px;
                         text-transform: lowercase;
                         color: $body-color;
-                        border-top: 1px solid #eee;
+                        border-top: 1px solid $border-color;
                         font-size: 16px;
                         font-weight: 500;
 
@@ -395,13 +395,13 @@ onMounted(() => {
                                 padding-left: 10px;
                                 padding-right: 0px;
                                 display: block;
-                                border-top: 1px solid #eee;
+                                border-top: 1px solid $border-color;
                                 font-size: 14px;
                                 font-weight: 500;
                             }
 
                             &:last-child {
-                                border-bottom: 0px solid#eee;
+                                border-bottom: 0px solid $border-color;
                             }
                         }
                     }
@@ -476,7 +476,7 @@ onMounted(() => {
                     }
 
                     &:last-child {
-                        border-bottom: 1px solid#eee;
+                        border-bottom: 1px solid $border-color;
                     }
                 }
             }

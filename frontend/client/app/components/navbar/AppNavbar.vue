@@ -149,7 +149,7 @@
               padding: 12px 0px 12px 20px;
               font-weight: 400;
               font-size: 14px;
-              color: #2d2d2d;
+              color: $link-secondary-color;
               text-transform: lowercase;
 
               &::first-letter {

@@ -151,11 +151,7 @@
 /* Product Style */
 .product {
     position: relative;
-    // border-width: 2px;
     background: $white;
-    // border-color: rgba(225, 225, 225, 1);
-    // border-style: solid;
-    // border-radius: 13px;
     padding: 5px;
     margin-bottom: 0;
     transition: $baseTransition;
@@ -205,10 +201,8 @@
         justify-content: center;
         height: 60px;
         background: white;
-        // border: 2px solid rgba(225, 225, 225, 1);
         border-top: none;
         z-index: 11;
-        // border-radius: 0 0 13px 13px;
         width: 100%;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         & .action {
@@ -276,7 +270,7 @@
         line-height: 1;
         background-color: #fff;
         padding: 0 0 30px;
-        max-width: 100%; /* Добавляем ограничение ширины */
+        max-width: 100%;
         .category {
             a {
                 font-size: 14px;
@@ -317,9 +311,6 @@
             font-weight: 500;
             color: $theme-color;
             margin-top: 10px;
-            // &:not(:last-child) {
-            //     margin-bottom: 20px;
-            // }
             & span {
                 &.new {
                     font-weight: 500;

@@ -108,7 +108,6 @@ const currentYear = ref(new Date().getFullYear())
 // Переменные
 $bg-color: #1a1a1a;
 $text-color: #e0e0e0;
-$text-secondary: #8a8a8a;
 $border-color: #2c2c2c;
 $social-bg: #2c2c2c;
 
@@ -153,7 +152,7 @@ $social-bg: #2c2c2c;
 .footer-logo-text {
   font-size: 28px;
   font-weight: 700;
-  color: #fff;
+  color: $white;
   text-decoration: none;
   display: inline-block;
   margin-bottom: 20px;
@@ -168,7 +167,7 @@ $social-bg: #2c2c2c;
 .footer-heading {
   font-size: 18px;
   font-weight: 600;
-  color: #fff;
+  color: $white;
   margin-bottom: 20px;
   position: relative;
   padding-bottom: 10px;
@@ -187,7 +186,7 @@ $social-bg: #2c2c2c;
 // Текст описания
 .about-text {
   line-height: 1.6;
-  color: $text-secondary;
+  color: $logo-secondary-color;
   text-align: justify;
   margin-bottom: 20px;
 }
@@ -204,7 +203,7 @@ $social-bg: #2c2c2c;
 }
 
 .single-link {
-  color: $text-secondary;
+  color: $logo-secondary-color;
   text-decoration: none;
   transition: all 0.3s ease;
   position: relative;
@@ -221,10 +220,10 @@ $social-bg: #2c2c2c;
   display: flex;
   align-items: center;
   margin-bottom: 15px;
-  color: $text-secondary;
+  color: $logo-secondary-color;
 
   a {
-    color: $text-secondary;
+    color: $logo-secondary-color;
     text-decoration: none;
     transition: color 0.3s;
 
@@ -260,7 +259,7 @@ $social-bg: #2c2c2c;
   align-items: center;
   justify-content: center;
   background-color: $social-bg;
-  color: #fff;
+  color: $white;
   margin-right: 10px;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -293,16 +292,16 @@ $social-bg: #2c2c2c;
 }
 
 .copy-text {
-  color: $text-secondary;
+  color: $logo-secondary-color;
   margin: 0;
 
   strong {
-    color: #fff;
+    color: $white;
   }
 }
 
 .policy-link {
-  color: $text-secondary;
+  color: $logo-secondary-color;
   text-decoration: none;
   transition: color 0.3s;
   margin-top: 10px;

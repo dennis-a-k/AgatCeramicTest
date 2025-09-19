@@ -64,7 +64,6 @@
         }
     }
 
-    //header action
     .header-actions {
         display: flex;
         justify-content: flex-end;
@@ -89,7 +88,7 @@
             display: flex;
             flex-direction: column;
             text-decoration: none;
-            color: #000;
+            color: $black;
             transition: $baseTransition;
 
             &:hover {
@@ -120,7 +119,7 @@
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                color: #fff;
+                color: $white;
                 border-radius: 50%;
                 background-color: $theme-color;
                 width: 21px;
@@ -150,8 +149,6 @@
             }
         }
     }
-
-    //header action
 }
 
 .sticky-nav.menu_fixed {
@@ -167,10 +164,10 @@
     -webkit-box-shadow: 2px 4px 8px rgba(51, 51, 51, 0.25);
     -moz-box-shadow: 2px 4px 8px rgba(51, 51, 51, 0.25);
     box-shadow: 2px 4px 8px rgba(51, 51, 51, 0.25);
-    background-color: #f2f6f9;
+    background-color: $secondary;
 
     &.style-1 {
-        background-color: #f2f6f9;
+        background-color: $secondary;
         padding: 20px 0;
     }
 }
