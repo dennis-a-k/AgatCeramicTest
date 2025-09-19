@@ -32,8 +32,6 @@
 </template>
 
 <style scoped lang="scss">
-$logo-secondary-color: #8a8a8a;
-
 .header-bottom {
     padding: 30px 0;
     background-color: $secondary;
