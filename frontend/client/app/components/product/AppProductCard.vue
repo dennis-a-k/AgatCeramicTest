@@ -48,10 +48,6 @@ const props = defineProps({
   product: {
     type: Object,
     required: true
-  },
-  formatter: {
-    type: Function,
-    required: true
   }
 });
 
@@ -69,3 +65,212 @@ const truncatedTitle = computed(() => {
   return props.product.title.slice(0, 80);
 });
 </script>
+
+<style scoped lang="scss">
+.product {
+  position: relative;
+  background: $white;
+  padding: 5px;
+  margin-bottom: 0;
+  transition: $baseTransition;
+  z-index: 0;
+
+  & .badges {
+    position: absolute;
+    z-index: 8;
+    top: 15px;
+    left: 15px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    transition: $baseTransition;
+
+    & span {
+      font-size: 14px;
+      line-height: 1.75;
+      display: block;
+      padding: 0 12px;
+      text-align: center;
+      text-transform: uppercase;
+      border-radius: 5px;
+      color: $white;
+      font-weight: 600;
+
+      &.new {
+        background-color: $red;
+      }
+    }
+  }
+
+  & .actions {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    opacity: 0;
+    visibility: hidden;
+    transition: $baseTransition;
+    top: calc(100% - 15px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    justify-content: center;
+    height: 60px;
+    background: $white;
+    z-index: 11;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    & .action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      width: 40px;
+      height: 40px;
+      transition: $baseTransition;
+      text-decoration: none;
+      color: $white;
+      border-radius: 5px;
+      background-color: $theme-color;
+      font-size: 24px;
+
+      &+.action {
+        margin-left: 10px;
+      }
+
+      &:hover {
+        color: $white;
+        background: $body-color;
+      }
+    }
+  }
+
+  & .thumb {
+    position: relative;
+    overflow: hidden;
+
+    & .image {
+      position: relative;
+      display: block;
+      overflow: hidden;
+      max-width: 435px;
+
+      & img {
+        z-index: 1;
+        max-width: 100%;
+        transition: $baseTransition;
+        width: 100%;
+
+        &.hover-image {
+          position: absolute;
+          z-index: 2;
+          top: 0;
+          left: 0;
+          opacity: 0;
+        }
+      }
+    }
+  }
+
+  & .content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    transition: $baseTransition;
+    align-items: center;
+    line-height: 1;
+    background-color: $white;
+    padding: 0 0 30px;
+    max-width: 100%;
+
+    .category {
+      a {
+        font-size: 14px;
+        color: $logo-secondary-color;
+        font-weight: 500;
+
+        &:hover {
+          color: $theme-color;
+        }
+      }
+    }
+
+    & .title {
+      font-size: 16px;
+      margin: 10px 0 20px;
+      font-family: $Poppins;
+
+      & a {
+        display: inline-block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        word-wrap: break-word;
+        text-decoration: none;
+        color: $black;
+        font-size: 16px;
+        font-weight: 600;
+      }
+    }
+
+    & .price {
+      font-size: 20px;
+      font-family: $Poppins;
+      line-height: 1;
+      font-weight: 500;
+      color: $theme-color;
+      margin-top: 10px;
+    }
+  }
+
+  &:hover {
+    transform: scaleY(1.05);
+    z-index: 1;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+
+    & .thumb {
+      & .image {
+        & img {
+          transform: scale(1.1) rotate(0deg);
+
+          &:not(:last-child) {
+            opacity: 0;
+          }
+
+          &.hover-image {
+            opacity: 1;
+          }
+        }
+      }
+    }
+
+    & .actions {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+@media #{$small-mobile} {
+  .col-xs-6 {
+    width: 50%;
+  }
+}
+
+@media #{$extra-small-mobile} {
+  .col-xs-6 {
+    width: 100%;
+  }
+
+  .product {
+    & .content {
+      & .title {
+        & a {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
+</style>

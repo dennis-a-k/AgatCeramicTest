@@ -109,3 +109,74 @@ const products = [
     }
 ]
 </script>
+
+<style scoped lang="scss">
+.product-tab-nav {
+    &.nav {
+        flex-wrap: inherit;
+    }
+
+    @media #{$large-mobile} {}
+
+    & .nav-item {
+        display: inline-block;
+        vertical-align: top;
+        text-transform: capitalize;
+        cursor: pointer;
+        -webkit-transition: all 300ms ease;
+        -moz-transition: all 300ms ease;
+        -ms-transition: all 300ms ease;
+        -o-transition: all 300ms ease;
+        transition: all 300ms ease;
+
+        &:not(:first-child) {
+            margin-left: 20px;
+
+            @media #{$small-mobile} {
+                margin-left: 10px;
+            }
+        }
+
+        & .nav-link {
+            width: 174px;
+            height: 54px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #eaeaeb;
+            border-radius: 18px;
+            font-size: 18px;
+            font-weight: 600;
+            color: $logo-secondary-color;
+            background-color: $white;
+
+            @media #{$tablet-device, $large-mobile} {
+                width: 150px;
+                height: 48px;
+                font-size: 16px;
+            }
+
+            @media #{$small-mobile} {
+                width: 140px;
+                height: 40px;
+                font-size: 14px;
+            }
+
+            @media #{$extra-small-mobile} {
+                width: auto;
+                font-size: 12px;
+                padding: 0 15px;
+            }
+
+            &:hover,
+            &.active {
+                color: $white;
+                background-color: $theme-color;
+                border-color: $theme-color;
+            }
+        }
+    }
+}
+</style>
