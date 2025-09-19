@@ -2,43 +2,53 @@
     <div id="offcanvas-cart" class="offcanvas offcanvas-cart">
         <div class="inner">
             <div class="head">
-                <span class="title">Cart</span>
+                <span class="title">Корзина</span>
                 <button class="offcanvas-close">×</button>
             </div>
             <div class="body customScroll">
                 <ul class="minicart-product-list">
-                    <li>
-                        <a href="single-product.html" class="image"><img src="" alt="Cart product Image"></a>
+
+                    <li class="d-flex" data-product-id=" $item['id'] ">
+                        <a href="/" class="image">
+                            <img src=""
+                                alt="">
+                        </a>
                         <div class="content">
-                            <a href="single-product.html" class="title">Modern Smart Phone</a>
-                            <span class="quantity-price">1 x <span class="amount">$18.86</span></span>
-                            <a href="#" class="remove">×</a>
+                            <a href="/" class="title lh-1">
+
+                                <p> $item['title']  $item['weight_kg']  кг</p>
+
+                                <p> $item['title'] </p>
+
+                            </a>
+                            <span class="quantity-price">
+                                $item['quantity'] 
+                                шт.
+
+                                м<sup>2</sup>
+
+                                <span class="amount"> number_format($item['price'], 2, '.', ' ') &#8381;</span>
+                            </span>
                         </div>
+                        <a href="#" class="remove" data-product-id=" $item['id'] ">×</a>
                     </li>
-                    <li>
-                        <a href="single-product.html" class="image"><img src="" alt="Cart product Image"></a>
-                        <div class="content">
-                            <a href="single-product.html" class="title">Bluetooth Headphone</a>
-                            <span class="quantity-price">1 x <span class="amount">$43.28</span></span>
-                            <a href="#" class="remove">×</a>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="single-product.html" class="image"><img src="" alt="Cart product Image"></a>
-                        <div class="content">
-                            <a href="single-product.html" class="title">Smart Music Box</a>
-                            <span class="quantity-price">1 x <span class="amount">$37.34</span></span>
-                            <a href="#" class="remove">×</a>
-                        </div>
-                    </li>
+
+                    <li class="empty-cart">Корзина пуста</li>
+
                 </ul>
             </div>
+
             <div class="foot">
+                <div class="sub-total">
+                    <strong>Итого:</strong>
+                    <span class="amount"> number_format($total, 2, '.', ' ')  &#8381;</span>
+                </div>
                 <div class="buttons mt-30px">
-                    <a href="cart.html" class="btn btn-dark btn-hover-primary mb-30px">view cart</a>
-                    <a href="checkout.html" class="btn btn-outline-dark current-btn">checkout</a>
+                    <a href="/" class="btn mb-30px">Перейти в корзину</a>
+                    <a href="/" class="btn current-btn">Оформить заказ</a>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -228,13 +238,13 @@ onMounted(() => {
 
                     &:hover {
                         background-color: $theme-color;
-                        color: #fff;
+                        color: $white;
                     }
                 }
 
                 .current-btn {
                     background-color: $theme-color;
-                    color: #fff;
+                    color: $white;
                 }
             }
         }
