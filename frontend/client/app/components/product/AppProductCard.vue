@@ -6,20 +6,20 @@
       </span>
 
       <div class="thumb d-flex justify-content-center align-items-center" style="aspect-ratio: 1 / 1;">
-        <a href="/" class="image">
+        <NuxtLink href="/" class="image">
           <NuxtImg :src="productImage" :alt="product.title" />
           <NuxtImg :src="productImage" :alt="product.title" class="hover-image" />
-        </a>
+        </NuxtLink>
       </div>
       <div class="content text-center">
-        <span class="category"><a :href="product.href">{{ product.category.name }}</a></span>
+        <span class="category"><NuxtLink :to="product.href">{{ product.category.name }}</NuxtLink></span>
 
         <span class="price">
           <span class="new">{{ formattedPrice }}</span>
         </span>
 
         <h5 class="title">
-          <a href="/">{{ truncatedTitle }}</a>
+          <NuxtLink :to="product.href">{{ truncatedTitle }}</NuxtLink>
         </h5>
       </div>
       <div class="actions">

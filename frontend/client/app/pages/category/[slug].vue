@@ -2,23 +2,21 @@
 
   <main class="shop-category-area pt-100px pb-100px">
     <div class="container">
-      <div v-if="!pending && !error && products.value && products.value.data && products.value.data.length === 0" class="text-center mt-2">
+      <div v-if="pending" class="loading">
+        Загрузка товаров...
+      </div>
+      <div v-else-if="error && error.message !== 'Request aborted as another request to the same endpoint was initiated.' && error.name !== 'AbortError'" class="error">
+        Ошибка загрузки: {{ error.message }}
+      </div>
+      <div v-else-if="!productsData || !productsData.data || productsData.data.length === 0" class="text-center mt-2">
         <h1>Список товаров пуст</h1>
       </div>
       <div v-else class="row">
-
-        <div v-if="pending" class="loading">
-          Загрузка товаров...
-        </div>
-        <div v-else-if="error && error.message !== 'Request aborted as another request to the same endpoint was initiated.' && error.name !== 'AbortError'" class="error">
-          Ошибка загрузки: {{ error.message }}
-        </div>
-
         <div class="col-lg-9 order-lg-last col-md-12 order-md-first">
           <div class="shop-top-bar d-flex justify-content-between mb-3">
             <div class="category-text">
-              <h1 class="h3 m-0">{{ category.name }}</h1>
-              <p>{{ category.description }}</p>
+              <h1 class="h3 m-0" v-if="categoryData">{{ categoryData.name }}</h1>
+              <p v-if="categoryData">{{ categoryData.description }}</p>
             </div>
             <ProductAppSortedGoods @update:sortOption="handleSortChange" />
           </div>
@@ -28,17 +26,17 @@
                 <div class="tab-content">
                   <div class="tab-pane fade show active" id="shop-grid">
                     <div class="row mb-n-30px">
-                      <ProductAppProductCard v-for="product in products.data" :key="product.id" :product="product" />
+                      <ProductAppProductCard v-for="product in productsData.data" :key="product.id" :product="product" />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <nav v-if="products.last_page > 1">
+            <nav v-if="productsData.last_page > 1">
               <ul class="pagination">
-                <li v-for="page in products.last_page" :key="page"
-                  :class="['page-item', { active: products.current_page === page }]">
+                <li v-for="page in productsData.last_page" :key="page"
+                  :class="['page-item', { active: productsData.current_page === page }]">
                   <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
                 </li>
               </ul>
@@ -48,7 +46,7 @@
         </div>
         <FiltersAppCategoryFilters :initialFilters="filters" @update:filters="handleFilterChange" />
       </div>
-    </div> 
+    </div>
   </main>
 </template>
 
@@ -59,8 +57,8 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const slug = route.params.slug;
 
-const category = ref({});
-const products = ref({ data: [] });
+// const category = ref(null);
+// const products = ref(null);
 const filters = ref({ brands: [], min_price: '', max_price: '', colors: [], patterns: [], weights: [], subcategories: [], glues: [], mixture_types: [], seams: [], textures: [], sizes: [] });
 
 const selectedBrands = ref([]);
@@ -95,26 +93,27 @@ const queryParams = computed(() => ({
   sizes: selectedSizes.value,
 }));
 
-const { data, pending, error, refresh } = useFetch(
+const { data: fetchData, pending, error, refresh } = useFetch(
   `http://localhost/api/category/${slug}/products`,
-  {  
+  {
     query: queryParams,
     watch: [queryParams]
   }
 );
 
-watch(data, (newData) => {
-  if (newData) {
-    category.value = newData.category;
-    products.value = newData.products;
-    filters.value = newData.filters;
+const categoryData = computed(() => fetchData.value?.category || null);
+const productsData = computed(() => fetchData.value?.products || null);
+
+watch(fetchData, (newData) => {
+  if (newData && newData.filters) {
+    Object.assign(filters.value, newData.filters);
   }
 }, { immediate: true });
 
 
-if (error.value) {
-  console.error('Ошибка при загрузке товаров категории:', error.value);
-}
+// if (error.value) {
+//   console.error('Ошибка при загрузке товаров категории:', error.value);
+// }
 
 const handleFilterChange = (newFilters) => {
   selectedBrands.value = newFilters.brands;
