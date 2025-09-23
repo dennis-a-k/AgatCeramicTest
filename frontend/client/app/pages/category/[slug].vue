@@ -1,18 +1,19 @@
 <template>
 
-  <nav v-if="products.last_page > 1">
-    <ul class="pagination">
-      <li v-for="page in products.last_page" :key="page"
-        :class="['page-item', { active: products.current_page === page }]">
-        <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
-      </li>
-    </ul>
-  </nav>
-
-  
   <main class="shop-category-area pt-100px pb-100px">
     <div class="container">
-      <div class="row">
+      <div v-if="products.length === 0" class="text-center mt-2">
+        <h1>Список товаров пуст</h1>
+      </div>
+      <div v-else class="row">
+
+        <div v-if="pending" class="loading">
+          Загрузка товаров...
+        </div>
+        <div v-else-if="error" class="error">
+          Ошибка загрузки: {{ error.message }}
+        </div>
+
         <div class="col-lg-9 order-lg-last col-md-12 order-md-first">
           <div class="shop-top-bar d-flex justify-content-between mb-3">
             <div class="category-text">
@@ -27,22 +28,27 @@
                 <div class="tab-content">
                   <div class="tab-pane fade show active" id="shop-grid">
                     <div class="row mb-n-30px">
-
                       <ProductAppProductCard v-for="product in products.data" :key="product.id" :product="product" />
-                    </div>
-                    <div v-if="products.data.length === 0" class="text-center mt-2">
-                      <h1>Список товаров пуст</h1>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
+            <nav v-if="products.last_page > 1">
+              <ul class="pagination">
+                <li v-for="page in products.last_page" :key="page"
+                  :class="['page-item', { active: products.current_page === page }]">
+                  <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
+                </li>
+              </ul>
+            </nav>
+
           </div>
         </div>
         <FiltersAppCategoryFilters />
       </div>
-    </div>
+    </div> 
   </main>
 </template>
 
