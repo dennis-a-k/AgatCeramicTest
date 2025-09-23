@@ -12,7 +12,7 @@
         </a>
       </div>
       <div class="content text-center">
-        <span class="category"><a :href="product.href">{{ product.category }}</a></span>
+        <span class="category"><a :href="product.href">{{ product.category.name }}</a></span>
 
         <span class="price">
           <span class="new">{{ formattedPrice }}</span>
@@ -62,7 +62,7 @@ const formattedPrice = computed(() => {
 });
 
 const truncatedTitle = computed(() => {
-  return props.product.title.slice(0, 80);
+  return props.product.name.slice(0, 80);
 });
 </script>
 
