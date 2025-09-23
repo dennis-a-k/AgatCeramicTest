@@ -5,7 +5,7 @@
       <div v-if="pending" class="loading">
         Загрузка товаров...
       </div>
-      <div v-else-if="error && error.message !== 'Request aborted as another request to the same endpoint was initiated.' && error.name !== 'AbortError'" class="error">
+      <div v-else-if="showErrorMessage" class="error">
         Ошибка загрузки: {{ error.message }}
       </div>
       <div v-else-if="!productsData || !productsData.data || productsData.data.length === 0" class="text-center mt-2">
@@ -76,6 +76,16 @@ const selectedSeams = ref([]);
 const selectedTextures = ref([]);
 const selectedSizes = ref([]);
 
+// Debounce utility function
+const debounce = (func, delay) => {
+  let timeout;
+  return function(...args) {
+    const context = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), delay);
+  };
+};
+
 const queryParams = computed(() => ({
   brands: selectedBrands.value,
   min_price: minPrice.value,
@@ -97,9 +107,17 @@ const { data: fetchData, pending, error, refresh } = useFetch(
   `http://localhost/api/category/${slug}/products`,
   {
     query: queryParams,
-    watch: [queryParams]
+    // Remove watch here, we will manually debounce it
   }
 );
+
+// Debounce the refresh function
+const debouncedRefresh = debounce(refresh, 300);
+
+// Watch queryParams and trigger debounced refresh
+watch(queryParams, () => {
+  debouncedRefresh();
+}, { deep: true });
 
 const categoryData = computed(() => fetchData.value?.category || null);
 const productsData = computed(() => fetchData.value?.products || null);
@@ -139,6 +157,13 @@ const handleSortChange = (newSortOption) => {
   sortOption.value = newSortOption;
   currentPage.value = 1;
 };
+
+const showErrorMessage = computed(() => {
+  return error.value &&
+         !pending.value &&
+         !error.value.message.includes('Request aborted') &&
+         error.value.name !== 'AbortError';
+});
 </script>
 
 <style scoped>
