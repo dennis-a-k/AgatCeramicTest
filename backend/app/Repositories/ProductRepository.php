@@ -48,6 +48,35 @@ class ProductRepository implements FilterableRepositoryInterface
         return $this->model->find($id)->delete();
     }
 
+    // Добавляем методы для работы с фильтрами (начало нового)
+    /**
+     * Получение товаров по slug категории с фильтрами
+     *
+     * @param string $slug Slug категории
+     * @param Request $request Параметры фильтрации
+     * @return array
+     */
+    public function getByCategorySlug($slug, Request $request): array
+    {
+        $category = Category::where('slug', $slug)->firstOrFail();
+        $categoryIds = $category->children->pluck('id')->push($category->id);
+
+        // Создаем клон запроса с добавленным category_id
+        $newRequest = clone $request;
+        $newRequest->merge(['category_id' => $category->id]);
+
+        $products = $this->applyFilters($newRequest);
+        $filters = $this->getAvailableFilters($newRequest);
+
+        return [
+            'category' => $category,
+            'products' => $products,
+            'filters' => $filters
+        ];
+    }
+    // конец нового
+
+    // Метод для применения фильтров
     public function applyFilters(Request $request): LengthAwarePaginator
     {
         $query = $this->model->with(['category', 'brand', 'color', 'attributeValues.attribute'])

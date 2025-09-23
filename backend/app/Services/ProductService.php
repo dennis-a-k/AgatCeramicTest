@@ -51,4 +51,18 @@ class ProductService
     {
         return $this->repository->delete($id);
     }
+
+    // ниже новое
+
+    /**
+     * Получение товаров по категории с фильтрами
+     *
+     * @param string $slug Slug категории
+     * @param Request $request Параметры фильтрации
+     * @return array
+     */
+    public function getProductsByCategory($slug, Request $request): array
+    {
+        return $this->repository->getByCategorySlug($slug, $request);
+    }
 }

@@ -39,4 +39,18 @@ class ProductController extends Controller
         $result = $this->productService->getProductsWithFilters($request);
         return response()->json($result);
     }
+
+    // Новый метод для получения товаров по категории (новое)
+    /**
+     * Получение товаров по категории с фильтрами
+     *
+     * @param string $slug Slug категории
+     * @param Request $request Параметры фильтрации
+     * @return JsonResponse
+     */
+    public function getByCategory($slug, Request $request): JsonResponse
+    {
+        $result = $this->productService->getProductsByCategory($slug, $request);
+        return response()->json($result);
+    }
 }
