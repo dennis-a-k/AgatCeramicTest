@@ -1,191 +1,149 @@
 <template>
     <div class="col-lg-3 order-lg-first col-md-12 order-md-last">
         <div class="shop-sidebar-wrap">
-            @if (isset($subcategories) && $subcategories->count())
-            <div class="sidebar-widget">
+            <div class="sidebar-widget" v-if="subcategories && subcategories.length">
                 <h4 class="sidebar-title">Тип</h4>
                 <div class="sidebar-widget-category">
                     <ul>
                         <div class="subcategories">
-                            @foreach ($subcategories as $child)
-                            <li class="dropdown position-static">
-                                <a href="/">
-                                    подкатегория
+                            <li class="dropdown position-static" v-for="child in subcategories" :key="child.id">
+                                <a href="#" @click.prevent="selectFilter('subcategory', child.id)">
+                                    {{ child.name }}
                                 </a>
                             </li>
-                            @endforeach
                         </div>
                     </ul>
                 </div>
             </div>
-            @endif
 
-            @if (isset($patterns) && $patterns->count())
-            <div class="sidebar-widget">
+            <div class="sidebar-widget" v-if="patterns && patterns.length">
                 <h4 class="sidebar-title">Рисунок</h4>
                 <div class="sidebar-widget-category">
                     <ul>
-                        @foreach ($patterns as $pattern)
-                        <li class="dropdown position-static">
-                            <a href="/">
-                                рисунок
+                        <li class="dropdown position-static" v-for="pattern in patterns" :key="pattern.id">
+                            <a href="#" @click.prevent="selectFilter('pattern', pattern.id)">
+                                {{ pattern.name }}
                             </a>
                         </li>
-                        @endforeach
                     </ul>
                 </div>
             </div>
-            @endif
 
-            @if (isset($weights) && $weights->count())
-            <div class="sidebar-widget">
+            <div class="sidebar-widget" v-if="weights && weights.length">
                 <h4 class="sidebar-title">Вес (кг)</h4>
                 <div class="sidebar-widget-category">
                     <ul>
-                        @foreach ($weights as $weight)
-                        <li class="color-list weight">
-                            <a href="/" class="text-white">
-                                вес
+                        <li class="color-list weight" v-for="weight in weights" :key="weight.id">
+                            <a href="#" class="text-white" @click.prevent="selectFilter('weight', weight.id)">
+                                {{ weight.value }}
                             </a>
                         </li>
-                        @endforeach
                     </ul>
                 </div>
             </div>
-            @endif
 
-            @if (isset($colors) && $colors->count())
-            <div class="sidebar-widget">
+            <div class="sidebar-widget" v-if="colors && colors.length">
                 <h4 class="sidebar-title">Цвет</h4>
                 <div class="sidebar-widget-color">
                     <ul class="d-flex flex-wrap">
-                        @foreach ($colors as $color)
-                        <li class="color-list">
-                            <a href="/" style="background-color: #FFFF00;" class="colors-filter" data-color="жёлтый">
+                        <li class="color-list" v-for="color in colors" :key="color.id">
+                            <a href="#" :style="{ backgroundColor: color.hex_code }" class="colors-filter" :data-color="color.name" @click.prevent="selectFilter('color', color.id)">
                             </a>
                         </li>
-                        @endforeach
                     </ul>
                 </div>
             </div>
-            @endif
 
-            @if (isset($glues) && $glues->count())
-            <div class="sidebar-widget">
+            <div class="sidebar-widget" v-if="glues && glues.length">
                 <h4 class="sidebar-title">Использовать в качестве клея</h4>
                 <div class="sidebar-widget-category">
                     <ul>
-                        @foreach ($glues as $glue)
-                        <li class="color-list weight">
-                            <a href="/" class="text-white">
-                                да
+                        <li class="color-list weight" v-for="glue in glues" :key="glue.id">
+                            <a href="#" class="text-white" @click.prevent="selectFilter('glue', glue.id)">
+                                {{ glue.name }}
                             </a>
                         </li>
-                        @endforeach
                     </ul>
                 </div>
             </div>
-            @endif
 
-            @if (isset($mixture_types) && $mixture_types->count())
-            <div class="sidebar-widget">
+            <div class="sidebar-widget" v-if="mixture_types && mixture_types.length">
                 <h4 class="sidebar-title">Тип смеси</h4>
                 <div class="sidebar-widget-category">
                     <ul>
-                        @foreach ($mixture_types as $type)
-                        <li>
-                            <a href="/">
-                                тип
+                        <li v-for="type in mixture_types" :key="type.id">
+                            <a href="#" @click.prevent="selectFilter('mixture_type', type.id)">
+                                {{ type.name }}
                             </a>
                         </li>
-                        @endforeach
                     </ul>
                 </div>
             </div>
-            @endif
 
-            @if (isset($seams) && $seams->count())
-            <div class="sidebar-widget">
+            <div class="sidebar-widget" v-if="seams && seams.length">
                 <h4 class="sidebar-title">Ширина шва (мм)</h4>
                 <div class="sidebar-widget-category">
                     <ul>
-                        @foreach ($seams as $seam)
-                        <li class="color-list weight">
-                            <a href="/" class="text-white">
-                                77
+                        <li class="color-list weight" v-for="seam in seams" :key="seam.id">
+                            <a href="#" class="text-white" @click.prevent="selectFilter('seam', seam.id)">
+                                {{ seam.value }}
                             </a>
                         </li>
-                        @endforeach
                     </ul>
                 </div>
             </div>
-            @endif
 
-            @if (isset($textures) && $textures->count())
-            <div class="sidebar-widget">
+            <div class="sidebar-widget" v-if="textures && textures.length">
                 <h4 class="sidebar-title">Поверхность</h4>
                 <div class="sidebar-widget-category">
                     <ul>
-                        @foreach ($textures as $texture)
-                        <li>
-                            <a href="/">
-                                глянцевая
+                        <li v-for="texture in textures" :key="texture.id">
+                            <a href="#" @click.prevent="selectFilter('texture', texture.id)">
+                                {{ texture.name }}
                             </a>
                         </li>
-                        @endforeach
                     </ul>
                 </div>
             </div>
-            @endif
 
-            @if (isset($sizes) && $sizes->count())
-            <div class="sidebar-widget">
+            <div class="sidebar-widget" v-if="sizes && sizes.length">
                 <h4 class="sidebar-title">Размер</h4>
                 <div class="sidebar-widget-size">
                     <ul>
-                        @foreach ($sizes as $size)
-                        <li>
-                            <a href="/">
-                                120х120
+                        <li v-for="size in sizes" :key="size.id">
+                            <a href="#" @click.prevent="selectFilter('size', size.id)">
+                                {{ size.value }}
                             </a>
                         </li>
-                        @endforeach
                     </ul>
                 </div>
             </div>
-            @endif
 
-            @if (isset($brands) && $brands->count())
-            <div class="sidebar-widget">
+            <div class="sidebar-widget" v-if="brands && brands.length">
                 <h4 class="sidebar-title">Производитель</h4>
                 <div class="sidebar-widget-category">
                     <ul id="brands-list">
-                        @foreach ($brands->take(5) as $brand)
-                        <li>
-                            <a href="/">
-                                бренд
+                        <li v-for="brand in visibleBrands" :key="brand.id">
+                            <a href="#" @click.prevent="selectFilter('brand', brand.id)">
+                                {{ brand.name }}
                             </a>
                         </li>
-                        @endforeach
 
-                        @if ($brands->count() > 5)
-                        <div id="hidden-brands" style="display: none;">
-                            @foreach ($brands->slice(5) as $brand)
-                            <li>
-                                <a href="/">
-                                    список скрытых брендов
+                        <div id="hidden-brands" v-show="showAllBrands">
+                            <li v-for="brand in hiddenBrands" :key="brand.id">
+                                <a href="#" @click.prevent="selectFilter('brand', brand.id)">
+                                    {{ brand.name }}
                                 </a>
                             </li>
-                            @endforeach
                         </div>
-                        <li>
-                            <a href="#" id="show-all-brands" class="show-more-link">Показать все</a>
+                        <li v-if="brands.length > 5">
+                            <a href="#" id="show-all-brands" class="show-more-link" @click.prevent="toggleShowAllBrands">
+                                {{ showAllBrands ? 'Скрыть' : 'Показать все' }}
+                            </a>
                         </li>
-                        @endif
                     </ul>
                 </div>
             </div>
-            @endif
 
             <div class="sidebar-widget">
                 <div class="">
@@ -197,6 +155,164 @@
         </div>
     </div>
 </template>
+
+<script setup>
+import { ref, watch, computed } from 'vue';
+
+const props = defineProps({
+    subcategories: { type: Array, default: () => [] },
+    patterns: { type: Array, default: () => [] },
+    weights: { type: Array, default: () => [] },
+    colors: { type: Array, default: () => [] },
+    glues: { type: Array, default: () => [] },
+    mixture_types: { type: Array, default: () => [] },
+    seams: { type: Array, default: () => [] },
+    textures: { type: Array, default: () => [] },
+    sizes: { type: Array, default: () => [] },
+    brands: { type: Array, default: () => [] },
+    initialFilters: { type: Object, default: () => ({ brands: [], min_price: '', max_price: '', colors: [], patterns: [], weights: [], subcategories: [], glues: [], mixture_types: [], seams: [], textures: [], sizes: [] }) }
+});
+
+const emit = defineEmits(['update:filters']);
+
+const selectedBrands = ref(props.initialFilters.brands);
+const selectedColors = ref(props.initialFilters.colors);
+const selectedPatterns = ref(props.initialFilters.patterns);
+const selectedWeights = ref(props.initialFilters.weights);
+const selectedSubcategories = ref(props.initialFilters.subcategories);
+const selectedGlues = ref(props.initialFilters.glues);
+const selectedMixtureTypes = ref(props.initialFilters.mixture_types);
+const selectedSeams = ref(props.initialFilters.seams);
+const selectedTextures = ref(props.initialFilters.textures);
+const selectedSizes = ref(props.initialFilters.sizes);
+
+const showAllBrands = ref(false);
+
+const visibleBrands = computed(() => props.brands.slice(0, 5));
+const hiddenBrands = computed(() => props.brands.slice(5));
+
+const toggleShowAllBrands = () => {
+    showAllBrands.value = !showAllBrands.value;
+};
+
+const selectFilter = (type, value) => {
+    if (type === 'brand') {
+        const index = selectedBrands.value.indexOf(value);
+        if (index === -1) {
+            selectedBrands.value.push(value);
+        } else {
+            selectedBrands.value.splice(index, 1);
+        }
+    } else if (type === 'color') {
+        const index = selectedColors.value.indexOf(value);
+        if (index === -1) {
+            selectedColors.value.push(value);
+        } else {
+            selectedColors.value.splice(index, 1);
+        }
+    } else if (type === 'pattern') {
+        const index = selectedPatterns.value.indexOf(value);
+        if (index === -1) {
+            selectedPatterns.value.push(value);
+        } else {
+            selectedPatterns.value.splice(index, 1);
+        }
+    } else if (type === 'weight') {
+        const index = selectedWeights.value.indexOf(value);
+        if (index === -1) {
+            selectedWeights.value.push(value);
+        } else {
+            selectedWeights.value.splice(index, 1);
+        }
+    } else if (type === 'subcategory') {
+        const index = selectedSubcategories.value.indexOf(value);
+        if (index === -1) {
+            selectedSubcategories.value.push(value);
+        } else {
+            selectedSubcategories.value.splice(index, 1);
+        }
+    } else if (type === 'glue') {
+        const index = selectedGlues.value.indexOf(value);
+        if (index === -1) {
+            selectedGlues.value.push(value);
+        } else {
+            selectedGlues.value.splice(index, 1);
+        }
+    } else if (type === 'mixture_type') {
+        const index = selectedMixtureTypes.value.indexOf(value);
+        if (index === -1) {
+            selectedMixtureTypes.value.push(value);
+        } else {
+            selectedMixtureTypes.value.splice(index, 1);
+        }
+    } else if (type === 'seam') {
+        const index = selectedSeams.value.indexOf(value);
+        if (index === -1) {
+            selectedSeams.value.push(value);
+        } else {
+            selectedSeams.value.splice(index, 1);
+        }
+    } else if (type === 'texture') {
+        const index = selectedTextures.value.indexOf(value);
+        if (index === -1) {
+            selectedTextures.value.push(value);
+        } else {
+            selectedTextures.value.splice(index, 1);
+        }
+    } else if (type === 'size') {
+        const index = selectedSizes.value.indexOf(value);
+        if (index === -1) {
+            selectedSizes.value.push(value);
+        } else {
+            selectedSizes.value.splice(index, 1);
+        }
+    }
+    emitFilters();
+};
+
+const emitFilters = () => {
+    emit('update:filters', {
+        brands: selectedBrands.value,
+        colors: selectedColors.value,
+        patterns: selectedPatterns.value,
+        weights: selectedWeights.value,
+        subcategories: selectedSubcategories.value,
+        glues: selectedGlues.value,
+        mixture_types: selectedMixtureTypes.value,
+        seams: selectedSeams.value,
+        textures: selectedTextures.value,
+        sizes: selectedSizes.value,
+    });
+};
+
+const resetFilters = () => {
+    selectedBrands.value = [];
+    selectedColors.value = [];
+    selectedPatterns.value = [];
+    selectedWeights.value = [];
+    selectedSubcategories.value = [];
+    selectedGlues.value = [];
+    selectedMixtureTypes.value = [];
+    selectedSeams.value = [];
+    selectedTextures.value = [];
+    selectedSizes.value = [];
+    emitFilters();
+};
+
+watch(() => props.initialFilters, (newFilters) => {
+  selectedBrands.value = newFilters.brands || [];
+  selectedColors.value = newFilters.colors || [];
+  selectedPatterns.value = newFilters.patterns || [];
+  selectedWeights.value = newFilters.weights || [];
+  selectedSubcategories.value = newFilters.subcategories || [];
+  selectedGlues.value = newFilters.glues || [];
+  selectedMixtureTypes.value = newFilters.mixture_types || [];
+  selectedSeams.value = newFilters.seams || [];
+  selectedTextures.value = newFilters.textures || [];
+  selectedSizes.value = newFilters.sizes || [];
+}, { deep: true });
+
+</script>
 
 <style scoped lang="scss">
 .shop-sidebar-wrap {

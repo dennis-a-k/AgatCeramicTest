@@ -48,6 +48,16 @@ class ProductRepository implements FilterableRepositoryInterface
         return $this->model->find($id)->delete();
     }
 
+    /**
+     * Получение всех ID категории, включая дочерние
+     *
+     * @param Category $category
+     * @return array
+     */
+    protected function getCategoryIds(Category $category): array
+    {
+        return $category->children->pluck('id')->push($category->id)->toArray();
+    }
     // Добавляем методы для работы с фильтрами (начало нового)
     /**
      * Получение товаров по slug категории с фильтрами
@@ -59,11 +69,11 @@ class ProductRepository implements FilterableRepositoryInterface
     public function getByCategorySlug($slug, Request $request): array
     {
         $category = Category::where('slug', $slug)->firstOrFail();
-        $categoryIds = $category->children->pluck('id')->push($category->id);
+        $categoryIds = $this->getCategoryIds($category);
 
         // Создаем клон запроса с добавленным category_id
         $newRequest = clone $request;
-        $newRequest->merge(['category_id' => $category->id]);
+        $newRequest->merge(['category_ids' => $categoryIds]);
 
         $products = $this->applyFilters($newRequest);
         $filters = $this->getAvailableFilters($newRequest);
@@ -91,9 +101,11 @@ class ProductRepository implements FilterableRepositoryInterface
         if ($request->has('category_id')) {
             $category = Category::find($request->category_id);
             if ($category) {
-                $categoryIds = $category->children->pluck('id')->push($category->id);
+                $categoryIds = $this->getCategoryIds($category);
                 $query->whereIn('category_id', $categoryIds);
             }
+        } elseif ($request->has('category_ids')) {
+            $query->whereIn('category_id', (array)$request->category_ids);
         }
 
         // Фильтрация по бренду
@@ -144,12 +156,26 @@ class ProductRepository implements FilterableRepositoryInterface
         }
 
         // Сортировка
-        $sortField = $request->get('sort', 'created_at');
-        $sortDirection = $request->get('order', 'desc');
+        $sortOption = $request->get('sort', 'default'); // Получаем опцию сортировки из запроса
 
-        $allowedSortFields = ['price', 'name', 'created_at', 'article'];
-        if (in_array($sortField, $allowedSortFields)) {
-            $query->orderBy($sortField, $sortDirection);
+        switch ($sortOption) {
+            case 'alphabetical':
+                $query->orderBy('name', 'asc');
+                break;
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'default':
+            case 'newest': // Добавляем обработку 'newest' для совместимости
+                $query->orderBy('created_at', 'desc');
+                break;
+            default:
+                // По умолчанию сортируем по 'created_at' desc, если опция неизвестна
+                $query->orderBy('created_at', 'desc');
+                break;
         }
 
         // Пагинация
@@ -165,9 +191,11 @@ class ProductRepository implements FilterableRepositoryInterface
         if ($request->has('category_id')) {
             $category = Category::find($request->category_id);
             if ($category) {
-                $categoryIds = $category->children->pluck('id')->push($category->id);
+                $categoryIds = $this->getCategoryIds($category);
                 $baseQuery->whereIn('category_id', $categoryIds);
             }
+        } elseif ($request->has('category_ids')) {
+            $baseQuery->whereIn('category_id', (array)$request->category_ids);
         }
 
         if ($request->has('brand_id')) {
