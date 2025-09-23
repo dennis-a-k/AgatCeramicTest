@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/sitemap',
     '@nuxt/image',
+    '@vueuse/nuxt',
   ],
   css: [
     'bootstrap/dist/css/bootstrap.min.css',
@@ -25,6 +26,12 @@ export default defineNuxtConfig({
   plugins: [
     'plugins/bootstrap.client.js',
   ],
+  runtimeConfig: {
+    public: {
+      // apiBase: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://api.your-backend.com',
+      // siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://your-site.com'
+    }
+  },
   // Настройки Sitemap
   sitemap: {
     hostname: 'https://yourdomain.com', // Замените на ваш домен
@@ -43,6 +50,7 @@ export default defineNuxtConfig({
 
 
   // Настройки для SEO
+  ssr: true, // Важно для SEO
   app: {
     head: {
       charset: 'utf-8',
