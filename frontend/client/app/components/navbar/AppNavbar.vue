@@ -35,8 +35,8 @@
                 </li>
               </ul>
             </li>
-            <li><a href="about.html">Керамогранит</a></li>
-            <li><a href="about.html">Плитка</a></li>
+            <li><NuxtLink to="/products">Керамогранит</NuxtLink></li>
+            <li><NuxtLink to="/category/plitka-dlia-pola">Плитка</NuxtLink></li>
             <li><a href="about.html">Мозаика</a></li>
             <li>
               <NuxtLink to="/partnerships" target="_blank">Дизайнерам</NuxtLink>
