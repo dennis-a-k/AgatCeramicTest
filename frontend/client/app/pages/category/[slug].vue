@@ -10,6 +10,7 @@
             </div>
             <ProductAppSortedGoods @update:sortOption="handleSortChange" />
           </div>
+          <div>Debug: Pending: {{ pending }} Error: {{ error }} Length: {{ productsData?.data?.length }}</div>
           <div v-if="pending" class="loading">
             Загрузка товаров...
           </div>
@@ -50,7 +51,7 @@
             :weights="filters.weights" :colors="filters.colors" :glues="filters.glues"
             :mixture_types="filters.mixture_types" :seams="filters.seams" :textures="filters.textures"
             :sizes="filters.sizes" :brands="filters.brands" :initialFilters="filters"
-            @update:filters="handleFilterChange" />
+            @update:filters="debouncedHandleFilterChange" />
         </ClientOnly>
       </div>
     </div>
@@ -104,25 +105,8 @@ const debounce = (func, delay) => {
   }
 }
 
-const queryParams = ref({
-  brands: selectedBrands.value,
-  min_price: minPrice.value,
-  max_price: maxPrice.value,
-  sort: sortOption.value,
-  page: currentPage.value,
-  colors: selectedColors.value,
-  patterns: selectedPatterns.value,
-  weights: selectedWeights.value,
-  subcategories: selectedSubcategories.value,
-  glues: selectedGlues.value,
-  mixture_types: selectedMixtureTypes.value,
-  seams: selectedSeams.value,
-  textures: selectedTextures.value,
-  sizes: selectedSizes.value
-})
-
-const updateQuery = () => {
-  queryParams.value = {
+const queryParams = computed(() => {
+  const params = {
     brands: selectedBrands.value,
     min_price: minPrice.value,
     max_price: maxPrice.value,
@@ -138,38 +122,37 @@ const updateQuery = () => {
     textures: selectedTextures.value,
     sizes: selectedSizes.value
   }
-}
 
-const debouncedUpdateQuery = debounce(updateQuery, 300)
+  // Фильтруем пустые значения
+  Object.keys(params).forEach(key => {
+    const value = params[key]
+    if (value === '' || value === null || value === undefined || (Array.isArray(value) && value.length === 0)) {
+      delete params[key]
+    }
+  })
 
-watchEffect(() => {
-  selectedBrands.value
-  minPrice.value
-  maxPrice.value
-  sortOption.value
-  currentPage.value
-  selectedColors.value
-  selectedPatterns.value
-  selectedWeights.value
-  selectedSubcategories.value
-  selectedGlues.value
-  selectedMixtureTypes.value
-  selectedSeams.value
-  selectedTextures.value
-  selectedSizes.value
-  debouncedUpdateQuery()
+  return params
 })
 
 const config = useRuntimeConfig()
-const { data: fetchData, pending, error, refresh } = useFetch(
-  `${config.public.apiBase}/api/category/${slug}/products`,
-  {
-    query: queryParams
-  }
-)
+const { data: fetchData, pending, error, execute } = useAsyncData(`category-products-${slug}`, () => $fetch(`${config.public.apiBase}/api/category/${slug}/products`, {
+  query: queryParams.value
+}), {
+  immediate: false
+})
+
+const refresh = () => execute()
+
+watchEffect(() => {
+  refresh()
+})
 
 const categoryData = computed(() => fetchData.value?.category || null)
-const productsData = computed(() => fetchData.value?.products || null)
+const productsData = computed(() => {
+  const p = fetchData.value?.products || null
+  console.log('productsData computed', p)
+  return p
+})
 
 watch(fetchData, (newData) => {
   if (newData && newData.filters) {
@@ -190,6 +173,8 @@ const handleFilterChange = (newFilters) => {
   selectedSizes.value = newFilters.sizes || []
   currentPage.value = 1
 }
+
+const debouncedHandleFilterChange = debounce(handleFilterChange, 300)
 
 const changePage = (page) => {
   currentPage.value = page
@@ -249,6 +234,7 @@ useHead(computed(() => ({
   ],
   script: structuredData.value ? [{ type: 'application/ld+json', children: JSON.stringify(structuredData.value) }] : []
 })))
+console.log(fetchData.value)
 </script>
 
 <style scoped>

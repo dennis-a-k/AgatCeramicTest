@@ -175,16 +175,16 @@ const props = defineProps({
 
 const emit = defineEmits(['update:filters']);
 
-const selectedBrands = ref(props.initialFilters.brands);
-const selectedColors = ref(props.initialFilters.colors);
-const selectedPatterns = ref(props.initialFilters.patterns);
-const selectedWeights = ref(props.initialFilters.weights);
-const selectedSubcategories = ref(props.initialFilters.subcategories);
-const selectedGlues = ref(props.initialFilters.glues);
-const selectedMixtureTypes = ref(props.initialFilters.mixture_types);
-const selectedSeams = ref(props.initialFilters.seams);
-const selectedTextures = ref(props.initialFilters.textures);
-const selectedSizes = ref(props.initialFilters.sizes);
+const selectedBrands = ref([]);
+const selectedColors = ref([]);
+const selectedPatterns = ref([]);
+const selectedWeights = ref([]);
+const selectedSubcategories = ref([]);
+const selectedGlues = ref([]);
+const selectedMixtureTypes = ref([]);
+const selectedSeams = ref([]);
+const selectedTextures = ref([]);
+const selectedSizes = ref([]);
 
 const showAllBrands = ref(false);
 
@@ -299,18 +299,6 @@ const resetFilters = () => {
     emitFilters();
 };
 
-watch(() => props.initialFilters, (newFilters) => {
-  selectedBrands.value = newFilters.brands || [];
-  selectedColors.value = newFilters.colors || [];
-  selectedPatterns.value = newFilters.patterns || [];
-  selectedWeights.value = newFilters.weights || [];
-  selectedSubcategories.value = newFilters.subcategories || [];
-  selectedGlues.value = newFilters.glues || [];
-  selectedMixtureTypes.value = newFilters.mixture_types || [];
-  selectedSeams.value = newFilters.seams || [];
-  selectedTextures.value = newFilters.textures || [];
-  selectedSizes.value = newFilters.sizes || [];
-}, { deep: true });
 
 </script>
 

@@ -9,13 +9,17 @@
               <ul class="sub-menu">
                 <li><a href="index.html">Клинкер</a></li>
                 <li><a href="index.html">Ступени</a></li>
-                <li><a href="index.html">Затирка для плитки</a></li>
-                <li><a href="index.html">Клеевые смеси</a></li>
+                <li>
+                  <NuxtLink to="/category/zatirka-dlia-plitki">Затирка для плитки</NuxtLink>
+                </li>
+                <li>
+                  <NuxtLink to="/category/klei-dlia-plitki">Клеевые смеси</NuxtLink>
+                </li>
                 <li class="dropdown position-static">
-                  <a href="blog-grid-left-sidebar.html">
+                  <NuxtLink to="/category/santexnika">
                     Сантехника
                     <i class="fa fa-angle-right"></i>
-                  </a>
+                  </NuxtLink>
                   <ul class="sub-menu sub-menu-2">
                     <li><a href="blog-grid.html">Ванны</a></li>
                     <li><a href="blog-grid-left-sidebar.html">Смесители</a></li>
@@ -35,8 +39,12 @@
                 </li>
               </ul>
             </li>
-            <li><NuxtLink to="/products">Керамогранит</NuxtLink></li>
-            <li><NuxtLink to="/category/plitka-dlia-pola">Плитка</NuxtLink></li>
+            <li>
+              <NuxtLink to="/products">Керамогранит</NuxtLink>
+            </li>
+            <li>
+              <NuxtLink to="/category/plitka-dlia-pola">Плитка</NuxtLink>
+            </li>
             <li><a href="about.html">Мозаика</a></li>
             <li>
               <NuxtLink to="/partnerships" target="_blank">Дизайнерам</NuxtLink>

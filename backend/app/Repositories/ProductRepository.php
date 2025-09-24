@@ -11,6 +11,7 @@ use App\Repositories\Contracts\FilterableRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductRepository implements FilterableRepositoryInterface
 {
@@ -78,12 +79,95 @@ class ProductRepository implements FilterableRepositoryInterface
         $products = $this->applyFilters($newRequest);
         $filters = $this->getAvailableFilters($newRequest);
 
+        // Строим baseQuery для subcategories
+        $baseQuery = $this->model->published();
+        if ($request->has('category_id')) {
+            $cat = Category::find($request->category_id);
+            if ($cat) {
+                $categoryIds = $this->getCategoryIds($cat);
+                $baseQuery->whereIn('category_id', $categoryIds);
+            }
+        } elseif ($request->has('category_ids')) {
+            $baseQuery->whereIn('category_id', (array)$request->category_ids);
+        }
+        // Добавляем остальные фильтры аналогично getAvailableFilters
+        if ($request->has('brands') && !empty($request->brands)) {
+            $baseQuery->whereIn('brand_id', array_map('intval', (array)$request->brands));
+        }
+        if ($request->has('colors') && !empty($request->colors)) {
+            $baseQuery->whereIn('color_id', array_map('intval', (array)$request->colors));
+        }
+        if ($request->has('patterns') && !empty($request->patterns)) {
+            $baseQuery->whereIn('pattern', (array)$request->patterns);
+        }
+        if ($request->has('textures') && !empty($request->textures)) {
+            $baseQuery->whereIn('texture', (array)$request->textures);
+        }
+        if ($request->has('subcategories') && !empty($request->subcategories)) {
+            $baseQuery->whereIn('category_id', array_map('intval', (array)$request->subcategories));
+        }
+
+        // Фильтрация по весу (толщина)
+        if ($request->has('weights') && !empty($request->weights)) {
+            $attribute = Attribute::where('slug', 'tolshhina')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->weights);
+                });
+            }
+        }
+
+        // Фильтрация по клею
+        if ($request->has('glues') && !empty($request->glues)) {
+            $attribute = Attribute::where('slug', 'glue')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->glues);
+                });
+            }
+        }
+
+        // Фильтрация по типу смеси
+        if ($request->has('mixture_types') && !empty($request->mixture_types)) {
+            $attribute = Attribute::where('slug', 'mixture_type')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->mixture_types);
+                });
+            }
+        }
+
+        // Фильтрация по шву
+        if ($request->has('seams') && !empty($request->seams)) {
+            $attribute = Attribute::where('slug', 'seam')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->seams);
+                });
+            }
+        }
+
+        // Фильтрация по размеру
+        if ($request->has('sizes') && !empty($request->sizes)) {
+            $attribute = Attribute::where('slug', 'size')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->sizes);
+                });
+            }
+        }
+
         // Добавляем subcategories
-        $filters['subcategories'] = $category->children->map(function ($child) {
+        $filters['subcategories'] = $category->children()->whereHas('products', function ($q) use ($baseQuery) {
+            $q->whereIn('products.id', $baseQuery->select('id'));
+        })->withCount(['products' => function ($q) use ($baseQuery) {
+            $q->whereIn('products.id', $baseQuery->select('id'));
+        }])->get()->map(function ($child) {
             return [
                 'id' => $child->id,
                 'name' => $child->name,
                 'slug' => $child->slug,
+                'count' => $child->products_count,
             ];
         })->toArray();
 
@@ -98,8 +182,7 @@ class ProductRepository implements FilterableRepositoryInterface
     // Метод для применения фильтров
     public function applyFilters(Request $request): LengthAwarePaginator
     {
-        $query = $this->model->with(['category', 'brand', 'color', 'attributeValues.attribute'])
-            ->published();
+        $query = $this->model->with(['category', 'brand', 'color', 'attributeValues.attribute'])->published();
 
         // Поиск
         if ($request->has('search') && !empty($request->search)) {
@@ -107,25 +190,41 @@ class ProductRepository implements FilterableRepositoryInterface
         }
 
         // Фильтрация по категории
-        if ($request->has('category_id')) {
+        $categoryIdsToUse = null;
+        if ($request->has('subcategories') && !empty($request->subcategories)) {
+            $categoryIdsToUse = (array)$request->subcategories;
+        } elseif ($request->has('category_id')) {
             $category = Category::find($request->category_id);
             if ($category) {
-                $categoryIds = $this->getCategoryIds($category);
-                $query->whereIn('category_id', $categoryIds);
+                $categoryIdsToUse = $this->getCategoryIds($category);
             }
         } elseif ($request->has('category_ids')) {
-            $query->whereIn('category_id', (array)$request->category_ids);
+            $categoryIdsToUse = (array)$request->category_ids;
+        }
+        if ($categoryIdsToUse) {
+            $query->whereIn('category_id', $categoryIdsToUse);
         }
 
         // Фильтрация по бренду
-        if ($request->has('brand_id')) {
-            $query->whereIn('brand_id', (array)$request->brand_id);
+        if ($request->has('brands') && !empty($request->brands)) {
+            $query->whereIn('brand_id', array_map('intval', (array)$request->brands));
         }
 
         // Фильтрация по цвету
-        if ($request->has('color_id')) {
-            $query->whereIn('color_id', (array)$request->color_id);
+        if ($request->has('colors') && !empty($request->colors)) {
+            $query->whereIn('color_id', array_map('intval', (array)$request->colors));
         }
+
+        // Фильтрация по паттернам
+        if ($request->has('patterns') && !empty($request->patterns)) {
+            $query->whereIn('pattern', (array)$request->patterns);
+        }
+
+        // Фильтрация по текстурам
+        if ($request->has('textures') && !empty($request->textures)) {
+            $query->whereIn('texture', (array)$request->textures);
+        }
+
 
         // Фильтрация по цене
         if ($request->has('price_min')) {
@@ -159,6 +258,56 @@ class ProductRepository implements FilterableRepositoryInterface
             }
         }
 
+        // Фильтрация по весу (толщина)
+        if ($request->has('weights') && !empty($request->weights)) {
+            $attribute = Attribute::where('slug', 'tolshhina')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->weights);
+                });
+            }
+        }
+
+        // Фильтрация по клею
+        if ($request->has('glues') && !empty($request->glues)) {
+            $attribute = Attribute::where('slug', 'glue')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->glues);
+                });
+            }
+        }
+
+        // Фильтрация по типу смеси
+        if ($request->has('mixture_types') && !empty($request->mixture_types)) {
+            $attribute = Attribute::where('slug', 'mixture_type')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->mixture_types);
+                });
+            }
+        }
+
+        // Фильтрация по шву
+        if ($request->has('seams') && !empty($request->seams)) {
+            $attribute = Attribute::where('slug', 'seam')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->seams);
+                });
+            }
+        }
+
+        // Фильтрация по размеру
+        if ($request->has('sizes') && !empty($request->sizes)) {
+            $attribute = Attribute::where('slug', 'size')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->sizes);
+                });
+            }
+        }
+
         // Сортировка
         $sortOption = $request->get('sort', 'default'); // Получаем опцию сортировки из запроса
 
@@ -182,6 +331,7 @@ class ProductRepository implements FilterableRepositoryInterface
                 break;
         }
 
+        // dd($request->all(), $query->toSql(), $query->getBindings());
         // Пагинация
         $perPage = $request->get('per_page', 24);
         return $query->paginate($perPage);
@@ -206,8 +356,75 @@ class ProductRepository implements FilterableRepositoryInterface
             $category = Category::find($categoryId);
         }
 
-        if ($request->has('brand_id')) {
-            $baseQuery->whereIn('brand_id', (array)$request->brand_id);
+        if ($request->has('brands') && !empty($request->brands)) {
+            $baseQuery->whereIn('brand_id', array_map('intval', (array)$request->brands));
+        }
+
+        if ($request->has('colors') && !empty($request->colors)) {
+            $baseQuery->whereIn('color_id', array_map('intval', (array)$request->colors));
+        }
+
+        if ($request->has('patterns') && !empty($request->patterns)) {
+            $baseQuery->whereIn('pattern', (array)$request->patterns);
+        }
+
+        if ($request->has('textures') && !empty($request->textures)) {
+            $baseQuery->whereIn('texture', (array)$request->textures);
+        }
+
+        // Фильтрация по субкатегориям
+        if ($request->has('subcategories') && !empty($request->subcategories)) {
+            $baseQuery->whereIn('category_id', array_map('intval', (array)$request->subcategories));
+        }
+
+        // Фильтрация по весу (толщина)
+        if ($request->has('weights') && !empty($request->weights)) {
+            $attribute = Attribute::where('slug', 'tolshhina')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->weights);
+                });
+            }
+        }
+
+        // Фильтрация по клею
+        if ($request->has('glues') && !empty($request->glues)) {
+            $attribute = Attribute::where('slug', 'glue')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->glues);
+                });
+            }
+        }
+
+        // Фильтрация по типу смеси
+        if ($request->has('mixture_types') && !empty($request->mixture_types)) {
+            $attribute = Attribute::where('slug', 'mixture_type')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->mixture_types);
+                });
+            }
+        }
+
+        // Фильтрация по шву
+        if ($request->has('seams') && !empty($request->seams)) {
+            $attribute = Attribute::where('slug', 'seam')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->seams);
+                });
+            }
+        }
+
+        // Фильтрация по размеру
+        if ($request->has('sizes') && !empty($request->sizes)) {
+            $attribute = Attribute::where('slug', 'size')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->sizes);
+                });
+            }
         }
 
         // Получаем доступные бренды
