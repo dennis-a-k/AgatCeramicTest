@@ -60,7 +60,6 @@
 <script setup>
 import { ref, watch, computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
-import { useHead } from '@unhead/vue'
 import { useRuntimeConfig } from '#imports'
 
 const route = useRoute()
