@@ -11,6 +11,7 @@ use App\Models\Attribute;
 use App\Models\Product;
 use App\Models\ProductAttributeValue;
 use Illuminate\Support\Str;
+use Faker\Factory as Faker;
 
 class ProductSeeder extends Seeder
 {
@@ -19,126 +20,58 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
+        $faker = Faker::create('ru_RU');
+
         // Создание категорий
-        $category1 = Category::create([
-            'name' => 'Плитка для пола',
-            'slug' => Str::slug('Плитка для пола'),
-            'description' => 'Высококачественная плитка для напольного покрытия.',
-            'is_active' => true,
-        ]);
-        $category2 = Category::create([
-            'name' => 'Плитка для стен',
-            'slug' => Str::slug('Плитка для стен'),
-            'description' => 'Элегантная плитка для облицовки стен.',
-            'is_active' => true,
-        ]);
+        $categories = [];
+        $category_names = ['Керамогранит', 'Плитка', 'Мозаика', 'Клинкер', 'Ступени', 'Затирка', 'Клей', 'Сантехника'];
+        foreach ($category_names as $name) {
+            $categories[$name] = Category::create([
+                'name' => $name,
+                'slug' => Str::slug($name),
+                'description' => 'Описание категории ' . $name,
+                'is_active' => true,
+            ]);
+        }
 
-        $category3 = Category::create([
-            'name' => 'Сантехника',
-            'slug' => Str::slug('Сантехника'),
-            'description' => 'Широкий выбор сантехники для ванных комнат.',
-            'is_active' => true,
-        ]);
+        // Подкатегории для сантехники
+        $sanitary_subs = [];
+        $sub_names = ['Ванны', 'Смесители', 'Унитазы', 'Инсталляции', 'Душевые кабины'];
+        foreach ($sub_names as $name) {
+            $sanitary_subs[$name] = Category::create([
+                'name' => $name,
+                'slug' => Str::slug($name),
+                'description' => 'Описание подкатегории ' . $name,
+                'is_active' => true,
+                'parent_id' => $categories['Сантехника']->id,
+            ]);
+        }
 
-        $category_baths = Category::create([
-            'name' => 'Ванны',
-            'slug' => Str::slug('Ванны'),
-            'description' => 'Различные типы ванн для вашей ванной комнаты.',
-            'is_active' => true,
-            'parent_id' => $category3->id,
-        ]);
+        // Создание брендов (204)
+        $brands = [];
+        $countries = ['Россия', 'Италия', 'Германия', 'Польша', 'Испания', 'Турция', 'Китай', 'Бельгия', 'Франция', 'Швеция'];
+        for ($i = 1; $i <= 204; $i++) {
+            $name = 'Brand' . $i;
+            $country = $faker->randomElement($countries);
+            $brands[] = Brand::create([
+                'name' => $name,
+                'slug' => Str::slug($name),
+                'country' => $country,
+                'is_active' => true,
+            ]);
+        }
 
-        $category_sinks = Category::create([
-            'name' => 'Раковины',
-            'slug' => Str::slug('Раковины'),
-            'description' => 'Стильные и функциональные раковины.',
-            'is_active' => true,
-            'parent_id' => $category3->id,
-        ]);
-
-        $category_toilets = Category::create([
-            'name' => 'Унитазы',
-            'slug' => Str::slug('Унитазы'),
-            'description' => 'Современные унитазы для любой ванной.',
-            'is_active' => true,
-            'parent_id' => $category3->id,
-        ]);
-
-        $category_faucets = Category::create([
-            'name' => 'Смесители',
-            'slug' => Str::slug('Смесители'),
-            'description' => 'Качественные смесители для ванной и кухни.',
-            'is_active' => true,
-            'parent_id' => $category3->id,
-        ]);
-
-        $category4 = Category::create([
-            'name' => 'Клей для плитки',
-            'slug' => Str::slug('Клей для плитки'),
-            'description' => 'Надежный клей для любых видов плитки.',
-            'is_active' => true,
-        ]);
-
-        $category5 = Category::create([
-            'name' => 'Затирка для плитки',
-            'slug' => Str::slug('Затирка для плитки'),
-            'description' => 'Качественная затирка для долговечного шва.',
-            'is_active' => true,
-        ]);
-
-        // Создание брендов
-        $brand1 = Brand::create([
-            'name' => 'Kerama Marazzi',
-            'slug' => Str::slug('Kerama Marazzi'),
-            'country' => 'Россия',
-            'is_active' => true,
-        ]);
-        $brand2 = Brand::create([
-            'name' => 'Atlas Concorde',
-            'slug' => Str::slug('Atlas Concorde'),
-            'country' => 'Италия',
-            'is_active' => true,
-        ]);
-        $brand3 = Brand::create([
-            'name' => 'Grohe',
-            'slug' => Str::slug('Grohe'),
-            'country' => 'Германия',
-            'is_active' => true,
-        ]);
-        $brand4 = Brand::create([
-            'name' => 'Cersanit',
-            'slug' => Str::slug('Cersanit'),
-            'country' => 'Польша',
-            'is_active' => true,
-        ]);
-        $brand5 = Brand::create([
-            'name' => 'Litokol',
-            'slug' => Str::slug('Litokol'),
-            'country' => 'Италия',
-            'is_active' => true,
-        ]);
-
-        // Создание цветов
-        $color1 = Color::create([
-            'name' => 'Белый',
-            'slug' => Str::slug('Белый'),
-            'hex' => '#FFFFFF',
-        ]);
-        $color2 = Color::create([
-            'name' => 'Серый',
-            'slug' => Str::slug('Серый'),
-            'hex' => '#808080',
-        ]);
-        $color3 = Color::create([
-            'name' => 'Бежевый',
-            'slug' => Str::slug('Бежевый'),
-            'hex' => '#F5F5DC',
-        ]);
-        $color4 = Color::create([
-            'name' => 'Хром',
-            'slug' => Str::slug('Хром'),
-            'hex' => '#E4E5E6',
-        ]);
+        // Создание цветов (36)
+        $colors = [];
+        $color_names = ['Белый', 'Черный', 'Серый', 'Красный', 'Синий', 'Зеленый', 'Желтый', 'Оранжевый', 'Фиолетовый', 'Розовый', 'Бежевый', 'Коричневый', 'Голубой', 'Бирюзовый', 'Лиловый', 'Малиновый', 'Изумрудный', 'Золотой', 'Серебряный', 'Бронзовый', 'Перламутровый', 'Металлик', 'Гранитный', 'Мраморный', 'Дубовый', 'Бук', 'Орех', 'Клен', 'Ясень', 'Вишня', 'Эбен', 'Тик', 'Бамбук', 'Ротанг', 'Лен'];
+        foreach ($color_names as $name) {
+            $hex = '#' . strtoupper(dechex(rand(0, 16777215)));
+            $colors[] = Color::create([
+                'name' => $name,
+                'slug' => Str::slug($name),
+                'hex' => $hex,
+            ]);
+        }
 
         // Создание атрибутов
         $attribute_thickness = Attribute::create([
@@ -216,356 +149,262 @@ class ProductSeeder extends Seeder
             'slug' => Str::slug('Расход'),
             'type' => 'string',
         ]);
-
-        // Создание продуктов
-        $product1 = Product::create([
-            'article' => 'KM001',
-            'name' => 'Плитка Лофт Белая',
-            'slug' => Str::slug('Плитка Лофт Белая'),
-            'price' => 1250.00,
-            'unit' => 'кв.м',
-            'product_code' => 'P001',
-            'description' => 'Современная плитка в стиле лофт.',
-            'category_id' => $category1->id,
-            'color_id' => $color1->id,
-            'brand_id' => $brand1->id,
-            'is_published' => true,
-            'is_sale' => false,
-            'texture' => 'Матовая',
-            'pattern' => 'Однотонный',
-            'country' => 'Россия',
-            'collection' => 'Лофт',
+        $attribute_sizes = Attribute::create([
+            'name' => 'Размеры',
+            'slug' => Str::slug('Размеры'),
+            'type' => 'string',
+        ]);
+        $attribute_used_as_glue = Attribute::create([
+            'name' => 'Используется в качестве клея',
+            'slug' => Str::slug('Используется в качестве клея'),
+            'type' => 'boolean',
+        ]);
+        $attribute_seam_width = Attribute::create([
+            'name' => 'Ширина шва',
+            'slug' => Str::slug('Ширина шва'),
+            'type' => 'string',
+        ]);
+        $attribute_type = Attribute::create([
+            'name' => 'Тип',
+            'slug' => Str::slug('Тип'),
+            'type' => 'string',
         ]);
 
-        ProductAttributeValue::create([
-            'product_id' => $product1->id,
-            'attribute_id' => $attribute_thickness->id,
-            'number_value' => 10.5,
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product1->id,
-            'attribute_id' => $attribute_material->id,
-            'string_value' => 'Керамогранит',
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product1->id,
-            'attribute_id' => $attribute_waterproof->id,
-            'boolean_value' => true,
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product1->id,
-            'attribute_id' => $attribute_description_full->id,
-            'text_value' => 'Полное описание плитки Лофт Белая: Идеально подходит для современных интерьеров. Легко укладывается и проста в уходе.',
-        ]);
+        // Генерация товаров
+        $product_counter = 1;
 
-        $product2 = Product::create([
-            'article' => 'AC002',
-            'name' => 'Плитка Элегант Серая',
-            'slug' => Str::slug('Плитка Элегант Серая'),
-            'price' => 2500.00,
-            'unit' => 'кв.м',
-            'product_code' => 'P002',
-            'description' => 'Изысканная плитка для классических интерьеров.',
-            'category_id' => $category2->id,
-            'color_id' => $color2->id,
-            'brand_id' => $brand2->id,
-            'is_published' => true,
-            'is_sale' => true,
-            'texture' => 'Глянцевая',
-            'pattern' => 'Мрамор',
-            'country' => 'Италия',
-            'collection' => 'Элегант',
-        ]);
+        // Керамогранит (150)
+        $this->createProductsForCategory($categories['Керамогранит'], $brands, $colors, $faker, 150, 'кв.м', 'KG', 'Керамогранит', $attribute_sizes, $attribute_thickness, $attribute_material, $attribute_waterproof, $attribute_description_full, $product_counter);
 
-        ProductAttributeValue::create([
-            'product_id' => $product2->id,
-            'attribute_id' => $attribute_thickness->id,
-            'number_value' => 8.0,
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product2->id,
-            'attribute_id' => $attribute_material->id,
-            'string_value' => 'Керамика',
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product2->id,
-            'attribute_id' => $attribute_waterproof->id,
-            'boolean_value' => false,
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product2->id,
-            'attribute_id' => $attribute_description_full->id,
-            'text_value' => 'Полное описание плитки Элегант Серая: Создаст атмосферу роскоши в любом помещении. Долговечна и устойчива к износу.',
-        ]);
+        // Плитка (150)
+        $this->createProductsForCategory($categories['Плитка'], $brands, $colors, $faker, 150, 'кв.м', 'PL', 'Керамика', $attribute_sizes, $attribute_thickness, $attribute_material, $attribute_waterproof, $attribute_description_full, $product_counter);
 
-        $product3 = Product::create([
-            'article' => 'KM003',
-            'name' => 'Плитка Теплый Беж',
-            'slug' => Str::slug('Плитка Теплый Беж'),
-            'price' => 1500.00,
-            'unit' => 'кв.м',
-            'product_code' => 'P003',
-            'description' => 'Уютная плитка в теплых тонах.',
-            'category_id' => $category1->id,
-            'color_id' => $color3->id,
-            'brand_id' => $brand1->id,
-            'is_published' => true,
-            'is_sale' => false,
-            'texture' => 'Матовая',
-            'pattern' => 'Под дерево',
-            'country' => 'Россия',
-            'collection' => 'Природа',
-        ]);
+        // Мозаика (150)
+        $this->createProductsForCategory($categories['Мозаика'], $brands, $colors, $faker, 150, 'кв.м', 'MZ', 'Мозаика', $attribute_sizes, $attribute_thickness, $attribute_material, $attribute_waterproof, $attribute_description_full, $product_counter);
 
-        ProductAttributeValue::create([
-            'product_id' => $product3->id,
-            'attribute_id' => $attribute_thickness->id,
-            'number_value' => 9.0,
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product3->id,
-            'attribute_id' => $attribute_material->id,
-            'string_value' => 'Керамогранит',
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product3->id,
-            'attribute_id' => $attribute_waterproof->id,
-            'boolean_value' => true,
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product3->id,
-            'attribute_id' => $attribute_description_full->id,
-            'text_value' => 'Полное описание плитки Теплый Беж: Имитация дерева создает ощущение тепла и комфорта. Подходит для любого стиля.',
-        ]);
+        // Клинкер (150)
+        $this->createProductsForCategory($categories['Клинкер'], $brands, $colors, $faker, 150, 'кв.м', 'KL', 'Клинкер', $attribute_sizes, $attribute_thickness, $attribute_material, $attribute_waterproof, $attribute_description_full, $product_counter);
 
-        $product4 = Product::create([
-            'article' => 'CSN001',
-            'name' => 'Ванна акриловая Cersanit',
-            'slug' => Str::slug('Ванна акриловая Cersanit'),
-            'price' => 15000.00,
-            'unit' => 'шт',
-            'product_code' => 'S001',
-            'description' => 'Комфортная акриловая ванна для вашей ванной комнаты.',
-            'category_id' => $category_baths->id,
-            'color_id' => $color1->id,
-            'brand_id' => $brand4->id,
-            'is_published' => true,
-            'is_sale' => false,
-            'texture' => 'Гладкая',
-            'pattern' => 'Нет',
-            'country' => 'Польша',
-            'collection' => 'Nano',
-        ]);
+        // Ступени (150)
+        $this->createProductsForCategory($categories['Ступени'], $brands, $colors, $faker, 150, 'кв.м', 'ST', 'Керамогранит', $attribute_sizes, $attribute_thickness, $attribute_material, $attribute_waterproof, $attribute_description_full, $product_counter);
 
-        ProductAttributeValue::create([
-            'product_id' => $product4->id,
-            'attribute_id' => $attribute_volume->id,
-            'number_value' => 200,
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product4->id,
-            'attribute_id' => $attribute_material->id,
-            'string_value' => 'Акрил',
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product4->id,
-            'attribute_id' => $attribute_installation_type->id,
-            'string_value' => 'Пристенная',
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product4->id,
-            'attribute_id' => $attribute_shape->id,
-            'string_value' => 'Прямоугольная',
-        ]);
+        // Затирка (150)
+        $this->createGroutProducts($categories['Затирка'], $brands, $colors, $faker, 150, $attribute_weight, $attribute_used_as_glue, $attribute_seam_width, $attribute_description_full, $product_counter);
 
-        $product5 = Product::create([
-            'article' => 'GRH002',
-            'name' => 'Смеситель для раковины Grohe',
-            'slug' => Str::slug('Смеситель для раковины Grohe'),
-            'price' => 7500.00,
-            'unit' => 'шт',
-            'product_code' => 'S002',
-            'description' => 'Надежный и стильный смеситель для умывальника.',
-            'category_id' => $category_faucets->id,
-            'color_id' => $color4->id,
-            'brand_id' => $brand3->id,
-            'is_published' => true,
-            'is_sale' => true,
-            'texture' => 'Глянцевая',
-            'pattern' => 'Нет',
-            'country' => 'Германия',
-            'collection' => 'Eurosmart',
-        ]);
+        // Клей (150)
+        $this->createGlueProducts($categories['Клей'], $brands, $colors, $faker, 150, $attribute_weight, $attribute_description_full, $product_counter);
 
-        ProductAttributeValue::create([
-            'product_id' => $product5->id,
-            'attribute_id' => $attribute_material->id,
-            'string_value' => 'Латунь',
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product5->id,
-            'attribute_id' => $attribute_installation_type->id,
-            'string_value' => 'На раковину',
-        ]);
+        // Сантехника (150, распределено по подкатегориям)
+        $this->createSanitaryProducts($sanitary_subs, $brands, $colors, $faker, 30, $attribute_type, $attribute_description_full, $product_counter);
+    }
 
-        $product8 = Product::create([
-            'article' => 'CSN003',
-            'name' => 'Раковина Cersanit President',
-            'slug' => Str::slug('Раковина Cersanit President'),
-            'price' => 3500.00,
-            'unit' => 'шт',
-            'product_code' => 'S003',
-            'description' => 'Элегантная керамическая раковина для любой ванной комнаты.',
-            'category_id' => $category_sinks->id,
-            'color_id' => $color1->id,
-            'brand_id' => $brand4->id,
-            'is_published' => true,
-            'is_sale' => false,
-            'texture' => 'Гладкая',
-            'pattern' => 'Нет',
-            'country' => 'Польша',
-            'collection' => 'President',
-        ]);
+    private function createProductsForCategory($category, $brands, $colors, $faker, $count, $unit, $prefix, $material, $attribute_sizes, $attribute_thickness, $attribute_material, $attribute_waterproof, $attribute_description_full, &$product_counter)
+    {
+        for ($i = 0; $i < $count; $i++) {
+            $brand = $faker->randomElement($brands);
+            $color = $faker->randomElement($colors);
+            $name = $faker->sentence(3);
+            $article = $prefix . str_pad($product_counter, 4, '0', STR_PAD_LEFT);
+            $product = Product::create([
+                'article' => $article,
+                'name' => $name,
+                'slug' => Str::slug($name . $product_counter),
+                'price' => $faker->numberBetween(1000, 10000),
+                'unit' => $unit,
+                'product_code' => $prefix . $product_counter,
+                'description' => $faker->paragraph,
+                'category_id' => $category->id,
+                'color_id' => $color->id,
+                'brand_id' => $brand->id,
+                'is_published' => $faker->boolean(80),
+                'is_sale' => $faker->boolean(20),
+                'texture' => $faker->randomElement(['Матовая', 'Глянцевая', 'Полуматовая']),
+                'pattern' => $faker->randomElement(['Однотонный', 'Мрамор', 'Под дерево', 'Абстрактный']),
+                'country' => $brand->country,
+                'collection' => $faker->word,
+            ]);
 
-        ProductAttributeValue::create([
-            'product_id' => $product8->id,
-            'attribute_id' => $attribute_material->id,
-            'string_value' => 'Керамика',
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product8->id,
-            'attribute_id' => $attribute_installation_type->id,
-            'string_value' => 'Подвесная',
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product8->id,
-            'attribute_id' => $attribute_shape->id,
-            'string_value' => 'Овальная',
-        ]);
+            ProductAttributeValue::create([
+                'product_id' => $product->id,
+                'attribute_id' => $attribute_sizes->id,
+                'string_value' => $faker->randomElement(['600x600', '800x800', '1200x600', '300x300']),
+            ]);
+            ProductAttributeValue::create([
+                'product_id' => $product->id,
+                'attribute_id' => $attribute_thickness->id,
+                'number_value' => $faker->numberBetween(8, 12),
+            ]);
+            ProductAttributeValue::create([
+                'product_id' => $product->id,
+                'attribute_id' => $attribute_material->id,
+                'string_value' => $material,
+            ]);
+            ProductAttributeValue::create([
+                'product_id' => $product->id,
+                'attribute_id' => $attribute_waterproof->id,
+                'boolean_value' => true,
+            ]);
+            ProductAttributeValue::create([
+                'product_id' => $product->id,
+                'attribute_id' => $attribute_description_full->id,
+                'text_value' => $faker->paragraph(3),
+            ]);
 
-        $product9 = Product::create([
-            'article' => 'CSN004',
-            'name' => 'Унитаз-компакт Cersanit Delfi',
-            'slug' => Str::slug('Унитаз-компакт Cersanit Delfi'),
-            'price' => 8000.00,
-            'unit' => 'шт',
-            'product_code' => 'S004',
-            'description' => 'Компактный унитаз с горизонтальным выпуском.',
-            'category_id' => $category_toilets->id,
-            'color_id' => $color1->id,
-            'brand_id' => $brand4->id,
-            'is_published' => true,
-            'is_sale' => false,
-            'texture' => 'Гладкая',
-            'pattern' => 'Нет',
-            'country' => 'Польша',
-            'collection' => 'Delfi',
-        ]);
+            $product_counter++;
+        }
+    }
 
-        ProductAttributeValue::create([
-            'product_id' => $product9->id,
-            'attribute_id' => $attribute_material->id,
-            'string_value' => 'Керамика',
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product9->id,
-            'attribute_id' => $attribute_installation_type->id,
-            'string_value' => 'Напольный',
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product9->id,
-            'attribute_id' => $attribute_waterproof->id,
-            'boolean_value' => false,
-        ]);
+    private function createGroutProducts($category, $brands, $colors, $faker, $count, $attribute_weight, $attribute_used_as_glue, $attribute_seam_width, $attribute_description_full, &$product_counter)
+    {
+        for ($i = 0; $i < $count; $i++) {
+            $brand = $faker->randomElement($brands);
+            $color = $faker->randomElement($colors);
+            $name = $faker->sentence(3);
+            $article = 'ZT' . str_pad($product_counter, 4, '0', STR_PAD_LEFT);
+            $product = Product::create([
+                'article' => $article,
+                'name' => $name,
+                'slug' => Str::slug($name . $product_counter),
+                'price' => $faker->numberBetween(500, 2000),
+                'unit' => 'кг',
+                'product_code' => 'ZT' . $product_counter,
+                'description' => $faker->paragraph,
+                'category_id' => $category->id,
+                'color_id' => $color->id,
+                'brand_id' => $brand->id,
+                'is_published' => $faker->boolean(80),
+                'is_sale' => $faker->boolean(20),
+                'texture' => 'Гладкая',
+                'pattern' => 'Нет',
+                'country' => $brand->country,
+                'collection' => $faker->word,
+            ]);
 
-        $product6 = Product::create([
-            'article' => 'LIT001',
-            'name' => 'Клей для плитки Litokol Litoflex K80',
-            'slug' => Str::slug('Клей для плитки Litokol Litoflex K80'),
-            'price' => 1200.00,
-            'unit' => 'упак.',
-            'product_code' => 'M001',
-            'description' => 'Высокоэластичный клей для керамогранита и крупноформатной плитки.',
-            'category_id' => $category4->id,
-            'color_id' => $color1->id,
-            'brand_id' => $brand5->id,
-            'is_published' => true,
-            'is_sale' => false,
-            'texture' => 'Порошок',
-            'pattern' => 'Нет',
-            'country' => 'Италия',
-            'collection' => 'Litoflex',
-        ]);
+            ProductAttributeValue::create([
+                'product_id' => $product->id,
+                'attribute_id' => $attribute_weight->id,
+                'number_value' => $faker->numberBetween(1, 25),
+            ]);
+            ProductAttributeValue::create([
+                'product_id' => $product->id,
+                'attribute_id' => $attribute_used_as_glue->id,
+                'boolean_value' => $faker->boolean,
+            ]);
+            ProductAttributeValue::create([
+                'product_id' => $product->id,
+                'attribute_id' => $attribute_seam_width->id,
+                'string_value' => $faker->randomElement(['1-3 мм', '2-5 мм', '3-8 мм']),
+            ]);
+            ProductAttributeValue::create([
+                'product_id' => $product->id,
+                'attribute_id' => $attribute_description_full->id,
+                'text_value' => $faker->paragraph(3),
+            ]);
 
-        ProductAttributeValue::create([
-            'product_id' => $product6->id,
-            'attribute_id' => $attribute_pack_weight->id,
-            'number_value' => 25,
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product6->id,
-            'attribute_id' => $attribute_drying_time->id,
-            'string_value' => '24 часа',
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product6->id,
-            'attribute_id' => $attribute_min_temp->id,
-            'number_value' => -30,
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product6->id,
-            'attribute_id' => $attribute_max_temp->id,
-            'number_value' => 70,
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product6->id,
-            'attribute_id' => $attribute_consumption->id,
-            'string_value' => '2-5 кг/м2',
-        ]);
+            $product_counter++;
+        }
+    }
 
-        $product7 = Product::create([
-            'article' => 'LIT002',
-            'name' => 'Затирка для плитки Litokol Starlike Evo',
-            'slug' => Str::slug('Затирка для плитки Litokol Starlike Evo'),
-            'price' => 800.00,
-            'unit' => 'кг',
-            'product_code' => 'M002',
-            'description' => 'Эпоксидная затирка для швов с высокой стойкостью к агрессивным средам.',
-            'category_id' => $category5->id,
-            'color_id' => $color2->id,
-            'brand_id' => $brand5->id,
-            'is_published' => true,
-            'is_sale' => false,
-            'texture' => 'Гладкая',
-            'pattern' => 'Нет',
-            'country' => 'Италия',
-            'collection' => 'Starlike',
-        ]);
+    private function createGlueProducts($category, $brands, $colors, $faker, $count, $attribute_weight, $attribute_description_full, &$product_counter)
+    {
+        for ($i = 0; $i < $count; $i++) {
+            $brand = $faker->randomElement($brands);
+            $color = $faker->randomElement($colors);
+            $name = $faker->sentence(3);
+            $article = 'KL' . str_pad($product_counter, 4, '0', STR_PAD_LEFT);
+            $product = Product::create([
+                'article' => $article,
+                'name' => $name,
+                'slug' => Str::slug($name . $product_counter),
+                'price' => $faker->numberBetween(800, 3000),
+                'unit' => 'упак.',
+                'product_code' => 'KL' . $product_counter,
+                'description' => $faker->paragraph,
+                'category_id' => $category->id,
+                'color_id' => $color->id,
+                'brand_id' => $brand->id,
+                'is_published' => $faker->boolean(80),
+                'is_sale' => $faker->boolean(20),
+                'texture' => 'Порошок',
+                'pattern' => 'Нет',
+                'country' => $brand->country,
+                'collection' => $faker->word,
+            ]);
 
-        ProductAttributeValue::create([
-            'product_id' => $product7->id,
-            'attribute_id' => $attribute_pack_weight->id,
-            'number_value' => 5,
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product7->id,
-            'attribute_id' => $attribute_drying_time->id,
-            'string_value' => '24 часа (пешие нагрузки)',
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product7->id,
-            'attribute_id' => $attribute_waterproof->id,
-            'boolean_value' => true,
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product7->id,
-            'attribute_id' => $attribute_min_temp->id,
-            'number_value' => -20,
-        ]);
-        ProductAttributeValue::create([
-            'product_id' => $product7->id,
-            'attribute_id' => $attribute_max_temp->id,
-            'number_value' => 100,
-        ]);
+            ProductAttributeValue::create([
+                'product_id' => $product->id,
+                'attribute_id' => $attribute_weight->id,
+                'number_value' => $faker->numberBetween(5, 25),
+            ]);
+            ProductAttributeValue::create([
+                'product_id' => $product->id,
+                'attribute_id' => $attribute_description_full->id,
+                'text_value' => $faker->paragraph(3),
+            ]);
+
+            $product_counter++;
+        }
+    }
+
+    private function createSanitaryProducts($sanitary_subs, $brands, $colors, $faker, $count_per_sub, $attribute_type, $attribute_description_full, &$product_counter)
+    {
+        foreach ($sanitary_subs as $sub_name => $sub_category) {
+            for ($i = 0; $i < $count_per_sub; $i++) {
+                $brand = $faker->randomElement($brands);
+                $color = $faker->randomElement($colors);
+                $name = $faker->sentence(3);
+                $article = 'SN' . str_pad($product_counter, 4, '0', STR_PAD_LEFT);
+                $product = Product::create([
+                    'article' => $article,
+                    'name' => $name,
+                    'slug' => Str::slug($name . $product_counter),
+                    'price' => $faker->numberBetween(5000, 50000),
+                    'unit' => 'шт',
+                    'product_code' => 'SN' . $product_counter,
+                    'description' => $faker->paragraph,
+                    'category_id' => $sub_category->id,
+                    'color_id' => $color->id,
+                    'brand_id' => $brand->id,
+                    'is_published' => $faker->boolean(80),
+                    'is_sale' => $faker->boolean(20),
+                    'texture' => 'Гладкая',
+                    'pattern' => 'Нет',
+                    'country' => $brand->country,
+                    'collection' => $faker->word,
+                ]);
+
+                $type = '';
+                switch ($sub_name) {
+                    case 'Ванны':
+                        $type = $faker->randomElement(['Акриловая', 'Чугунная', 'Стальная']);
+                        break;
+                    case 'Смесители':
+                        $type = $faker->randomElement(['Однорычажный', 'Двухвентильный', 'Термостатический']);
+                        break;
+                    case 'Унитазы':
+                        $type = $faker->randomElement(['Компакт', 'Подвесной', 'Напольный']);
+                        break;
+                    case 'Инсталляции':
+                        $type = $faker->randomElement(['Блочная', 'Рамная']);
+                        break;
+                    case 'Душевые кабины':
+                        $type = $faker->randomElement(['Закрытая', 'Открытая', 'Угловая']);
+                        break;
+                }
+
+                ProductAttributeValue::create([
+                    'product_id' => $product->id,
+                    'attribute_id' => $attribute_type->id,
+                    'string_value' => $type,
+                ]);
+                ProductAttributeValue::create([
+                    'product_id' => $product->id,
+                    'attribute_id' => $attribute_description_full->id,
+                    'text_value' => $faker->paragraph(3),
+                ]);
+
+                $product_counter++;
+            }
+        }
     }
 }
