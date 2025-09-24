@@ -11,17 +11,17 @@
                 <div class="footer-links">
                   <ul class="footer-menu">
                     <li>
-                      <NuxtLink class="single-link" to="/">
+                      <NuxtLink class="single-link" to="/category/keramogranit">
                         Керамогранит
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink class="single-link" to="/">
+                      <NuxtLink class="single-link" to="/category/plitka">
                         Плитка
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink class="single-link" to="/">
+                      <NuxtLink class="single-link" to="/category/mozaika">
                         Мозаика
                       </NuxtLink>
                     </li>

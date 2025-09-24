@@ -7,13 +7,13 @@
             <li class="dropdown">
               <a href="#"> Каталог <i class="fa fa-angle-down"></i> </a>
               <ul class="sub-menu">
-                <li><a href="index.html">Клинкер</a></li>
-                <li><a href="index.html">Ступени</a></li>
+                <li><NuxtLink to="/category/klinker">Клинкер</NuxtLink></li>
+                <li><NuxtLink to="/category/stupeni">Ступени</NuxtLink></li>
                 <li>
-                  <NuxtLink to="/category/zatirka-dlia-plitki">Затирка для плитки</NuxtLink>
+                  <NuxtLink to="/category/zatirka">Затирка для плитки</NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to="/category/klei-dlia-plitki">Клеевые смеси</NuxtLink>
+                  <NuxtLink to="/category/klei">Клеевые смеси</NuxtLink>
                 </li>
                 <li class="dropdown position-static">
                   <NuxtLink to="/category/santexnika">
@@ -40,12 +40,12 @@
               </ul>
             </li>
             <li>
-              <NuxtLink to="/products">Керамогранит</NuxtLink>
+              <NuxtLink to="/category/keramogranit">Керамогранит</NuxtLink>
             </li>
             <li>
-              <NuxtLink to="/category/plitka-dlia-pola">Плитка</NuxtLink>
+              <NuxtLink to="/category/plitka">Плитка</NuxtLink>
             </li>
-            <li><a href="about.html">Мозаика</a></li>
+            <li><NuxtLink to="/category/mozaika">Мозаика</NuxtLink></li>
             <li>
               <NuxtLink to="/partnerships" target="_blank">Дизайнерам</NuxtLink>
             </li>

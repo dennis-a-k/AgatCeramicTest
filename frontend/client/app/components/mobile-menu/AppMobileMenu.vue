@@ -23,21 +23,15 @@
             <nav class="offcanvas-menu mb-4">
                 <ul>
                     <li>
-                        <a href="#">
-                            Керамогранит
-                        </a>
+                        <NuxtLink to="/category/keramogranit">Керамогранит</NuxtLink>
                     </li>
 
                     <li>
-                        <a href="/">
-                            Плитка
-                        </a>
+                        <NuxtLink to="/category/plitka">Плитка</NuxtLink>
                     </li>
 
                     <li>
-                        <a href="/">
-                            Мозаика
-                        </a>
+                        <NuxtLink to="/category/mozaika">Мозаика</NuxtLink>
                     </li>
 
                     <li>
@@ -56,27 +50,19 @@
                         <a href="#"><span class="menu-text">Каталог</span></a>
                         <ul class="sub-menu">
                             <li>
-                                <a href="/">
-                                    <span class="menu-text">Клинкер</span>
-                                </a>
+                                <NuxtLink to="/category/klinker"><span class="menu-text">Клинкер</span></NuxtLink>
                             </li>
                             <li>
-                                <a href="/">
-                                    <span class="menu-text">Ступени</span>
-                                </a>
+                                <NuxtLink to="/category/stupeni"><span class="menu-text">Ступени</span></NuxtLink>
                             </li>
                             <li>
-                                <a href="/">
-                                    <span class="menu-text">Затирка для плитки</span>
-                                </a>
+                                <NuxtLink to="/category/zatirka"><span class="menu-text">Затирка для плитки</span></NuxtLink>
                             </li>
                             <li>
-                                <a href="/">
-                                    <span class="menu-text">Клеевые смеси</span>
-                                </a>
+                                <NuxtLink to="/category/klei"><span class="menu-text">Клеевые смеси</span></NuxtLink>
                             </li>
                             <li>
-                                <a href="#"><span class="menu-text">Сантехника</span></a>
+                                <NuxtLink to="/category/santexnika"><span class="menu-text">Сантехника</span></NuxtLink>
                                 <ul class="sub-menu">
                                     <li><a href="/">Ванны</a></li>
                                     <li><a href="/">Смесители</a></li>
