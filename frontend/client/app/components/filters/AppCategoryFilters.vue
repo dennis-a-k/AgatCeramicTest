@@ -47,7 +47,7 @@
                 <div class="sidebar-widget-color">
                     <ul class="d-flex flex-wrap">
                         <li class="color-list" v-for="color in colors" :key="color.id">
-                            <a href="#" :style="{ backgroundColor: color.hex_code }" class="colors-filter" :data-color="color.name" @click.prevent="selectFilter('color', color.id)">
+                            <a href="#" :style="{ backgroundColor: color.hex }" class="colors-filter" :data-color="color.name" @click.prevent="selectFilter('color', color.id)">
                             </a>
                         </li>
                     </ul>
