@@ -84,8 +84,18 @@ export default defineNuxtConfig({
   ssr: true,
   app: {
     head: {
-      charset: 'utf-8',
-      viewport: 'width=device-width, initial-scale=1',
+      htmlAttrs: {
+        lang: 'ru',
+        dir: 'ltr',
+      },
+      title: 'AgatCeramic',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+      ],
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      ]
     }
-  }
+  },
 })
