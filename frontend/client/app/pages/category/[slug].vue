@@ -1,17 +1,7 @@
 <template>
-
   <main class="shop-category-area pt-100px pb-100px">
     <div class="container">
-      <div v-if="pending" class="loading">
-        Загрузка товаров...
-      </div>
-      <div v-else-if="showErrorMessage" class="error">
-        Ошибка загрузки: {{ error.message }}
-      </div>
-      <div v-else-if="!productsData || !productsData.data || productsData.data.length === 0" class="text-center mt-2">
-        <h1>Список товаров пуст</h1>
-      </div>
-      <div v-else class="row">
+      <div class="row">
         <div class="col-lg-9 order-lg-last col-md-12 order-md-first">
           <div class="shop-top-bar d-flex justify-content-between mb-3">
             <div class="category-text">
@@ -20,13 +10,24 @@
             </div>
             <ProductAppSortedGoods @update:sortOption="handleSortChange" />
           </div>
-          <div class="shop-bottom-area">
+          <div v-if="pending" class="loading">
+            Загрузка товаров...
+          </div>
+          <div v-else-if="showErrorMessage" class="error text-center mt-5">
+            <h2>Произошла ошибка при загрузке товаров.<br>Попробуйте перезагрузить страницу.</h2>
+          </div>
+          <div v-else-if="!productsData || !productsData.data || productsData.data.length === 0"
+            class="text-center mt-2">
+            <h2>Список товаров пуст</h2>
+          </div>
+          <div v-else class="shop-bottom-area">
             <div class="row">
               <div class="col">
                 <div class="tab-content">
                   <div class="tab-pane fade show active" id="shop-grid">
                     <div class="row mb-n-30px">
-                      <ProductAppProductCard v-for="product in productsData.data" :key="product.id" :product="product" />
+                      <ProductAppProductCard v-for="product in productsData.data" :key="product.id"
+                        :product="product" />
                     </div>
                   </div>
                 </div>
@@ -51,42 +52,52 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, watch, computed, watchEffect } from 'vue'
+import { useRoute } from 'vue-router'
+import { useHead } from '@unhead/vue'
 
-const route = useRoute();
-const slug = route.params.slug;
+const route = useRoute()
+const slug = route.params.slug
 
-// const category = ref(null);
-// const products = ref(null);
-const filters = ref({ brands: [], min_price: '', max_price: '', colors: [], patterns: [], weights: [], subcategories: [], glues: [], mixture_types: [], seams: [], textures: [], sizes: [] });
+const filters = ref({
+  brands: [],
+  min_price: '',
+  max_price: '',
+  colors: [],
+  patterns: [],
+  weights: [],
+  subcategories: [],
+  glues: [],
+  mixture_types: [],
+  seams: [],
+  textures: [],
+  sizes: []
+})
 
-const selectedBrands = ref([]);
-const minPrice = ref('');
-const maxPrice = ref('');
-const sortOption = ref('default');
-const currentPage = ref(1);
-const selectedColors = ref([]);
-const selectedPatterns = ref([]);
-const selectedWeights = ref([]);
-const selectedSubcategories = ref([]);
-const selectedGlues = ref([]);
-const selectedMixtureTypes = ref([]);
-const selectedSeams = ref([]);
-const selectedTextures = ref([]);
-const selectedSizes = ref([]);
+const selectedBrands = ref([])
+const minPrice = ref('')
+const maxPrice = ref('')
+const sortOption = ref('default')
+const currentPage = ref(1)
+const selectedColors = ref([])
+const selectedPatterns = ref([])
+const selectedWeights = ref([])
+const selectedSubcategories = ref([])
+const selectedGlues = ref([])
+const selectedMixtureTypes = ref([])
+const selectedSeams = ref([])
+const selectedTextures = ref([])
+const selectedSizes = ref([])
 
-// Debounce utility function
 const debounce = (func, delay) => {
-  let timeout;
-  return function(...args) {
-    const context = this;
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(context, args), delay);
-  };
-};
+  let timeout
+  return (...args) => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => func(...args), delay)
+  }
+}
 
-const queryParams = computed(() => ({
+const queryParams = ref({
   brands: selectedBrands.value,
   min_price: minPrice.value,
   max_price: maxPrice.value,
@@ -100,70 +111,137 @@ const queryParams = computed(() => ({
   mixture_types: selectedMixtureTypes.value,
   seams: selectedSeams.value,
   textures: selectedTextures.value,
-  sizes: selectedSizes.value,
-}));
+  sizes: selectedSizes.value
+})
+
+const updateQuery = () => {
+  queryParams.value = {
+    brands: selectedBrands.value,
+    min_price: minPrice.value,
+    max_price: maxPrice.value,
+    sort: sortOption.value,
+    page: currentPage.value,
+    colors: selectedColors.value,
+    patterns: selectedPatterns.value,
+    weights: selectedWeights.value,
+    subcategories: selectedSubcategories.value,
+    glues: selectedGlues.value,
+    mixture_types: selectedMixtureTypes.value,
+    seams: selectedSeams.value,
+    textures: selectedTextures.value,
+    sizes: selectedSizes.value
+  }
+}
+
+const debouncedUpdateQuery = debounce(updateQuery, 300)
+
+watchEffect(() => {
+  // Trigger on changes to any filter or sort parameters
+  selectedBrands.value
+  minPrice.value
+  maxPrice.value
+  sortOption.value
+  currentPage.value
+  selectedColors.value
+  selectedPatterns.value
+  selectedWeights.value
+  selectedSubcategories.value
+  selectedGlues.value
+  selectedMixtureTypes.value
+  selectedSeams.value
+  selectedTextures.value
+  selectedSizes.value
+  debouncedUpdateQuery()
+})
 
 const { data: fetchData, pending, error, refresh } = useFetch(
-  `http://localhost/api/category/${slug}/products`,
+  `http://127.0.0.1:8000/api/category/${slug}/products`,
   {
-    query: queryParams,
-    // Remove watch here, we will manually debounce it
+    query: queryParams
   }
-);
+)
 
-// Debounce the refresh function
-const debouncedRefresh = debounce(refresh, 300);
-
-// Watch queryParams and trigger debounced refresh
-watch(queryParams, () => {
-  debouncedRefresh();
-}, { deep: true });
-
-const categoryData = computed(() => fetchData.value?.category || null);
-const productsData = computed(() => fetchData.value?.products || null);
+const categoryData = computed(() => fetchData.value?.category || null)
+const productsData = computed(() => fetchData.value?.products || null)
 
 watch(fetchData, (newData) => {
   if (newData && newData.filters) {
-    Object.assign(filters.value, newData.filters);
+    Object.assign(filters.value, newData.filters)
   }
-}, { immediate: true });
-
-
-// if (error.value) {
-//   console.error('Ошибка при загрузке товаров категории:', error.value);
-// }
+}, { immediate: true })
 
 const handleFilterChange = (newFilters) => {
-  selectedBrands.value = newFilters.brands;
-  selectedColors.value = newFilters.colors || [];
-  selectedPatterns.value = newFilters.patterns || [];
-  selectedWeights.value = newFilters.weights || [];
-  selectedSubcategories.value = newFilters.subcategories || [];
-  selectedGlues.value = newFilters.glues || [];
-  selectedMixtureTypes.value = newFilters.mixture_types || [];
-  selectedSeams.value = newFilters.seams || [];
-  selectedTextures.value = newFilters.textures || [];
-  selectedSizes.value = newFilters.sizes || [];
-  // minPrice.value = newFilters.min_price; // Assuming min_price and max_price are handled separately or in filters
-  // maxPrice.value = newFilters.max_price; // Assuming min_price and max_price are handled separately or in filters
-  currentPage.value = 1;
-};
+  selectedBrands.value = newFilters.brands
+  selectedColors.value = newFilters.colors || []
+  selectedPatterns.value = newFilters.patterns || []
+  selectedWeights.value = newFilters.weights || []
+  selectedSubcategories.value = newFilters.subcategories || []
+  selectedGlues.value = newFilters.glues || []
+  selectedMixtureTypes.value = newFilters.mixture_types || []
+  selectedSeams.value = newFilters.seams || []
+  selectedTextures.value = newFilters.textures || []
+  selectedSizes.value = newFilters.sizes || []
+  currentPage.value = 1
+}
 
 const changePage = (page) => {
-  currentPage.value = page;
-};
+  currentPage.value = page
+}
 
 const handleSortChange = (newSortOption) => {
-  sortOption.value = newSortOption;
-  currentPage.value = 1;
-};
+  sortOption.value = newSortOption
+  currentPage.value = 1
+}
 
 const showErrorMessage = computed(() => {
-  return error.value &&
-         !pending.value &&
-         !error.value.message.includes('Request aborted') &&
-         error.value.name !== 'AbortError';
-});
+  return error.value && !pending.value
+})
+
+const structuredData = computed(() => {
+  if (!productsData.value?.data) return null
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: categoryData.value?.name || 'Категория товаров',
+    description: categoryData.value?.description || '',
+    url: `https://yourdomain.com/category/${slug}`,
+    numberOfItems: productsData.value.data.length,
+    itemListElement: productsData.value.data.map((product, index) => ({
+      '@type': 'Product',
+      position: index + 1,
+      name: product.name,
+      description: product.description,
+      image: product.image,
+      offers: {
+        '@type': 'Offer',
+        price: product.price,
+        priceCurrency: 'RUB',
+        availability: product.in_stock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
+      }
+    }))
+  }
+})
+
+useHead(computed(() => ({
+  title: categoryData.value?.name ? `${categoryData.value.name} - Agat Ceramic` : 'Категория товаров - Agat Ceramic',
+  meta: [
+    {
+      name: 'description',
+      content: categoryData.value?.description || 'Купить товары категории в интернет-магазине Agat Ceramic'
+    },
+    {
+      name: 'keywords',
+      content: categoryData.value?.name ? `${categoryData.value.name}, керамическая плитка, сантехника` : 'керамическая плитка, сантехника'
+    }
+  ],
+  link: [
+    {
+      rel: 'canonical',
+      href: `https://yourdomain.com/category/${slug}`
+    }
+  ],
+  script: structuredData.value ? [{ type: 'application/ld+json', children: JSON.stringify(structuredData.value) }] : []
+})))
 </script>
 
 <style scoped>

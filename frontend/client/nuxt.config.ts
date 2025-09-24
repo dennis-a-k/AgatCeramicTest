@@ -37,13 +37,19 @@ export default defineNuxtConfig({
     hostname: 'https://yourdomain.com', // Замените на ваш домен
     gzip: true,
     routes: async () => {
-      // Здесь можно динамически генерировать routes для sitemap
-      return [
-        '/',
-        '/about',
-        '/contact'
-        // Добавьте свои маршруты
-      ]
+      try {
+        const categories: string[] = await $fetch('http://127.0.0.1:8000/api/categories/slugs') || []
+        const categoryRoutes = categories.map((slug: string) => `/category/${slug}`)
+        return [
+          '/',
+          '/about',
+          '/contact',
+          ...categoryRoutes
+          // Добавьте другие маршруты
+        ]
+      } catch {
+        return ['/', '/about', '/contact']
+      }
     }
   },
 
