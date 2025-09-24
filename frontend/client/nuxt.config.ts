@@ -28,17 +28,17 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      // apiBase: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://api.your-backend.com',
-      // siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://your-site.com'
+      apiBase: process.env.NUXT_PUBLIC_API_BASE_URL,
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
     }
   },
   // Настройки Sitemap
   sitemap: {
-    hostname: 'https://yourdomain.com', // Замените на ваш домен
+    hostname: process.env.NUXT_PUBLIC_SITE_URL,
     gzip: true,
     routes: async () => {
       try {
-        const categories: string[] = await $fetch('http://127.0.0.1:8000/api/categories/slugs') || []
+        const categories: string[] = await $fetch(`${process.env.NUXT_PUBLIC_API_BASE_URL}/api/categories/slugs`) || []
         const categoryRoutes = categories.map((slug: string) => `/category/${slug}`)
         return [
           '/',

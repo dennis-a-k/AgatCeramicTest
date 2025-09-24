@@ -55,6 +55,7 @@
 import { ref, watch, computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { useHead } from '@unhead/vue'
+import { useRuntimeConfig } from '#imports'
 
 const route = useRoute()
 const slug = route.params.slug
@@ -136,7 +137,6 @@ const updateQuery = () => {
 const debouncedUpdateQuery = debounce(updateQuery, 300)
 
 watchEffect(() => {
-  // Trigger on changes to any filter or sort parameters
   selectedBrands.value
   minPrice.value
   maxPrice.value
@@ -154,8 +154,9 @@ watchEffect(() => {
   debouncedUpdateQuery()
 })
 
+const config = useRuntimeConfig()
 const { data: fetchData, pending, error, refresh } = useFetch(
-  `http://127.0.0.1:8000/api/category/${slug}/products`,
+  `${config.public.apiBase}/api/category/${slug}/products`,
   {
     query: queryParams
   }
@@ -204,7 +205,7 @@ const structuredData = computed(() => {
     '@type': 'ItemList',
     name: categoryData.value?.name || 'Категория товаров',
     description: categoryData.value?.description || '',
-    url: `https://yourdomain.com/category/${slug}`,
+    url: `${config.public.siteUrl}/category/${slug}`,
     numberOfItems: productsData.value.data.length,
     itemListElement: productsData.value.data.map((product, index) => ({
       '@type': 'Product',
@@ -237,7 +238,7 @@ useHead(computed(() => ({
   link: [
     {
       rel: 'canonical',
-      href: `https://yourdomain.com/category/${slug}`
+      href: `${config.public.siteUrl}/category/${slug}`
     }
   ],
   script: structuredData.value ? [{ type: 'application/ld+json', children: JSON.stringify(structuredData.value) }] : []
