@@ -45,6 +45,14 @@ export default defineNuxtConfig({
         }
       },
     },
+    optimizeDeps: {
+      exclude: ['nuxt']
+    }
+  },
+  nitro: {
+    externals: {
+      external: ['nuxt/dist/core/runtime/nitro/utils/cache-driver']
+    }
   },
   plugins: [
     'plugins/bootstrap.client.js',
