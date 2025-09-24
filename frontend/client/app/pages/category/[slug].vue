@@ -8,7 +8,7 @@
               <h1 class="h3 m-0" v-if="categoryData">{{ categoryData.name }}</h1>
               <p v-if="categoryData">{{ categoryData.description }}</p>
             </div>
-            <ProductAppSortedGoods @update:sortOption="handleSortChange" />
+            <UiAppSortedGoods @update:sortOption="handleSortChange" />
           </div>
           <UiAppSpinner v-if="pending" text="Загрузка товаров..." />
           <div v-else-if="showErrorMessage" class="error text-center mt-5">
