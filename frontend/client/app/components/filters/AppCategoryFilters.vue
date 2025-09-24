@@ -147,7 +147,7 @@
 
             <div class="sidebar-widget">
                 <div class="">
-                    <a href="/" class="btn-filter">
+                    <a href="#" class="btn-filter" @click.prevent="resetFilters">
                         Сбросить фильтры
                     </a>
                 </div>
