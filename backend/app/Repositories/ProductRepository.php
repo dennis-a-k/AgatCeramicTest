@@ -58,7 +58,7 @@ class ProductRepository implements FilterableRepositoryInterface
     {
         return $category->children->pluck('id')->push($category->id)->toArray();
     }
-    // Добавляем методы для работы с фильтрами (начало нового)
+
     /**
      * Получение товаров по slug категории с фильтрами
      *
@@ -176,7 +176,6 @@ class ProductRepository implements FilterableRepositoryInterface
             'filters' => $filters
         ];
     }
-    // конец нового
 
     // Метод для применения фильтров
     public function applyFilters(Request $request): LengthAwarePaginator

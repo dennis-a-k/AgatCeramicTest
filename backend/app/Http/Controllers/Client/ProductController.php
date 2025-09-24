@@ -40,7 +40,6 @@ class ProductController extends Controller
         return response()->json($result);
     }
 
-    // Новый метод для получения товаров по категории (новое)
     /**
      * Получение товаров по категории с фильтрами
      *
