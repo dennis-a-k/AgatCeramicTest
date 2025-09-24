@@ -1,3 +1,26 @@
+import { config } from 'dotenv'
+import { loadEnv } from 'vite'
+
+// Полностью перезаписываем переменные из нужного .env файла
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development'
+const envConfig = config({ path: envFile })
+
+if (envConfig.parsed) {
+  // Полностью перезаписываем process.env значениями из файла
+  for (const key in envConfig.parsed) {
+    process.env[key] = envConfig.parsed[key]
+  }
+}
+
+// Альтернативно: используем Vite для загрузки env
+const viteEnv = loadEnv(process.env.NODE_ENV || 'production', process.cwd(), '')
+Object.assign(process.env, viteEnv)
+
+console.log('Current NODE_ENV:', process.env.NODE_ENV)
+console.log('Site URL from env:', process.env.NUXT_PUBLIC_SITE_URL)
+console.log('Site API URL from env:', process.env.NUXT_PUBLIC_API_BASE_URL)
+console.log('Loaded from file:', envFile)
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
@@ -32,7 +55,6 @@ export default defineNuxtConfig({
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
     }
   },
-  // Настройки Sitemap
   sitemap: {
     hostname: process.env.NUXT_PUBLIC_SITE_URL,
     gzip: true,
@@ -45,23 +67,17 @@ export default defineNuxtConfig({
           '/about',
           '/contact',
           ...categoryRoutes
-          // Добавьте другие маршруты
         ]
       } catch {
         return ['/', '/about', '/contact']
       }
     }
   },
-
-
-
-  // Настройки для SEO
-  ssr: true, // Важно для SEO
+  ssr: true,
   app: {
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
     }
   }
-
 })
