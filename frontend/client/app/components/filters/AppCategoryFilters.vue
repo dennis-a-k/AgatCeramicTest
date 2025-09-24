@@ -173,6 +173,8 @@ const props = defineProps({
     initialFilters: { type: Object, default: () => ({ brands: [], min_price: '', max_price: '', colors: [], patterns: [], weights: [], subcategories: [], glues: [], mixture_types: [], seams: [], textures: [], sizes: [] }) }
 });
 
+console.log('AppCategoryFilters props:', props);
+
 const emit = defineEmits(['update:filters']);
 
 const selectedBrands = ref(props.initialFilters.brands);

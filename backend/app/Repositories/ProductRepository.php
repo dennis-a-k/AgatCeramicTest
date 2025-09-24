@@ -11,6 +11,7 @@ use App\Repositories\Contracts\FilterableRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductRepository implements FilterableRepositoryInterface
 {
@@ -78,6 +79,17 @@ class ProductRepository implements FilterableRepositoryInterface
         $products = $this->applyFilters($newRequest);
         $filters = $this->getAvailableFilters($newRequest);
 
+        // Добавляем subcategories
+        $filters['subcategories'] = $category->children->map(function ($child) {
+            return [
+                'id' => $child->id,
+                'name' => $child->name,
+                'slug' => $child->slug,
+            ];
+        })->toArray();
+
+        Log::info('Category filters for ' . $slug, $filters);
+
         return [
             'category' => $category,
             'products' => $products,
@@ -141,12 +153,7 @@ class ProductRepository implements FilterableRepositoryInterface
                         $q->where('attribute_id', $attributeId);
 
                         if ($attribute->type === 'number') {
-                            if (isset($values['min'])) {
-                                $q->where('number_value', '>=', $values['min']);
-                            }
-                            if (isset($values['max'])) {
-                                $q->where('number_value', '<=', $values['max']);
-                            }
+                            $q->whereIn('number_value', (array)$values);
                         } else {
                             $q->whereIn('string_value', (array)$values);
                         }
@@ -188,6 +195,7 @@ class ProductRepository implements FilterableRepositoryInterface
         $baseQuery = $this->model->published();
 
         // Применяем те же фильтры, что и в основном запросе
+        $category = null;
         if ($request->has('category_id')) {
             $category = Category::find($request->category_id);
             if ($category) {
@@ -196,6 +204,9 @@ class ProductRepository implements FilterableRepositoryInterface
             }
         } elseif ($request->has('category_ids')) {
             $baseQuery->whereIn('category_id', (array)$request->category_ids);
+            // Для получения атрибутов, берем первую категорию из массива
+            $categoryId = is_array($request->category_ids) ? $request->category_ids[0] : $request->category_ids;
+            $category = Category::find($categoryId);
         }
 
         if ($request->has('brand_id')) {
@@ -220,37 +231,77 @@ class ProductRepository implements FilterableRepositoryInterface
             }])
             ->get();
 
-        // Получаем доступные атрибуты
-        $attributes = [];
-        if ($request->has('category_id')) {
-            $category = Category::with('filterableAttributes')->find($request->category_id);
-            if ($category) {
-                foreach ($category->filterableAttributes as $attribute) {
-                    $valuesQuery = DB::table('product_attribute_values')
-                        ->join('products', 'product_attribute_values.product_id', '=', 'products.id')
-                        ->where('product_attribute_values.attribute_id', $attribute->id)
-                        ->whereIn('products.id', $baseQuery->select('id'))
-                        ->where('products.is_published', true);
+        // Получаем уникальные значения из полей products
+        $patternsQuery = clone $baseQuery;
+        $patterns = $patternsQuery->select('pattern as value', DB::raw('COUNT(*) as count'))
+            ->whereNotNull('pattern')
+            ->groupBy('pattern')
+            ->get()
+            ->map(fn($item) => ['id' => $item->value, 'name' => $item->value, 'count' => $item->count])
+            ->toArray();
 
-                    if ($attribute->type === 'number') {
-                        $min = $valuesQuery->min('number_value');
-                        $max = $valuesQuery->max('number_value');
-                        $attributes[$attribute->id] = [
-                            'attribute' => $attribute,
-                            'min' => $min,
-                            'max' => $max,
-                            'type' => 'range'
-                        ];
-                    } else {
-                        $values = $valuesQuery->select('string_value', DB::raw('COUNT(*) as count'))
-                            ->groupBy('string_value')
-                            ->get();
-                        $attributes[$attribute->id] = [
-                            'attribute' => $attribute,
-                            'values' => $values,
-                            'type' => 'select'
-                        ];
-                    }
+        $texturesQuery = clone $baseQuery;
+        $textures = $texturesQuery->select('texture as value', DB::raw('COUNT(*) as count'))
+            ->whereNotNull('texture')
+            ->groupBy('texture')
+            ->get()
+            ->map(fn($item) => ['id' => $item->value, 'name' => $item->value, 'count' => $item->count])
+            ->toArray();
+
+        // Инициализируем массивы для атрибутов
+        $weights = [];
+        $glues = [];
+        $mixture_types = [];
+        $seams = [];
+        $sizes = [];
+
+        if ($category) {
+            $category = Category::with('filterableAttributes')->find($category->id);
+            foreach ($category->filterableAttributes as $attribute) {
+                $valuesQuery = DB::table('product_attribute_values')
+                    ->join('products', 'product_attribute_values.product_id', '=', 'products.id')
+                    ->where('product_attribute_values.attribute_id', $attribute->id)
+                    ->whereIn('products.id', $baseQuery->select('id'))
+                    ->where('products.is_published', true);
+
+                $values = [];
+                if ($attribute->type === 'number') {
+                    $values = $valuesQuery->select('number_value as value', DB::raw('COUNT(*) as count'))
+                        ->whereNotNull('number_value')
+                        ->groupBy('number_value')
+                        ->get()
+                        ->map(function ($item) {
+                            return ['id' => $item->value, 'value' => $item->value, 'count' => $item->count];
+                        })
+                        ->toArray();
+                } else {
+                    $values = $valuesQuery->select('string_value as value', DB::raw('COUNT(*) as count'))
+                        ->whereNotNull('string_value')
+                        ->groupBy('string_value')
+                        ->get()
+                        ->map(function ($item) {
+                            return ['id' => $item->value, 'name' => $item->value, 'count' => $item->count];
+                        })
+                        ->toArray();
+                }
+
+                // Распределяем по slug
+                switch ($attribute->slug) {
+                    case 'tolshhina':
+                        $weights = $values; // толщина как вес
+                        break;
+                    case 'glue':
+                        $glues = $values;
+                        break;
+                    case 'mixture_type':
+                        $mixture_types = $values;
+                        break;
+                    case 'seam':
+                        $seams = $values;
+                        break;
+                    case 'size':
+                        $sizes = $values;
+                        break;
                 }
             }
         }
@@ -261,12 +312,22 @@ class ProductRepository implements FilterableRepositoryInterface
             'max' => $baseQuery->max('price')
         ];
 
-        return [
+        $result = [
             'brands' => $brands,
             'colors' => $colors,
-            'attributes' => $attributes,
+            'patterns' => $patterns,
+            'weights' => $weights,
+            'glues' => $glues,
+            'mixture_types' => $mixture_types,
+            'seams' => $seams,
+            'textures' => $textures,
+            'sizes' => $sizes,
             'price_range' => $priceRange,
             'has_sale' => $baseQuery->where('is_sale', true)->exists()
         ];
+
+        Log::info('Available filters result', $result);
+
+        return $result;
     }
 }

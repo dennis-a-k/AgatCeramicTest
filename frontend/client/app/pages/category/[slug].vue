@@ -45,7 +45,20 @@
 
           </div>
         </div>
-        <FiltersAppCategoryFilters :initialFilters="filters" @update:filters="handleFilterChange" />
+        <FiltersAppCategoryFilters
+          :subcategories="filters.subcategories"
+          :patterns="filters.patterns"
+          :weights="filters.weights"
+          :colors="filters.colors"
+          :glues="filters.glues"
+          :mixture_types="filters.mixture_types"
+          :seams="filters.seams"
+          :textures="filters.textures"
+          :sizes="filters.sizes"
+          :brands="filters.brands"
+          :initialFilters="filters"
+          @update:filters="handleFilterChange"
+        />
       </div>
     </div>
   </main>
@@ -166,8 +179,10 @@ const categoryData = computed(() => fetchData.value?.category || null)
 const productsData = computed(() => fetchData.value?.products || null)
 
 watch(fetchData, (newData) => {
+  console.log('fetchData changed:', newData)
   if (newData && newData.filters) {
     Object.assign(filters.value, newData.filters)
+    console.log('Updated filters in [slug].vue:', filters.value)
   }
 }, { immediate: true })
 
