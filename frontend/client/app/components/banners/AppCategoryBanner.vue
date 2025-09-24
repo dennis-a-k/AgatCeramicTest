@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6" v-for="(banner, index) in banners" :key="index">
-                    <a :href="banner.href">
+                    <NuxtLink :to="banner.href">
                         <div class="single-banner mb-30px">
                             <NuxtImg :src="banner.imgSrc" :alt="banner.imgAlt" />
                             <div class="banner-content">
@@ -11,7 +11,7 @@
                                 <span class="category" v-if="banner.category" v-html="banner.category"></span>
                             </div>
                         </div>
-                    </a>
+                    </NuxtLink>
                 </div>
             </div>
         </div>
@@ -21,35 +21,35 @@
 <script setup>
 const banners = [
     {
-        href: "/",
+        href: "/category/keramogranit",
         imgSrc: "/images/page-index/banners/keramogranit.jpeg",
         imgAlt: "keramogranit",
         title: "Керамогранит",
         category: "От ведущих<br>производителей"
     },
     {
-        href: "/",
+        href: "/category/plitka",
         imgSrc: "/images/page-index/banners/plitka.jpg",
         imgAlt: "plitka",
         title: "Керамическая плитка",
         category: ""
     },
     {
-        href: "/",
+        href: "/category/mozaika",
         imgSrc: "/images/page-index/banners/mozaika.jpeg",
         imgAlt: "mozaika",
         title: "Керамическая мозаика",
         category: ""
     },
     {
-        href: "/",
+        href: "/category/zatirka",
         imgSrc: "/images/page-index/banners/zatirka.jpg",
         imgAlt: "zatirka",
         title: "Затирка для керамической плитки",
         category: ""
     },
     {
-        href: "/",
+        href: "/category/santexnika",
         imgSrc: "/images/page-index/banners/santekhnika.jpeg",
         imgAlt: "santekhnika",
         title: "Сантехника",

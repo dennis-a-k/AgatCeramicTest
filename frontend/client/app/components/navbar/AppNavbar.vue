@@ -7,8 +7,12 @@
             <li class="dropdown">
               <a href="#"> Каталог <i class="fa fa-angle-down"></i> </a>
               <ul class="sub-menu">
-                <li><NuxtLink to="/category/klinker">Клинкер</NuxtLink></li>
-                <li><NuxtLink to="/category/stupeni">Ступени</NuxtLink></li>
+                <li>
+                  <NuxtLink to="/category/klinker">Клинкер</NuxtLink>
+                </li>
+                <li>
+                  <NuxtLink to="/category/stupeni">Ступени</NuxtLink>
+                </li>
                 <li>
                   <NuxtLink to="/category/zatirka">Затирка для плитки</NuxtLink>
                 </li>
@@ -21,9 +25,21 @@
                     <i class="fa fa-angle-right"></i>
                   </NuxtLink>
                   <ul class="sub-menu sub-menu-2">
-                    <li><a href="blog-grid.html">Ванны</a></li>
-                    <li><a href="blog-grid-left-sidebar.html">Смесители</a></li>
-                    <li><a href="blog-grid-right-sidebar.html">Унитазы</a></li>
+                    <li>
+                      <NuxtLink to="/category/vanny">Ванны</NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/category/smesiteli">Смесители</NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/category/unitazy">Унитазы</NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/category/installiacii">Инсталляции</NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/category/dusevye-kabiny">Душевые кабины</NuxtLink>
+                    </li>
                   </ul>
                 </li>
               </ul>
@@ -45,7 +61,9 @@
             <li>
               <NuxtLink to="/category/plitka">Плитка</NuxtLink>
             </li>
-            <li><NuxtLink to="/category/mozaika">Мозаика</NuxtLink></li>
+            <li>
+              <NuxtLink to="/category/mozaika">Мозаика</NuxtLink>
+            </li>
             <li>
               <NuxtLink to="/partnerships" target="_blank">Дизайнерам</NuxtLink>
             </li>

@@ -56,7 +56,8 @@
                                 <NuxtLink to="/category/stupeni"><span class="menu-text">Ступени</span></NuxtLink>
                             </li>
                             <li>
-                                <NuxtLink to="/category/zatirka"><span class="menu-text">Затирка для плитки</span></NuxtLink>
+                                <NuxtLink to="/category/zatirka"><span class="menu-text">Затирка для плитки</span>
+                                </NuxtLink>
                             </li>
                             <li>
                                 <NuxtLink to="/category/klei"><span class="menu-text">Клеевые смеси</span></NuxtLink>
@@ -64,9 +65,21 @@
                             <li>
                                 <NuxtLink to="/category/santexnika"><span class="menu-text">Сантехника</span></NuxtLink>
                                 <ul class="sub-menu">
-                                    <li><a href="/">Ванны</a></li>
-                                    <li><a href="/">Смесители</a></li>
-                                    <li><a href="/">Унитазы</a></li>
+                                    <li>
+                                        <NuxtLink to="/category/vanny">Ванны</NuxtLink>
+                                    </li>
+                                    <li>
+                                        <NuxtLink to="/category/smesiteli">Смесители</NuxtLink>
+                                    </li>
+                                    <li>
+                                        <NuxtLink to="/category/unitazy">Унитазы</NuxtLink>
+                                    </li>
+                                    <li>
+                                        <NuxtLink to="/category/installiacii">Инсталляции</NuxtLink>
+                                    </li>
+                                    <li>
+                                        <NuxtLink to="/category/dusevye-kabiny">Душевые кабины</NuxtLink>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
