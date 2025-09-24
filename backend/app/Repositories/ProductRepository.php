@@ -11,7 +11,6 @@ use App\Repositories\Contracts\FilterableRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class ProductRepository implements FilterableRepositoryInterface
 {
@@ -87,8 +86,6 @@ class ProductRepository implements FilterableRepositoryInterface
                 'slug' => $child->slug,
             ];
         })->toArray();
-
-        Log::info('Category filters for ' . $slug, $filters);
 
         return [
             'category' => $category,
@@ -312,7 +309,7 @@ class ProductRepository implements FilterableRepositoryInterface
             'max' => $baseQuery->max('price')
         ];
 
-        $result = [
+        return [
             'brands' => $brands,
             'colors' => $colors,
             'patterns' => $patterns,
@@ -325,9 +322,5 @@ class ProductRepository implements FilterableRepositoryInterface
             'price_range' => $priceRange,
             'has_sale' => $baseQuery->where('is_sale', true)->exists()
         ];
-
-        Log::info('Available filters result', $result);
-
-        return $result;
     }
 }
