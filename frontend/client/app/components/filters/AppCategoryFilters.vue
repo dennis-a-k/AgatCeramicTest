@@ -358,7 +358,7 @@ const resetFilters = () => {
                 bottom: 0;
                 width: 150px;
                 height: 2px;
-                background-color: #e1e1e1;
+                background-color: $border-color;
                 content: "";
                 left: 0;
             }
@@ -375,7 +375,7 @@ const resetFilters = () => {
     box-shadow: none;
     padding: 10px 15px;
     line-height: 26px;
-    border: 1px solid #e1e1e1;
+    border: 1px solid $border-color;
     background: $white;
     border-radius: 0;
     width: auto;

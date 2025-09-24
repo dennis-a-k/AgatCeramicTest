@@ -10,9 +10,7 @@
             </div>
             <ProductAppSortedGoods @update:sortOption="handleSortChange" />
           </div>
-          <div v-if="pending" class="loading">
-            Загрузка товаров...
-          </div>
+          <UiAppSpinner v-if="pending" text="Загрузка товаров..." />
           <div v-else-if="showErrorMessage" class="error text-center mt-5">
             <h2>Произошла ошибка при загрузке товаров.<br>Попробуйте перезагрузить страницу.</h2>
           </div>
@@ -233,7 +231,7 @@ useHead(computed(() => ({
 })))
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .category-text {
   line-height: 1em;
 }

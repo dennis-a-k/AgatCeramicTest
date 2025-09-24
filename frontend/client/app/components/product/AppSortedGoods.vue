@@ -98,7 +98,7 @@ const selectSortOption = (option) => {
     border: none;
     background-color: transparent;
     padding: 0;
-    color: #090909;
+    color: $link-secondary-color;
     width: 100%;
 
     &::after {
@@ -139,7 +139,7 @@ const selectSortOption = (option) => {
     }
 
     & li {
-      border-bottom: 1px solid #ebebeb;
+      border-bottom: 1px solid $border-color;
 
       &:last-child {
         border: none;
@@ -148,7 +148,7 @@ const selectSortOption = (option) => {
 
     & .dropdown-item {
       padding: 10px;
-      color: #2d2d2d;
+      color: $link-secondary-color;
       line-height: 25px;
       font-size: 14px;
       background: transparent;
