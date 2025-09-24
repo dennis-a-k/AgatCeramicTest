@@ -11,7 +11,6 @@ use App\Repositories\Contracts\FilterableRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class ProductRepository implements FilterableRepositoryInterface
 {
@@ -331,7 +330,6 @@ class ProductRepository implements FilterableRepositoryInterface
                 break;
         }
 
-        // dd($request->all(), $query->toSql(), $query->getBindings());
         // Пагинация
         $perPage = $request->get('per_page', 24);
         return $query->paginate($perPage);
@@ -429,8 +427,8 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Получаем доступные бренды
         $brands = Brand::whereHas('products', function ($q) use ($baseQuery) {
-                $q->whereIn('products.id', $baseQuery->select('id'));
-            })
+            $q->whereIn('products.id', $baseQuery->select('id'));
+        })
             ->withCount(['products' => function ($q) use ($baseQuery) {
                 $q->whereIn('products.id', $baseQuery->select('id'));
             }])
@@ -438,8 +436,8 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Получаем доступные цвета
         $colors = Color::whereHas('products', function ($q) use ($baseQuery) {
-                $q->whereIn('products.id', $baseQuery->select('id'));
-            })
+            $q->whereIn('products.id', $baseQuery->select('id'));
+        })
             ->withCount(['products' => function ($q) use ($baseQuery) {
                 $q->whereIn('products.id', $baseQuery->select('id'));
             }])

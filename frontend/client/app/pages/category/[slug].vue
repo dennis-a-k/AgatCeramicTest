@@ -10,7 +10,6 @@
             </div>
             <ProductAppSortedGoods @update:sortOption="handleSortChange" />
           </div>
-          <div>Debug: Pending: {{ pending }} Error: {{ error }} Length: {{ productsData?.data?.length }}</div>
           <div v-if="pending" class="loading">
             Загрузка товаров...
           </div>
@@ -150,7 +149,6 @@ watchEffect(() => {
 const categoryData = computed(() => fetchData.value?.category || null)
 const productsData = computed(() => {
   const p = fetchData.value?.products || null
-  console.log('productsData computed', p)
   return p
 })
 
@@ -234,7 +232,6 @@ useHead(computed(() => ({
   ],
   script: structuredData.value ? [{ type: 'application/ld+json', children: JSON.stringify(structuredData.value) }] : []
 })))
-console.log(fetchData.value)
 </script>
 
 <style scoped>
