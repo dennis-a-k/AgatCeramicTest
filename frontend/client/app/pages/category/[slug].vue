@@ -210,11 +210,11 @@ const structuredData = computed(() => {
 })
 
 useHead(computed(() => ({
-  title: categoryData.value?.name ? `${categoryData.value.name} - Agat Ceramic` : 'Категория товаров - Agat Ceramic',
+  title: categoryData.value?.name ? `${categoryData.value.name} - AgatCeramic` : 'Категория товаров - AgatCeramic',
   meta: [
     {
       name: 'description',
-      content: categoryData.value?.description || 'Купить товары категории в интернет-магазине Agat Ceramic'
+      content: categoryData.value?.description || 'Купить товары категории в интернет-магазине AgatCeramic'
     },
     {
       name: 'keywords',
