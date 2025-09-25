@@ -131,7 +131,7 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по типу смеси
         if ($request->has('mixture_types') && !empty($request->mixture_types)) {
-            $attribute = Attribute::where('slug', 'mixture_type')->first();
+            $attribute = Attribute::where('slug', 'tip')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
                     $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->mixture_types);
@@ -141,10 +141,10 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по шву
         if ($request->has('seams') && !empty($request->seams)) {
-            $attribute = Attribute::where('slug', 'seam')->first();
+            $attribute = Attribute::where('slug', 'sirina-sva')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
-                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->seams);
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->seams);
                 });
             }
         }
@@ -171,7 +171,7 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по влагостойкости
         if ($request->has('waterproofs') && !empty($request->waterproofs)) {
-            $attribute = Attribute::where('slug', 'vlagostojkost')->first();
+            $attribute = Attribute::where('slug', 'vlagostoikost')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
                     $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->waterproofs));
@@ -405,7 +405,7 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по типу смеси
         if ($request->has('mixture_types') && !empty($request->mixture_types)) {
-            $attribute = Attribute::where('slug', 'mixture_type')->first();
+            $attribute = Attribute::where('slug', 'tip')->first();
             if ($attribute) {
                 $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
                     $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->mixture_types);
@@ -415,10 +415,10 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по шву
         if ($request->has('seams') && !empty($request->seams)) {
-            $attribute = Attribute::where('slug', 'seam')->first();
+            $attribute = Attribute::where('slug', 'sirina-sva')->first();
             if ($attribute) {
                 $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
-                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->seams);
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->seams);
                 });
             }
         }
@@ -445,7 +445,7 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по влагостойкости
         if ($request->has('waterproofs') && !empty($request->waterproofs)) {
-            $attribute = Attribute::where('slug', 'vlagostojkost')->first();
+            $attribute = Attribute::where('slug', 'vlagostoikost')->first();
             if ($attribute) {
                 $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
                     $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->waterproofs));
@@ -735,7 +735,7 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по типу смеси
         if ($request->has('mixture_types') && !empty($request->mixture_types)) {
-            $attribute = Attribute::where('slug', 'mixture_type')->first();
+            $attribute = Attribute::where('slug', 'tip')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
                     $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->mixture_types);
@@ -745,10 +745,10 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по шву
         if ($request->has('seams') && !empty($request->seams)) {
-            $attribute = Attribute::where('slug', 'seam')->first();
+            $attribute = Attribute::where('slug', 'sirina-sva')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
-                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->seams);
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->seams);
                 });
             }
         }
@@ -775,7 +775,7 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по влагостойкости
         if ($request->has('waterproofs') && !empty($request->waterproofs)) {
-            $attribute = Attribute::where('slug', 'vlagostojkost')->first();
+            $attribute = Attribute::where('slug', 'vlagostoikost')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
                     $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->waterproofs));
@@ -998,10 +998,10 @@ class ProductRepository implements FilterableRepositoryInterface
                     case 'ispolzuetsya-v-kachestve-kleya':
                         $glues = $values;
                         break;
-                    case 'mixture_type':
+                    case 'tip':
                         $mixture_types = $values; // тип смеси или тип для сантехники
                         break;
-                    case 'seam':
+                    case 'sirina-sva':
                         $seams = $values;
                         break;
                     case 'razmery':
@@ -1010,7 +1010,7 @@ class ProductRepository implements FilterableRepositoryInterface
                     case 'material':
                         $materials = $values;
                         break;
-                    case 'vlagostojkost':
+                    case 'vlagostoikost':
                         $waterproofs = $values;
                         break;
                     case 'obem':

@@ -86,7 +86,7 @@ class ProductSeeder extends Seeder
         ]);
         $attribute_waterproof = Attribute::create([
             'name' => 'Влагостойкость',
-            'slug' => Str::slug('Влагостойкость'),
+            'slug' => 'vlagostoikost',
             'type' => 'boolean',
         ]);
         $attribute_collection = Attribute::create([
@@ -161,7 +161,7 @@ class ProductSeeder extends Seeder
         ]);
         $attribute_seam_width = Attribute::create([
             'name' => 'Ширина шва',
-            'slug' => Str::slug('Ширина шва'),
+            'slug' => 'sirina-sva',
             'type' => 'string',
         ]);
         $attribute_type = Attribute::create([

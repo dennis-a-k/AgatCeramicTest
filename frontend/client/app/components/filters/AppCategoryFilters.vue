@@ -2,7 +2,7 @@
     <div class="col-lg-3 order-lg-first col-md-12 order-md-last">
         <div class="shop-sidebar-wrap">
             <div class="sidebar-widget" v-if="subcategories && subcategories.length">
-                <h4 class="sidebar-title">Тип</h4>
+                <h4 class="sidebar-title">Подкатегория</h4>
                 <div class="sidebar-widget-category">
                     <ul>
                         <div class="subcategories">
@@ -68,7 +68,7 @@
             </div>
 
             <div class="sidebar-widget" v-if="mixture_types && mixture_types.length">
-                <h4 class="sidebar-title">Тип смеси</h4>
+                <h4 class="sidebar-title">Тип</h4>
                 <div class="sidebar-widget-category">
                     <ul>
                         <li v-for="type in mixture_types" :key="type.id">
@@ -86,7 +86,7 @@
                     <ul>
                         <li class="color-list weight" v-for="seam in seams" :key="seam.id">
                             <a href="#" class="text-white" @click.prevent="selectFilter('seam', seam.id)">
-                                {{ seam.value }}
+                                {{ seam.name }}
                             </a>
                         </li>
                     </ul>
