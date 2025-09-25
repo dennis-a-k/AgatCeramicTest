@@ -7,8 +7,8 @@
                         <i class="fa fa-angle-left"></i>
                     </a>
                 </li>
-                <li v-for="page in pages" :key="page" class="page-item li" :class="{ active: page === currentPage }">
-                    <a class="page-link" href="#" @click.prevent="$emit('change-page', page)">{{ page }}</a>
+                <li v-for="page in pages" :key="page" class="page-item li">
+                    <a class="page-link" :class="{ active: page === currentPage }" href="#" @click.prevent="$emit('change-page', page)">{{ page }}</a>
                 </li>
                 <li class="page-item li" :class="{ disabled: currentPage === totalPages }">
                     <a class="page-link" href="#" @click.prevent="currentPage < totalPages && $emit('change-page', currentPage + 1)">
@@ -65,10 +65,10 @@ const pages = computed(() => {
 
     & a {
         font-weight: 400;
-        color: #9e9e9e;
+        color: $logo-secondary-color;
         padding: 0;
         height: 40px;
-        background: #fff;
+        background: $white;
         display: inline-block;
         width: 40px;
         border-radius: 5px;
@@ -76,7 +76,7 @@ const pages = computed(() => {
         vertical-align: top;
         font-size: 12px;
         transition: $baseTransition;
-        border-color: #e1e1e1;
+        border-color: $border-color;
         font-weight: 600;
         line-height: 40px;
         outline: none;
@@ -99,21 +99,22 @@ const pages = computed(() => {
         &.active {
             color: $theme-color;
             border-color: $theme-color;
-            background: #fff;
+            background: $white;
         }
 
         &:hover {
             color: $theme-color;
             border-color: $theme-color;
-            background: #fff;
+            background: $white;
         }
     }
 
     .page-link {
+        border-radius: 5px;
         &:focus {
             z-index: 3;
             color: $theme-color;
-            background-color: #fff;
+            background-color: $white;
             outline: 0;
             box-shadow: none;
         }
@@ -121,11 +122,10 @@ const pages = computed(() => {
 
     .disabled {
         pointer-events: none;
-        opacity: 0.5;
     }
 
     .disabled a {
-        background-color: #e1e1e1;
+        background-color: $border-color;
     }
 }
 </style>
