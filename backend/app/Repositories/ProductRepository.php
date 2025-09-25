@@ -660,7 +660,7 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по типу смеси
         if ($request->has('mixture_types') && !empty($request->mixture_types)) {
-            $attribute = Attribute::where('slug', 'mixture_type')->first();
+            $attribute = Attribute::where('slug', 'tip')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
                     $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->mixture_types);
@@ -670,10 +670,10 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по шву
         if ($request->has('seams') && !empty($request->seams)) {
-            $attribute = Attribute::where('slug', 'seam')->first();
+            $attribute = Attribute::where('slug', 'sirina-sva')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
-                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->seams);
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->seams);
                 });
             }
         }
