@@ -122,7 +122,7 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по клею
         if ($request->has('glues') && !empty($request->glues)) {
-            $attribute = Attribute::where('slug', 'ispolzuetsya-v-kachestve-kleya')->first();
+            $attribute = Attribute::where('slug', 'ispolzuetsia-v-kacestve-kleia')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
                     // Convert "0"/"1" strings back to boolean values for filtering
@@ -404,7 +404,7 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по клею
         if ($request->has('glues') && !empty($request->glues)) {
-            $attribute = Attribute::where('slug', 'ispolzuetsya-v-kachestve-kleya')->first();
+            $attribute = Attribute::where('slug', 'ispolzuetsia-v-kacestve-kleia')->first();
             if ($attribute) {
                 $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
                     // Convert "0"/"1" strings back to boolean values for filtering
@@ -667,7 +667,7 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по клею
         if ($request->has('glues') && !empty($request->glues)) {
-            $attribute = Attribute::where('slug', 'ispolzuetsya-v-kachestve-kleya')->first();
+            $attribute = Attribute::where('slug', 'ispolzuetsia-v-kacestve-kleia')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
                     // Convert "0"/"1" strings back to boolean values for filtering
@@ -746,7 +746,7 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по клею
         if ($request->has('glues') && !empty($request->glues)) {
-            $attribute = Attribute::where('slug', 'ispolzuetsya-v-kachestve-kleya')->first();
+            $attribute = Attribute::where('slug', 'ispolzuetsia-v-kacestve-kleia')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
                     // Convert "0"/"1" strings back to boolean values for filtering
@@ -1024,7 +1024,7 @@ class ProductRepository implements FilterableRepositoryInterface
                     case 'tolshhina':
                         $weights = $values; // толщина как вес
                         break;
-                    case 'ispolzuetsya-v-kachestve-kleya':
+                    case 'ispolzuetsia-v-kacestve-kleia':
                         // Convert boolean values to "Да"/"Нет" strings for display but keep ID as boolean
                         $glues = array_map(function($item) {
                             if ($item['value'] === '1' || $item['value'] === 1 || $item['value'] === true) {
@@ -1036,6 +1036,12 @@ class ProductRepository implements FilterableRepositoryInterface
                             }
                             return $item;
                         }, $values);
+                        // Log for debugging
+                        if (!empty($glues)) {
+                            Log::debug('Glues filter data found:', ['glues' => $glues]);
+                        } else {
+                            Log::debug('No glues filter data found for attribute ispolzuetsia-v-kacestve-kleia');
+                        }
                         break;
                     case 'tip':
                         $mixture_types = $values; // тип смеси или тип для сантехники
@@ -1127,7 +1133,7 @@ class ProductRepository implements FilterableRepositoryInterface
             $gluesQuery = DB::table('product_attribute_values')
                 ->join('products', 'product_attribute_values.product_id', '=', 'products.id')
                 ->join('attributes', 'product_attribute_values.attribute_id', '=', 'attributes.id')
-                ->where('attributes.slug', 'ispolzuetsya-v-kachestve-kleya')
+                ->where('attributes.slug', 'ispolzuetsia-v-kacestve-kleia')
                 ->whereIn('products.id', $baseQuery->select('id'))
                 ->where('products.is_published', true)
                 ->select('product_attribute_values.boolean_value as value', DB::raw('COUNT(*) as count'))
