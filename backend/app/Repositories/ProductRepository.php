@@ -105,7 +105,10 @@ class ProductRepository implements FilterableRepositoryInterface
         if ($request->has('subcategories') && !empty($request->subcategories)) {
             $baseQuery->whereIn('category_id', array_map('intval', (array)$request->subcategories));
         }
-
+        // Фильтрация по коллекции
+        if ($request->has('collections') && !empty($request->collections)) {
+            $baseQuery->whereIn('collection', (array)$request->collections);
+        }
         // Фильтрация по весу (толщина)
         if ($request->has('weights') && !empty($request->weights)) {
             $attribute = Attribute::where('slug', 'tolshhina')->first();
@@ -172,16 +175,6 @@ class ProductRepository implements FilterableRepositoryInterface
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
                     $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->waterproofs));
-                });
-            }
-        }
-
-        // Фильтрация по коллекции
-        if ($request->has('collections') && !empty($request->collections)) {
-            $attribute = Attribute::where('slug', 'kollektsiya')->first();
-            if ($attribute) {
-                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
-                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->collections);
                 });
             }
         }
@@ -353,6 +346,10 @@ class ProductRepository implements FilterableRepositoryInterface
             $query->whereIn('texture', (array)$request->textures);
         }
 
+        // Фильтрация по стране
+        if ($request->has('countries') && !empty($request->countries)) {
+            $query->whereIn('country', (array)$request->countries);
+        }
 
         // Фильтрация по цене
         if ($request->has('price_min')) {
@@ -591,21 +588,104 @@ class ProductRepository implements FilterableRepositoryInterface
 
     public function getAvailableFilters(Request $request): array
     {
-        $baseQuery = $this->model->published();
+        $categoryQuery = $this->model->published();
+        $baseQuery = clone $categoryQuery;
 
-        // Применяем те же фильтры, что и в основном запросе
+        // Применяем фильтры категории
         $category = null;
         if ($request->has('category_id')) {
             $category = Category::find($request->category_id);
             if ($category) {
                 $categoryIds = $this->getCategoryIds($category);
+                $categoryQuery->whereIn('category_id', $categoryIds);
                 $baseQuery->whereIn('category_id', $categoryIds);
             }
         } elseif ($request->has('category_ids')) {
+            $categoryQuery->whereIn('category_id', (array)$request->category_ids);
             $baseQuery->whereIn('category_id', (array)$request->category_ids);
             // Для получения атрибутов, берем первую категорию из массива
             $categoryId = is_array($request->category_ids) ? $request->category_ids[0] : $request->category_ids;
             $category = Category::find($categoryId);
+        }
+
+        // Применяем остальные фильтры к baseQuery для subcategories и counts
+        if ($request->has('brands') && !empty($request->brands)) {
+            $baseQuery->whereIn('brand_id', array_map('intval', (array)$request->brands));
+        }
+
+        if ($request->has('colors') && !empty($request->colors)) {
+            $baseQuery->whereIn('color_id', array_map('intval', (array)$request->colors));
+        }
+
+        if ($request->has('patterns') && !empty($request->patterns)) {
+            $baseQuery->whereIn('pattern', (array)$request->patterns);
+        }
+
+        if ($request->has('textures') && !empty($request->textures)) {
+            $baseQuery->whereIn('texture', (array)$request->textures);
+        }
+
+        if ($request->has('countries') && !empty($request->countries)) {
+            $baseQuery->whereIn('country', (array)$request->countries);
+        }
+
+        if ($request->has('collections') && !empty($request->collections)) {
+            $baseQuery->whereIn('collection', (array)$request->collections);
+        }
+
+        // Фильтрация по субкатегориям
+        if ($request->has('subcategories') && !empty($request->subcategories)) {
+            $baseQuery->whereIn('category_id', array_map('intval', (array)$request->subcategories));
+        }
+
+        // Фильтрация по весу (толщина)
+        if ($request->has('weights') && !empty($request->weights)) {
+            $attribute = Attribute::where('slug', 'tolshhina')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->weights);
+                });
+            }
+        }
+
+        // Фильтрация по клею
+        if ($request->has('glues') && !empty($request->glues)) {
+            $attribute = Attribute::where('slug', 'ispolzuetsya-v-kachestve-kleya')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->glues));
+                });
+            }
+        }
+
+        // Фильтрация по типу смеси
+        if ($request->has('mixture_types') && !empty($request->mixture_types)) {
+            $attribute = Attribute::where('slug', 'mixture_type')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->mixture_types);
+                });
+            }
+        }
+
+        // Фильтрация по шву
+        if ($request->has('seams') && !empty($request->seams)) {
+            $attribute = Attribute::where('slug', 'seam')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->seams);
+                });
+            }
+        }
+
+        // Фильтрация по размеру
+        if ($request->has('sizes') && !empty($request->sizes)) {
+            $attribute = Attribute::where('slug', 'razmery')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->sizes);
+                });
+            }
         }
 
         if ($request->has('brands') && !empty($request->brands)) {
@@ -843,9 +923,19 @@ class ProductRepository implements FilterableRepositoryInterface
             ->map(fn($item) => ['id' => $item->value, 'name' => $item->value, 'count' => $item->count])
             ->toArray();
 
+        $countriesQuery = clone $baseQuery;
+        $countries = $countriesQuery->select('country as value', DB::raw('COUNT(*) as count'))
+            ->whereNotNull('country')
+            ->where('country', '!=', '')
+            ->groupBy('country')
+            ->get()
+            ->map(fn($item) => ['id' => $item->value, 'name' => $item->value, 'count' => $item->count])
+            ->toArray();
+
         $collectionsQuery = clone $baseQuery;
         $collections = $collectionsQuery->select('collection as value', DB::raw('COUNT(*) as count'))
             ->whereNotNull('collection')
+            ->where('collection', '!=', '')
             ->groupBy('collection')
             ->get()
             ->map(fn($item) => ['id' => $item->value, 'name' => $item->value, 'count' => $item->count])
@@ -859,7 +949,6 @@ class ProductRepository implements FilterableRepositoryInterface
         $sizes = [];
         $materials = [];
         $waterproofs = [];
-        $collections = [];
         $volumes = [];
         $product_weights = [];
         $installation_types = [];
@@ -909,10 +998,10 @@ class ProductRepository implements FilterableRepositoryInterface
                     case 'ispolzuetsya-v-kachestve-kleya':
                         $glues = $values;
                         break;
-                    case 'tip':
+                    case 'mixture_type':
                         $mixture_types = $values; // тип смеси или тип для сантехники
                         break;
-                    case 'shirina-shva':
+                    case 'seam':
                         $seams = $values;
                         break;
                     case 'razmery':
@@ -992,6 +1081,7 @@ class ProductRepository implements FilterableRepositoryInterface
             'mixture_types' => $mixture_types,
             'seams' => $seams,
             'textures' => $textures,
+            'countries' => $countries,
             'sizes' => $sizes,
             'materials' => $materials,
             'waterproofs' => $waterproofs,

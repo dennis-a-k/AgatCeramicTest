@@ -106,6 +106,19 @@
                 </div>
             </div>
 
+            <div class="sidebar-widget" v-if="countries && countries.length">
+                <h4 class="sidebar-title">Страна</h4>
+                <div class="sidebar-widget-category">
+                    <ul>
+                        <li v-for="country in countries" :key="country.id">
+                            <a href="#" @click.prevent="selectFilter('country', country.id)">
+                                {{ country.name }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
             <div class="sidebar-widget" v-if="sizes && sizes.length">
                 <h4 class="sidebar-title">Размер</h4>
                 <div class="sidebar-widget-size">
@@ -337,6 +350,7 @@ const props = defineProps({
     mixture_types: { type: Array, default: () => [] },
     seams: { type: Array, default: () => [] },
     textures: { type: Array, default: () => [] },
+    countries: { type: Array, default: () => [] },
     sizes: { type: Array, default: () => [] },
     materials: { type: Array, default: () => [] },
     waterproofs: { type: Array, default: () => [] },
@@ -352,7 +366,7 @@ const props = defineProps({
     max_temps: { type: Array, default: () => [] },
     consumptions: { type: Array, default: () => [] },
     brands: { type: Array, default: () => [] },
-    initialFilters: { type: Object, default: () => ({ brands: [], min_price: '', max_price: '', colors: [], patterns: [], weights: [], subcategories: [], glues: [], mixture_types: [], seams: [], textures: [], sizes: [], materials: [], waterproofs: [], collections: [], volumes: [], product_weights: [], installation_types: [], shapes: [], applications: [], drying_times: [], package_weights: [], min_temps: [], max_temps: [], consumptions: [] }) }
+    initialFilters: { type: Object, default: () => ({ brands: [], min_price: '', max_price: '', colors: [], patterns: [], weights: [], subcategories: [], glues: [], mixture_types: [], seams: [], textures: [], countries: [], sizes: [], materials: [], waterproofs: [], collections: [], volumes: [], product_weights: [], installation_types: [], shapes: [], applications: [], drying_times: [], package_weights: [], min_temps: [], max_temps: [], consumptions: [] }) }
 });
 
 const emit = defineEmits(['update:filters']);
@@ -369,6 +383,7 @@ const selectedTextures = ref([]);
 const selectedSizes = ref([]);
 const selectedMaterials = ref([]);
 const selectedWaterproofs = ref([]);
+const selectedCountries = ref([]);
 const selectedCollections = ref([]);
 const selectedVolumes = ref([]);
 const selectedProductWeights = ref([]);
@@ -475,6 +490,13 @@ const selectFilter = (type, value) => {
         } else {
             selectedWaterproofs.value.splice(index, 1);
         }
+    } else if (type === 'country') {
+        const index = selectedCountries.value.indexOf(value);
+        if (index === -1) {
+            selectedCountries.value.push(value);
+        } else {
+            selectedCountries.value.splice(index, 1);
+        }
     } else if (type === 'collection') {
         const index = selectedCollections.value.indexOf(value);
         if (index === -1) {
@@ -567,6 +589,7 @@ const emitFilters = () => {
         mixture_types: selectedMixtureTypes.value,
         seams: selectedSeams.value,
         textures: selectedTextures.value,
+        countries: selectedCountries.value,
         sizes: selectedSizes.value,
         materials: selectedMaterials.value,
         waterproofs: selectedWaterproofs.value,
@@ -594,6 +617,7 @@ const resetFilters = () => {
     selectedMixtureTypes.value = [];
     selectedSeams.value = [];
     selectedTextures.value = [];
+    selectedCountries.value = [];
     selectedSizes.value = [];
     selectedMaterials.value = [];
     selectedWaterproofs.value = [];

@@ -46,7 +46,7 @@
         <ClientOnly>
           <FiltersAppCategoryFilters :subcategories="filters.subcategories" :patterns="filters.patterns"
             :weights="filters.weights" :colors="filters.colors" :glues="filters.glues"
-            :mixture_types="filters.mixture_types" :seams="filters.seams" :textures="filters.textures"
+            :mixture_types="filters.mixture_types" :seams="filters.seams" :textures="filters.textures" :countries="filters.countries"
             :sizes="filters.sizes" :materials="filters.materials" :waterproofs="filters.waterproofs"
             :collections="filters.collections" :volumes="filters.volumes" :product_weights="filters.product_weights"
             :installation_types="filters.installation_types" :shapes="filters.shapes" :applications="filters.applications"
@@ -79,6 +79,7 @@ const filters = ref({
   mixture_types: [],
   seams: [],
   textures: [],
+  countries: [],
   sizes: [],
   materials: [],
   waterproofs: [],
@@ -108,6 +109,7 @@ const selectedGlues = ref([])
 const selectedMixtureTypes = ref([])
 const selectedSeams = ref([])
 const selectedTextures = ref([])
+const selectedCountries = ref([])
 const selectedSizes = ref([])
 const selectedMaterials = ref([])
 const selectedWaterproofs = ref([])
@@ -146,6 +148,7 @@ const queryParams = computed(() => {
     mixture_types: selectedMixtureTypes.value,
     seams: selectedSeams.value,
     textures: selectedTextures.value,
+    countries: selectedCountries.value,
     sizes: selectedSizes.value,
     materials: selectedMaterials.value,
     waterproofs: selectedWaterproofs.value,
@@ -208,6 +211,7 @@ const handleFilterChange = (newFilters) => {
   selectedMixtureTypes.value = newFilters.mixture_types || []
   selectedSeams.value = newFilters.seams || []
   selectedTextures.value = newFilters.textures || []
+  selectedCountries.value = newFilters.countries || []
   selectedSizes.value = newFilters.sizes || []
   selectedMaterials.value = newFilters.materials || []
   selectedWaterproofs.value = newFilters.waterproofs || []
