@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use App\Models\Product;
 
 class ProductService

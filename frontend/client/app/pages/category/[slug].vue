@@ -32,16 +32,12 @@
                 </div>
               </div>
             </div>
-
-            <nav v-if="productsData.last_page > 1">
-              <ul class="pagination">
-                <li v-for="page in productsData.last_page" :key="page"
-                  :class="['page-item', { active: productsData.current_page === page }]">
-                  <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
-                </li>
-              </ul>
-            </nav>
-
+            <PaginationAppPagination
+              v-if="productsData.last_page > 1"
+              :current-page="productsData.current_page"
+              :total-pages="productsData.last_page"
+              @change-page="changePage"
+            />
           </div>
         </div>
         <ClientOnly>
