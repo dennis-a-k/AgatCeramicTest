@@ -1036,12 +1036,6 @@ class ProductRepository implements FilterableRepositoryInterface
                             }
                             return $item;
                         }, $values);
-                        // Log for debugging
-                        if (!empty($glues)) {
-                            Log::debug('Glues filter data found:', ['glues' => $glues]);
-                        } else {
-                            Log::debug('No glues filter data found for attribute ispolzuetsia-v-kacestve-kleia');
-                        }
                         break;
                     case 'tip':
                         $mixture_types = $values; // тип смеси или тип для сантехники
@@ -1067,13 +1061,6 @@ class ProductRepository implements FilterableRepositoryInterface
                             }
                             return $item;
                         }, $values);
-                        // Log for debugging
-                        // Временное логирование для отладки
-                        if (!empty($waterproofs)) {
-                            Log::debug('Waterproofs filter data found:', ['waterproofs' => $waterproofs]);
-                        } else {
-                            Log::debug('No waterproofs filter data found for attribute vlagostoikost');
-                        }
                         break;
                     case 'obem':
                         $volumes = $values;

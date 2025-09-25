@@ -149,8 +149,8 @@
                 <h4 class="sidebar-title">Влагостойкость</h4>
                 <div class="sidebar-widget-category">
                     <ul>
-                        <li v-for="waterproof in waterproofs" :key="waterproof.id">
-                            <a href="#" @click.prevent="selectFilter('waterproof', waterproof.id)">
+                        <li class="color-list weight" v-for="waterproof in waterproofs" :key="waterproof.id">
+                            <a href="#" class="text-white" @click.prevent="selectFilter('waterproof', waterproof.id)">
                                 {{ waterproof.name }}
                             </a>
                         </li>

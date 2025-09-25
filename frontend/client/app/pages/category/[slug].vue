@@ -198,10 +198,6 @@ const productsData = computed(() => {
 watch(fetchData, (newData) => {
   if (newData && newData.filters) {
     Object.assign(filters.value, newData.filters)
-    // Временное логирование для отладки фильтра влагостойкости
-    console.log('Waterproofs filter data:', newData.filters.waterproofs)
-    // Временное логирование для отладки фильтра клея
-    console.log('Glues filter data:', newData.filters.glues)
   }
 }, { immediate: true })
 
