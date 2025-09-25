@@ -366,7 +366,8 @@ const props = defineProps({
     max_temps: { type: Array, default: () => [] },
     consumptions: { type: Array, default: () => [] },
     brands: { type: Array, default: () => [] },
-    initialFilters: { type: Object, default: () => ({ brands: [], min_price: '', max_price: '', colors: [], patterns: [], weights: [], subcategories: [], glues: [], mixture_types: [], seams: [], textures: [], countries: [], sizes: [], materials: [], waterproofs: [], collections: [], volumes: [], product_weights: [], installation_types: [], shapes: [], applications: [], drying_times: [], package_weights: [], min_temps: [], max_temps: [], consumptions: [] }) }
+    initialFilters: { type: Object, default: () => ({ brands: [], min_price: '', max_price: '', colors: [], patterns: [], weights: [], subcategories: [], glues: [], mixture_types: [], seams: [], textures: [], countries: [], sizes: [], materials: [], waterproofs: [], collections: [], volumes: [], product_weights: [], installation_types: [], shapes: [], applications: [], drying_times: [], package_weights: [], min_temps: [], max_temps: [], consumptions: [] }) },
+    selectedFilters: { type: Object, default: () => ({ brands: [], colors: [], patterns: [], weights: [], subcategories: [], glues: [], mixture_types: [], seams: [], textures: [], countries: [], sizes: [], materials: [], waterproofs: [], collections: [], volumes: [], product_weights: [], installation_types: [], shapes: [], applications: [], drying_times: [], package_weights: [], min_temps: [], max_temps: [], consumptions: [] }) }
 });
 
 const emit = defineEmits(['update:filters']);
@@ -400,6 +401,33 @@ const showAllBrands = ref(false);
 
 const visibleBrands = computed(() => props.brands.slice(0, 5));
 const hiddenBrands = computed(() => props.brands.slice(5));
+
+watch(() => props.selectedFilters, (newFilters) => {
+  selectedBrands.value = newFilters.brands || [];
+  selectedColors.value = newFilters.colors || [];
+  selectedPatterns.value = newFilters.patterns || [];
+  selectedWeights.value = newFilters.weights || [];
+  selectedSubcategories.value = newFilters.subcategories || [];
+  selectedGlues.value = newFilters.glues || [];
+  selectedMixtureTypes.value = newFilters.mixture_types || [];
+  selectedSeams.value = newFilters.seams || [];
+  selectedTextures.value = newFilters.textures || [];
+  selectedCountries.value = newFilters.countries || [];
+  selectedSizes.value = newFilters.sizes || [];
+  selectedMaterials.value = newFilters.materials || [];
+  selectedWaterproofs.value = newFilters.waterproofs || [];
+  selectedCollections.value = newFilters.collections || [];
+  selectedVolumes.value = newFilters.volumes || [];
+  selectedProductWeights.value = newFilters.product_weights || [];
+  selectedInstallationTypes.value = newFilters.installation_types || [];
+  selectedShapes.value = newFilters.shapes || [];
+  selectedApplications.value = newFilters.applications || [];
+  selectedDryingTimes.value = newFilters.drying_times || [];
+  selectedPackageWeights.value = newFilters.package_weights || [];
+  selectedMinTemps.value = newFilters.min_temps || [];
+  selectedMaxTemps.value = newFilters.max_temps || [];
+  selectedConsumptions.value = newFilters.consumptions || [];
+}, { immediate: true });
 
 const toggleShowAllBrands = () => {
     showAllBrands.value = !showAllBrands.value;
