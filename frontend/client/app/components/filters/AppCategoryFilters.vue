@@ -162,9 +162,22 @@
                 <h4 class="sidebar-title">Коллекция</h4>
                 <div class="sidebar-widget-category">
                     <ul>
-                        <li v-for="collection in collections" :key="collection.id">
+                        <li v-for="collection in visibleCollections" :key="collection.id">
                             <a href="#" @click.prevent="selectFilter('collection', collection.id)">
                                 {{ collection.name }}
+                            </a>
+                        </li>
+
+                        <div v-show="showAllCollections">
+                            <li v-for="collection in hiddenCollections" :key="collection.id">
+                                <a href="#" @click.prevent="selectFilter('collection', collection.id)">
+                                    {{ collection.name }}
+                                </a>
+                            </li>
+                        </div>
+                        <li v-if="collections.length > 10">
+                            <a href="#" class="show-more-link" @click.prevent="toggleShowAllCollections">
+                                {{ showAllCollections ? 'Скрыть' : 'Показать все' }}
                             </a>
                         </li>
                     </ul>
@@ -398,9 +411,13 @@ const selectedMaxTemps = ref([]);
 const selectedConsumptions = ref([]);
 
 const showAllBrands = ref(false);
+const showAllCollections = ref(false);
 
 const visibleBrands = computed(() => props.brands.slice(0, 5));
 const hiddenBrands = computed(() => props.brands.slice(5));
+
+const visibleCollections = computed(() => props.collections.slice(0, 10));
+const hiddenCollections = computed(() => props.collections.slice(10));
 
 watch(() => props.selectedFilters, (newFilters) => {
   selectedBrands.value = newFilters.brands || [];
@@ -431,6 +448,10 @@ watch(() => props.selectedFilters, (newFilters) => {
 
 const toggleShowAllBrands = () => {
     showAllBrands.value = !showAllBrands.value;
+};
+
+const toggleShowAllCollections = () => {
+    showAllCollections.value = !showAllCollections.value;
 };
 
 const selectFilter = (type, value) => {
