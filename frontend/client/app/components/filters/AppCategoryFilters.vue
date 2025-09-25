@@ -121,10 +121,10 @@
 
             <div class="sidebar-widget" v-if="sizes && sizes.length">
                 <h4 class="sidebar-title">Размер</h4>
-                <div class="sidebar-widget-size">
+                <div class="sidebar-widget-category">
                     <ul>
-                        <li v-for="size in sizes" :key="size.id">
-                            <a href="#" @click.prevent="selectFilter('size', size.id)">
+                        <li class="color-list weight" v-for="size in sizes" :key="size.id">
+                            <a href="#" class="text-white" @click.prevent="selectFilter('size', size.id)">
                                 {{ size.name }}
                             </a>
                         </li>
