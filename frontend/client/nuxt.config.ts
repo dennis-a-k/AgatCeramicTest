@@ -28,6 +28,7 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
     '@nuxt/image',
     '@vueuse/nuxt',
+    '@pinia/nuxt',
   ],
   css: [
     'bootstrap/dist/css/bootstrap.min.css',
