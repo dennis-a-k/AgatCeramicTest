@@ -11,6 +11,7 @@ use App\Repositories\Contracts\FilterableRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductRepository implements FilterableRepositoryInterface
 {
@@ -124,7 +125,11 @@ class ProductRepository implements FilterableRepositoryInterface
             $attribute = Attribute::where('slug', 'ispolzuetsya-v-kachestve-kleya')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
-                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->glues));
+                    // Convert "0"/"1" strings back to boolean values for filtering
+                    $booleanValues = array_map(function($value) {
+                        return $value === '1' || $value === 1 || $value === true || $value === 'true';
+                    }, (array)$request->glues);
+                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', $booleanValues);
                 });
             }
         }
@@ -174,7 +179,11 @@ class ProductRepository implements FilterableRepositoryInterface
             $attribute = Attribute::where('slug', 'vlagostoikost')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
-                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->waterproofs));
+                    // Convert "0"/"1" strings back to boolean values for filtering
+                    $booleanValues = array_map(function($value) {
+                        return $value === '1' || $value === 1 || $value === true || $value === 'true';
+                    }, (array)$request->waterproofs);
+                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', $booleanValues);
                 });
             }
         }
@@ -398,7 +407,11 @@ class ProductRepository implements FilterableRepositoryInterface
             $attribute = Attribute::where('slug', 'ispolzuetsya-v-kachestve-kleya')->first();
             if ($attribute) {
                 $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
-                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->glues));
+                    // Convert "0"/"1" strings back to boolean values for filtering
+                    $booleanValues = array_map(function($value) {
+                        return $value === '1' || $value === 1 || $value === true || $value === 'true';
+                    }, (array)$request->glues);
+                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', $booleanValues);
                 });
             }
         }
@@ -448,7 +461,11 @@ class ProductRepository implements FilterableRepositoryInterface
             $attribute = Attribute::where('slug', 'vlagostoikost')->first();
             if ($attribute) {
                 $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
-                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->waterproofs));
+                    // Convert "0"/"1" strings back to boolean values for filtering
+                    $booleanValues = array_map(function($value) {
+                        return $value === '1' || $value === 1 || $value === true || $value === 'true';
+                    }, (array)$request->waterproofs);
+                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', $booleanValues);
                 });
             }
         }
@@ -653,7 +670,11 @@ class ProductRepository implements FilterableRepositoryInterface
             $attribute = Attribute::where('slug', 'ispolzuetsya-v-kachestve-kleya')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
-                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->glues));
+                    // Convert "0"/"1" strings back to boolean values for filtering
+                    $booleanValues = array_map(function($value) {
+                        return $value === '1' || $value === 1 || $value === true || $value === 'true';
+                    }, (array)$request->glues);
+                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', $booleanValues);
                 });
             }
         }
@@ -728,7 +749,11 @@ class ProductRepository implements FilterableRepositoryInterface
             $attribute = Attribute::where('slug', 'ispolzuetsya-v-kachestve-kleya')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
-                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->glues));
+                    // Convert "0"/"1" strings back to boolean values for filtering
+                    $booleanValues = array_map(function($value) {
+                        return $value === '1' || $value === 1 || $value === true || $value === 'true';
+                    }, (array)$request->glues);
+                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', $booleanValues);
                 });
             }
         }
@@ -778,7 +803,11 @@ class ProductRepository implements FilterableRepositoryInterface
             $attribute = Attribute::where('slug', 'vlagostoikost')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
-                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->waterproofs));
+                    // Convert "0"/"1" strings back to boolean values for filtering
+                    $booleanValues = array_map(function($value) {
+                        return $value === '1' || $value === 1 || $value === true || $value === 'true';
+                    }, (array)$request->waterproofs);
+                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', $booleanValues);
                 });
             }
         }
@@ -996,7 +1025,17 @@ class ProductRepository implements FilterableRepositoryInterface
                         $weights = $values; // толщина как вес
                         break;
                     case 'ispolzuetsya-v-kachestve-kleya':
-                        $glues = $values;
+                        // Convert boolean values to "Да"/"Нет" strings for display but keep ID as boolean
+                        $glues = array_map(function($item) {
+                            if ($item['value'] === '1' || $item['value'] === 1 || $item['value'] === true) {
+                                $item['name'] = 'Да';
+                                $item['id'] = true;
+                            } elseif ($item['value'] === '0' || $item['value'] === 0 || $item['value'] === false) {
+                                $item['name'] = 'Нет';
+                                $item['id'] = false;
+                            }
+                            return $item;
+                        }, $values);
                         break;
                     case 'tip':
                         $mixture_types = $values; // тип смеси или тип для сантехники
@@ -1011,7 +1050,24 @@ class ProductRepository implements FilterableRepositoryInterface
                         $materials = $values;
                         break;
                     case 'vlagostoikost':
-                        $waterproofs = $values;
+                        // Convert boolean values to "Да"/"Нет" strings for display but keep ID as boolean
+                        $waterproofs = array_map(function($item) {
+                            if ($item['value'] === '1' || $item['value'] === 1 || $item['value'] === true) {
+                                $item['name'] = 'Да';
+                                $item['id'] = true;
+                            } elseif ($item['value'] === '0' || $item['value'] === 0 || $item['value'] === false) {
+                                $item['name'] = 'Нет';
+                                $item['id'] = false;
+                            }
+                            return $item;
+                        }, $values);
+                        // Log for debugging
+                        // Временное логирование для отладки
+                        if (!empty($waterproofs)) {
+                            Log::debug('Waterproofs filter data found:', ['waterproofs' => $waterproofs]);
+                        } else {
+                            Log::debug('No waterproofs filter data found for attribute vlagostoikost');
+                        }
                         break;
                     case 'obem':
                         $volumes = $values;
@@ -1064,6 +1120,48 @@ class ProductRepository implements FilterableRepositoryInterface
                 })
                 ->toArray();
             $sizes = $sizesQuery;
+        }
+
+        // Дополнительно собираем glues, если не собраны из filterableAttributes
+        if (empty($glues)) {
+            $gluesQuery = DB::table('product_attribute_values')
+                ->join('products', 'product_attribute_values.product_id', '=', 'products.id')
+                ->join('attributes', 'product_attribute_values.attribute_id', '=', 'attributes.id')
+                ->where('attributes.slug', 'ispolzuetsya-v-kachestve-kleya')
+                ->whereIn('products.id', $baseQuery->select('id'))
+                ->where('products.is_published', true)
+                ->select('product_attribute_values.boolean_value as value', DB::raw('COUNT(*) as count'))
+                ->whereNotNull('product_attribute_values.boolean_value')
+                ->groupBy('product_attribute_values.boolean_value')
+                ->get()
+                ->map(function ($item) {
+                    $name = ($item->value == 1 || $item->value === true || $item->value === 'true') ? 'Да' : 'Нет';
+                    $id = ($item->value == 1 || $item->value === true || $item->value === 'true') ? true : false;
+                    return ['id' => $id, 'name' => $name, 'count' => $item->count];
+                })
+                ->toArray();
+            $glues = $gluesQuery;
+        }
+
+        // Дополнительно собираем waterproofs, если не собраны из filterableAttributes
+        if (empty($waterproofs)) {
+            $waterproofsQuery = DB::table('product_attribute_values')
+                ->join('products', 'product_attribute_values.product_id', '=', 'products.id')
+                ->join('attributes', 'product_attribute_values.attribute_id', '=', 'attributes.id')
+                ->where('attributes.slug', 'vlagostoikost')
+                ->whereIn('products.id', $baseQuery->select('id'))
+                ->where('products.is_published', true)
+                ->select('product_attribute_values.boolean_value as value', DB::raw('COUNT(*) as count'))
+                ->whereNotNull('product_attribute_values.boolean_value')
+                ->groupBy('product_attribute_values.boolean_value')
+                ->get()
+                ->map(function ($item) {
+                    $name = ($item->value == 1 || $item->value === true || $item->value === 'true') ? 'Да' : 'Нет';
+                    $id = ($item->value == 1 || $item->value === true || $item->value === 'true') ? true : false;
+                    return ['id' => $id, 'name' => $name, 'count' => $item->count];
+                })
+                ->toArray();
+            $waterproofs = $waterproofsQuery;
         }
 
         // Ценовой диапазон
