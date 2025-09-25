@@ -656,7 +656,7 @@ const resetFilters = () => {
                 color: $logo-secondary-color;
                 font-size: 16px;
                 display: inline-block;
-                margin-top: 10px;
+                margin: 0 0 0 10px;
                 font-weight: 300;
                 line-height: 1;
 
@@ -673,7 +673,6 @@ const resetFilters = () => {
                 width: 24px;
                 height: 24px;
                 border-radius: 50%;
-                margin: 0 0 0 10px;
             }
         }
     }
