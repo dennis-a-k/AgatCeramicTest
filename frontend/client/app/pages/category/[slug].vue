@@ -47,8 +47,12 @@
           <FiltersAppCategoryFilters :subcategories="filters.subcategories" :patterns="filters.patterns"
             :weights="filters.weights" :colors="filters.colors" :glues="filters.glues"
             :mixture_types="filters.mixture_types" :seams="filters.seams" :textures="filters.textures"
-            :sizes="filters.sizes" :brands="filters.brands" :initialFilters="filters"
-            @update:filters="debouncedHandleFilterChange" />
+            :sizes="filters.sizes" :materials="filters.materials" :waterproofs="filters.waterproofs"
+            :collections="filters.collections" :volumes="filters.volumes" :product_weights="filters.product_weights"
+            :installation_types="filters.installation_types" :shapes="filters.shapes" :applications="filters.applications"
+            :drying_times="filters.drying_times" :package_weights="filters.package_weights" :min_temps="filters.min_temps"
+            :max_temps="filters.max_temps" :consumptions="filters.consumptions" :brands="filters.brands"
+            :initialFilters="filters" @update:filters="debouncedHandleFilterChange" />
         </ClientOnly>
       </div>
     </div>
@@ -75,7 +79,20 @@ const filters = ref({
   mixture_types: [],
   seams: [],
   textures: [],
-  sizes: []
+  sizes: [],
+  materials: [],
+  waterproofs: [],
+  collections: [],
+  volumes: [],
+  product_weights: [],
+  installation_types: [],
+  shapes: [],
+  applications: [],
+  drying_times: [],
+  package_weights: [],
+  min_temps: [],
+  max_temps: [],
+  consumptions: []
 })
 
 const selectedBrands = ref([])
@@ -92,6 +109,19 @@ const selectedMixtureTypes = ref([])
 const selectedSeams = ref([])
 const selectedTextures = ref([])
 const selectedSizes = ref([])
+const selectedMaterials = ref([])
+const selectedWaterproofs = ref([])
+const selectedCollections = ref([])
+const selectedVolumes = ref([])
+const selectedProductWeights = ref([])
+const selectedInstallationTypes = ref([])
+const selectedShapes = ref([])
+const selectedApplications = ref([])
+const selectedDryingTimes = ref([])
+const selectedPackageWeights = ref([])
+const selectedMinTemps = ref([])
+const selectedMaxTemps = ref([])
+const selectedConsumptions = ref([])
 
 const debounce = (func, delay) => {
   let timeout
@@ -116,7 +146,20 @@ const queryParams = computed(() => {
     mixture_types: selectedMixtureTypes.value,
     seams: selectedSeams.value,
     textures: selectedTextures.value,
-    sizes: selectedSizes.value
+    sizes: selectedSizes.value,
+    materials: selectedMaterials.value,
+    waterproofs: selectedWaterproofs.value,
+    collections: selectedCollections.value,
+    volumes: selectedVolumes.value,
+    product_weights: selectedProductWeights.value,
+    installation_types: selectedInstallationTypes.value,
+    shapes: selectedShapes.value,
+    applications: selectedApplications.value,
+    drying_times: selectedDryingTimes.value,
+    package_weights: selectedPackageWeights.value,
+    min_temps: selectedMinTemps.value,
+    max_temps: selectedMaxTemps.value,
+    consumptions: selectedConsumptions.value
   }
 
   // Фильтруем пустые значения
@@ -166,6 +209,19 @@ const handleFilterChange = (newFilters) => {
   selectedSeams.value = newFilters.seams || []
   selectedTextures.value = newFilters.textures || []
   selectedSizes.value = newFilters.sizes || []
+  selectedMaterials.value = newFilters.materials || []
+  selectedWaterproofs.value = newFilters.waterproofs || []
+  selectedCollections.value = newFilters.collections || []
+  selectedVolumes.value = newFilters.volumes || []
+  selectedProductWeights.value = newFilters.product_weights || []
+  selectedInstallationTypes.value = newFilters.installation_types || []
+  selectedShapes.value = newFilters.shapes || []
+  selectedApplications.value = newFilters.applications || []
+  selectedDryingTimes.value = newFilters.drying_times || []
+  selectedPackageWeights.value = newFilters.package_weights || []
+  selectedMinTemps.value = newFilters.min_temps || []
+  selectedMaxTemps.value = newFilters.max_temps || []
+  selectedConsumptions.value = newFilters.consumptions || []
   currentPage.value = 1
 }
 

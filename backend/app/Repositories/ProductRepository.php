@@ -118,10 +118,10 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по клею
         if ($request->has('glues') && !empty($request->glues)) {
-            $attribute = Attribute::where('slug', 'glue')->first();
+            $attribute = Attribute::where('slug', 'ispolzuetsya-v-kachestve-kleya')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
-                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->glues);
+                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->glues));
                 });
             }
         }
@@ -148,10 +148,140 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по размеру
         if ($request->has('sizes') && !empty($request->sizes)) {
-            $attribute = Attribute::where('slug', 'size')->first();
+            $attribute = Attribute::where('slug', 'razmery')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
                     $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->sizes);
+                });
+            }
+        }
+
+        // Фильтрация по материалу
+        if ($request->has('materials') && !empty($request->materials)) {
+            $attribute = Attribute::where('slug', 'material')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->materials);
+                });
+            }
+        }
+
+        // Фильтрация по влагостойкости
+        if ($request->has('waterproofs') && !empty($request->waterproofs)) {
+            $attribute = Attribute::where('slug', 'vlagostojkost')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->waterproofs));
+                });
+            }
+        }
+
+        // Фильтрация по коллекции
+        if ($request->has('collections') && !empty($request->collections)) {
+            $attribute = Attribute::where('slug', 'kollektsiya')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->collections);
+                });
+            }
+        }
+
+        // Фильтрация по объему
+        if ($request->has('volumes') && !empty($request->volumes)) {
+            $attribute = Attribute::where('slug', 'obem')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->volumes);
+                });
+            }
+        }
+
+        // Фильтрация по весу
+        if ($request->has('product_weights') && !empty($request->product_weights)) {
+            $attribute = Attribute::where('slug', 'ves')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->product_weights);
+                });
+            }
+        }
+
+        // Фильтрация по типу установки
+        if ($request->has('installation_types') && !empty($request->installation_types)) {
+            $attribute = Attribute::where('slug', 'tip-ustanovki')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->installation_types);
+                });
+            }
+        }
+
+        // Фильтрация по форме
+        if ($request->has('shapes') && !empty($request->shapes)) {
+            $attribute = Attribute::where('slug', 'forma')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->shapes);
+                });
+            }
+        }
+
+        // Фильтрация по применению
+        if ($request->has('applications') && !empty($request->applications)) {
+            $attribute = Attribute::where('slug', 'primenenie')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->applications);
+                });
+            }
+        }
+
+        // Фильтрация по времени высыхания
+        if ($request->has('drying_times') && !empty($request->drying_times)) {
+            $attribute = Attribute::where('slug', 'vremya-vysykhaniya')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->drying_times);
+                });
+            }
+        }
+
+        // Фильтрация по весу упаковки
+        if ($request->has('package_weights') && !empty($request->package_weights)) {
+            $attribute = Attribute::where('slug', 'ves-upakovki')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->package_weights);
+                });
+            }
+        }
+
+        // Фильтрация по мин. температуре
+        if ($request->has('min_temps') && !empty($request->min_temps)) {
+            $attribute = Attribute::where('slug', 'min-temperatura-ekspluatatsii')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->min_temps);
+                });
+            }
+        }
+
+        // Фильтрация по макс. температуре
+        if ($request->has('max_temps') && !empty($request->max_temps)) {
+            $attribute = Attribute::where('slug', 'maks-temperatura-ekspluatatsii')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->max_temps);
+                });
+            }
+        }
+
+        // Фильтрация по расходу
+        if ($request->has('consumptions') && !empty($request->consumptions)) {
+            $attribute = Attribute::where('slug', 'rashod')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->consumptions);
                 });
             }
         }
@@ -268,10 +398,10 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по клею
         if ($request->has('glues') && !empty($request->glues)) {
-            $attribute = Attribute::where('slug', 'glue')->first();
+            $attribute = Attribute::where('slug', 'ispolzuetsya-v-kachestve-kleya')->first();
             if ($attribute) {
                 $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
-                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->glues);
+                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->glues));
                 });
             }
         }
@@ -298,10 +428,135 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по размеру
         if ($request->has('sizes') && !empty($request->sizes)) {
-            $attribute = Attribute::where('slug', 'size')->first();
+            $attribute = Attribute::where('slug', 'razmery')->first();
             if ($attribute) {
                 $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
                     $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->sizes);
+                });
+            }
+        }
+
+        // Фильтрация по материалу
+        if ($request->has('materials') && !empty($request->materials)) {
+            $attribute = Attribute::where('slug', 'material')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->materials);
+                });
+            }
+        }
+
+        // Фильтрация по влагостойкости
+        if ($request->has('waterproofs') && !empty($request->waterproofs)) {
+            $attribute = Attribute::where('slug', 'vlagostojkost')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->waterproofs));
+                });
+            }
+        }
+
+        // Фильтрация по коллекции
+        if ($request->has('collections') && !empty($request->collections)) {
+            $query->whereIn('collection', (array)$request->collections);
+        }
+
+        // Фильтрация по объему
+        if ($request->has('volumes') && !empty($request->volumes)) {
+            $attribute = Attribute::where('slug', 'obem')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->volumes);
+                });
+            }
+        }
+
+        // Фильтрация по весу
+        if ($request->has('product_weights') && !empty($request->product_weights)) {
+            $attribute = Attribute::where('slug', 'ves')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->product_weights);
+                });
+            }
+        }
+
+        // Фильтрация по типу установки
+        if ($request->has('installation_types') && !empty($request->installation_types)) {
+            $attribute = Attribute::where('slug', 'tip-ustanovki')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->installation_types);
+                });
+            }
+        }
+
+        // Фильтрация по форме
+        if ($request->has('shapes') && !empty($request->shapes)) {
+            $attribute = Attribute::where('slug', 'forma')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->shapes);
+                });
+            }
+        }
+
+        // Фильтрация по применению
+        if ($request->has('applications') && !empty($request->applications)) {
+            $attribute = Attribute::where('slug', 'primenenie')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->applications);
+                });
+            }
+        }
+
+        // Фильтрация по времени высыхания
+        if ($request->has('drying_times') && !empty($request->drying_times)) {
+            $attribute = Attribute::where('slug', 'vremya-vysykhaniya')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->drying_times);
+                });
+            }
+        }
+
+        // Фильтрация по весу упаковки
+        if ($request->has('package_weights') && !empty($request->package_weights)) {
+            $attribute = Attribute::where('slug', 'ves-upakovki')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->package_weights);
+                });
+            }
+        }
+
+        // Фильтрация по мин. температуре
+        if ($request->has('min_temps') && !empty($request->min_temps)) {
+            $attribute = Attribute::where('slug', 'min-temperatura-ekspluatatsii')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->min_temps);
+                });
+            }
+        }
+
+        // Фильтрация по макс. температуре
+        if ($request->has('max_temps') && !empty($request->max_temps)) {
+            $attribute = Attribute::where('slug', 'maks-temperatura-ekspluatatsii')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->max_temps);
+                });
+            }
+        }
+
+        // Фильтрация по расходу
+        if ($request->has('consumptions') && !empty($request->consumptions)) {
+            $attribute = Attribute::where('slug', 'rashod')->first();
+            if ($attribute) {
+                $query->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->consumptions);
                 });
             }
         }
@@ -369,6 +624,10 @@ class ProductRepository implements FilterableRepositoryInterface
             $baseQuery->whereIn('texture', (array)$request->textures);
         }
 
+        if ($request->has('collections') && !empty($request->collections)) {
+            $baseQuery->whereIn('collection', (array)$request->collections);
+        }
+
         // Фильтрация по субкатегориям
         if ($request->has('subcategories') && !empty($request->subcategories)) {
             $baseQuery->whereIn('category_id', array_map('intval', (array)$request->subcategories));
@@ -386,10 +645,10 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по клею
         if ($request->has('glues') && !empty($request->glues)) {
-            $attribute = Attribute::where('slug', 'glue')->first();
+            $attribute = Attribute::where('slug', 'ispolzuetsya-v-kachestve-kleya')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
-                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->glues);
+                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->glues));
                 });
             }
         }
@@ -416,10 +675,135 @@ class ProductRepository implements FilterableRepositoryInterface
 
         // Фильтрация по размеру
         if ($request->has('sizes') && !empty($request->sizes)) {
-            $attribute = Attribute::where('slug', 'size')->first();
+            $attribute = Attribute::where('slug', 'razmery')->first();
             if ($attribute) {
                 $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
                     $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->sizes);
+                });
+            }
+        }
+
+        // Фильтрация по материалу
+        if ($request->has('materials') && !empty($request->materials)) {
+            $attribute = Attribute::where('slug', 'material')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->materials);
+                });
+            }
+        }
+
+        // Фильтрация по влагостойкости
+        if ($request->has('waterproofs') && !empty($request->waterproofs)) {
+            $attribute = Attribute::where('slug', 'vlagostojkost')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('boolean_value', array_map('intval', (array)$request->waterproofs));
+                });
+            }
+        }
+
+        // Фильтрация по коллекции
+        if ($request->has('collections') && !empty($request->collections)) {
+            $baseQuery->whereIn('collection', (array)$request->collections);
+        }
+
+        // Фильтрация по объему
+        if ($request->has('volumes') && !empty($request->volumes)) {
+            $attribute = Attribute::where('slug', 'obem')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->volumes);
+                });
+            }
+        }
+
+        // Фильтрация по весу
+        if ($request->has('product_weights') && !empty($request->product_weights)) {
+            $attribute = Attribute::where('slug', 'ves')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->product_weights);
+                });
+            }
+        }
+
+        // Фильтрация по типу установки
+        if ($request->has('installation_types') && !empty($request->installation_types)) {
+            $attribute = Attribute::where('slug', 'tip-ustanovki')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->installation_types);
+                });
+            }
+        }
+
+        // Фильтрация по форме
+        if ($request->has('shapes') && !empty($request->shapes)) {
+            $attribute = Attribute::where('slug', 'forma')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->shapes);
+                });
+            }
+        }
+
+        // Фильтрация по применению
+        if ($request->has('applications') && !empty($request->applications)) {
+            $attribute = Attribute::where('slug', 'primenenie')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->applications);
+                });
+            }
+        }
+
+        // Фильтрация по времени высыхания
+        if ($request->has('drying_times') && !empty($request->drying_times)) {
+            $attribute = Attribute::where('slug', 'vremya-vysykhaniya')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->drying_times);
+                });
+            }
+        }
+
+        // Фильтрация по весу упаковки
+        if ($request->has('package_weights') && !empty($request->package_weights)) {
+            $attribute = Attribute::where('slug', 'ves-upakovki')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->package_weights);
+                });
+            }
+        }
+
+        // Фильтрация по мин. температуре
+        if ($request->has('min_temps') && !empty($request->min_temps)) {
+            $attribute = Attribute::where('slug', 'min-temperatura-ekspluatatsii')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->min_temps);
+                });
+            }
+        }
+
+        // Фильтрация по макс. температуре
+        if ($request->has('max_temps') && !empty($request->max_temps)) {
+            $attribute = Attribute::where('slug', 'maks-temperatura-ekspluatatsii')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('number_value', (array)$request->max_temps);
+                });
+            }
+        }
+
+        // Фильтрация по расходу
+        if ($request->has('consumptions') && !empty($request->consumptions)) {
+            $attribute = Attribute::where('slug', 'rashod')->first();
+            if ($attribute) {
+                $baseQuery->whereHas('attributeValues', function ($q) use ($attribute, $request) {
+                    $q->where('attribute_id', $attribute->id)->whereIn('string_value', (array)$request->consumptions);
                 });
             }
         }
@@ -459,12 +843,33 @@ class ProductRepository implements FilterableRepositoryInterface
             ->map(fn($item) => ['id' => $item->value, 'name' => $item->value, 'count' => $item->count])
             ->toArray();
 
+        $collectionsQuery = clone $baseQuery;
+        $collections = $collectionsQuery->select('collection as value', DB::raw('COUNT(*) as count'))
+            ->whereNotNull('collection')
+            ->groupBy('collection')
+            ->get()
+            ->map(fn($item) => ['id' => $item->value, 'name' => $item->value, 'count' => $item->count])
+            ->toArray();
+
         // Инициализируем массивы для атрибутов
         $weights = [];
         $glues = [];
         $mixture_types = [];
         $seams = [];
         $sizes = [];
+        $materials = [];
+        $waterproofs = [];
+        $collections = [];
+        $volumes = [];
+        $product_weights = [];
+        $installation_types = [];
+        $shapes = [];
+        $applications = [];
+        $drying_times = [];
+        $package_weights = [];
+        $min_temps = [];
+        $max_temps = [];
+        $consumptions = [];
 
         if ($category) {
             $category = Category::with('filterableAttributes')->find($category->id);
@@ -501,20 +906,75 @@ class ProductRepository implements FilterableRepositoryInterface
                     case 'tolshhina':
                         $weights = $values; // толщина как вес
                         break;
-                    case 'glue':
+                    case 'ispolzuetsya-v-kachestve-kleya':
                         $glues = $values;
                         break;
-                    case 'mixture_type':
-                        $mixture_types = $values;
+                    case 'tip':
+                        $mixture_types = $values; // тип смеси или тип для сантехники
                         break;
-                    case 'seam':
+                    case 'shirina-shva':
                         $seams = $values;
                         break;
-                    case 'size':
+                    case 'razmery':
                         $sizes = $values;
+                        break;
+                    case 'material':
+                        $materials = $values;
+                        break;
+                    case 'vlagostojkost':
+                        $waterproofs = $values;
+                        break;
+                    case 'obem':
+                        $volumes = $values;
+                        break;
+                    case 'ves':
+                        $product_weights = $values;
+                        break;
+                    case 'tip-ustanovki':
+                        $installation_types = $values;
+                        break;
+                    case 'forma':
+                        $shapes = $values;
+                        break;
+                    case 'primenenie':
+                        $applications = $values;
+                        break;
+                    case 'vremya-vysykhaniya':
+                        $drying_times = $values;
+                        break;
+                    case 'ves-upakovki':
+                        $package_weights = $values;
+                        break;
+                    case 'min-temperatura-ekspluatatsii':
+                        $min_temps = $values;
+                        break;
+                    case 'maks-temperatura-ekspluatatsii':
+                        $max_temps = $values;
+                        break;
+                    case 'rashod':
+                        $consumptions = $values;
                         break;
                 }
             }
+        }
+
+        // Дополнительно собираем sizes, если не собраны из filterableAttributes
+        if (empty($sizes)) {
+            $sizesQuery = DB::table('product_attribute_values')
+                ->join('products', 'product_attribute_values.product_id', '=', 'products.id')
+                ->join('attributes', 'product_attribute_values.attribute_id', '=', 'attributes.id')
+                ->where('attributes.slug', 'razmery')
+                ->whereIn('products.id', $baseQuery->select('id'))
+                ->where('products.is_published', true)
+                ->select('product_attribute_values.string_value as value', DB::raw('COUNT(*) as count'))
+                ->whereNotNull('product_attribute_values.string_value')
+                ->groupBy('product_attribute_values.string_value')
+                ->get()
+                ->map(function ($item) {
+                    return ['id' => $item->value, 'name' => $item->value, 'count' => $item->count];
+                })
+                ->toArray();
+            $sizes = $sizesQuery;
         }
 
         // Ценовой диапазон
@@ -533,6 +993,19 @@ class ProductRepository implements FilterableRepositoryInterface
             'seams' => $seams,
             'textures' => $textures,
             'sizes' => $sizes,
+            'materials' => $materials,
+            'waterproofs' => $waterproofs,
+            'collections' => $collections,
+            'volumes' => $volumes,
+            'product_weights' => $product_weights,
+            'installation_types' => $installation_types,
+            'shapes' => $shapes,
+            'applications' => $applications,
+            'drying_times' => $drying_times,
+            'package_weights' => $package_weights,
+            'min_temps' => $min_temps,
+            'max_temps' => $max_temps,
+            'consumptions' => $consumptions,
             'price_range' => $priceRange,
             'has_sale' => $baseQuery->where('is_sale', true)->exists()
         ];

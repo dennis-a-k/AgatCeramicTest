@@ -30,7 +30,7 @@
             </div>
 
             <div class="sidebar-widget" v-if="weights && weights.length">
-                <h4 class="sidebar-title">Вес (кг)</h4>
+                <h4 class="sidebar-title">Толщина шва</h4>
                 <div class="sidebar-widget-category">
                     <ul>
                         <li class="color-list weight" v-for="weight in weights" :key="weight.id">
@@ -112,7 +112,176 @@
                     <ul>
                         <li v-for="size in sizes" :key="size.id">
                             <a href="#" @click.prevent="selectFilter('size', size.id)">
-                                {{ size.value }}
+                                {{ size.name }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget" v-if="materials && materials.length">
+                <h4 class="sidebar-title">Материал</h4>
+                <div class="sidebar-widget-category">
+                    <ul>
+                        <li v-for="material in materials" :key="material.id">
+                            <a href="#" @click.prevent="selectFilter('material', material.id)">
+                                {{ material.name }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget" v-if="waterproofs && waterproofs.length">
+                <h4 class="sidebar-title">Влагостойкость</h4>
+                <div class="sidebar-widget-category">
+                    <ul>
+                        <li v-for="waterproof in waterproofs" :key="waterproof.id">
+                            <a href="#" @click.prevent="selectFilter('waterproof', waterproof.id)">
+                                {{ waterproof.name }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget" v-if="collections && collections.length">
+                <h4 class="sidebar-title">Коллекция</h4>
+                <div class="sidebar-widget-category">
+                    <ul>
+                        <li v-for="collection in collections" :key="collection.id">
+                            <a href="#" @click.prevent="selectFilter('collection', collection.id)">
+                                {{ collection.name }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget" v-if="volumes && volumes.length">
+                <h4 class="sidebar-title">Объем (л)</h4>
+                <div class="sidebar-widget-category">
+                    <ul>
+                        <li class="color-list weight" v-for="volume in volumes" :key="volume.id">
+                            <a href="#" class="text-white" @click.prevent="selectFilter('volume', volume.id)">
+                                {{ volume.value }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget" v-if="product_weights && product_weights.length">
+                <h4 class="sidebar-title">Вес (кг)</h4>
+                <div class="sidebar-widget-category">
+                    <ul>
+                        <li class="color-list weight" v-for="weight in product_weights" :key="weight.id">
+                            <a href="#" class="text-white" @click.prevent="selectFilter('product_weight', weight.id)">
+                                {{ weight.value }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget" v-if="installation_types && installation_types.length">
+                <h4 class="sidebar-title">Тип установки</h4>
+                <div class="sidebar-widget-category">
+                    <ul>
+                        <li v-for="type in installation_types" :key="type.id">
+                            <a href="#" @click.prevent="selectFilter('installation_type', type.id)">
+                                {{ type.name }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget" v-if="shapes && shapes.length">
+                <h4 class="sidebar-title">Форма</h4>
+                <div class="sidebar-widget-category">
+                    <ul>
+                        <li v-for="shape in shapes" :key="shape.id">
+                            <a href="#" @click.prevent="selectFilter('shape', shape.id)">
+                                {{ shape.name }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget" v-if="applications && applications.length">
+                <h4 class="sidebar-title">Применение</h4>
+                <div class="sidebar-widget-category">
+                    <ul>
+                        <li v-for="application in applications" :key="application.id">
+                            <a href="#" @click.prevent="selectFilter('application', application.id)">
+                                {{ application.name }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget" v-if="drying_times && drying_times.length">
+                <h4 class="sidebar-title">Время высыхания</h4>
+                <div class="sidebar-widget-category">
+                    <ul>
+                        <li v-for="time in drying_times" :key="time.id">
+                            <a href="#" @click.prevent="selectFilter('drying_time', time.id)">
+                                {{ time.name }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget" v-if="package_weights && package_weights.length">
+                <h4 class="sidebar-title">Вес упаковки (кг)</h4>
+                <div class="sidebar-widget-category">
+                    <ul>
+                        <li class="color-list weight" v-for="weight in package_weights" :key="weight.id">
+                            <a href="#" class="text-white" @click.prevent="selectFilter('package_weight', weight.id)">
+                                {{ weight.value }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget" v-if="min_temps && min_temps.length">
+                <h4 class="sidebar-title">Мин. температура эксплуатации (°C)</h4>
+                <div class="sidebar-widget-category">
+                    <ul>
+                        <li class="color-list weight" v-for="temp in min_temps" :key="temp.id">
+                            <a href="#" class="text-white" @click.prevent="selectFilter('min_temp', temp.id)">
+                                {{ temp.value }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget" v-if="max_temps && max_temps.length">
+                <h4 class="sidebar-title">Макс. температура эксплуатации (°C)</h4>
+                <div class="sidebar-widget-category">
+                    <ul>
+                        <li class="color-list weight" v-for="temp in max_temps" :key="temp.id">
+                            <a href="#" class="text-white" @click.prevent="selectFilter('max_temp', temp.id)">
+                                {{ temp.value }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sidebar-widget" v-if="consumptions && consumptions.length">
+                <h4 class="sidebar-title">Расход</h4>
+                <div class="sidebar-widget-category">
+                    <ul>
+                        <li v-for="consumption in consumptions" :key="consumption.id">
+                            <a href="#" @click.prevent="selectFilter('consumption', consumption.id)">
+                                {{ consumption.name }}
                             </a>
                         </li>
                     </ul>
@@ -169,8 +338,21 @@ const props = defineProps({
     seams: { type: Array, default: () => [] },
     textures: { type: Array, default: () => [] },
     sizes: { type: Array, default: () => [] },
+    materials: { type: Array, default: () => [] },
+    waterproofs: { type: Array, default: () => [] },
+    collections: { type: Array, default: () => [] },
+    volumes: { type: Array, default: () => [] },
+    product_weights: { type: Array, default: () => [] },
+    installation_types: { type: Array, default: () => [] },
+    shapes: { type: Array, default: () => [] },
+    applications: { type: Array, default: () => [] },
+    drying_times: { type: Array, default: () => [] },
+    package_weights: { type: Array, default: () => [] },
+    min_temps: { type: Array, default: () => [] },
+    max_temps: { type: Array, default: () => [] },
+    consumptions: { type: Array, default: () => [] },
     brands: { type: Array, default: () => [] },
-    initialFilters: { type: Object, default: () => ({ brands: [], min_price: '', max_price: '', colors: [], patterns: [], weights: [], subcategories: [], glues: [], mixture_types: [], seams: [], textures: [], sizes: [] }) }
+    initialFilters: { type: Object, default: () => ({ brands: [], min_price: '', max_price: '', colors: [], patterns: [], weights: [], subcategories: [], glues: [], mixture_types: [], seams: [], textures: [], sizes: [], materials: [], waterproofs: [], collections: [], volumes: [], product_weights: [], installation_types: [], shapes: [], applications: [], drying_times: [], package_weights: [], min_temps: [], max_temps: [], consumptions: [] }) }
 });
 
 const emit = defineEmits(['update:filters']);
@@ -185,6 +367,19 @@ const selectedMixtureTypes = ref([]);
 const selectedSeams = ref([]);
 const selectedTextures = ref([]);
 const selectedSizes = ref([]);
+const selectedMaterials = ref([]);
+const selectedWaterproofs = ref([]);
+const selectedCollections = ref([]);
+const selectedVolumes = ref([]);
+const selectedProductWeights = ref([]);
+const selectedInstallationTypes = ref([]);
+const selectedShapes = ref([]);
+const selectedApplications = ref([]);
+const selectedDryingTimes = ref([]);
+const selectedPackageWeights = ref([]);
+const selectedMinTemps = ref([]);
+const selectedMaxTemps = ref([]);
+const selectedConsumptions = ref([]);
 
 const showAllBrands = ref(false);
 
@@ -266,6 +461,97 @@ const selectFilter = (type, value) => {
         } else {
             selectedSizes.value.splice(index, 1);
         }
+    } else if (type === 'material') {
+        const index = selectedMaterials.value.indexOf(value);
+        if (index === -1) {
+            selectedMaterials.value.push(value);
+        } else {
+            selectedMaterials.value.splice(index, 1);
+        }
+    } else if (type === 'waterproof') {
+        const index = selectedWaterproofs.value.indexOf(value);
+        if (index === -1) {
+            selectedWaterproofs.value.push(value);
+        } else {
+            selectedWaterproofs.value.splice(index, 1);
+        }
+    } else if (type === 'collection') {
+        const index = selectedCollections.value.indexOf(value);
+        if (index === -1) {
+            selectedCollections.value.push(value);
+        } else {
+            selectedCollections.value.splice(index, 1);
+        }
+    } else if (type === 'volume') {
+        const index = selectedVolumes.value.indexOf(value);
+        if (index === -1) {
+            selectedVolumes.value.push(value);
+        } else {
+            selectedVolumes.value.splice(index, 1);
+        }
+    } else if (type === 'product_weight') {
+        const index = selectedProductWeights.value.indexOf(value);
+        if (index === -1) {
+            selectedProductWeights.value.push(value);
+        } else {
+            selectedProductWeights.value.splice(index, 1);
+        }
+    } else if (type === 'installation_type') {
+        const index = selectedInstallationTypes.value.indexOf(value);
+        if (index === -1) {
+            selectedInstallationTypes.value.push(value);
+        } else {
+            selectedInstallationTypes.value.splice(index, 1);
+        }
+    } else if (type === 'shape') {
+        const index = selectedShapes.value.indexOf(value);
+        if (index === -1) {
+            selectedShapes.value.push(value);
+        } else {
+            selectedShapes.value.splice(index, 1);
+        }
+    } else if (type === 'application') {
+        const index = selectedApplications.value.indexOf(value);
+        if (index === -1) {
+            selectedApplications.value.push(value);
+        } else {
+            selectedApplications.value.splice(index, 1);
+        }
+    } else if (type === 'drying_time') {
+        const index = selectedDryingTimes.value.indexOf(value);
+        if (index === -1) {
+            selectedDryingTimes.value.push(value);
+        } else {
+            selectedDryingTimes.value.splice(index, 1);
+        }
+    } else if (type === 'package_weight') {
+        const index = selectedPackageWeights.value.indexOf(value);
+        if (index === -1) {
+            selectedPackageWeights.value.push(value);
+        } else {
+            selectedPackageWeights.value.splice(index, 1);
+        }
+    } else if (type === 'min_temp') {
+        const index = selectedMinTemps.value.indexOf(value);
+        if (index === -1) {
+            selectedMinTemps.value.push(value);
+        } else {
+            selectedMinTemps.value.splice(index, 1);
+        }
+    } else if (type === 'max_temp') {
+        const index = selectedMaxTemps.value.indexOf(value);
+        if (index === -1) {
+            selectedMaxTemps.value.push(value);
+        } else {
+            selectedMaxTemps.value.splice(index, 1);
+        }
+    } else if (type === 'consumption') {
+        const index = selectedConsumptions.value.indexOf(value);
+        if (index === -1) {
+            selectedConsumptions.value.push(value);
+        } else {
+            selectedConsumptions.value.splice(index, 1);
+        }
     }
     emitFilters();
 };
@@ -282,6 +568,19 @@ const emitFilters = () => {
         seams: selectedSeams.value,
         textures: selectedTextures.value,
         sizes: selectedSizes.value,
+        materials: selectedMaterials.value,
+        waterproofs: selectedWaterproofs.value,
+        collections: selectedCollections.value,
+        volumes: selectedVolumes.value,
+        product_weights: selectedProductWeights.value,
+        installation_types: selectedInstallationTypes.value,
+        shapes: selectedShapes.value,
+        applications: selectedApplications.value,
+        drying_times: selectedDryingTimes.value,
+        package_weights: selectedPackageWeights.value,
+        min_temps: selectedMinTemps.value,
+        max_temps: selectedMaxTemps.value,
+        consumptions: selectedConsumptions.value,
     });
 };
 
@@ -296,6 +595,19 @@ const resetFilters = () => {
     selectedSeams.value = [];
     selectedTextures.value = [];
     selectedSizes.value = [];
+    selectedMaterials.value = [];
+    selectedWaterproofs.value = [];
+    selectedCollections.value = [];
+    selectedVolumes.value = [];
+    selectedProductWeights.value = [];
+    selectedInstallationTypes.value = [];
+    selectedShapes.value = [];
+    selectedApplications.value = [];
+    selectedDryingTimes.value = [];
+    selectedPackageWeights.value = [];
+    selectedMinTemps.value = [];
+    selectedMaxTemps.value = [];
+    selectedConsumptions.value = [];
     emitFilters();
 };
 
