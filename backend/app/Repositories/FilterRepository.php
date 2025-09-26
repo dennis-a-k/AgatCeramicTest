@@ -42,6 +42,16 @@ class FilterRepository
     }
 
     /**
+     * Построение базового запроса с примененными фильтрами
+     */
+    protected function buildBaseQuery(Request $request)
+    {
+        $query = $this->model->published();
+        $this->applyBaseFilters($query, $request);
+        return $query;
+    }
+
+    /**
      * Получение ID категорий, включая дочерние
      */
     public function getCategoryIds(Category $category): array
@@ -165,9 +175,7 @@ class FilterRepository
      */
     public function applyFilters(Request $request): LengthAwarePaginator
     {
-        $query = $this->model->with(['category', 'brand', 'color', 'attributeValues.attribute'])->published();
-
-        $this->applyBaseFilters($query, $request);
+        $query = $this->buildBaseQuery($request)->with(['category', 'brand', 'color', 'attributeValues.attribute']);
 
         // Сортировка
         $sortOption = $request->get('sort', 'default');
@@ -201,28 +209,139 @@ class FilterRepository
      */
     public function getAvailableFilters(Request $request): array
     {
-        $categoryQuery = $this->model->published();
-        $baseQuery = clone $categoryQuery;
+        $baseQuery = $this->buildBaseQuery($request);
 
-        // Применяем фильтры категории
+        // Определяем категорию для атрибутов
         $category = null;
         if ($request->has('category_id')) {
             $category = Category::find($request->category_id);
-            if ($category) {
-                $categoryIds = $this->getCategoryIds($category);
-                $categoryQuery->whereIn('category_id', $categoryIds);
-                $baseQuery->whereIn('category_id', $categoryIds);
-            }
         } elseif ($request->has('category_ids')) {
-            $categoryQuery->whereIn('category_id', (array)$request->category_ids);
-            $baseQuery->whereIn('category_id', (array)$request->category_ids);
             $categoryId = is_array($request->category_ids) ? $request->category_ids[0] : $request->category_ids;
             $category = Category::find($categoryId);
         }
 
-        // Применяем остальные фильтры к baseQuery
-        $this->applyBaseFilters($baseQuery, $request);
+        // Получаем доступные бренды
+        $brands = Brand::whereHas('products', function ($q) use ($baseQuery) {
+            $q->whereIn('products.id', $baseQuery->select('id'));
+        })
+            ->withCount(['products' => function ($q) use ($baseQuery) {
+                $q->whereIn('products.id', $baseQuery->select('id'));
+            }])
+            ->get();
 
+        // Получаем доступные цвета
+        $colors = Color::whereHas('products', function ($q) use ($baseQuery) {
+            $q->whereIn('products.id', $baseQuery->select('id'));
+        })
+            ->withCount(['products' => function ($q) use ($baseQuery) {
+                $q->whereIn('products.id', $baseQuery->select('id'));
+            }])
+            ->get();
+
+        // Получаем уникальные значения из полей products
+        $patternsQuery = clone $baseQuery;
+        $patterns = $patternsQuery->select('pattern as value', DB::raw('COUNT(*) as count'))
+            ->whereNotNull('pattern')
+            ->groupBy('pattern')
+            ->get()
+            ->map(fn($item) => ['id' => $item->value, 'name' => $item->value, 'count' => $item->count])
+            ->toArray();
+
+        $texturesQuery = clone $baseQuery;
+        $textures = $texturesQuery->select('texture as value', DB::raw('COUNT(*) as count'))
+            ->whereNotNull('texture')
+            ->groupBy('texture')
+            ->get()
+            ->map(fn($item) => ['id' => $item->value, 'name' => $item->value, 'count' => $item->count])
+            ->toArray();
+
+        $countriesQuery = clone $baseQuery;
+        $countries = $countriesQuery->select('country as value', DB::raw('COUNT(*) as count'))
+            ->whereNotNull('country')
+            ->where('country', '!=', '')
+            ->groupBy('country')
+            ->get()
+            ->map(fn($item) => ['id' => $item->value, 'name' => $item->value, 'count' => $item->count])
+            ->toArray();
+
+        $collectionsQuery = clone $baseQuery;
+        $collections = $collectionsQuery->select('collection as value', DB::raw('COUNT(*) as count'))
+            ->whereNotNull('collection')
+            ->where('collection', '!=', '')
+            ->groupBy('collection')
+            ->get()
+            ->map(fn($item) => ['id' => $item->value, 'name' => $item->value, 'count' => $item->count])
+            ->toArray();
+
+        // Получаем значения атрибутов
+        $attributeValues = $this->getAttributeValues($baseQuery, $category);
+
+        // Ценовой диапазон
+        $priceRange = [
+            'min' => $baseQuery->min('price'),
+            'max' => $baseQuery->max('price')
+        ];
+
+        return array_merge([
+            'brands' => $brands,
+            'colors' => $colors,
+            'patterns' => $patterns,
+            'textures' => $textures,
+            'countries' => $countries,
+            'collections' => $collections,
+            'price_range' => $priceRange,
+            'has_sale' => $baseQuery->where('is_sale', true)->exists()
+        ], $attributeValues);
+    }
+
+    /**
+     * Получение отфильтрованного запроса и доступных фильтров
+     */
+    public function getFilteredQueryAndFilters(Request $request): array
+    {
+        $baseQuery = $this->buildBaseQuery($request);
+
+        // Определяем категорию для атрибутов
+        $category = null;
+        if ($request->has('category_id')) {
+            $category = Category::find($request->category_id);
+        } elseif ($request->has('category_ids')) {
+            $categoryId = is_array($request->category_ids) ? $request->category_ids[0] : $request->category_ids;
+            $category = Category::find($categoryId);
+        }
+
+        $filters = $this->getAvailableFiltersForQuery($baseQuery, $category);
+
+        return [
+            'query' => $baseQuery,
+            'filters' => $filters
+        ];
+    }
+
+    /**
+     * Получение подкатегорий с количеством продуктов
+     */
+    public function getSubcategories($baseQuery, Category $category): array
+    {
+        return $category->children()->whereHas('products', function ($q) use ($baseQuery) {
+            $q->whereIn('products.id', $baseQuery->select('id'));
+        })->withCount(['products' => function ($q) use ($baseQuery) {
+            $q->whereIn('products.id', $baseQuery->select('id'));
+        }])->get()->map(function ($child) {
+            return [
+                'id' => $child->id,
+                'name' => $child->name,
+                'slug' => $child->slug,
+                'count' => $child->products_count,
+            ];
+        })->toArray();
+    }
+
+    /**
+     * Получение доступных фильтров для заданного запроса
+     */
+    public function getAvailableFiltersForQuery($baseQuery, $category = null): array
+    {
         // Получаем доступные бренды
         $brands = Brand::whereHas('products', function ($q) use ($baseQuery) {
             $q->whereIn('products.id', $baseQuery->select('id'));

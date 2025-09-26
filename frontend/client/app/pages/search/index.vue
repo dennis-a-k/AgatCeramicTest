@@ -125,9 +125,10 @@ const fetchSearchResults = async () => {
 
     loading.value = true
     try {
-        const response = await $fetch(`${config.public.apiBase}/api/products/search/${encodeURIComponent(searchQuery.value)}`, {
-            method: 'GET',
-            query: {
+        const response = await $fetch(`${config.public.apiBase}/api/search`, {
+            method: 'POST',
+            body: {
+                query: searchQuery.value,
                 page: meta.value.current_page,
                 per_page: meta.value.per_page
             }
