@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\BrandRepository;
 use App\Repositories\CategoryRepository;
+use App\Repositories\FilterRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\SearchRepository;
 use App\Services\BrandService;
@@ -24,8 +25,12 @@ class RepositoryServiceProvider extends ServiceProvider
             return new CategoryRepository($app->make(\App\Models\Category::class));
         });
 
+        $this->app->bind(FilterRepository::class, function ($app) {
+            return new FilterRepository($app->make(\App\Models\Product::class));
+        });
+
         $this->app->bind(ProductRepository::class, function ($app) {
-            return new ProductRepository($app->make(\App\Models\Product::class));
+            return new ProductRepository($app->make(\App\Models\Product::class), $app->make(FilterRepository::class));
         });
 
         $this->app->bind(SearchRepository::class, function ($app) {
