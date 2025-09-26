@@ -352,7 +352,10 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { ref, computed } from 'vue';
+import { useCategoryStore } from '~/stores/useCategoryStore'
+
+const store = useCategoryStore()
 
 const props = defineProps({
     subcategories: { type: Array, default: () => [] },
@@ -379,36 +382,8 @@ const props = defineProps({
     max_temps: { type: Array, default: () => [] },
     consumptions: { type: Array, default: () => [] },
     brands: { type: Array, default: () => [] },
-    initialFilters: { type: Object, default: () => ({ brands: [], min_price: '', max_price: '', colors: [], patterns: [], weights: [], subcategories: [], glues: [], mixture_types: [], seams: [], textures: [], countries: [], sizes: [], materials: [], waterproofs: [], collections: [], volumes: [], product_weights: [], installation_types: [], shapes: [], applications: [], drying_times: [], package_weights: [], min_temps: [], max_temps: [], consumptions: [] }) },
-    selectedFilters: { type: Object, default: () => ({ brands: [], colors: [], patterns: [], weights: [], subcategories: [], glues: [], mixture_types: [], seams: [], textures: [], countries: [], sizes: [], materials: [], waterproofs: [], collections: [], volumes: [], product_weights: [], installation_types: [], shapes: [], applications: [], drying_times: [], package_weights: [], min_temps: [], max_temps: [], consumptions: [] }) }
+    initialFilters: { type: Object, default: () => ({ brands: [], min_price: '', max_price: '', colors: [], patterns: [], weights: [], subcategories: [], glues: [], mixture_types: [], seams: [], textures: [], countries: [], sizes: [], materials: [], waterproofs: [], collections: [], volumes: [], product_weights: [], installation_types: [], shapes: [], applications: [], drying_times: [], package_weights: [], min_temps: [], max_temps: [], consumptions: [] }) }
 });
-
-const emit = defineEmits(['update:filters']);
-
-const selectedBrands = ref([]);
-const selectedColors = ref([]);
-const selectedPatterns = ref([]);
-const selectedWeights = ref([]);
-const selectedSubcategories = ref([]);
-const selectedGlues = ref([]);
-const selectedMixtureTypes = ref([]);
-const selectedSeams = ref([]);
-const selectedTextures = ref([]);
-const selectedSizes = ref([]);
-const selectedMaterials = ref([]);
-const selectedWaterproofs = ref([]);
-const selectedCountries = ref([]);
-const selectedCollections = ref([]);
-const selectedVolumes = ref([]);
-const selectedProductWeights = ref([]);
-const selectedInstallationTypes = ref([]);
-const selectedShapes = ref([]);
-const selectedApplications = ref([]);
-const selectedDryingTimes = ref([]);
-const selectedPackageWeights = ref([]);
-const selectedMinTemps = ref([]);
-const selectedMaxTemps = ref([]);
-const selectedConsumptions = ref([]);
 
 const showAllBrands = ref(false);
 const showAllCollections = ref(false);
@@ -419,33 +394,6 @@ const hiddenBrands = computed(() => props.brands.slice(5));
 const visibleCollections = computed(() => props.collections.slice(0, 10));
 const hiddenCollections = computed(() => props.collections.slice(10));
 
-watch(() => props.selectedFilters, (newFilters) => {
-  selectedBrands.value = newFilters.brands || [];
-  selectedColors.value = newFilters.colors || [];
-  selectedPatterns.value = newFilters.patterns || [];
-  selectedWeights.value = newFilters.weights || [];
-  selectedSubcategories.value = newFilters.subcategories || [];
-  selectedGlues.value = newFilters.glues || [];
-  selectedMixtureTypes.value = newFilters.mixture_types || [];
-  selectedSeams.value = newFilters.seams || [];
-  selectedTextures.value = newFilters.textures || [];
-  selectedCountries.value = newFilters.countries || [];
-  selectedSizes.value = newFilters.sizes || [];
-  selectedMaterials.value = newFilters.materials || [];
-  selectedWaterproofs.value = newFilters.waterproofs || [];
-  selectedCollections.value = newFilters.collections || [];
-  selectedVolumes.value = newFilters.volumes || [];
-  selectedProductWeights.value = newFilters.product_weights || [];
-  selectedInstallationTypes.value = newFilters.installation_types || [];
-  selectedShapes.value = newFilters.shapes || [];
-  selectedApplications.value = newFilters.applications || [];
-  selectedDryingTimes.value = newFilters.drying_times || [];
-  selectedPackageWeights.value = newFilters.package_weights || [];
-  selectedMinTemps.value = newFilters.min_temps || [];
-  selectedMaxTemps.value = newFilters.max_temps || [];
-  selectedConsumptions.value = newFilters.consumptions || [];
-}, { immediate: true });
-
 const toggleShowAllBrands = () => {
     showAllBrands.value = !showAllBrands.value;
 };
@@ -455,233 +403,11 @@ const toggleShowAllCollections = () => {
 };
 
 const selectFilter = (type, value) => {
-    if (type === 'brand') {
-        const index = selectedBrands.value.indexOf(value);
-        if (index === -1) {
-            selectedBrands.value.push(value);
-        } else {
-            selectedBrands.value.splice(index, 1);
-        }
-    } else if (type === 'color') {
-        const index = selectedColors.value.indexOf(value);
-        if (index === -1) {
-            selectedColors.value.push(value);
-        } else {
-            selectedColors.value.splice(index, 1);
-        }
-    } else if (type === 'pattern') {
-        const index = selectedPatterns.value.indexOf(value);
-        if (index === -1) {
-            selectedPatterns.value.push(value);
-        } else {
-            selectedPatterns.value.splice(index, 1);
-        }
-    } else if (type === 'weight') {
-        const index = selectedWeights.value.indexOf(value);
-        if (index === -1) {
-            selectedWeights.value.push(value);
-        } else {
-            selectedWeights.value.splice(index, 1);
-        }
-    } else if (type === 'subcategory') {
-        const index = selectedSubcategories.value.indexOf(value);
-        if (index === -1) {
-            selectedSubcategories.value.push(value);
-        } else {
-            selectedSubcategories.value.splice(index, 1);
-        }
-    } else if (type === 'glue') {
-        const index = selectedGlues.value.indexOf(value);
-        if (index === -1) {
-            selectedGlues.value.push(value);
-        } else {
-            selectedGlues.value.splice(index, 1);
-        }
-    } else if (type === 'mixture_type') {
-        const index = selectedMixtureTypes.value.indexOf(value);
-        if (index === -1) {
-            selectedMixtureTypes.value.push(value);
-        } else {
-            selectedMixtureTypes.value.splice(index, 1);
-        }
-    } else if (type === 'seam') {
-        const index = selectedSeams.value.indexOf(value);
-        if (index === -1) {
-            selectedSeams.value.push(value);
-        } else {
-            selectedSeams.value.splice(index, 1);
-        }
-    } else if (type === 'texture') {
-        const index = selectedTextures.value.indexOf(value);
-        if (index === -1) {
-            selectedTextures.value.push(value);
-        } else {
-            selectedTextures.value.splice(index, 1);
-        }
-    } else if (type === 'size') {
-        const index = selectedSizes.value.indexOf(value);
-        if (index === -1) {
-            selectedSizes.value.push(value);
-        } else {
-            selectedSizes.value.splice(index, 1);
-        }
-    } else if (type === 'material') {
-        const index = selectedMaterials.value.indexOf(value);
-        if (index === -1) {
-            selectedMaterials.value.push(value);
-        } else {
-            selectedMaterials.value.splice(index, 1);
-        }
-    } else if (type === 'waterproof') {
-        const index = selectedWaterproofs.value.indexOf(value);
-        if (index === -1) {
-            selectedWaterproofs.value.push(value);
-        } else {
-            selectedWaterproofs.value.splice(index, 1);
-        }
-    } else if (type === 'country') {
-        const index = selectedCountries.value.indexOf(value);
-        if (index === -1) {
-            selectedCountries.value.push(value);
-        } else {
-            selectedCountries.value.splice(index, 1);
-        }
-    } else if (type === 'collection') {
-        const index = selectedCollections.value.indexOf(value);
-        if (index === -1) {
-            selectedCollections.value.push(value);
-        } else {
-            selectedCollections.value.splice(index, 1);
-        }
-    } else if (type === 'volume') {
-        const index = selectedVolumes.value.indexOf(value);
-        if (index === -1) {
-            selectedVolumes.value.push(value);
-        } else {
-            selectedVolumes.value.splice(index, 1);
-        }
-    } else if (type === 'product_weight') {
-        const index = selectedProductWeights.value.indexOf(value);
-        if (index === -1) {
-            selectedProductWeights.value.push(value);
-        } else {
-            selectedProductWeights.value.splice(index, 1);
-        }
-    } else if (type === 'installation_type') {
-        const index = selectedInstallationTypes.value.indexOf(value);
-        if (index === -1) {
-            selectedInstallationTypes.value.push(value);
-        } else {
-            selectedInstallationTypes.value.splice(index, 1);
-        }
-    } else if (type === 'shape') {
-        const index = selectedShapes.value.indexOf(value);
-        if (index === -1) {
-            selectedShapes.value.push(value);
-        } else {
-            selectedShapes.value.splice(index, 1);
-        }
-    } else if (type === 'application') {
-        const index = selectedApplications.value.indexOf(value);
-        if (index === -1) {
-            selectedApplications.value.push(value);
-        } else {
-            selectedApplications.value.splice(index, 1);
-        }
-    } else if (type === 'drying_time') {
-        const index = selectedDryingTimes.value.indexOf(value);
-        if (index === -1) {
-            selectedDryingTimes.value.push(value);
-        } else {
-            selectedDryingTimes.value.splice(index, 1);
-        }
-    } else if (type === 'package_weight') {
-        const index = selectedPackageWeights.value.indexOf(value);
-        if (index === -1) {
-            selectedPackageWeights.value.push(value);
-        } else {
-            selectedPackageWeights.value.splice(index, 1);
-        }
-    } else if (type === 'min_temp') {
-        const index = selectedMinTemps.value.indexOf(value);
-        if (index === -1) {
-            selectedMinTemps.value.push(value);
-        } else {
-            selectedMinTemps.value.splice(index, 1);
-        }
-    } else if (type === 'max_temp') {
-        const index = selectedMaxTemps.value.indexOf(value);
-        if (index === -1) {
-            selectedMaxTemps.value.push(value);
-        } else {
-            selectedMaxTemps.value.splice(index, 1);
-        }
-    } else if (type === 'consumption') {
-        const index = selectedConsumptions.value.indexOf(value);
-        if (index === -1) {
-            selectedConsumptions.value.push(value);
-        } else {
-            selectedConsumptions.value.splice(index, 1);
-        }
-    }
-    emitFilters();
-};
-
-const emitFilters = () => {
-    emit('update:filters', {
-        brands: selectedBrands.value,
-        colors: selectedColors.value,
-        patterns: selectedPatterns.value,
-        weights: selectedWeights.value,
-        subcategories: selectedSubcategories.value,
-        glues: selectedGlues.value,
-        mixture_types: selectedMixtureTypes.value,
-        seams: selectedSeams.value,
-        textures: selectedTextures.value,
-        countries: selectedCountries.value,
-        sizes: selectedSizes.value,
-        materials: selectedMaterials.value,
-        waterproofs: selectedWaterproofs.value,
-        collections: selectedCollections.value,
-        volumes: selectedVolumes.value,
-        product_weights: selectedProductWeights.value,
-        installation_types: selectedInstallationTypes.value,
-        shapes: selectedShapes.value,
-        applications: selectedApplications.value,
-        drying_times: selectedDryingTimes.value,
-        package_weights: selectedPackageWeights.value,
-        min_temps: selectedMinTemps.value,
-        max_temps: selectedMaxTemps.value,
-        consumptions: selectedConsumptions.value,
-    });
+    store.selectFilter(type, value);
 };
 
 const resetFilters = () => {
-    selectedBrands.value = [];
-    selectedColors.value = [];
-    selectedPatterns.value = [];
-    selectedWeights.value = [];
-    selectedSubcategories.value = [];
-    selectedGlues.value = [];
-    selectedMixtureTypes.value = [];
-    selectedSeams.value = [];
-    selectedTextures.value = [];
-    selectedCountries.value = [];
-    selectedSizes.value = [];
-    selectedMaterials.value = [];
-    selectedWaterproofs.value = [];
-    selectedCollections.value = [];
-    selectedVolumes.value = [];
-    selectedProductWeights.value = [];
-    selectedInstallationTypes.value = [];
-    selectedShapes.value = [];
-    selectedApplications.value = [];
-    selectedDryingTimes.value = [];
-    selectedPackageWeights.value = [];
-    selectedMinTemps.value = [];
-    selectedMaxTemps.value = [];
-    selectedConsumptions.value = [];
-    emitFilters();
+    store.resetFilters();
 };
 
 
