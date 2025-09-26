@@ -70,7 +70,7 @@
             <li>
               <NuxtLink to="/contacts">Контакты</NuxtLink>
             </li>
-            <li><a href="about.html" class="sail">Распродажа</a></li>
+            <li><NuxtLink to="/sale" class="sale">Распродажа</NuxtLink></li>
           </ul>
         </div>
       </div>
@@ -119,7 +119,7 @@
         line-height: 50px;
       }
 
-      & .sail {
+      & .sale {
         color: $red;
       }
 
@@ -287,7 +287,7 @@
     color: $white;
   }
 
-  & .sail {
+  & .sale {
     color: $black;
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-30px">
     <div class="product card h-100" style="border: none">
-      <span class="badges" v-if="product.sale">
+      <span class="badges" v-if="product.is_sale">
         <span class="new">Распродажа</span>
       </span>
 

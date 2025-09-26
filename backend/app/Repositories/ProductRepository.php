@@ -80,6 +80,32 @@ class ProductRepository implements FilterableRepositoryInterface
         ];
     }
 
+    /**
+     * Получение товаров на распродаже с фильтрами
+     *
+     * @param Request $request Параметры фильтрации
+     * @return array
+     */
+    public function getBySale(Request $request): array
+    {
+        // Создаем клон запроса с добавленным фильтром по распродаже
+        $newRequest = clone $request;
+        $newRequest->merge(['is_sale' => true]);
+
+        $products = $this->filterRepository->applyFilters($newRequest);
+
+        $filteredData = $this->filterRepository->getFilteredQueryAndFilters($newRequest);
+        $filters = $filteredData['filters'];
+        $baseQuery = $filteredData['query'];
+
+        // Для распродажи subcategories не нужны, так как нет конкретной категории
+
+        return [
+            'products' => $products,
+            'filters' => $filters
+        ];
+    }
+
 
     public function applyFilters(Request $request): LengthAwarePaginator
     {

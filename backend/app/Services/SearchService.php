@@ -30,6 +30,17 @@ class SearchService
     }
 
     /**
+     * Получение товаров на распродаже с фильтрами
+     *
+     * @param Request $request Параметры фильтрации
+     * @return array
+     */
+    public function getProductsBySale(Request $request): array
+    {
+        return $this->repository->getBySale($request);
+    }
+
+    /**
      * Быстрый поиск для автодополнения
      *
      * @param string $query

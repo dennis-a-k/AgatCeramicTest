@@ -8,9 +8,9 @@
             <div class="row justify-content-center align-items-center h-100">
                 <div class="col-12 text-center">
                     <h2 class="title"><span>Распродажа</span>Успейте купить</h2>
-                    <a href="/" class="btn text-capitalize m-auto">
+                    <NuxtLink to="/sale" class="btn text-capitalize m-auto">
                         Распродажа
-                    </a>
+                    </NuxtLink>
                 </div>
             </div>
         </div>

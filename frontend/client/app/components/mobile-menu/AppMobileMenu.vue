@@ -98,7 +98,7 @@
                         <NuxtLink to="/contacts">Контакты</NuxtLink>
                     </li>
                     <li>
-                        <NuxtLink to="/" class="text-danger">Распродажа</NuxtLink>
+                        <NuxtLink to="/sale" class="text-danger">Распродажа</NuxtLink>
                     </li>
                 </ul>
             </nav>
