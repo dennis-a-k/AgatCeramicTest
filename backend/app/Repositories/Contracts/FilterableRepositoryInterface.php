@@ -2,10 +2,6 @@
 
 namespace App\Repositories\Contracts;
 
-use Illuminate\Http\Request;
-
-interface FilterableRepositoryInterface extends RepositoryInterface
+interface FilterableRepositoryInterface extends RepositoryInterface, FilterBuilderInterface, AvailableFiltersInterface, CategoryHelperInterface
 {
-    public function applyFilters(Request $request);
-    public function getAvailableFilters(Request $request);
 }

@@ -4,8 +4,8 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\Attribute;
 use App\Repositories\Contracts\FilterableRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -89,6 +89,36 @@ class ProductRepository implements FilterableRepositoryInterface
     public function getAvailableFilters(Request $request): array
     {
         return $this->filterRepository->getAvailableFilters($request);
+    }
+
+    public function buildBaseQuery(Request $request): Builder
+    {
+        return $this->filterRepository->buildBaseQuery($request);
+    }
+
+    public function applyBaseFilters(Builder $query, Request $request): void
+    {
+        $this->filterRepository->applyBaseFilters($query, $request);
+    }
+
+    public function getAvailableFiltersForQuery(Builder $baseQuery, $category = null): array
+    {
+        return $this->filterRepository->getAvailableFiltersForQuery($baseQuery, $category);
+    }
+
+    public function getFilteredQueryAndFilters(Request $request): array
+    {
+        return $this->filterRepository->getFilteredQueryAndFilters($request);
+    }
+
+    public function getCategoryIds(Category $category): array
+    {
+        return $this->filterRepository->getCategoryIds($category);
+    }
+
+    public function getSubcategories(Builder $baseQuery, Category $category): array
+    {
+        return $this->filterRepository->getSubcategories($baseQuery, $category);
     }
 
 }
