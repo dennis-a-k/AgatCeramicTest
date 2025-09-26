@@ -77,7 +77,7 @@ const handleInput = () => {
 }
 
 const selectSuggestion = (suggestion) => {
-    searchQuery.value = suggestion.display_text
+    searchQuery.value = suggestion.article
     showSuggestions.value = false
     handleSearch()
 }

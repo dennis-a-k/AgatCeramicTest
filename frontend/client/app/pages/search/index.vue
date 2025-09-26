@@ -7,10 +7,8 @@
                         <h1>Результаты поиска</h1>
                         <p v-if="searchQuery">По запросу: "{{ searchQuery }}"</p>
                     </div>
-
                     <div class="search-results">
                         <UiAppSpinner v-if="loading" text="Поиск товаров..." />
-
                         <div v-else-if="products.length === 0 && !loading" class="no-results">
                             <div class="no-results-content">
                                 <i class="pe-7s-search"></i>
@@ -18,53 +16,46 @@
                                 <p>Попробуйте изменить поисковый запрос</p>
                             </div>
                         </div>
-
-
-
-                                  <div v-else class="shop-bottom-area">
-            <div class="row">
-              <div class="col">
-                <div class="tab-content">
-                  <div class="tab-pane fade show active" id="shop-grid">
-                    <div class="row mb-n-30px">
-                      <ProductAppProductCard v-for="product in products" :key="product.id"
-                        :product="product" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-<!-- Пагинация -->
-                        <div v-if="products.length > 0 && meta.last_page > 1" class="pagination-wrapper">
-                            <nav aria-label="Page navigation">
-                                <ul class="pagination">
-                                    <li class="page-item" :class="{ disabled: meta.current_page === 1 }">
-                                        <a class="page-link" href="#" @click.prevent="changePage(meta.current_page - 1)">
-                                            <i class="pe-7s-angle-left"></i>
-                                        </a>
-                                    </li>
-                                    
-                                    <li
-                                        v-for="page in pageRange"
-                                        :key="page"
-                                        class="page-item"
-                                        :class="{ active: page === meta.current_page }"
-                                    >
-                                        <a class="page-link" href="#" @click.prevent="changePage(page)">
-                                            {{ page }}
-                                        </a>
-                                    </li>
-
-                                    <li class="page-item" :class="{ disabled: meta.current_page === meta.last_page }">
-                                        <a class="page-link" href="#" @click.prevent="changePage(meta.current_page + 1)">
-                                            <i class="pe-7s-angle-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
+                        <div v-else class="shop-bottom-area">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="shop-grid">
+                                            <div class="row mb-n-30px">
+                                                <ProductAppProductCard v-for="product in products" :key="product.id"
+                                                    :product="product" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Пагинация -->
+                            <div v-if="products.length > 0 && meta.last_page > 1" class="pagination-wrapper">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination">
+                                        <li class="page-item" :class="{ disabled: meta.current_page === 1 }">
+                                            <a class="page-link" href="#"
+                                                @click.prevent="changePage(meta.current_page - 1)">
+                                                <i class="pe-7s-angle-left"></i>
+                                            </a>
+                                        </li>
+                                        <li v-for="page in pageRange" :key="page" class="page-item"
+                                            :class="{ active: page === meta.current_page }">
+                                            <a class="page-link" href="#" @click.prevent="changePage(page)">
+                                                {{ page }}
+                                            </a>
+                                        </li>
+                                        <li class="page-item"
+                                            :class="{ disabled: meta.current_page === meta.last_page }">
+                                            <a class="page-link" href="#"
+                                                @click.prevent="changePage(meta.current_page + 1)">
+                                                <i class="pe-7s-angle-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
-          </div>
-                        
                     </div>
                 </div>
             </div>
@@ -94,7 +85,7 @@ const loading = ref(false)
 const meta = ref({
     total: 0,
     current_page: 1,
-    per_page: 8,
+    per_page: 24,
     last_page: 1
 })
 
@@ -160,10 +151,10 @@ const fetchSearchResults = async () => {
 // Смена страницы
 const changePage = (page) => {
     if (page < 1 || page > meta.value.last_page || page === meta.value.current_page) return
-    
+
     meta.value.current_page = page
     router.push({
-        query: { 
+        query: {
             ...route.query,
             page: page
         }
@@ -300,7 +291,7 @@ onMounted(() => {
 
     .search-header {
         margin-bottom: 20px;
-        
+
         h1 {
             font-size: 24px;
         }
@@ -314,11 +305,11 @@ onMounted(() => {
 
     .search-header {
         margin-bottom: 15px;
-        
+
         h1 {
             font-size: 20px;
         }
-        
+
         p {
             font-size: 14px;
         }
@@ -326,13 +317,13 @@ onMounted(() => {
 
     .no-results {
         padding: 40px 0;
-        
+
         .no-results-content {
             i {
                 font-size: 40px;
                 margin-bottom: 15px;
             }
-            
+
             h3 {
                 font-size: 18px;
             }
