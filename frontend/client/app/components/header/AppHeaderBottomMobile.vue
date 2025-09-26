@@ -26,6 +26,8 @@
             </div>
         </div>
     </div>
+
+    <UiSearchMobileForm />
 </template>
 
 <style scoped lang="scss">

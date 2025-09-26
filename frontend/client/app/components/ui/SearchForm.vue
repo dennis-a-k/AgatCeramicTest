@@ -139,11 +139,6 @@ onMounted(() => {
             padding-left: 15px;
             font-size: 14px;
             color: $body-color;
-
-            &:focus {
-                outline: none;
-                box-shadow: 0 0 0 2px $theme-color;
-            }
         }
 
         button {
@@ -165,7 +160,7 @@ onMounted(() => {
             transition: background-color 0.2s ease;
 
             &:hover {
-                background-color: $theme-color;
+                background-color: $body-color;
             }
         }
     }
@@ -203,7 +198,7 @@ onMounted(() => {
     }
 
     &:hover {
-        background-color: $body-color;
+        background-color: $secondary;
     }
 }
 </style>

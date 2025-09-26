@@ -9,10 +9,7 @@
                     </div>
 
                     <div class="search-results">
-                        <div v-if="loading" class="loading-spinner">
-                            <div class="spinner"></div>
-                            <p>Загрузка...</p>
-                        </div>
+                        <UiAppSpinner v-if="loading" text="Поиск товаров..." />
 
                         <div v-else-if="products.length === 0 && !loading" class="no-results">
                             <div class="no-results-content">
@@ -22,28 +19,22 @@
                             </div>
                         </div>
 
-                        <div v-else class="products-grid">
-                            <div class="row">
-                                <div
-                                    v-for="product in products"
-                                    :key="product.id"
-                                    class="col-xl-3 col-lg-4 col-md-6 col-sm-6"
-                                >
-                                    <div class="product-card">
-                                        <div class="product-image">
-                                            <img :src="product.image || '/images/stock/stock-image.png'" :alt="product.name" />
-                                        </div>
-                                        <div class="product-info">
-                                            <h3>{{ product.name }}</h3>
-                                            <p class="price">{{ formatPrice(product.price) }}</p>
-                                            <p class="article">Артикул: {{ product.article }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- Пагинация -->
+
+                                  <div v-else class="shop-bottom-area">
+            <div class="row">
+              <div class="col">
+                <div class="tab-content">
+                  <div class="tab-pane fade show active" id="shop-grid">
+                    <div class="row mb-n-30px">
+                      <ProductAppProductCard v-for="product in products" :key="product.id"
+                        :product="product" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+<!-- Пагинация -->
                         <div v-if="products.length > 0 && meta.last_page > 1" class="pagination-wrapper">
                             <nav aria-label="Page navigation">
                                 <ul class="pagination">
@@ -72,6 +63,8 @@
                                 </ul>
                             </nav>
                         </div>
+          </div>
+                        
                     </div>
                 </div>
             </div>
@@ -101,7 +94,7 @@ const loading = ref(false)
 const meta = ref({
     total: 0,
     current_page: 1,
-    per_page: 40,
+    per_page: 8,
     last_page: 1
 })
 

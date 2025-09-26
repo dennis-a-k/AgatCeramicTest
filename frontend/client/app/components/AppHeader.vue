@@ -9,8 +9,6 @@
     <NavbarAppNavbar />
 
     <NavbarAppNavAlphabet />
-
-    <UiSearchMobileForm />
   </header>
 </template>
 
