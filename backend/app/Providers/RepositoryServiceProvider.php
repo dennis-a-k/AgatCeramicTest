@@ -6,9 +6,11 @@ use Illuminate\Support\ServiceProvider;
 use App\Repositories\BrandRepository;
 use App\Repositories\CategoryRepository;
 use App\Repositories\ProductRepository;
+use App\Repositories\SearchRepository;
 use App\Services\BrandService;
 use App\Services\CategoryService;
 use App\Services\ProductService;
+use App\Services\SearchService;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,10 @@ class RepositoryServiceProvider extends ServiceProvider
             return new ProductRepository($app->make(\App\Models\Product::class));
         });
 
+        $this->app->bind(SearchRepository::class, function ($app) {
+            return new SearchRepository($app->make(\App\Models\Product::class));
+        });
+
         $this->app->bind(BrandService::class, function ($app) {
             return new BrandService($app->make(BrandRepository::class));
         });
@@ -36,6 +42,10 @@ class RepositoryServiceProvider extends ServiceProvider
 
         $this->app->bind(ProductService::class, function ($app) {
             return new ProductService($app->make(ProductRepository::class));
+        });
+
+        $this->app->bind(SearchService::class, function ($app) {
+            return new SearchService($app->make(ProductRepository::class), $app->make(SearchRepository::class));
         });
     }
 

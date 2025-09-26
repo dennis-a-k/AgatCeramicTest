@@ -4,16 +4,19 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Services\ProductService;
+use App\Services\SearchService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class ProductController extends Controller
 {
     protected $productService;
+    protected $searchService;
 
-    public function __construct(ProductService $productService)
+    public function __construct(ProductService $productService, SearchService $searchService)
     {
         $this->productService = $productService;
+        $this->searchService = $searchService;
     }
 
     public function index(Request $request): JsonResponse
@@ -49,7 +52,7 @@ class ProductController extends Controller
      */
     public function getByCategory($slug, Request $request): JsonResponse
     {
-        $result = $this->productService->getProductsByCategory($slug, $request);
+        $result = $this->searchService->getProductsByCategory($slug, $request);
         return response()->json($result);
     }
 }

@@ -4,16 +4,19 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Services\ProductService;
+use App\Services\SearchService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class SearchController extends Controller
 {
     protected $productService;
+    protected $searchService;
 
-    public function __construct(ProductService $productService)
+    public function __construct(ProductService $productService, SearchService $searchService)
     {
         $this->productService = $productService;
+        $this->searchService = $searchService;
     }
 
     /**
@@ -54,7 +57,7 @@ class SearchController extends Controller
             'query' => 'required|string|min:2|max:100',
         ]);
 
-        $products = $this->productService->quickSearch($request->input('query'));
+        $products = $this->searchService->quickSearch($request->input('query'));
 
         return response()->json([
             'results' => $products,
