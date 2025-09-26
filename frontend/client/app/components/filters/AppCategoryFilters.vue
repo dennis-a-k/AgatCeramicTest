@@ -1,7 +1,7 @@
 <template>
     <div class="col-lg-3 order-lg-first col-md-12 order-md-last">
         <div class="shop-sidebar-wrap">
-            <div class="sidebar-widget" v-if="categories && categories.length">
+            <div class="sidebar-widget" v-if="showCategoriesFilter && categories && categories.length">
                 <h4 class="sidebar-title">Категория</h4>
                 <div class="sidebar-widget-category">
                     <ul>
@@ -385,6 +385,7 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    showCategoriesFilter: { type: Boolean, default: false },
     categories: { type: Array, default: () => [] },
     subcategories: { type: Array, default: () => [] },
     patterns: { type: Array, default: () => [] },

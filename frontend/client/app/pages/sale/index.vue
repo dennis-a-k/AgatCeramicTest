@@ -41,7 +41,7 @@
           </div>
         </div>
         <ClientOnly>
-          <FiltersAppCategoryFilters :store="store" :categories="store.filters.categories" :subcategories="store.filters.subcategories" :patterns="store.filters.patterns"
+          <FiltersAppCategoryFilters :store="store" :showCategoriesFilter="true" :categories="store.filters.categories" :subcategories="store.filters.subcategories" :patterns="store.filters.patterns"
             :weights="store.filters.weights" :colors="store.filters.colors" :glues="store.filters.glues"
             :mixture_types="store.filters.mixture_types" :seams="store.filters.seams" :textures="store.filters.textures" :countries="store.filters.countries"
             :sizes="store.filters.sizes" :materials="store.filters.materials" :waterproofs="store.filters.waterproofs"
