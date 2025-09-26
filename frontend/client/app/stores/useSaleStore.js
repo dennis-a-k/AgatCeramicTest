@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 
 // Конфигурация типов фильтров
 const filterConfigs = {
+  categories: { nameField: 'name' },
   brands: { nameField: 'name' },
   colors: { nameField: 'name' },
   patterns: { nameField: 'name' },
@@ -33,6 +34,7 @@ const filterTypes = Object.keys(filterConfigs)
 
 // Маппинг singular к plural
 const singularToPlural = {
+  category: 'categories',
   brand: 'brands',
   color: 'colors',
   pattern: 'patterns',
@@ -55,7 +57,7 @@ const singularToPlural = {
   drying_time: 'drying_times',
   package_weight: 'package_weights',
   min_temp: 'min_temps',
-  max_temp: 'max_temps',
+  max_temp: 'max_temp',
   consumption: 'consumptions'
 }
 
@@ -89,6 +91,12 @@ export const useSaleStore = defineStore('sale', () => {
       max_price: maxPrice.value,
       sort: sortOption.value,
       page: currentPage.value
+    }
+
+    // Преобразуем categories в category_ids для backend
+    if (params.categories && params.categories.length > 0) {
+      params.category_ids = params.categories
+      delete params.categories
     }
 
     // Фильтруем пустые значения

@@ -1,6 +1,32 @@
 <template>
     <div class="col-lg-3 order-lg-first col-md-12 order-md-last">
         <div class="shop-sidebar-wrap">
+            <div class="sidebar-widget" v-if="categories && categories.length">
+                <h4 class="sidebar-title">Категория</h4>
+                <div class="sidebar-widget-category">
+                    <ul>
+                        <li v-for="category in visibleCategories" :key="category.id">
+                            <a href="#" @click.prevent="selectFilter('category', category.id)">
+                                {{ category.name }}
+                            </a>
+                        </li>
+
+                        <div v-show="showAllCategories">
+                            <li v-for="category in hiddenCategories" :key="category.id">
+                                <a href="#" @click.prevent="selectFilter('category', category.id)">
+                                    {{ category.name }}
+                                </a>
+                            </li>
+                        </div>
+                        <li v-if="categories.length > 5">
+                            <a href="#" class="show-more-link" @click.prevent="toggleShowAllCategories">
+                                {{ showAllCategories ? 'Скрыть' : 'Показать все' }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
             <div class="sidebar-widget" v-if="subcategories && subcategories.length">
                 <h4 class="sidebar-title">Подкатегория</h4>
                 <div class="sidebar-widget-category">
@@ -359,6 +385,7 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    categories: { type: Array, default: () => [] },
     subcategories: { type: Array, default: () => [] },
     patterns: { type: Array, default: () => [] },
     weights: { type: Array, default: () => [] },
@@ -386,14 +413,22 @@ const props = defineProps({
     initialFilters: { type: Object, default: () => ({ brands: [], min_price: '', max_price: '', colors: [], patterns: [], weights: [], subcategories: [], glues: [], mixture_types: [], seams: [], textures: [], countries: [], sizes: [], materials: [], waterproofs: [], collections: [], volumes: [], product_weights: [], installation_types: [], shapes: [], applications: [], drying_times: [], package_weights: [], min_temps: [], max_temps: [], consumptions: [] }) }
 });
 
+const showAllCategories = ref(false);
 const showAllBrands = ref(false);
 const showAllCollections = ref(false);
+
+const visibleCategories = computed(() => props.categories.slice(0, 5));
+const hiddenCategories = computed(() => props.categories.slice(5));
 
 const visibleBrands = computed(() => props.brands.slice(0, 5));
 const hiddenBrands = computed(() => props.brands.slice(5));
 
 const visibleCollections = computed(() => props.collections.slice(0, 10));
 const hiddenCollections = computed(() => props.collections.slice(10));
+
+const toggleShowAllCategories = () => {
+    showAllCategories.value = !showAllCategories.value;
+};
 
 const toggleShowAllBrands = () => {
     showAllBrands.value = !showAllBrands.value;

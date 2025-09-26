@@ -107,6 +107,15 @@ class AvailableFiltersRetriever implements AvailableFiltersInterface
             }])
             ->get();
 
+        // Получаем доступные категории
+        $categories = Category::whereHas('products', function ($q) use ($baseQuery) {
+            $q->whereIn('products.id', $baseQuery->select('id'));
+        })
+            ->withCount(['products' => function ($q) use ($baseQuery) {
+                $q->whereIn('products.id', $baseQuery->select('id'));
+            }])
+            ->get();
+
         // Получаем уникальные значения из полей products
         $patternsQuery = clone $baseQuery;
         $patterns = $patternsQuery->select('pattern as value', DB::raw('COUNT(*) as count'))
@@ -152,6 +161,7 @@ class AvailableFiltersRetriever implements AvailableFiltersInterface
         ];
 
         return array_merge([
+            'categories' => $categories,
             'brands' => $brands,
             'colors' => $colors,
             'patterns' => $patterns,
