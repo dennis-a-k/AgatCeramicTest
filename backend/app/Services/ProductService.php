@@ -64,4 +64,15 @@ class ProductService
     {
         return $this->repository->getByCategorySlug($slug, $request);
     }
+
+    /**
+     * Быстрый поиск для автодополнения
+     *
+     * @param string $query
+     * @return array
+     */
+    public function quickSearch(string $query): array
+    {
+        return $this->repository->quickSearch($query);
+    }
 }
