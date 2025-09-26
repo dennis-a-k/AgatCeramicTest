@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import { computed, watch, watchEffect } from 'vue'
+import { computed, watch } from 'vue'
 import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { useRuntimeConfig } from '#imports'
 import { useCategoryStore } from '~/stores/useCategoryStore'
