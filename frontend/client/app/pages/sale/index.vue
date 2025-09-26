@@ -57,11 +57,16 @@
 </template>
 
 <script setup>
-import { computed, watch } from 'vue'
+import { computed, watch, onMounted } from 'vue'
 import { useRuntimeConfig } from '#imports'
 import { useSaleStore } from '~/stores/useSaleStore'
 
 const store = useSaleStore()
+
+// Сбрасываем фильтры при входе на страницу распродажи
+onMounted(() => {
+  store.resetFilters()
+})
 
 const config = useRuntimeConfig()
 const { data: fetchData, pending, error, execute } = useAsyncData(`sale-products`, () => $fetch(`${config.public.apiBase}/api/sale/products`, {

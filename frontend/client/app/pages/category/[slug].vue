@@ -57,8 +57,8 @@
 </template>
 
 <script setup>
-import { computed, watch } from 'vue'
-import { useRoute, onBeforeRouteUpdate } from 'vue-router'
+import { computed, watch, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useRuntimeConfig } from '#imports'
 import { useCategoryStore } from '~/stores/useCategoryStore'
 
@@ -67,11 +67,8 @@ const slug = route.params.slug
 const store = useCategoryStore()
 
 // Сбрасываем фильтры при переходе в новую категорию
-onBeforeRouteUpdate((to, from) => {
-  if (to.params.slug !== from.params.slug) {
-    store.resetFilters()
-    refresh()
-  }
+onMounted(() => {
+  store.resetFilters()
 })
 
 const config = useRuntimeConfig()
