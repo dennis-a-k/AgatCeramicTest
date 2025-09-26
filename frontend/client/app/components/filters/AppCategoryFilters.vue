@@ -353,11 +353,12 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useCategoryStore } from '~/stores/useCategoryStore'
-
-const store = useCategoryStore()
 
 const props = defineProps({
+    store: {
+        type: Object,
+        required: true
+    },
     subcategories: { type: Array, default: () => [] },
     patterns: { type: Array, default: () => [] },
     weights: { type: Array, default: () => [] },
@@ -403,11 +404,11 @@ const toggleShowAllCollections = () => {
 };
 
 const selectFilter = (type, value) => {
-    store.selectFilter(type, value);
+    props.store.selectFilter(type, value);
 };
 
 const resetFilters = () => {
-    store.resetFilters();
+    props.store.resetFilters();
 };
 
 
