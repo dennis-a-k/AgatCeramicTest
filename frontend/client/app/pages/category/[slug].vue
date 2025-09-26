@@ -83,9 +83,7 @@ const { data: fetchData, pending, error, execute } = useAsyncData(`category-prod
 
 const refresh = () => execute()
 
-watchEffect(() => {
-  refresh()
-})
+watch(() => store.queryParams, () => refresh(), { immediate: true })
 
 const categoryData = computed(() => fetchData.value?.category || null)
 const productsData = computed(() => {
