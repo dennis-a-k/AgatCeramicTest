@@ -100,6 +100,9 @@ const handleSearch = async () => {
         path: '/search',
         query: { q: searchQuery.value.trim() }
     })
+
+    // Очищаем поле поиска после выполнения поиска
+    searchQuery.value = ''
 }
 
 // Очистка подсказок при изменении маршрута
