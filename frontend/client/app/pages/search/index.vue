@@ -10,7 +10,8 @@
 
                     <div class="search-results">
                         <div v-if="loading" class="loading-spinner">
-                            <AppSpinner />
+                            <div class="spinner"></div>
+                            <p>Загрузка...</p>
                         </div>
 
                         <div v-else-if="products.length === 0 && !loading" class="no-results">
@@ -23,12 +24,21 @@
 
                         <div v-else class="products-grid">
                             <div class="row">
-                                <div 
-                                    v-for="product in products" 
+                                <div
+                                    v-for="product in products"
                                     :key="product.id"
                                     class="col-xl-3 col-lg-4 col-md-6 col-sm-6"
                                 >
-                                    <AppProductCard :product="product" />
+                                    <div class="product-card">
+                                        <div class="product-image">
+                                            <img :src="product.image || '/images/stock/stock-image.png'" :alt="product.name" />
+                                        </div>
+                                        <div class="product-info">
+                                            <h3>{{ product.name }}</h3>
+                                            <p class="price">{{ formatPrice(product.price) }}</p>
+                                            <p class="article">Артикул: {{ product.article }}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -43,8 +53,8 @@
                                         </a>
                                     </li>
                                     
-                                    <li 
-                                        v-for="page in pageRange" 
+                                    <li
+                                        v-for="page in pageRange"
                                         :key="page"
                                         class="page-item"
                                         :class="{ active: page === meta.current_page }"
@@ -72,9 +82,18 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useRuntimeConfig } from '#imports'
+
+const formatPrice = (price) => {
+    return new Intl.NumberFormat('ru-RU', {
+        style: 'currency',
+        currency: 'RUB'
+    }).format(price);
+};
 
 const route = useRoute()
 const router = useRouter()
+const config = useRuntimeConfig()
 
 const searchQuery = ref('')
 const products = ref([])
@@ -122,10 +141,9 @@ const fetchSearchResults = async () => {
 
     loading.value = true
     try {
-        const response = await $fetch('/api/search', {
-            method: 'POST',
-            body: {
-                query: searchQuery.value,
+        const response = await $fetch(`${config.public.apiBase}/api/products/search/${encodeURIComponent(searchQuery.value)}`, {
+            method: 'GET',
+            query: {
                 page: meta.value.current_page,
                 per_page: meta.value.per_page
             }

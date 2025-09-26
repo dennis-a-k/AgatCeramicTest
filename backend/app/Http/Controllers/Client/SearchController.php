@@ -28,7 +28,7 @@ class SearchController extends Controller
             'query' => 'required|string|min:2|max:255',
         ]);
 
-        $result = $this->productService->getProductsWithFilters($request->merge(['search' => $request->query]));
+        $result = $this->productService->getProductsWithFilters($request->merge(['search' => $request->input('query')]));
 
         return response()->json([
             'products' => $result['products'] ?? [],
