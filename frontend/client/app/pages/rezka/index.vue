@@ -41,11 +41,7 @@
             Обработка кромки (фаска) в этом варианте не выполняется.
           </p>
           <div class="row justify-content-center">
-            <NuxtImg
-              src="/images/page-rezka/rezka_1.jpg"
-              class="col-4"
-              alt="Полосы противоскольжения без фаски"
-            />
+            <NuxtImg src="/images/page-rezka/rezka_1.jpg" class="col-4" alt="Полосы противоскольжения без фаски" />
           </div>
         </li>
         <li>
@@ -66,11 +62,7 @@
             обработанных участках.
           </p>
           <div class="row justify-content-center">
-            <NuxtImg
-              src="/images/page-rezka/rezka_2.jpg"
-              class="col-4"
-              alt="Матовое скругление (1/4 круга)"
-            />
+            <NuxtImg src="/images/page-rezka/rezka_2.jpg" class="col-4" alt="Матовое скругление (1/4 круга)" />
           </div>
         </li>
         <li>
@@ -84,11 +76,7 @@
             более эффектный и дорогой вид.
           </p>
           <div class="row justify-content-center">
-            <NuxtImg
-              src="/images/page-rezka/rezka_3.jpg"
-              class="col-4"
-              alt="Полированное скругление (1/4 круга)"
-            />
+            <NuxtImg src="/images/page-rezka/rezka_3.jpg" class="col-4" alt="Полированное скругление (1/4 круга)" />
           </div>
         </li>
         <li>
@@ -110,11 +98,7 @@
             ее дизайн.
           </p>
           <div class="row justify-content-center">
-            <NuxtImg
-              src="/images/page-rezka/rezka_4.jpg"
-              class="col-4"
-              alt="Ступень со склейкой двойная"
-            />
+            <NuxtImg src="/images/page-rezka/rezka_4.jpg" class="col-4" alt="Ступень со склейкой двойная" />
           </div>
         </li>
         <li>
@@ -127,11 +111,7 @@
             и придает лестнице респектабельный вид, подчеркивая статус интерьера
           </p>
           <div class="row justify-content-center">
-            <NuxtImg
-              src="/images/page-rezka/rezka_5.jpg"
-              class="col-4"
-              alt="Ступень со склейкой тройная"
-            />
+            <NuxtImg src="/images/page-rezka/rezka_5.jpg" class="col-4" alt="Ступень со склейкой тройная" />
           </div>
         </li>
       </ul>
@@ -149,11 +129,7 @@
         могут быть отшлифованы до идеально гладкой, глянцевой поверхности.
       </p>
       <div class="row justify-content-center">
-        <NuxtImg
-          src="/images/page-rezka/rezka_6.jpg"
-          class="col-4"
-          alt="Изготовление плинтусов и бордюров из плитки"
-        />
+        <NuxtImg src="/images/page-rezka/rezka_6.jpg" class="col-4" alt="Изготовление плинтусов и бордюров из плитки" />
       </div>
     </section>
 
@@ -188,3 +164,29 @@
     </section>
   </div>
 </template>
+
+<script setup>
+import { useRuntimeConfig } from '#imports'
+
+const config = useRuntimeConfig()
+
+useHead({
+  title: 'Резка керамогранита и керамической плитки - AgatCeramic',
+  meta: [
+    {
+      name: 'description',
+      content: 'Услуги резки керамогранита и керамической плитки в AgatCeramic. Изготовление ступеней, плинтусов, гидроабразивная резка.'
+    },
+    {
+      name: 'keywords',
+      content: 'резка плитки, керамогранит, ступени, плинтусы, гидроабразивная резка, AgatCeramic'
+    }
+  ],
+  link: [
+    {
+      rel: 'canonical',
+      href: `${config.public.siteUrl}/rezka`
+    }
+  ]
+})
+</script>

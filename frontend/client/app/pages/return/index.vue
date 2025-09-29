@@ -10,11 +10,7 @@
             <th>Срок приема претензий</th>
             <th>При приемке</th>
             <th>
-              После приемки<br /><a
-                href="#7dnei"
-                style="border-bottom: dashed 1px"
-                >в течение 7 дней*</a
-              >
+              После приемки<br /><a href="#7dnei" style="border-bottom: dashed 1px">в течение 7 дней*</a>
             </th>
             <th>
               После приемки<br />
@@ -49,9 +45,7 @@
           </tr>
           <tr>
             <td data-label="">
-              <a href="#peresort" style="border-bottom: dashed 1px"
-                >Пересорт (не тот товар)</a
-              >
+              <a href="#peresort" style="border-bottom: dashed 1px">Пересорт (не тот товар)</a>
             </td>
             <td data-label="При приемке" align="center">
               <NuxtImg src="/images/page-return/yes.svg" alt="Да" />
@@ -65,9 +59,7 @@
           </tr>
           <tr>
             <td data-label="">
-              <a href="#brak" style="border-bottom: dashed 1px"
-                >Заводской брак</a
-              >
+              <a href="#brak" style="border-bottom: dashed 1px">Заводской брак</a>
             </td>
             <td data-label="При приемке" align="center">
               <NuxtImg src="/images/page-return/yes.svg" alt="Да" />
@@ -81,11 +73,8 @@
           </tr>
           <tr>
             <td data-label="">
-              <span
-                ><a href="#razmer" style="border-bottom: dashed 1px"
-                  >Материал имеет разный тон/калибр (размер)</a
-                ></span
-              >
+              <span><a href="#razmer" style="border-bottom: dashed 1px">Материал имеет разный тон/калибр
+                  (размер)</a></span>
             </td>
             <td data-label="При приемке" align="center">
               <NuxtImg src="/images/page-return/yes.svg" alt="Да" />
@@ -99,12 +88,9 @@
           </tr>
           <tr>
             <td data-label="" style="max-width: 450px">
-              <span
-                ><a href="#izlishek" style="border-bottom: dashed 1px"
-                  >Товар не подошел, осталось лишнее (плитка целая, коробки в
-                  хорошем состоянии)</a
-                ></span
-              >
+              <span><a href="#izlishek" style="border-bottom: dashed 1px">Товар не подошел, осталось лишнее (плитка
+                  целая, коробки в
+                  хорошем состоянии)</a></span>
             </td>
             <td data-label="При приемке" align="center">
               <NuxtImg src="/images/page-return/yes.svg" alt="Да" />
@@ -123,10 +109,8 @@
     <section class="mb-5">
       <h2 class="h3 text-center">Правила во время приемки товара</h2>
       <p>
-        <strong
-          >При приемке товара, которая происходит в присутствии
-          водителя-экспедитора, вам необходимо убедиться, что:</strong
-        >
+        <strong>При приемке товара, которая происходит в присутствии
+          водителя-экспедитора, вам необходимо убедиться, что:</strong>
       </p>
       <ul class="mb-3">
         <li>&nbsp;&nbsp;&nbsp;• Наименование и артикул товара правильные.</li>
@@ -145,12 +129,9 @@
       </p>
       <p style="text-align: justify">
         В соответствии со
-        <a
-          target="_blank"
-          rel="nofollow"
-          href="http://www.consultant.ru/document/cons_doc_LAW_9027/a3dd5614fc46ef5cb3b6d7d88109b6c65cd83be1/#:~:text=1.,%D0%BE%D0%B1%D1%8F%D0%B7%D0%B0%D0%BD%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BF%D0%BE%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B4%D0%B0%D1%87%D0%B5%20%D1%82%D0%BE%D0%B2%D0%B0%D1%80%D0%B0%20%D0%BF%D0%BE%D0%BA%D1%83%D0%BF%D0%B0%D1%82%D0%B5%D0%BB%D1%8E."
-          >ст. 459 ч.2 ГК РФ</a
-        >
+        <a target="_blank" rel="nofollow"
+          href="http://www.consultant.ru/document/cons_doc_LAW_9027/a3dd5614fc46ef5cb3b6d7d88109b6c65cd83be1/#:~:text=1.,%D0%BE%D0%B1%D1%8F%D0%B7%D0%B0%D0%BD%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D0%BF%D0%BE%20%D0%BF%D0%B5%D1%80%D0%B5%D0%B4%D0%B0%D1%87%D0%B5%20%D1%82%D0%BE%D0%B2%D0%B0%D1%80%D0%B0%20%D0%BF%D0%BE%D0%BA%D1%83%D0%BF%D0%B0%D1%82%D0%B5%D0%BB%D1%8E.">ст.
+          459 ч.2 ГК РФ</a>
         (также ст.211 ГК РФ), претензии по внешнему виду и комплектности
         доставленного покупателю товара можно предъявить только до момента
         передачи ему товара продавцом.
@@ -171,9 +152,7 @@
         </li>
         <li>
           &nbsp;&nbsp;&nbsp;• Отправьте фотографии в письме на нашу почту
-          <a href="mailto:zakaz@agatceramic.ru" class="link-dark"
-            >zakaz@agatceramic.ru</a
-          >
+          <a href="mailto:zakaz@agatceramic.ru" class="link-dark">zakaz@agatceramic.ru</a>
           с темой письма <strong>"Ошибка в отгрузке № номер заказа"</strong>.
         </li>
       </ul>
@@ -194,9 +173,7 @@
         <li>&nbsp;&nbsp;&nbsp;• Опишите брак в свободной форме.</li>
         <li>
           &nbsp;&nbsp;&nbsp;• Отправьте фотографии в письме на нашу почту
-          <a href="mailto:zakaz@agatceramic.ru" class="link-dark"
-            >zakaz@agatceramic.ru</a
-          >
+          <a href="mailto:zakaz@agatceramic.ru" class="link-dark">zakaz@agatceramic.ru</a>
           с темой письма <strong>"Брак № номер заказа"</strong>.
         </li>
       </ul>
@@ -221,9 +198,7 @@
         <li>&nbsp;&nbsp;&nbsp;• Опишите брак в свободной форме.</li>
         <li>
           &nbsp;&nbsp;&nbsp;• Отправьте фотографии в письме на нашу почту
-          <a href="mailto:zakaz@agatceramic.ru" class="link-dark"
-            >zakaz@agatceramic.ru</a
-          >
+          <a href="mailto:zakaz@agatceramic.ru" class="link-dark">zakaz@agatceramic.ru</a>
           с темой письма <strong>"Разный тон/калибр № номер заказа"</strong>.
         </li>
       </ul>
@@ -243,9 +218,7 @@
         </li>
         <li>
           &nbsp;&nbsp;&nbsp;• Отправьте фотографии в письме на нашу почту
-          <a href="mailto:zakaz@agatceramic.ru" class="link-dark"
-            >zakaz@agatceramic.ru</a
-          >
+          <a href="mailto:zakaz@agatceramic.ru" class="link-dark">zakaz@agatceramic.ru</a>
           с темой письма <strong>"Возврат № номер заказа"</strong>.
         </li>
         <li>
@@ -273,13 +246,9 @@
       <ul class="mb-3" style="text-align: justify">
         <li>
           &nbsp;&nbsp;&nbsp;• В соответствии со
-          <a
-            href="http://www.consultant.ru/document/cons_doc_LAW_305/07e266c138f7d30d498ff235626083e75b770ff3/#:~:text=%D0%9F%D1%80%D0%B0%D0%B2%D0%BE%20%D0%BF%D0%BE%D1%82%D1%80%D0%B5%D0%B1%D0%B8%D1%82%D0%B5%D0%BB%D1%8F%20%D0%BD%D0%B0%20%D0%BE%D0%B1%D0%BC%D0%B5%D0%BD%20%D1%82%D0%BE%D0%B2%D0%B0%D1%80%D0%B0%20%D0%BD%D0%B0%D0%B4%D0%BB%D0%B5%D0%B6%D0%B0%D1%89%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0,-%D0%9F%D0%B5%D1%80%D1%81%D0%BF%D0%B5%D0%BA%D1%82%D0%B8%D0%B2%D1%8B%20%D0%B8%20%D1%80%D0%B8%D1%81%D0%BA%D0%B8&amp;text=1.,%2C%20%D1%80%D0%B0%D1%81%D1%86%D0%B2%D0%B5%D1%82%D0%BA%D0%B5%2C%20%D1%80%D0%B0%D0%B7%D0%BC%D0%B5%D1%80%D1%83%20%D0%B8%D0%BB%D0%B8%20%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%82%D0%B0%D1%86%D0%B8%D0%B8."
-            target="_blank"
-            rel="nofollow"
-            >статьей 25 «Право потребителя на обмен товара надлежащего качества»
-            Закона РФ «О защите прав потребителей»</a
-          >
+          <a href="http://www.consultant.ru/document/cons_doc_LAW_305/07e266c138f7d30d498ff235626083e75b770ff3/#:~:text=%D0%9F%D1%80%D0%B0%D0%B2%D0%BE%20%D0%BF%D0%BE%D1%82%D1%80%D0%B5%D0%B1%D0%B8%D1%82%D0%B5%D0%BB%D1%8F%20%D0%BD%D0%B0%20%D0%BE%D0%B1%D0%BC%D0%B5%D0%BD%20%D1%82%D0%BE%D0%B2%D0%B0%D1%80%D0%B0%20%D0%BD%D0%B0%D0%B4%D0%BB%D0%B5%D0%B6%D0%B0%D1%89%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0,-%D0%9F%D0%B5%D1%80%D1%81%D0%BF%D0%B5%D0%BA%D1%82%D0%B8%D0%B2%D1%8B%20%D0%B8%20%D1%80%D0%B8%D1%81%D0%BA%D0%B8&amp;text=1.,%2C%20%D1%80%D0%B0%D1%81%D1%86%D0%B2%D0%B5%D1%82%D0%BA%D0%B5%2C%20%D1%80%D0%B0%D0%B7%D0%BC%D0%B5%D1%80%D1%83%20%D0%B8%D0%BB%D0%B8%20%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%82%D0%B0%D1%86%D0%B8%D0%B8."
+            target="_blank" rel="nofollow">статьей 25 «Право потребителя на обмен товара надлежащего качества»
+            Закона РФ «О защите прав потребителей»</a>
           Обмен и возврат непродовольственного товара надлежащего качества
           проводится, если указанный товар не был в употреблении, сохранены его
           товарный вид, потребительские свойства, а также документ,
@@ -302,22 +271,16 @@
     <hr />
     <section style="margin-bottom: 250px">
       <p>
-        <strong
-          >* Возврат товара надлежащего качества осуществляется в течение 7 дней
-          со дня доставки</strong
-        >
+        <strong>* Возврат товара надлежащего качества осуществляется в течение 7 дней
+          со дня доставки</strong>
       </p>
       <ul style="text-align: justify">
         <li>
           &nbsp;&nbsp;&nbsp;• Покупка в интернет-магазине относится к
           дистанционным способам продажи, и процедура возврата регулируется
           пунктом
-          <a
-            href="http://www.consultant.ru/document/cons_doc_LAW_305/1525b1a2f037db240c8e6a749619f86e53857f13/#:~:text=4.,%D1%82%D0%BE%D0%B2%D0%B0%D1%80%D0%B0%20%2D%20%D0%B2%20%D1%82%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%D0%B5%20%D1%81%D0%B5%D0%BC%D0%B8%20%D0%B4%D0%BD%D0%B5%D0%B9."
-            target="_blank"
-            rel="nofollow"
-            >пунктом 4 статьи 26.1. Закона «О защите прав потребителей»</a
-          >.
+          <a href="http://www.consultant.ru/document/cons_doc_LAW_305/1525b1a2f037db240c8e6a749619f86e53857f13/#:~:text=4.,%D1%82%D0%BE%D0%B2%D0%B0%D1%80%D0%B0%20%2D%20%D0%B2%20%D1%82%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%D0%B5%20%D1%81%D0%B5%D0%BC%D0%B8%20%D0%B4%D0%BD%D0%B5%D0%B9."
+            target="_blank" rel="nofollow">пунктом 4 статьи 26.1. Закона «О защите прав потребителей»</a>.
         </li>
         <li>
           &nbsp;&nbsp;&nbsp;• Потребитель вправе отказаться от товара в любое
@@ -328,6 +291,32 @@
     </section>
   </div>
 </template>
+
+<script setup>
+import { useRuntimeConfig } from '#imports'
+
+const config = useRuntimeConfig()
+
+useHead({
+  title: 'Обмен и возврат товара - AgatCeramic',
+  meta: [
+    {
+      name: 'description',
+      content: 'Правила обмена и возврата товара в интернет-магазине AgatCeramic. Условия возврата, сроки и порядок действий.'
+    },
+    {
+      name: 'keywords',
+      content: 'обмен товара, возврат товара, правила возврата, условия возврата, AgatCeramic'
+    }
+  ],
+  link: [
+    {
+      rel: 'canonical',
+      href: `${config.public.siteUrl}/return`
+    }
+  ]
+})
+</script>
 
 <style lang="scss">
 .table-return table tbody tr td img {

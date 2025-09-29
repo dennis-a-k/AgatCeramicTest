@@ -32,22 +32,21 @@
                 </div>
               </div>
             </div>
-            <PaginationAppPagination
-              v-if="productsData.last_page > 1"
-              :current-page="productsData.current_page"
-              :total-pages="productsData.last_page"
-              @change-page="store.changePage"
-            />
+            <PaginationAppPagination v-if="productsData.last_page > 1" :current-page="productsData.current_page"
+              :total-pages="productsData.last_page" @change-page="store.changePage" />
           </div>
         </div>
         <ClientOnly>
-          <FiltersAppCategoryFilters :store="store" :showCategoriesFilter="true" :categories="store.filters.categories" :subcategories="store.filters.subcategories" :patterns="store.filters.patterns"
+          <FiltersAppCategoryFilters :store="store" :showCategoriesFilter="true" :categories="store.filters.categories"
+            :subcategories="store.filters.subcategories" :patterns="store.filters.patterns"
             :weights="store.filters.weights" :colors="store.filters.colors" :glues="store.filters.glues"
-            :mixture_types="store.filters.mixture_types" :seams="store.filters.seams" :textures="store.filters.textures" :countries="store.filters.countries"
-            :sizes="store.filters.sizes" :materials="store.filters.materials" :waterproofs="store.filters.waterproofs"
-            :collections="store.filters.collections" :volumes="store.filters.volumes" :product_weights="store.filters.product_weights"
-            :installation_types="store.filters.installation_types" :shapes="store.filters.shapes" :applications="store.filters.applications"
-            :drying_times="store.filters.drying_times" :package_weights="store.filters.package_weights" :min_temps="store.filters.min_temps"
+            :mixture_types="store.filters.mixture_types" :seams="store.filters.seams" :textures="store.filters.textures"
+            :countries="store.filters.countries" :sizes="store.filters.sizes" :materials="store.filters.materials"
+            :waterproofs="store.filters.waterproofs" :collections="store.filters.collections"
+            :volumes="store.filters.volumes" :product_weights="store.filters.product_weights"
+            :installation_types="store.filters.installation_types" :shapes="store.filters.shapes"
+            :applications="store.filters.applications" :drying_times="store.filters.drying_times"
+            :package_weights="store.filters.package_weights" :min_temps="store.filters.min_temps"
             :max_temps="store.filters.max_temps" :consumptions="store.filters.consumptions"
             :initialFilters="store.filters" />
         </ClientOnly>

@@ -179,6 +179,16 @@ onMounted(() => {
         fetchSearchResults()
     }
 })
+
+useHead({
+    title: 'Результаты поиска - AgatCeramic',
+    meta: [
+        {
+            name: 'robots',
+            content: 'noindex, nofollow'
+        }
+    ]
+})
 </script>
 
 <style scoped lang="scss">

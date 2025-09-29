@@ -57,6 +57,32 @@
   </main>
 </template>
 
+<script setup>
+import { useRuntimeConfig } from '#imports'
+
+const config = useRuntimeConfig()
+
+useHead({
+  title: 'Контакты - AgatCeramic',
+  meta: [
+    {
+      name: 'description',
+      content: 'Контактная информация интернет-магазина AgatCeramic. Телефон, email, адрес. Свяжитесь с нами для консультации по выбору плитки и сантехники.'
+    },
+    {
+      name: 'keywords',
+      content: 'контакты, телефон, email, адрес, AgatCeramic, керамическая плитка, сантехника'
+    }
+  ],
+  link: [
+    {
+      rel: 'canonical',
+      href: `${config.public.siteUrl}/contacts`
+    }
+  ]
+})
+</script>
+
 <style scoped lang="scss">
 // Переменные цветов
 $text-color: #2e2e2e;

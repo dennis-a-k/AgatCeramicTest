@@ -167,6 +167,29 @@
 </template>
 
 <script setup>
+import { useRuntimeConfig } from '#imports'
+
+const config = useRuntimeConfig()
+
+useHead({
+  title: 'Партнерство с дизайнерами - AgatCeramic',
+  meta: [
+    {
+      name: 'description',
+      content: 'Станьте партнером AgatCeramic и получайте до 15% комиссионных с заказов клиентов. Эксклюзивные коллекции, персональный менеджер, готовый контент.'
+    },
+    {
+      name: 'keywords',
+      content: 'партнерство, дизайнеры, комиссионные, эксклюзивные коллекции, персональный менеджер, AgatCeramic'
+    }
+  ],
+  link: [
+    {
+      rel: 'canonical',
+      href: `${config.public.siteUrl}/partnerships`
+    }
+  ]
+})
 import { ref, onMounted, onUnmounted } from 'vue';
 
 definePageMeta({

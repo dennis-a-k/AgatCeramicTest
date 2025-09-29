@@ -115,3 +115,29 @@
         </section>
     </div>
 </template>
+
+<script setup>
+import { useRuntimeConfig } from '#imports'
+
+const config = useRuntimeConfig()
+
+useHead({
+    title: 'Оплата и доставка - AgatCeramic',
+    meta: [
+        {
+            name: 'description',
+            content: 'Условия оплаты и доставки в интернет-магазине AgatCeramic. Способы оплаты, стоимость доставки по Москве и регионам России.'
+        },
+        {
+            name: 'keywords',
+            content: 'оплата, доставка, стоимость доставки, способы оплаты, AgatCeramic, керамическая плитка, сантехника'
+        }
+    ],
+    link: [
+        {
+            rel: 'canonical',
+            href: `${config.public.siteUrl}/delivery`
+        }
+    ]
+})
+</script>

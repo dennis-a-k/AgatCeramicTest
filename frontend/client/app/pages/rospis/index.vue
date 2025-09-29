@@ -33,18 +33,12 @@
       </p>
       <div class="row justify-content-center">
         <div class="w-50 row justify-content-center">
-          <NuxtImg
-            src="/images/page-rospis/rospis_1.jpg"
-            class="col-6 clickable-image"
+          <NuxtImg src="/images/page-rospis/rospis_1.jpg" class="col-6 clickable-image"
             alt="Художественная роспись плитки для дома и офиса"
-            @click="openModal('/images/page-rospis/rospis_1.jpg')"
-          />
-          <NuxtImg
-            src="/images/page-rospis/rospis_2.jpg"
-            class="col-6 clickable-image"
+            @click="openModal('/images/page-rospis/rospis_1.jpg')" />
+          <NuxtImg src="/images/page-rospis/rospis_2.jpg" class="col-6 clickable-image"
             alt="Художественная роспись плитки для дома и офиса"
-            @click="openModal('/images/page-rospis/rospis_2.jpg')"
-          />
+            @click="openModal('/images/page-rospis/rospis_2.jpg')" />
         </div>
       </div>
     </section>
@@ -69,24 +63,15 @@
       </p>
       <div class="row justify-content-center">
         <div class="w-50 row justify-content-center">
-          <NuxtImg
-            src="/images/page-rospis/rospis_3.jpg"
-            class="col-4 clickable-image"
+          <NuxtImg src="/images/page-rospis/rospis_3.jpg" class="col-4 clickable-image"
             alt="Художественная роспись плитки для дома и офиса"
-            @click="openModal('/images/page-rospis/rospis_3.jpg')"
-          />
-          <NuxtImg
-            src="/images/page-rospis/rospis_4.jpg"
-            class="col-4 clickable-image"
+            @click="openModal('/images/page-rospis/rospis_3.jpg')" />
+          <NuxtImg src="/images/page-rospis/rospis_4.jpg" class="col-4 clickable-image"
             alt="Художественная роспись плитки для дома и офиса"
-            @click="openModal('/images/page-rospis/rospis_4.jpg')"
-          />
-          <NuxtImg
-            src="/images/page-rospis/rospis_5.jpg"
-            class="col-4 clickable-image"
+            @click="openModal('/images/page-rospis/rospis_4.jpg')" />
+          <NuxtImg src="/images/page-rospis/rospis_5.jpg" class="col-4 clickable-image"
             alt="Художественная роспись плитки для дома и офиса"
-            @click="openModal('/images/page-rospis/rospis_5.jpg')"
-          />
+            @click="openModal('/images/page-rospis/rospis_5.jpg')" />
         </div>
       </div>
     </section>
@@ -137,6 +122,29 @@
 </template>
 
 <script setup>
+import { useRuntimeConfig } from '#imports'
+
+const config = useRuntimeConfig()
+
+useHead({
+  title: 'Художественная роспись плитки - AgatCeramic',
+  meta: [
+    {
+      name: 'description',
+      content: 'Художественная роспись керамической плитки в AgatCeramic. Авторская роспись для дома и офиса, уникальные дизайны.'
+    },
+    {
+      name: 'keywords',
+      content: 'художественная роспись, роспись плитки, керамическая плитка, авторская роспись, AgatCeramic'
+    }
+  ],
+  link: [
+    {
+      rel: 'canonical',
+      href: `${config.public.siteUrl}/rospis`
+    }
+  ]
+})
 import { ref, watch } from 'vue';
 
 const isModalOpen = ref(false);

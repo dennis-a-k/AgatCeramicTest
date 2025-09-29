@@ -28,8 +28,10 @@
               <p>{{ productData.description }}</p>
             </div>
             <div class="product-details-meta">
-              <span v-if="productData.category">Категория: <NuxtLink :to="`/category/${productData.category.slug}`">{{ productData.category.name }}</NuxtLink></span>
-              <span v-if="productData.brand">Бренд: <NuxtLink :to="`/brand/${productData.brand.slug}`">{{ productData.brand.name }}</NuxtLink></span>
+              <span v-if="productData.category">Категория: <NuxtLink :to="`/category/${productData.category.slug}`">{{
+                productData.category.name }}</NuxtLink></span>
+              <span v-if="productData.brand">Бренд: <NuxtLink :to="`/brand/${productData.brand.slug}`">{{
+                productData.brand.name }}</NuxtLink></span>
               <span v-if="productData.article">Артикул: {{ productData.article }}</span>
               <span v-if="productData.product_code">Код товара: {{ productData.product_code }}</span>
             </div>
