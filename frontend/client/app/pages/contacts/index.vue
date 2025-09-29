@@ -84,15 +84,8 @@ useHead({
 </script>
 
 <style scoped lang="scss">
-// Переменные цветов
-$text-color: #2e2e2e;
-$body-color: #333333;
-$background-color: #f5f5f5;
-$border-color: #d7d7d7;
-$placeholder-color: #999999;
-
 .contact-wrapper {
-  background-color: $background-color;
+  background-color: $secondary;
   padding: 110px 120px;
 
   @media #{$desktop-device} {
@@ -161,7 +154,7 @@ $placeholder-color: #999999;
 
         .title {
           font-size: 24px;
-          color: $text-color;
+          color: $black;
           font-weight: 500;
           margin: 21px 0 18px 0;
 
