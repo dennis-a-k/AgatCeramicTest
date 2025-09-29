@@ -31,4 +31,15 @@ class BrandController extends Controller
 
         return response()->json($brand);
     }
+
+    /**
+     *
+     *
+     * */
+    public function getByCategories(): JsonResponse
+    {
+        $categorySlugs = ['keramogranit', 'plitka', 'mozaika', 'klinker', 'stupeni'];
+        $brands = $this->brandService->getBrandsByCategories($categorySlugs);
+        return response()->json($brands);
+    }
 }

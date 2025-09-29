@@ -41,4 +41,18 @@ class BrandRepository implements RepositoryInterface
     {
         return $this->model->find($id)->delete();
     }
+
+    public function getByCategories(array $categorySlugs): Collection
+    {
+        return $this->model->select('brands.*')
+            ->join('products', 'brands.id', '=', 'products.brand_id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->whereIn('categories.slug', $categorySlugs)
+            ->where('categories.is_active', true)
+            ->where('brands.is_active', true)
+            ->where('products.is_published', true)
+            ->distinct()
+            ->orderBy('brands.name')
+            ->get();
+    }
 }

@@ -39,4 +39,9 @@ class BrandService
     {
         return $this->repository->delete($id);
     }
+
+    public function getBrandsByCategories(array $categorySlugs): Collection
+    {
+        return $this->repository->getByCategories($categorySlugs);
+    }
 }
