@@ -25,14 +25,15 @@ export const useAlphabetStore = defineStore('alphabet', () => {
 
   const groupBrands = () => {
     const groups = {
-      '0-9': [],
-      'РУС': []
+      '0-9': []
     }
 
     // Инициализируем группы для латинских букв
     for (let i = 65; i <= 90; i++) {
       groups[String.fromCharCode(i)] = []
     }
+
+    groups['РУС'] = []
 
     brands.value.forEach(brand => {
       const firstChar = brand.name.charAt(0).toUpperCase()
