@@ -50,12 +50,30 @@ class ProductSeeder extends Seeder
         // Создание брендов (204)
         $brands = [];
         $countries = ['Россия', 'Италия', 'Германия', 'Польша', 'Испания', 'Турция', 'Китай', 'Бельгия', 'Франция', 'Швеция'];
-        for ($i = 1; $i <= 204; $i++) {
-            $name = 'Brand' . $i;
+        $lat = range('A', 'Z');
+        $cyr = ['А','Б','В','Г','Д','Е','Ё','Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У','Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ы','Ь','Э','Ю','Я'];
+        $num = range('0', '9');
+        $all_chars = array_merge($lat, $cyr, $num);
+        $brand_names = [];
+        foreach ($all_chars as $char) {
+            for ($j = 1; $j <= 3; $j++) {
+                if (in_array($char, $lat)) {
+                    $name = $char . 'Brand' . $j;
+                } elseif (in_array($char, $cyr)) {
+                    $name = $char . 'Бренд' . $j;
+                } else {
+                    $name = $char . 'Brand' . $j;
+                }
+                $brand_names[] = $name;
+            }
+        }
+        shuffle($brand_names);
+        for ($i = 0; $i < 204; $i++) {
+            $name = $brand_names[$i];
             $country = $faker->randomElement($countries);
             $brands[] = Brand::create([
                 'name' => $name,
-                'slug' => Str::slug($name),
+                'slug' => Str::slug($name . $i),
                 'country' => $country,
                 'is_active' => true,
             ]);
