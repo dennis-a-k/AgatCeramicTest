@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Category;
 use App\Repositories\Contracts\FilterableRepositoryInterface;
@@ -101,6 +102,34 @@ class ProductRepository implements FilterableRepositoryInterface
         // Для распродажи subcategories не нужны, так как нет конкретной категории
 
         return [
+            'products' => $products,
+            'filters' => $filters
+        ];
+    }
+
+    /**
+     * Получение товаров по slug бренда с фильтрами
+     *
+     * @param string $slug Slug бренда
+     * @param Request $request Параметры фильтрации
+     * @return array
+     */
+    public function getByBrandSlug($slug, Request $request): array
+    {
+        $brand = Brand::where('slug', $slug)->firstOrFail();
+
+        // Создаем клон запроса с добавленным brand_ids
+        $newRequest = clone $request;
+        $newRequest->merge(['brands' => [$brand->id]]);
+
+        $products = $this->filterRepository->applyFilters($newRequest);
+
+        $filteredData = $this->filterRepository->getFilteredQueryAndFilters($newRequest);
+        $filters = $filteredData['filters'];
+        $baseQuery = $filteredData['query'];
+
+        return [
+            'brand' => $brand,
             'products' => $products,
             'filters' => $filters
         ];

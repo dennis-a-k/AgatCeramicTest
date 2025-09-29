@@ -60,4 +60,17 @@ class ProductController extends Controller
         $result = $this->searchService->getProductsBySale($request);
         return response()->json($result);
     }
+
+    /**
+     * Получение товаров по бренду с фильтрами
+     *
+     * @param string $slug Slug бренда
+     * @param Request $request Параметры фильтрации
+     * @return JsonResponse
+     */
+    public function getByBrand($slug, Request $request): JsonResponse
+    {
+        $result = $this->searchService->getProductsByBrand($slug, $request);
+        return response()->json($result);
+    }
 }

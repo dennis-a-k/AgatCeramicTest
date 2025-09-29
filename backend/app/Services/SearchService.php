@@ -41,6 +41,18 @@ class SearchService
     }
 
     /**
+     * Получение товаров по бренду с фильтрами
+     *
+     * @param string $slug Slug бренда
+     * @param Request $request Параметры фильтрации
+     * @return array
+     */
+    public function getProductsByBrand($slug, Request $request): array
+    {
+        return $this->repository->getByBrandSlug($slug, $request);
+    }
+
+    /**
      * Быстрый поиск для автодополнения
      *
      * @param string $query
