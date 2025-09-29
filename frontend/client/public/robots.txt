@@ -1,2 +1,10 @@
-User-Agent: *
-Disallow:
+User-agent: *
+Disallow: /search
+Disallow: /personal-data
+Disallow: /policy
+Disallow: /*?*
+Disallow: /*&*
+
+Allow: /
+
+Sitemap: https://agatceramic.ru/sitemap.xml
