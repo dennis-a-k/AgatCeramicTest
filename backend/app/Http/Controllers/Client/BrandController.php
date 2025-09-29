@@ -33,9 +33,10 @@ class BrandController extends Controller
     }
 
     /**
-     *
-     *
-     * */
+     * Получает список брендов, связанных с заданными категориями.
+     * Метод извлекает бренды для следующих категорий: керамогранит, плитка, мозаика, клинкер, ступени.
+     * @return JsonResponse JSON-ответ с массивом брендов
+     */
     public function getByCategories(): JsonResponse
     {
         $categorySlugs = ['keramogranit', 'plitka', 'mozaika', 'klinker', 'stupeni'];
