@@ -71,11 +71,16 @@ export default defineNuxtConfig({
       try {
         const categories: string[] = await $fetch(`${process.env.NUXT_PUBLIC_API_BASE_URL}/api/categories/slugs`) || []
         const categoryRoutes = categories.map((slug: string) => `/category/${slug}`)
+
+        const products: string[] = await $fetch(`${process.env.NUXT_PUBLIC_API_BASE_URL}/api/products/slugs`) || []
+        const productRoutes = products.map((slug: string) => `/product/${slug}`)
+
         return [
           '/',
           '/about',
           '/contact',
-          ...categoryRoutes
+          ...categoryRoutes,
+          ...productRoutes
         ]
       } catch {
         return ['/', '/about', '/contact']

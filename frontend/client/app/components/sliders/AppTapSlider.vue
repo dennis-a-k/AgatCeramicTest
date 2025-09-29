@@ -76,11 +76,13 @@ const fetchRandomProducts = async (slug, targetArray) => {
             const transformedProducts = response.products.data.map(product => ({
                 id: product.id,
                 name: product.name,
+                slug: product.slug,
                 price: product.price,
                 sale: product.is_sale, // для компонента sale
                 is_sale: product.is_sale, // для компонента badges
                 category: {
-                    name: product.category?.name || 'Категория'
+                    name: product.category?.name || 'Категория',
+                    slug: product.category?.slug || ''
                 },
                 href: '/', // пока статический
                 imgSrc: '', // пока пустое, будет дефолтное изображение

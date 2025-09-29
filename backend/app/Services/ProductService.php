@@ -20,9 +20,19 @@ class ProductService
         return $this->repository->all()->toArray();
     }
 
+    public function getAllProductSlugs(): array
+    {
+        return $this->repository->all()->pluck('slug')->toArray();
+    }
+
     public function getProductById($id): ?Product
     {
         return $this->repository->find($id);
+    }
+
+    public function getProductBySlug($slug): ?Product
+    {
+        return $this->repository->findBySlug($slug);
     }
 
     public function getProductsWithFilters(Request $request): array

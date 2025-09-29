@@ -31,4 +31,10 @@ class CategoryController extends Controller
 
         return response()->json($category);
     }
+
+    public function slugs(): JsonResponse
+    {
+        $slugs = $this->categoryService->getAllCategorySlugs();
+        return response()->json($slugs);
+    }
 }

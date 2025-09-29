@@ -20,6 +20,11 @@ class CategoryService
         return $this->repository->all();
     }
 
+    public function getAllCategorySlugs(): array
+    {
+        return $this->repository->all()->pluck('slug')->toArray();
+    }
+
     public function getCategoryById($id): ?Category
     {
         return $this->repository->find($id);

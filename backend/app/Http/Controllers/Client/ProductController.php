@@ -36,6 +36,23 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
+    public function showBySlug($slug): JsonResponse
+    {
+        $product = $this->productService->getProductBySlug($slug);
+
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
+        return response()->json($product);
+    }
+
+    public function slugs(): JsonResponse
+    {
+        $slugs = $this->productService->getAllProductSlugs();
+        return response()->json($slugs);
+    }
+
     /**
      * Получение товаров по категории с фильтрами
      *

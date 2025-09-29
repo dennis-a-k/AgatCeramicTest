@@ -33,6 +33,14 @@ class ProductRepository implements FilterableRepositoryInterface
             ->find($id);
     }
 
+    public function findBySlug($slug): ?Product
+    {
+        return $this->model->with(['category', 'brand', 'color', 'attributeValues.attribute'])
+            ->published()
+            ->where('slug', $slug)
+            ->first();
+    }
+
     public function create(array $data): Product
     {
         return $this->model->create($data);
