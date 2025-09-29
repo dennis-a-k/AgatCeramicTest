@@ -30,21 +30,21 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="keramogranit">
                             <div class="row mb-n-30px">
-                                <ProductAppProductCard v-for="(product, index) in products" :key="index"
+                                <ProductAppProductCard v-for="(product, index) in keramogranitProducts" :key="product.id || index"
                                     :product="product" />
                             </div>
                         </div>
 
                         <div class="tab-pane fade" id="plitka">
                             <div class="row mb-n-30px">
-
-
+                                <ProductAppProductCard v-for="(product, index) in plitkaProducts" :key="product.id || index"
+                                    :product="product" />
                             </div>
                         </div>
 
                         <div class="tab-pane fade" id="mozaika">
                             <div class="row mb-n-30px">
-                                <ProductAppProductCard v-for="(product, index) in products" :key="index"
+                                <ProductAppProductCard v-for="(product, index) in mozaikaProducts" :key="product.id || index"
                                     :product="product" />
                             </div>
                         </div>
@@ -56,58 +56,55 @@
 </template>
 
 <script setup>
-const products = [
-    {
-        id: 1,
-        href: "/",
-        imgSrc: "/images/page-index/banners/keramogranit.jpeg",
-        imgAlt: "keramogranit",
-        name: "Керамогранит Керамогранит Керамогранит Керамогранит Керамогранит Керамогранит Керамогранит Керамогранит",
-        category: {name: "Керамогранит"},
-        sale: true,
-        price: 9999.99,
-    },
-    {
-        id: 2,
-        href: "/",
-        imgSrc: "/images/page-index/banners/plitka.jpg",
-        imgAlt: "plitka",
-        name: "Керамическая плитка",
-        category: {name: "Керамическая плитка"},
-        sale: false,
-        price: 9999.99,
-    },
-    {
-        id: 3,
-        href: "/",
-        imgSrc: "/images/page-index/banners/mozaika.jpeg",
-        imgAlt: "mozaika",
-        name: "Керамическая мозаика",
-        category: {name: "Керамическая мозаика"},
-        sale: true,
-        price: 9999,
-    },
-    {
-        id: 4,
-        href: "/",
-        imgSrc: "/images/page-index/banners/zatirka.jpg",
-        imgAlt: "zatirka",
-        name: "Затирка для керамической плитки",
-        category: {name: "Затирка для керамической плитки"},
-        sale: false,
-        price: 9999.99,
-    },
-    {
-        id: 5,
-        href: "/",
-        imgSrc: "",
-        imgAlt: "santekhnika",
-        name: "Сантехника",
-        category: {name: "Сантехника"},
-        sale: false,
-        price: 9999,
+import { ref, onMounted } from 'vue'
+import { useRuntimeConfig } from '#app'
+
+const config = useRuntimeConfig()
+const apiBase = config.public.apiBase
+
+// Реактивные переменные для товаров каждой категории
+const keramogranitProducts = ref([])
+const plitkaProducts = ref([])
+const mozaikaProducts = ref([])
+
+// Функция для получения случайных товаров категории
+const fetchRandomProducts = async (slug, targetArray) => {
+    try {
+        const response = await $fetch(`${apiBase}/api/category/${slug}/products?per_page=1000`)
+        if (response && response.products && response.products.data) {
+            // Трансформируем данные к формату компонента
+            const transformedProducts = response.products.data.map(product => ({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                sale: product.is_sale, // для компонента sale
+                is_sale: product.is_sale, // для компонента badges
+                category: {
+                    name: product.category?.name || 'Категория'
+                },
+                href: '/', // пока статический
+                imgSrc: '', // пока пустое, будет дефолтное изображение
+                imgAlt: product.name,
+                title: product.name
+            }))
+            // Перемешиваем массив и берем первые 8 товаров
+            const shuffled = transformedProducts.sort(() => 0.5 - Math.random())
+            targetArray.value = shuffled.slice(0, 8)
+        }
+    } catch (error) {
+        console.error(`Error fetching products for ${slug}:`, error)
+        targetArray.value = []
     }
-]
+}
+
+// Загрузка данных при монтировании компонента
+onMounted(async () => {
+    await Promise.all([
+        fetchRandomProducts('keramogranit', keramogranitProducts),
+        fetchRandomProducts('plitka', plitkaProducts),
+        fetchRandomProducts('mozaika', mozaikaProducts)
+    ])
+})
 </script>
 
 <style scoped lang="scss">
