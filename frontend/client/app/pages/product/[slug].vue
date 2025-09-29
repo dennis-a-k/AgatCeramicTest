@@ -41,14 +41,18 @@
           </div>
         </div>
       </div>
-      <div v-if="productData && productData.attributeValues && productData.attributeValues.length > 0" class="row mt-5">
+      <div v-if="productData?.attribute_values?.length > 0" class="row mt-5">
         <div class="col-12">
           <h3>Характеристики</h3>
           <table class="table table-striped">
             <tbody>
-              <tr v-for="attr in productData.attributeValues" :key="attr.id">
+              <tr v-for="attr in productData.attribute_values" :key="attr.id">
                 <td>{{ attr.attribute.name }}</td>
-                <td>{{ attr.string_value || attr.number_value || attr.boolean_value ? 'Да' : 'Нет' }}</td>
+                <td>
+                  <span v-if="attr.attribute.type === 'boolean'">{{ attr.boolean_value ? 'Да' : 'Нет' }}</span>
+                  <span v-else-if="attr.attribute.type === 'number'">{{ attr.number_value }}</span>
+                  <span v-else>{{ attr.string_value || attr.text_value }}</span>
+                </td>
               </tr>
             </tbody>
           </table>
