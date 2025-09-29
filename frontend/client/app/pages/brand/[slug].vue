@@ -48,7 +48,7 @@
             :collections="store.filters.collections" :volumes="store.filters.volumes" :product_weights="store.filters.product_weights"
             :installation_types="store.filters.installation_types" :shapes="store.filters.shapes" :applications="store.filters.applications"
             :drying_times="store.filters.drying_times" :package_weights="store.filters.package_weights" :min_temps="store.filters.min_temps"
-            :max_temps="store.filters.max_temps" :consumptions="store.filters.consumptions" :brands="store.filters.brands"
+            :max_temps="store.filters.max_temps" :consumptions="store.filters.consumptions"
             :initialFilters="store.filters" />
         </ClientOnly>
       </div>
