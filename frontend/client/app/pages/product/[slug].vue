@@ -128,14 +128,14 @@ const productImages = computed(() => {
       alt: img.alt || `Изображение продукта ${index + 1}`
     }))
   }
-  // Fallback to test images for slider testing
-  return [
-    { url: '/images/page-index/sliders/main-slider/bg/hero-bg-2.jpg', alt: 'Test Image 1' },
-    { url: '/images/page-index/sliders/main-slider/bg/hero-bg-1.jpeg', alt: 'Test Image 2' },
-    { url: '/images/page-index/sliders/main-slider/bg/hero-bg-2.jpg', alt: 'Test Image 3' },
-    { url: '/images/page-index/sliders/main-slider/bg/hero-bg-1.jpeg', alt: 'Test Image 4' },
-    { url: '/images/page-index/sliders/main-slider/bg/hero-bg-2.jpg', alt: 'Test Image 5' }
-  ]
+  // Fallback to single image if no images array
+  return productData.value?.imgSrc ? [{
+    url: productData.value.imgSrc,
+    alt: productData.value.name || 'Изображение продукта'
+  }] : [{
+    url: '/images/stock/stock-image.png',
+    alt: 'Изображение продукта'
+  }]
 })
 
 const { data: productData, pending, error, execute } = useAsyncData(`product-${slug}`, () => $fetch(`${config.public.apiBase}/api/products/slug/${slug}`), {
