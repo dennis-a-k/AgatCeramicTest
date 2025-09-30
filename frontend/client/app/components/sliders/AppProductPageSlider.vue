@@ -14,7 +14,7 @@
             :alt="image.alt"
           />
           <a
-            class="venobox full-preview"
+            class="venobox full-preview vbox-item"
             data-gall="myGallery"
             :href="image.url"
           >
@@ -73,7 +73,7 @@ const initSwipers = () => {
   // Мини-слайдер
   thumbsSwiperInstance = new Swiper(thumbsSwiper.value, {
     spaceBetween: 10,
-    slidesPerView: 3,
+    slidesPerView: 4,
     freeMode: true,
     watchSlidesProgress: true,
     navigation: {

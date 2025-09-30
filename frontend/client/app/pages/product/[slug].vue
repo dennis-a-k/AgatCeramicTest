@@ -150,27 +150,27 @@ const config = useRuntimeConfig()
 const quantity = ref(1)
 
 const productImages = [
-      {
-        url: '/images/page-index/sliders/main-slider/bg/hero-bg-2.jpg',
-        alt: 'Изображение продукта 1'
-      },
-      {
-        url: '/images/page-index/sliders/main-slider/bg/hero-bg-1.jpeg',
-        alt: 'Изображение продукта 2'
-      },
-      {
-        url: '/images/page-index/sliders/main-slider/bg/hero-bg-1.jpeg',
-        alt: 'Изображение продукта 3'
-      },
-      {
-        url: '/images/page-index/sliders/main-slider/bg/hero-bg-2.jpg',
-        alt: 'Изображение продукта 4'
-      },
-      {
-        url: '/images/page-index/sliders/main-slider/bg/hero-bg-1.jpeg',
-        alt: 'Изображение продукта 5'
-      }
-    ]
+  {
+    url: '/images/page-index/sliders/main-slider/bg/hero-bg-2.jpg',
+    alt: 'Изображение продукта 1'
+  },
+  {
+    url: '/images/page-index/sliders/main-slider/bg/hero-bg-1.jpeg',
+    alt: 'Изображение продукта 2'
+  },
+  {
+    url: '/images/page-index/sliders/main-slider/bg/hero-bg-1.jpeg',
+    alt: 'Изображение продукта 3'
+  },
+  {
+    url: '/images/page-index/sliders/main-slider/bg/hero-bg-2.jpg',
+    alt: 'Изображение продукта 4'
+  },
+  {
+    url: '/images/page-index/sliders/main-slider/bg/hero-bg-1.jpeg',
+    alt: 'Изображение продукта 5'
+  }
+]
 
 const { data: productData, pending, error, execute } = useAsyncData(`product-${slug}`, () => $fetch(`${config.public.apiBase}/api/products/slug/${slug}`), {
   immediate: true
