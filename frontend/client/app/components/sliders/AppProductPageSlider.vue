@@ -132,6 +132,10 @@ onBeforeUnmount(() => {
   object-fit: contain;
 }
 
+.zoom-thumbs {
+  overflow: hidden;
+}
+
 .zoom-thumbs .swiper-wrapper .swiper-slide {
   height: 144px;
   display: flex;
