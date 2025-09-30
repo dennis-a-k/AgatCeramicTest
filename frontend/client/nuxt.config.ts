@@ -36,6 +36,7 @@ export default defineNuxtConfig({
     '~/assets/css/pe-icon-7-stroke.css',
     '~/assets/css/animate.min.css',
     'swiper/swiper-bundle.css',
+    'venobox/dist/venobox.min.css',
     '~/assets/scss/main.scss',
   ],
   vite: {
@@ -57,6 +58,7 @@ export default defineNuxtConfig({
   },
   plugins: [
     'plugins/bootstrap.client.js',
+    'plugins/venobox.client.js',
   ],
   runtimeConfig: {
     public: {

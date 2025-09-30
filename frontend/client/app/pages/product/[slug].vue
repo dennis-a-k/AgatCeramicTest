@@ -10,10 +10,7 @@
       </div>
       <div v-else class="row">
         <div class="col-lg-5 col-sm-12 col-xs-12 mb-lm-30px mb-md-30px mb-sm-30px">
-
-          @include('components.swiper.swiper')
-
-          @include('components.swiper.swiper-slider')
+          <SlidersAppProductPageSlider :images="productImages" />
         </div>
         <div class="col-lg-7 col-sm-12 col-xs-12" data-aos="fade-up" data-aos-delay="200">
           <div class="product-details-content quickview-content ml-25px">
@@ -151,6 +148,29 @@ const route = useRoute()
 const slug = route.params.slug
 const config = useRuntimeConfig()
 const quantity = ref(1)
+
+const productImages = [
+      {
+        url: '/images/page-index/sliders/main-slider/bg/hero-bg-2.jpg',
+        alt: 'Изображение продукта 1'
+      },
+      {
+        url: '/images/page-index/sliders/main-slider/bg/hero-bg-1.jpeg',
+        alt: 'Изображение продукта 2'
+      },
+      {
+        url: '/images/page-index/sliders/main-slider/bg/hero-bg-1.jpeg',
+        alt: 'Изображение продукта 3'
+      },
+      {
+        url: '/images/page-index/sliders/main-slider/bg/hero-bg-2.jpg',
+        alt: 'Изображение продукта 4'
+      },
+      {
+        url: '/images/page-index/sliders/main-slider/bg/hero-bg-1.jpeg',
+        alt: 'Изображение продукта 5'
+      }
+    ]
 
 const { data: productData, pending, error, execute } = useAsyncData(`product-${slug}`, () => $fetch(`${config.public.apiBase}/api/products/slug/${slug}`), {
   immediate: true
@@ -569,6 +589,26 @@ useHead(computed(() => ({
       font-weight: 500;
       margin: 0 26px 0 0;
       min-width: 85px;
+    }
+  }
+}
+
+.product-details-img {
+  &.product-details-tab {
+    &.product-details-tab-2 {
+      &.product-details-tab-3 {
+        flex-direction: row-reverse;
+      }
+
+      & .zoom-thumbs-2 {
+        flex: 0 0 15%;
+        width: 15%;
+      }
+
+      & .zoom-top-2 {
+        flex: 0 0 85%;
+        width: 85%;
+      }
     }
   }
 }
