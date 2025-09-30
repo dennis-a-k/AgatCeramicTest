@@ -54,6 +54,13 @@ const banners = [
         imgAlt: "santekhnika",
         title: "Сантехника",
         category: ""
+    },
+    {
+        href: "/category/klei",
+        imgSrc: "/images/page-index/banners/klei.png",
+        imgAlt: "klei",
+        title: "Клеевые смеси",
+        category: "для плитки и керамогранита",
     }
 ]
 </script>
