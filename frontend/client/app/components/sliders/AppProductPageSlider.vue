@@ -15,7 +15,7 @@
           />
           <div class="image-overlay">
             <a
-              class="venobox full-preview vbox-item"
+              class="venobox full-preview"
               data-gall="myGallery"
               :href="image.url"
             >
@@ -54,7 +54,6 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import Swiper from 'swiper/bundle';
 import 'swiper/css/bundle';
-import VenoBox from 'venobox';
 
 const props = defineProps({
   images: {
@@ -93,15 +92,8 @@ const initSwipers = () => {
   });
 };
 
-const initVenoBox = () => {
-  new VenoBox({
-    selector: '.venobox',
-  });
-};
-
 onMounted(() => {
   initSwipers();
-  initVenoBox();
 });
 
 onBeforeUnmount(() => {

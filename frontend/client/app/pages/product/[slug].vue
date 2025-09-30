@@ -25,42 +25,13 @@
                 </li>
               </ul>
             </div>
-            <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
-              <span>Артикул:</span>
+            <div v-for="meta in productMeta" :key="meta.label" class="pro-details-categories-info pro-details-same-style d-flex m-0">
+              <span>{{ meta.label }}</span>
               <ul class="d-flex">
                 <li>
-                  {{ productData.article }}
+                  <NuxtLink v-if="meta.link" :to="meta.link">{{ meta.value }}</NuxtLink>
+                  <span v-else>{{ meta.value }}</span>
                 </li>
-              </ul>
-            </div>
-            <div v-if="productData.product_code" class="pro-details-categories-info pro-details-same-style d-flex m-0">
-              <span>Код товара: </span>
-              <ul class="d-flex">
-                <li>
-                  {{ productData.product_code }}
-                </li>
-              </ul>
-            </div>
-            <div v-if="productData.category" class="pro-details-categories-info pro-details-same-style d-flex m-0">
-              <span>Категория: </span>
-              <ul class="d-flex">
-                <li>
-                  <NuxtLink :to="`/category/${productData.category.slug}`">{{ productData.category.name }}</NuxtLink>
-                </li>
-              </ul>
-            </div>
-            <div v-if="productData.brand" class="pro-details-categories-info pro-details-same-style d-flex m-0">
-              <span>Производитель: </span>
-              <ul class="d-flex">
-                <li>
-                  <NuxtLink :to="`/brand/${productData.brand.slug}`">{{ productData.brand.name }}</NuxtLink>
-                </li>
-              </ul>
-            </div>
-            <div v-if="productData.collection" class="pro-details-categories-info pro-details-same-style d-flex m-0">
-              <span>Коллекция: </span>
-              <ul class="d-flex">
-                <li>{{ productData.collection }}</li>
               </ul>
             </div>
             <div class="pro-details-quality">
@@ -69,10 +40,9 @@
                 <input class="cart-plus-minus-box" type="text" name="qtybutton" v-model="quantity" />
                 <div class="inc qtybutton" @click="increment">+</div>
               </div>
-              <p v-if="productData.unit === 'шт'">шт.</p>
-              <p v-if="productData.unit === 'кв.м'">м<sup>2</sup></p>
+              <p v-if="productData.unit">{{ productData.unit === 'шт' ? 'шт.' : productData.unit === 'кв.м' ? 'м²' : productData.unit }}</p>
               <div class="pro-details-cart">
-                <button class="add-cart" data-product-id="{{productData.id}}">В корзину</button>
+                <button class="add-cart" :data-product-id="productData.id">В корзину</button>
               </div>
             </div>
           </div>
@@ -149,28 +119,22 @@ const slug = route.params.slug
 const config = useRuntimeConfig()
 const quantity = ref(1)
 
-const productImages = [
-  {
-    url: '/images/page-index/sliders/main-slider/bg/hero-bg-2.jpg',
-    alt: 'Изображение продукта 1'
-  },
-  {
-    url: '/images/page-index/sliders/main-slider/bg/hero-bg-1.jpeg',
-    alt: 'Изображение продукта 2'
-  },
-  {
-    url: '/images/page-index/sliders/main-slider/bg/hero-bg-1.jpeg',
-    alt: 'Изображение продукта 3'
-  },
-  {
-    url: '/images/page-index/sliders/main-slider/bg/hero-bg-2.jpg',
-    alt: 'Изображение продукта 4'
-  },
-  {
-    url: '/images/page-index/sliders/main-slider/bg/hero-bg-1.jpeg',
-    alt: 'Изображение продукта 5'
+const productImages = computed(() => {
+  if (productData.value?.images && productData.value.images.length > 0) {
+    return productData.value.images.map((img, index) => ({
+      url: img.url || img.src,
+      alt: img.alt || `Изображение продукта ${index + 1}`
+    }))
   }
-]
+  // Fallback to single image if no images array
+  return productData.value?.imgSrc ? [{
+    url: productData.value.imgSrc,
+    alt: productData.value.name || 'Изображение продукта'
+  }] : [{
+    url: '/images/stock/stock-image.png',
+    alt: 'Изображение продукта'
+  }]
+})
 
 const { data: productData, pending, error, execute } = useAsyncData(`product-${slug}`, () => $fetch(`${config.public.apiBase}/api/products/slug/${slug}`), {
   immediate: true
@@ -209,6 +173,35 @@ const weight = computed(() => {
   return attr ? attr.number_value : null
 })
 
+const productMeta = computed(() => {
+  if (!productData.value) return []
+  const meta = []
+  if (productData.value.article) {
+    meta.push({ label: 'Артикул:', value: productData.value.article })
+  }
+  if (productData.value.product_code) {
+    meta.push({ label: 'Код товара:', value: productData.value.product_code })
+  }
+  if (productData.value.category) {
+    meta.push({
+      label: 'Категория:',
+      value: productData.value.category.name,
+      link: `/category/${productData.value.category.slug}`
+    })
+  }
+  if (productData.value.brand) {
+    meta.push({
+      label: 'Производитель:',
+      value: productData.value.brand.name,
+      link: `/brand/${productData.value.brand.slug}`
+    })
+  }
+  if (productData.value.collection) {
+    meta.push({ label: 'Коллекция:', value: productData.value.collection })
+  }
+  return meta
+})
+
 const structuredData = computed(() => {
   if (!productData.value) return null
   return {
@@ -216,7 +209,8 @@ const structuredData = computed(() => {
     '@type': 'Product',
     name: productData.value.name,
     description: productData.value.description,
-    image: productImage.value,
+    image: productImages.value.map(img => img.url),
+    sku: productData.value.article || productData.value.product_code,
     offers: {
       '@type': 'Offer',
       price: productData.value.price,
@@ -227,7 +221,8 @@ const structuredData = computed(() => {
       '@type': 'Brand',
       name: productData.value.brand.name
     } : undefined,
-    category: productData.value.category ? productData.value.category.name : undefined
+    category: productData.value.category ? productData.value.category.name : undefined,
+    manufacturer: productData.value.brand ? productData.value.brand.name : undefined
   }
 })
 
