@@ -27,7 +27,7 @@
     </div>
 
     <!-- Мини-слайдер для навигации -->
-    <div class="swiper-container mt-20px zoom-thumbs slider-nav-style-1 small-nav" ref="thumbsSwiper">
+    <div v-if="images.length > 1" class="swiper-container mt-20px zoom-thumbs slider-nav-style-1 small-nav" ref="thumbsSwiper">
       <div class="swiper-wrapper">
         <div
           v-for="(image, index) in images"
@@ -73,23 +73,25 @@ let thumbsSwiperInstance = null;
 
 const initSwipers = () => {
   // Мини-слайдер
-  thumbsSwiperInstance = new Swiper(thumbsSwiper.value, {
-    spaceBetween: 10,
-    slidesPerView: 4,
-    freeMode: true,
-    watchSlidesProgress: true,
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-  });
+  if (props.images.length > 1) {
+    thumbsSwiperInstance = new Swiper(thumbsSwiper.value, {
+      spaceBetween: 10,
+      slidesPerView: 4,
+      freeMode: true,
+      watchSlidesProgress: true,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+  }
 
   // Основной слайдер
   mainSwiperInstance = new Swiper(mainSwiper.value, {
     spaceBetween: 10,
-    thumbs: {
+    thumbs: props.images.length > 1 ? {
       swiper: thumbsSwiperInstance,
-    },
+    } : {},
   });
 };
 
