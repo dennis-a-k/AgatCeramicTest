@@ -54,6 +54,7 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import Swiper from 'swiper/bundle';
 import 'swiper/css/bundle';
+import VenoBox from 'venobox';
 
 const props = defineProps({
   images: {
@@ -94,6 +95,11 @@ const initSwipers = () => {
 
 onMounted(() => {
   initSwipers();
+  // Initialize VenoBox for this component
+  new VenoBox({
+    selector: '.venobox',
+    galleries: true,
+  });
 });
 
 onBeforeUnmount(() => {

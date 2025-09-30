@@ -10,7 +10,9 @@
       </div>
       <div v-else class="row">
         <div class="col-lg-5 col-sm-12 col-xs-12 mb-lm-30px mb-md-30px mb-sm-30px">
-          <SlidersAppProductPageSlider :images="productImages" />
+          <ClientOnly>
+            <SlidersAppProductPageSlider :images="productImages" />
+          </ClientOnly>
         </div>
         <div class="col-lg-7 col-sm-12 col-xs-12" data-aos="fade-up" data-aos-delay="200">
           <div class="product-details-content quickview-content ml-25px">
@@ -126,14 +128,14 @@ const productImages = computed(() => {
       alt: img.alt || `Изображение продукта ${index + 1}`
     }))
   }
-  // Fallback to single image if no images array
-  return productData.value?.imgSrc ? [{
-    url: productData.value.imgSrc,
-    alt: productData.value.name || 'Изображение продукта'
-  }] : [{
-    url: '/images/stock/stock-image.png',
-    alt: 'Изображение продукта'
-  }]
+  // Fallback to test images for slider testing
+  return [
+    { url: '/images/page-index/sliders/main-slider/bg/hero-bg-2.jpg', alt: 'Test Image 1' },
+    { url: '/images/page-index/sliders/main-slider/bg/hero-bg-1.jpeg', alt: 'Test Image 2' },
+    { url: '/images/page-index/sliders/main-slider/bg/hero-bg-2.jpg', alt: 'Test Image 3' },
+    { url: '/images/page-index/sliders/main-slider/bg/hero-bg-1.jpeg', alt: 'Test Image 4' },
+    { url: '/images/page-index/sliders/main-slider/bg/hero-bg-2.jpg', alt: 'Test Image 5' }
+  ]
 })
 
 const { data: productData, pending, error, execute } = useAsyncData(`product-${slug}`, () => $fetch(`${config.public.apiBase}/api/products/slug/${slug}`), {

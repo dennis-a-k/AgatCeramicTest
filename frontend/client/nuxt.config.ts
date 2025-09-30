@@ -58,7 +58,6 @@ export default defineNuxtConfig({
   },
   plugins: [
     'plugins/bootstrap.client.js',
-    'plugins/venobox.client.js',
   ],
   runtimeConfig: {
     public: {
