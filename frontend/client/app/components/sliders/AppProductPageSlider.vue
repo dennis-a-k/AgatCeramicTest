@@ -13,13 +13,15 @@
             :src="image.url"
             :alt="image.alt"
           />
-          <a
-            class="venobox full-preview vbox-item"
-            data-gall="myGallery"
-            :href="image.url"
-          >
-            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
-          </a>
+          <div class="image-overlay">
+            <a
+              class="venobox full-preview vbox-item"
+              data-gall="myGallery"
+              :href="image.url"
+            >
+              <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -148,7 +150,7 @@ onBeforeUnmount(() => {
   width: auto;
   height: 100%;
   object-fit: contain;
-  border: 2px solid #e1e1e1;
+  border: 2px solid $border-color;
   border-radius: 10px;
   transition: border-color 0.3s;
 }
@@ -175,14 +177,14 @@ onBeforeUnmount(() => {
   text-align: center;
   box-shadow: 0 3px 25.5px 4.5px rgba(0, 0, 0, 0.06);
   color: $white;
-  background-color: #4a4a4a;
+  background-color: $link-secondary-color;
   cursor: pointer;
 }
 
 .slider-nav-style-1 .swiper-buttons .swiper-button-next:hover,
 .slider-nav-style-1 .swiper-buttons .swiper-button-prev:hover {
   background-color: $theme-color;
-  color: #fff;
+  color: $white;
 }
 
 .slider-nav-style-1 .swiper-button-prev {
@@ -207,25 +209,46 @@ onBeforeUnmount(() => {
   left: 0px;
 }
 
+/* Стили для overlay */
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.swiper-slide:hover .image-overlay {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
 /* Стили для venobox */
 .venobox {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
+  background: $theme-color;
+  color: $white;
   padding: 10px;
   border-radius: 50%;
   text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
+  transition: background 0.3s;
 }
 
 .venobox:hover {
-  background: rgba(0, 0, 0, 0.8);
+  background: $body-color;
 }
 
 /* Адаптивность */
