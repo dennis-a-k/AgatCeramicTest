@@ -156,12 +156,6 @@ const showErrorMessage = computed(() => {
   return error.value && !pending.value
 })
 
-const productImage = computed(() => {
-  return (productData.value?.imgSrc && productData.value.imgSrc.trim() !== '')
-    ? productData.value.imgSrc
-    : '/images/stock/stock-image.png';
-})
-
 const formattedPrice = computed(() => {
   const formatter = new Intl.NumberFormat('ru-RU', {
     style: 'currency',
