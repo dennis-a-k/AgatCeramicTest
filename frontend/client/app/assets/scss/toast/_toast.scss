@@ -1,0 +1,42 @@
+@use "../variables" as *;
+
+// Custom toast styles
+.custom-toast {
+    background: $theme-color !important;
+    color: $white !important;
+    border-radius: 0 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    border-left: 4px solid $theme-color !important;
+    font-family: $Poppins !important;
+    font-size: 14px !important;
+    min-height: 50px !important;
+}
+
+.custom-toast-body {
+    font-weight: 500 !important;
+}
+
+.custom-toast-progress {
+    background: $theme-color !important;
+    height: 3px !important;
+}
+
+// Success toast
+.custom-toast.Vue-Toastification__toast--success {
+    border-left-color: $theme-color !important;
+}
+
+// Error toast
+.custom-toast.Vue-Toastification__toast--error {
+    border-left-color: #dc3545 !important;
+}
+
+// Warning toast
+.custom-toast.Vue-Toastification__toast--warning {
+    border-left-color: #ffc107 !important;
+}
+
+// Info toast
+.custom-toast.Vue-Toastification__toast--info {
+    border-left-color: #17a2b8 !important;
+}
