@@ -1,89 +1,146 @@
 <template>
+    <ClientOnly>
     <div id="offcanvas-cart" class="offcanvas offcanvas-cart">
         <div class="inner">
             <div class="head">
                 <span class="title">Корзина</span>
-                <button class="offcanvas-close">×</button>
+                <button class="offcanvas-close" @click="closeCart">×</button>
             </div>
             <div class="body customScroll">
                 <ul class="minicart-product-list">
-
-                    <li class="d-flex" data-product-id=" $item['id'] ">
-                        <a href="/" class="image">
-                            <img src=""
-                                alt="">
-                        </a>
+                    <li v-for="item in cartStore.items" :key="item.id" class="d-flex" :data-product-id="item.id">
+                        <NuxtLink :to="`/product/${item.id}`" class="image">
+                            <img :src="item.image" :alt="item.title">
+                        </NuxtLink>
                         <div class="content">
-                            <a href="/" class="title lh-1">
-
-                                <p> $item['title']  $item['weight_kg']  кг</p>
-
-                                <p> $item['title'] </p>
-
-                            </a>
+                            <NuxtLink :to="`/product/${item.id}`" class="title lh-1">
+                                <p>{{ item.title }} {{ item.weight_kg }} кг</p>
+                            </NuxtLink>
                             <span class="quantity-price">
-                                $item['quantity'] 
-                                шт.
-
-                                м<sup>2</sup>
-
-                                <span class="amount"> number_format($item['price'], 2, '.', ' ') &#8381;</span>
+                                {{ item.quantity }} шт.
+                                <span class="amount">{{ formatPrice(item.price * item.quantity) }} &#8381;</span>
                             </span>
+                            <div class="quantity-controls">
+                                <button @click="updateQuantity(item.id, item.quantity - 1)" :disabled="item.quantity <= 1">-</button>
+                                <span>{{ item.quantity }}</span>
+                                <button @click="updateQuantity(item.id, item.quantity + 1)">+</button>
+                            </div>
                         </div>
-                        <a href="#" class="remove" data-product-id=" $item['id'] ">×</a>
+                        <a href="#" class="remove" @click.prevent="removeItem(item.id)" :data-product-id="item.id">×</a>
                     </li>
-
-                    <li class="empty-cart">Корзина пуста</li>
-
+                    <li v-if="cartStore.items.length === 0" class="empty-cart">Корзина пуста</li>
                 </ul>
             </div>
-
-            <div class="foot">
+            <div v-if="cartStore.items.length > 0" class="foot">
                 <div class="sub-total">
                     <strong>Итого:</strong>
-                    <span class="amount"> number_format($total, 2, '.', ' ')  &#8381;</span>
+                    <span class="amount">{{ formatPrice(cartStore.total) }} &#8381;</span>
                 </div>
                 <div class="buttons mt-30px">
-                    <a href="/" class="btn mb-30px">Перейти в корзину</a>
-                    <a href="/" class="btn current-btn">Оформить заказ</a>
+                    <NuxtLink to="/cart" class="btn mb-30px" @click="closeCart">Перейти в корзину</NuxtLink>
+                    <NuxtLink to="/checkout" class="btn current-btn" @click="closeCart">Оформить заказ</NuxtLink>
                 </div>
             </div>
-
         </div>
     </div>
+    </ClientOnly>
 </template>
-
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, nextTick } from 'vue';
+import { useCartStore } from '~/stores/useCartStore';
+
+const cartStore = useCartStore();
+const { $toast } = useNuxtApp();
+
+const formatPrice = (price) => {
+    return Number(price).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+};
+
+const removeItem = (id) => {
+    cartStore.removeFromCart(id);
+};
+
+const updateQuantity = (id, quantity) => {
+    cartStore.updateQuantity(id, quantity);
+};
+
+const closeCart = () => {
+    document.body.classList.remove("offcanvas-open");
+    const cartOffcanvas = document.getElementById('offcanvas-cart');
+    if (cartOffcanvas) {
+        cartOffcanvas.classList.remove("offcanvas-open");
+    }
+    const offCanvasOverlay = document.querySelector(".offcanvas-overlay");
+    if (offCanvasOverlay) {
+        offCanvasOverlay.style.display = "none";
+    }
+};
 
 onMounted(() => {
-    // Get cart-specific elements
-    const cartOffcanvas = document.getElementById('offcanvas-cart');
-    const offCanvasOverlay = document.querySelector(".offcanvas-overlay");
+    // Use nextTick to ensure DOM is ready
+    nextTick(() => {
+        // Get cart-specific elements
+        const cartOffcanvas = document.getElementById('offcanvas-cart');
+        const offCanvasOverlay = document.querySelector(".offcanvas-overlay");
 
-    // Open cart when clicked (handle both href and class selectors)
-    const cartToggles = document.querySelectorAll('a[href="#offcanvas-cart"], .offcanvas-toggle[href="#offcanvas-cart"]');
-    cartToggles.forEach(toggle => {
-        toggle.addEventListener("click", function (e) {
-            e.preventDefault();
-            document.body.classList.add("offcanvas-open");
-            cartOffcanvas.classList.add("offcanvas-open");
-            offCanvasOverlay.style.display = "block";
+        if (!cartOffcanvas || !offCanvasOverlay) return;
+
+        // Open cart when clicked (handle both href and class selectors)
+        const cartToggles = document.querySelectorAll('a[href="#offcanvas-cart"], .offcanvas-toggle[href="#offcanvas-cart"]');
+        cartToggles.forEach(toggle => {
+            toggle.addEventListener("click", function (e) {
+                e.preventDefault();
+                document.body.classList.add("offcanvas-open");
+                cartOffcanvas.classList.add("offcanvas-open");
+                offCanvasOverlay.style.display = "block";
+            });
         });
-    });
 
-    // Close cart when clicked
-    const closeButton = cartOffcanvas.querySelector('.offcanvas-close');
-    closeButton.addEventListener("click", function (e) {
-        e.preventDefault();
-        document.body.classList.remove("offcanvas-open");
-        cartOffcanvas.classList.remove("offcanvas-open");
-        offCanvasOverlay.style.display = "none";
+        // Close cart when clicked
+        const closeButton = cartOffcanvas.querySelector('.offcanvas-close');
+        if (closeButton) {
+            closeButton.addEventListener("click", function (e) {
+                e.preventDefault();
+                closeCart();
+            });
+        }
     });
 });
 </script>
 
 <style scoped lang="scss">
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+
+    button {
+        width: 25px;
+        height: 25px;
+        border: 1px solid $border-color;
+        background: $white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        &:hover {
+            background: $theme-color;
+            color: $white;
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+
+    span {
+        font-weight: 500;
+    }
+}
+
 .offcanvas-cart {
     font-size: 14px;
     font-weight: 400;

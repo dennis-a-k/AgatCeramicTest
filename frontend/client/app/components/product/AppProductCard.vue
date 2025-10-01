@@ -23,7 +23,7 @@
         </h5>
       </div>
       <div class="actions">
-        <button class="action add-cart" :data-product-id="product.id">
+        <button class="action add-cart" :data-product-id="product.id" @click="addToCart" title="В корзину">
           <i class="pe-7s-cart"></i>
         </button>
 
@@ -38,6 +38,10 @@
 
 <script setup>
 import { computed } from 'vue';
+import { useCartStore } from '~/stores/useCartStore';
+
+const cartStore = useCartStore();
+const { $toast } = useNuxtApp();
 
 const formatter = new Intl.NumberFormat('ru-RU', {
   style: 'currency',
@@ -64,6 +68,19 @@ const formattedPrice = computed(() => {
 const truncatedTitle = computed(() => {
   return props.product.name.slice(0, 80);
 });
+
+const addToCart = () => {
+  cartStore.addToCart({
+    id: props.product.id,
+    title: props.product.name,
+    weight_kg: props.product.weight_kg || 1,
+    quantity: 1,
+    price: props.product.price,
+    image: productImage.value
+  });
+
+  $toast.success('Товар добавлен в корзину!');
+};
 </script>
 
 <style scoped lang="scss">

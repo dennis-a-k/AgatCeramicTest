@@ -58,6 +58,7 @@ export default defineNuxtConfig({
   },
   plugins: [
     'plugins/bootstrap.client.js',
+    'plugins/toast.client.js',
   ],
   runtimeConfig: {
     public: {

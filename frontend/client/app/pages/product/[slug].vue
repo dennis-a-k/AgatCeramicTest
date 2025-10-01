@@ -44,7 +44,7 @@
               </div>
               <p v-if="productData.unit">{{ productData.unit === 'шт' ? 'шт.' : productData.unit === 'кв.м' ? 'м²' : productData.unit }}</p>
               <div class="pro-details-cart">
-                <button class="add-cart" :data-product-id="productData.id">В корзину</button>
+                <button class="add-cart" :data-product-id="productData.id" @click="addToCartProduct">В корзину</button>
               </div>
             </div>
           </div>
@@ -115,6 +115,10 @@
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRuntimeConfig } from '#imports'
+import { useCartStore } from '~/stores/useCartStore'
+
+const cartStore = useCartStore()
+const { $toast } = useNuxtApp()
 
 const route = useRoute()
 const slug = route.params.slug
@@ -150,6 +154,21 @@ const decrement = () => {
   if (quantity.value > 1) {
     quantity.value -= 1
   }
+}
+
+const addToCartProduct = () => {
+  if (!productData.value) return
+
+  cartStore.addToCart({
+    id: productData.value.id,
+    title: productData.value.name,
+    weight_kg: weight.value || 1,
+    quantity: quantity.value,
+    price: productData.value.price,
+    image: productImages.value[0]?.url || '/images/stock/stock-image.png'
+  })
+
+  $toast.success('Товар добавлен в корзину!')
 }
 
 const showErrorMessage = computed(() => {

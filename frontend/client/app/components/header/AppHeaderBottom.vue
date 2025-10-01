@@ -20,7 +20,7 @@
                             <div>
                                 <span>Корзина</span>
                                 <i class="pe-7s-cart"></i>
-                                <span class="header-action-num">01</span>
+                                <span class="header-action-num" v-if="cartStore.itemCount > 0">{{ cartStore.itemCount }}</span>
                             </div>
                             <span class="header-action-order">Оформить заказ</span>
                         </a>
@@ -30,6 +30,12 @@
         </div>
     </div>
 </template>
+
+<script setup>
+import { useCartStore } from '~/stores/useCartStore'
+
+const cartStore = useCartStore()
+</script>
 
 <style scoped lang="scss">
 .header-bottom {

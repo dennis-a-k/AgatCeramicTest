@@ -15,7 +15,7 @@
                         <a href="#offcanvas-cart"
                             class="header-action-btn header-action-btn-cart offcanvas-toggle pr-0">
                             <i class="pe-7s-cart"></i>
-                            <span class="header-action-num">01</span>
+                            <span class="header-action-num" v-if="cartStore.itemCount > 0">{{ cartStore.itemCount }}</span>
                         </a>
                         <a href="#offcanvas-mobile-menu"
                             class="header-action-btn header-action-btn-menu offcanvas-toggle d-lg-none">
@@ -29,6 +29,12 @@
 
     <UiSearchMobileForm />
 </template>
+
+<script setup>
+import { useCartStore } from '~/stores/useCartStore'
+
+const cartStore = useCartStore()
+</script>
 
 <style scoped lang="scss">
 .header-bottom {
