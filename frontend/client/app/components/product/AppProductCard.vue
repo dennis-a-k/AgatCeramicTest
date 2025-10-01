@@ -70,12 +70,16 @@ const truncatedTitle = computed(() => {
 });
 
 const addToCart = () => {
+  const weightAttribute = props.product.attribute_values?.find(a => a.attribute.name === 'Вес');
+
   cartStore.addToCart({
     id: props.product.id,
+    slug: props.product.slug,
     title: props.product.name,
-    weight_kg: props.product.weight_kg || 1,
+    weight_kg: weightAttribute?.number_value || props.product.weight_kg,
     quantity: 1,
     price: props.product.price,
+    unit: props.product.unit,
     image: productImage.value
   });
 

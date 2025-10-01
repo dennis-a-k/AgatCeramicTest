@@ -1,48 +1,51 @@
 <template>
     <ClientOnly>
-    <div id="offcanvas-cart" class="offcanvas offcanvas-cart">
-        <div class="inner">
-            <div class="head">
-                <span class="title">Корзина</span>
-                <button class="offcanvas-close" @click="closeCart">×</button>
-            </div>
-            <div class="body customScroll">
-                <ul class="minicart-product-list">
-                    <li v-for="item in cartStore.items" :key="item.id" class="d-flex" :data-product-id="item.id">
-                        <NuxtLink :to="`/product/${item.id}`" class="image">
-                            <img :src="item.image" :alt="item.title">
-                        </NuxtLink>
-                        <div class="content">
-                            <NuxtLink :to="`/product/${item.id}`" class="title lh-1">
-                                <p>{{ item.title }} {{ item.weight_kg }} кг</p>
-                            </NuxtLink>
-                            <span class="quantity-price">
-                                {{ item.quantity }} шт.
-                                <span class="amount">{{ formatPrice(item.price * item.quantity) }} &#8381;</span>
-                            </span>
-                            <div class="quantity-controls">
-                                <button @click="updateQuantity(item.id, item.quantity - 1)" :disabled="item.quantity <= 1">-</button>
-                                <span>{{ item.quantity }}</span>
-                                <button @click="updateQuantity(item.id, item.quantity + 1)">+</button>
-                            </div>
-                        </div>
-                        <a href="#" class="remove" @click.prevent="removeItem(item.id)" :data-product-id="item.id">×</a>
-                    </li>
-                    <li v-if="cartStore.items.length === 0" class="empty-cart">Корзина пуста</li>
-                </ul>
-            </div>
-            <div v-if="cartStore.items.length > 0" class="foot">
-                <div class="sub-total">
-                    <strong>Итого:</strong>
-                    <span class="amount">{{ formatPrice(cartStore.total) }} &#8381;</span>
+        <div id="offcanvas-cart" class="offcanvas offcanvas-cart">
+            <div class="inner">
+                <div class="head">
+                    <span class="title">Корзина</span>
+                    <button class="offcanvas-close" @click="closeCart">×</button>
                 </div>
-                <div class="buttons mt-30px">
-                    <NuxtLink to="/cart" class="btn mb-30px" @click="closeCart">Перейти в корзину</NuxtLink>
-                    <NuxtLink to="/checkout" class="btn current-btn" @click="closeCart">Оформить заказ</NuxtLink>
+                <div class="body customScroll">
+                    <ul class="minicart-product-list">
+                        <li v-for="item in cartStore.items" :key="item.id" class="d-flex" :data-product-id="item.id">
+                            <NuxtLink :to="`/product/${item.slug}`" class="image">
+                                <img :src="item.image" :alt="item.title">
+                            </NuxtLink>
+                            <div class="content">
+                                <NuxtLink :to="`/product/${item.slug}`" class="title lh-1">
+                                    <p>{{ item.title }}{{ item.weight_kg ? `, ${item.weight_kg} кг` : '' }}</p>
+                                </NuxtLink>
+                                <span class="quantity-price">
+                                    {{ item.quantity }} {{ item.unit === 'шт' ? 'шт.' : item.unit === 'кв.м' ? 'м²' :
+                                    item.unit }}
+                                    <span class="amount"> x {{ formatPrice(item.price * item.quantity) }}</span>
+                                </span>
+                                <div class="quantity-controls">
+                                    <button @click="updateQuantity(item.id, item.quantity - 1)"
+                                        :disabled="item.quantity <= 1">-</button>
+                                    <span>{{ item.quantity }}</span>
+                                    <button @click="updateQuantity(item.id, item.quantity + 1)">+</button>
+                                </div>
+                            </div>
+                            <a href="#" class="remove" @click.prevent="removeItem(item.id)"
+                                :data-product-id="item.id">×</a>
+                        </li>
+                        <li v-if="cartStore.items.length === 0" class="empty-cart">Корзина пуста</li>
+                    </ul>
+                </div>
+                <div v-if="cartStore.items.length > 0" class="foot">
+                    <div class="sub-total">
+                        <strong>Итого: </strong>
+                        <span class="amount">{{ formatPrice(cartStore.total) }}</span>
+                    </div>
+                    <div class="buttons mt-30px">
+                        <NuxtLink to="/cart" class="btn mb-30px" @click="closeCart">Перейти в корзину</NuxtLink>
+                        <NuxtLink to="/checkout" class="btn current-btn" @click="closeCart">Оформить заказ</NuxtLink>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </ClientOnly>
 </template>
 <script setup>
@@ -52,8 +55,13 @@ import { useCartStore } from '~/stores/useCartStore';
 const cartStore = useCartStore();
 const { $toast } = useNuxtApp();
 
+const formatter = new Intl.NumberFormat('ru-RU', {
+    style: 'currency',
+    currency: 'RUB',
+});
+
 const formatPrice = (price) => {
-    return Number(price).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    return formatter.format(price);;
 };
 
 const removeItem = (id) => {
@@ -277,16 +285,14 @@ onMounted(() => {
             .buttons {
                 a {
                     display: block;
-                    text-transform: capitalize;
                     font-weight: 500;
                     font-size: 16px;
-                    border: none;
-                    color: $white;
+                    border: 1px solid $theme-color;
+                    color: $theme-color;
                     box-shadow: none;
                     padding: 10px 15px;
                     line-height: 26px;
-                    border: none;
-                    background: $heading-color;
+                    background: transparent;
                     border-radius: 0px;
                     width: auto;
                     height: auto;
@@ -302,6 +308,26 @@ onMounted(() => {
                 .current-btn {
                     background-color: $theme-color;
                     color: $white;
+
+                    &:hover {
+                        background-color: $body-color;
+                    }
+                }
+            }
+
+            .sub-total {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                padding-top: 15px;
+                padding-bottom: 15px;
+                border-top: 1px solid $border-color;
+                color: $theme-color;
+                margin: 30px 0 0 0px;
+
+                .amount {
+                    color: $red;
+                    font-weight: 600;
                 }
             }
         }
@@ -344,7 +370,6 @@ onMounted(() => {
         }
 
         .content {
-            position: relative;
             -webkit-box-flex: 1;
             -webkit-flex: 1 0 calc(100% - 150px);
             -ms-flex: 1 0 calc(100% - 150px);
@@ -372,24 +397,23 @@ onMounted(() => {
                 }
             }
 
-            .remove {
-                line-height: 1.5;
-                position: absolute;
-                top: 0;
-                right: 0;
-                padding: 0 3px;
-                color: $heading-color;
-                font-size: 16px;
-
-                &:hover {
-                    color: $red;
-                }
-            }
-
             @media (max-width: 767.98px) {
                 -webkit-flex: 1 0 calc(100% - 75px);
                 -ms-flex: 1 0 calc(100% - 75px);
                 flex: 1 0 calc(100% - 75px);
+            }
+        }
+
+        .remove {
+            line-height: 1.5;
+            top: 0;
+            right: 0;
+            padding: 0 3px;
+            color: $heading-color;
+            font-size: 16px;
+
+            &:hover {
+                color: $red;
             }
         }
 

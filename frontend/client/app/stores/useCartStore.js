@@ -57,11 +57,13 @@ export const useCartStore = defineStore('cart', () => {
     } else {
       items.value.push({
         id: product.id,
+        slug: product.slug,
         title: product.title,
         weight_kg: product.weight_kg,
         quantity: product.quantity || 1,
         price: product.price,
-        image: product.image
+        image: product.image,
+        unit: product.unit,
       })
     }
     saveCart()

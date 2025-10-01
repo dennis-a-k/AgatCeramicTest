@@ -161,10 +161,12 @@ const addToCartProduct = () => {
 
   cartStore.addToCart({
     id: productData.value.id,
+    slug: productData.value.slug,
     title: productData.value.name,
-    weight_kg: weight.value || 1,
+    weight_kg: weight.value,
     quantity: quantity.value,
     price: productData.value.price,
+    unit: productData.value.unit,
     image: productImages.value[0]?.url || '/images/stock/stock-image.png'
   })
 
