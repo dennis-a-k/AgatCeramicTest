@@ -1,80 +1,125 @@
 <template>
   <ClientOnly>
-  <div class="checkout-page">
-    <div class="container">
-      <UiAppSpinner v-if="pageLoading" text="Загрузка страницы оформления..." />
-      <div v-else>
-        <h1 class="page-title">Оформление заказа</h1>
-
-      <div v-if="cartStore.items.length === 0" class="empty-cart">
-        <p>Ваша корзина пуста</p>
-        <NuxtLink to="/" class="btn">Вернуться к покупкам</NuxtLink>
-      </div>
-
-      <div v-else class="checkout-content">
-        <div class="order-summary">
-          <h2>Ваш заказ</h2>
-          <div class="order-items">
-            <div v-for="item in cartStore.items" :key="item.id" class="order-item">
-              <div class="item-info">
-                <img :src="item.image" :alt="item.title">
-                <div>
-                  <h4>{{ item.title }}</h4>
-                  <p>{{ item.weight_kg }} кг × {{ item.quantity }}</p>
-                </div>
-              </div>
-              <div class="item-price">{{ formatPrice(item.price * item.quantity) }} &#8381;</div>
+    <main class="checkout-area pt-100px pb-100px">
+      <div class="container">
+        <UiAppSpinner v-if="pageLoading" text="Загрузка страницы оформления..." />
+        <div v-else>
+          <div class="col-md-12" v-if="cartStore.items.length === 0">
+            <div class="empty-text-contant text-center">
+              <i class="pe-7s-cart"></i>
+              <h3>Ваша корзина пуста</h3>
+              <NuxtLink to="/" class="empty-cart-btn">
+                <i class="fa fa-arrow-left"></i> Перети к покупкам
+              </NuxtLink>
             </div>
           </div>
-          <div class="order-total">
-            <strong>Итого: {{ formatPrice(cartStore.total) }} &#8381;</strong>
-          </div>
+          <form @submit.prevent="submitOrder" v-else>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="billing-info-wrap">
+                  <h3>Детали заказа</h3>
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="billing-info mb-4">
+                        <label for="name">ФИО</label>
+                        <input type="text" id="name" v-model="form.name" required />
+                      </div>
+                    </div>
+                    <div class="col-lg-12">
+                      <div class="billing-info mb-4">
+                        <label for="address">Адрес доставки</label>
+                        <input type="text" id="address" v-model="form.address" required />
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                      <div class="billing-info mb-4">
+                        <label for="phone">Телефон</label>
+                        <input type="tel" id="phone" v-model="form.phone" required />
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                      <div class="billing-info mb-4">
+                        <label for="email">Электронная почта</label>
+                        <input type="email" id="email" v-model="form.email" required />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="additional-info-wrap">
+                    <div class="additional-info">
+                      <label for="comment">Комментарий к заказу</label>
+                      <textarea id="comment" v-model="form.comment"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 mt-md-30px mt-lm-30px ">
+                <div class="your-order-area">
+                  <h3>Ваш заказ</h3>
+                  <div class="your-order-wrap gray-bg-4">
+                    <div class="your-order-product-info">
+                      <div class="your-order-top">
+                        <ul>
+                          <li>Товар</li>
+                          <li>Стоимость</li>
+                        </ul>
+                      </div>
+                      <div class="your-order-middle">
+                        <div v-for="item in cartStore.items" :key="item.id" class="row align-items-center lh-1 mb-3">
+                          <div class="col-7">
+                            <span class="order-middle-left">
+                              {{ item.title }}{{ item.weight_kg ? `, ${item.weight_kg} кг` : '' }}
+                            </span>
+                          </div>
+                          <div class="col-2 text-end">
+                            × {{ item.quantity }} {{ item.unit === 'шт' ? 'шт.' : item.unit === 'кв.м' ? 'м²' :
+                              item.unit }}
+                          </div>
+                          <div class="col-3 text-end">
+                            <span class="order-price">{{ formatPrice(item.price * item.quantity) }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="your-order-total">
+                        <ul>
+                          <li class="order-total">Итого</li>
+                          <li>{{ formatPrice(cartStore.total) }}</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row Place-order mt-25">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                      <NuxtLink to="/cart" class="btn-change">Изменить</NuxtLink>
+                    </div>
+                    <div class="col-md-6">
+                      <button type="submit" class="btn-order" style="width: 100%;" :disabled="loading">{{ loading ?
+                        'Оформление...' : 'Заказать' }}</button>
+                    </div>
+                  </div>
+                  <div class="your-order-foot mt-3">
+                    <p class="text-end">
+                      Нажимая кнопку «Заказать», я даю <NuxtLink to="/personal-data" target="_blank">согласие</NuxtLink>
+                      на обработку персональных данных, в соответствии с <NuxtLink to="/policy" target="_blank">
+                        Политикой</NuxtLink>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
-
-        <form @submit.prevent="submitOrder" class="checkout-form">
-          <h2>Контактные данные</h2>
-
-          <div class="form-group">
-            <label for="name">Имя *</label>
-            <input type="text" id="name" v-model="form.name" required>
-          </div>
-
-          <div class="form-group">
-            <label for="email">Email *</label>
-            <input type="email" id="email" v-model="form.email" required>
-          </div>
-
-          <div class="form-group">
-            <label for="phone">Телефон *</label>
-            <input type="tel" id="phone" v-model="form.phone" required>
-          </div>
-
-          <div class="form-group">
-            <label for="address">Адрес доставки *</label>
-            <textarea id="address" v-model="form.address" required></textarea>
-          </div>
-
-          <div class="form-group">
-            <label for="comment">Комментарий к заказу</label>
-            <textarea id="comment" v-model="form.comment"></textarea>
-          </div>
-
-          <button type="submit" class="btn submit-btn" :disabled="loading">
-            {{ loading ? 'Оформление...' : 'Оформить заказ' }}
-          </button>
-        </form>
       </div>
-      </div>
-    </div>
-  </div>
+    </main>
   </ClientOnly>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useCartStore } from '~/stores/useCartStore';
+import { useRuntimeConfig } from '#imports';
 
 const cartStore = useCartStore();
+const config = useRuntimeConfig();
 const { $toast } = useNuxtApp();
 
 const loading = ref(false);
@@ -94,8 +139,13 @@ const form = ref({
   comment: ''
 });
 
+const formatter = new Intl.NumberFormat('ru-RU', {
+  style: 'currency',
+  currency: 'RUB',
+});
+
 const formatPrice = (price) => {
-  return Number(price).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  return formatter.format(price);;
 };
 
 const submitOrder = async () => {
@@ -139,176 +189,254 @@ const submitOrder = async () => {
     loading.value = false;
   }
 };
+
+const structuredData = computed(() => {
+  if (cartStore.items.length === 0) return null
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Оформление заказа',
+    itemListElement: cartStore.items.map((item, index) => ({
+      '@type': 'Product',
+      position: index + 1,
+      name: item.title,
+      image: item.image,
+      offers: {
+        '@type': 'Offer',
+        price: item.price,
+        priceCurrency: 'RUB',
+        availability: 'https://schema.org/InStock'
+      }
+    }))
+  }
+})
+
+useHead(computed(() => ({
+  title: 'Оформление заказа - AgatCeramic',
+  meta: [
+    {
+      name: 'description',
+      content: 'Оформите заказ в интернет-магазине AgatCeramic'
+    },
+    {
+      name: 'keywords',
+      content: 'оформление заказа, заказ, AgatCeramic'
+    },
+    {
+      name: 'robots',
+      content: 'noindex, nofollow'
+    }
+  ],
+  link: [
+    {
+      rel: 'canonical',
+      href: `${config.public.siteUrl}/checkout`
+    }
+  ],
+  script: structuredData.value ? [{ type: 'application/ld+json', children: JSON.stringify(structuredData.value) }] : []
+})))
 </script>
 
 <style scoped lang="scss">
-.checkout-page {
-  padding: 50px 0;
-  min-height: 60vh;
-
-  .page-title {
-    text-align: center;
-    margin-bottom: 40px;
-    font-size: 2rem;
-    color: $heading-color;
+.billing-info-wrap {
+  & h3 {
+    font-weight: 600;
+    color: $black;
+    margin: 0 0 30px;
+    font-size: 24px;
+    line-height: 16px;
   }
 
-  .empty-cart {
-    text-align: center;
-    padding: 50px 0;
+  .billing-info {
+    input {
+      background: transparent none repeat scroll 0 0;
+      border: 1px solid $border-color;
+      color: $body-color;
+      font-size: 16px;
+      padding-left: 20px;
+      padding-right: 10px;
+      width: 100%;
+      outline: none;
+      height: 45px;
 
-    p {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      color: $heading-color;
+      &:focus {
+        border-color: $theme-color;
+      }
+    }
+  }
+
+  .billing-select {
+    select {
+      background: transparent none repeat scroll 0 0;
+      border: 1px solid $border-color;
+      color: $body-color;
+      font-size: 16px;
+      padding-left: 20px;
+      padding-right: 10px;
+      width: 100%;
+      outline: none;
+      height: 45px;
+    }
+  }
+
+  .additional-info-wrap {
+    margin-bottom: 30px;
+
+    textarea {
+      background: transparent none repeat scroll 0 0;
+      border: 1px solid $border-color;
+      color: $body-color;
+      font-size: 16px;
+      height: 140px;
+      padding: 17px 20px;
+      width: 100%;
+      outline: none;
+
+      &:focus {
+        border-color: $theme-color;
+      }
+    }
+  }
+}
+
+.your-order-area {
+  & h3 {
+    font-weight: 600;
+    color: $black;
+    margin: 0 0 30px;
+    font-size: 24px;
+    line-height: 16px;
+  }
+
+  .your-order-wrap {
+    padding: 38px 45px 44px;
+    background: $border-color;
+
+    .your-order-product-info {
+      .your-order-top {
+        ul {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-pack: justify;
+          -ms-flex-pack: justify;
+          justify-content: space-between;
+          font-family: $heading-font;
+
+          li {
+            font-size: 16px;
+            font-weight: 600;
+            list-style: outside none none;
+            color: $black;
+          }
+        }
+      }
+
+      .your-order-middle {
+        border-top: 1px solid #dee0e4;
+        margin-top: 29px;
+        padding: 19px 0 18px;
+
+        li {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-pack: justify;
+          -ms-flex-pack: justify;
+          justify-content: space-between;
+          margin: 0 0 10px;
+        }
+      }
+
+      .your-order-total {
+        border-top: 1px solid #dee0e4;
+        padding-top: 17px;
+
+        ul {
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-pack: justify;
+          -ms-flex-pack: justify;
+          justify-content: space-between;
+
+          li {
+            font-weight: 600;
+            color: $theme-color;
+            font-size: 16px;
+            list-style: outside none none;
+            font-family: $heading-font;
+
+            &.order-total {
+              font-weight: 600;
+              color: $black;
+              font-size: 18px;
+            }
+          }
+        }
+      }
     }
 
-    .btn {
-      background: $theme-color;
-      color: $white;
-      padding: 10px 20px;
-      text-decoration: none;
-      border-radius: 5px;
+    @media #{$large-mobile} {
+      padding: 38px 30px 44px;
+    }
+  }
+
+  .Place-order {
+    margin-top: 25px;
+
+    .btn-change {
+      background-color: $border-color;
+      color: $black;
+      display: block;
+      font-weight: 600;
+      letter-spacing: 1px;
+      line-height: 1;
+      padding: 18px 20px;
+      text-align: center;
+      text-transform: uppercase;
+      border-radius: 0px;
+      z-index: 9;
 
       &:hover {
-        background: darken($theme-color, 10%);
-      }
-    }
-  }
-
-  .checkout-content {
-    display: grid;
-    grid-template-columns: 1fr 400px;
-    gap: 40px;
-
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .order-summary {
-    background: $white;
-    padding: 20px;
-    border: 1px solid $border-color;
-    border-radius: 5px;
-
-    h2 {
-      margin-bottom: 20px;
-      color: $heading-color;
-    }
-
-    .order-items {
-      .order-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 0;
-        border-bottom: 1px solid $border-color;
-
-        &:last-child {
-          border-bottom: none;
-        }
-
-        .item-info {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-
-          img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border: 1px solid $border-color;
-          }
-
-          h4 {
-            margin: 0 0 5px 0;
-            font-size: 1rem;
-            color: $heading-color;
-          }
-
-          p {
-            margin: 0;
-            color: $body-color;
-            font-size: 0.9rem;
-          }
-        }
-
-        .item-price {
-          font-weight: 600;
-          color: $theme-color;
-        }
+        background-color: $theme-color;
+        color: $white;
       }
     }
 
-    .order-total {
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 2px solid $border-color;
-      text-align: right;
-      font-size: 1.2rem;
-      color: $heading-color;
-    }
-  }
-
-  .checkout-form {
-    background: $white;
-    padding: 20px;
-    border: 1px solid $border-color;
-    border-radius: 5px;
-
-    h2 {
-      margin-bottom: 20px;
-      color: $heading-color;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-
-      label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: 500;
-        color: $heading-color;
-      }
-
-      input, textarea {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid $border-color;
-        border-radius: 3px;
-        font-size: 1rem;
-
-        &:focus {
-          outline: none;
-          border-color: $theme-color;
-        }
-      }
-
-      textarea {
-        resize: vertical;
-        min-height: 80px;
-      }
-    }
-
-    .submit-btn {
-      width: 100%;
-      background: $theme-color;
+    .btn-order {
+      background-color: $theme-color;
       color: $white;
-      padding: 15px;
-      border: none;
-      border-radius: 5px;
-      font-size: 1.1rem;
+      display: block;
       font-weight: 600;
-      cursor: pointer;
+      letter-spacing: 1px;
+      line-height: 1;
+      padding: 18px 20px;
+      text-align: center;
+      text-transform: uppercase;
+      border-radius: 0px;
+      z-index: 9;
 
-      &:hover:not(:disabled) {
-        background: darken($theme-color, 10%);
+      &:hover {
+        background-color: $body-color;
       }
+    }
+  }
 
-      &:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
+  .your-order-foot {
+    & p {
+      line-height: 25px;
+    }
+
+    & a {
+      color: $body-color;
+      text-decoration: underline;
+
+      &:hover {
+        color: $black;
       }
     }
   }

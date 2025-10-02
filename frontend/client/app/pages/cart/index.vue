@@ -1,66 +1,102 @@
 <template>
   <ClientOnly>
-  <div class="cart-page">
-    <div class="container">
-      <UiAppSpinner v-if="loading" text="Загрузка корзины..." />
-      <div v-else>
-        <h1 class="page-title">Корзина</h1>
-
-      <div v-if="cartStore.items.length === 0" class="empty-cart">
-        <p>Ваша корзина пуста</p>
-        <NuxtLink to="/" class="btn">Вернуться к покупкам</NuxtLink>
-      </div>
-
-      <div v-else class="cart-content">
-        <div class="cart-items">
-          <div v-for="item in cartStore.items" :key="item.id" class="cart-item">
-            <div class="item-image">
-              <NuxtLink :to="`/product/${item.id}`">
-                <img :src="item.image" :alt="item.title">
-              </NuxtLink>
-            </div>
-            <div class="item-details">
-              <h3 class="item-title">
-                <NuxtLink :to="`/product/${item.id}`">{{ item.title }}</NuxtLink>
-              </h3>
-              <p class="item-weight">{{ item.weight_kg }} кг</p>
-              <div class="item-price">{{ formatPrice(item.price) }} &#8381;</div>
-            </div>
-            <div class="item-quantity">
-              <div class="quantity-controls">
-                <button @click="updateQuantity(item.id, item.quantity - 1)" :disabled="item.quantity <= 1">-</button>
-                <input type="number" :value="item.quantity" @input="updateQuantity(item.id, parseInt($event.target.value) || 1)" min="1">
-                <button @click="updateQuantity(item.id, item.quantity + 1)">+</button>
+    <main class="cart-main-area pb-100px pt-100px">
+      <div class="container">
+        <div class="row">
+          <UiAppSpinner v-if="loading" text="Загрузка корзины..." />
+          <div v-else>
+            <div class="col-md-12" v-if="cartStore.items.length === 0">
+              <div class="empty-text-contant text-center">
+                <i class="pe-7s-cart"></i>
+                <h3>Ваша корзина пуста</h3>
+                <NuxtLink to="/" class="empty-cart-btn">
+                  <i class="fa fa-arrow-left"></i> Перети к покупкам
+                </NuxtLink>
               </div>
             </div>
-            <div class="item-total">
-              {{ formatPrice(item.price * item.quantity) }} &#8381;
-            </div>
-            <div class="item-remove">
-              <button @click="removeItem(item.id)" class="remove-btn">×</button>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12" v-else>
+              <div class="table-content table-responsive cart-table-content">
+                <table>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Товар</th>
+                      <th>Цена</th>
+                      <th>Количество</th>
+                      <th></th>
+                      <th>Стоимость</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in cartStore.items" :key="item.id" :data-product-id="item.id">
+                      <td class="product-thumbnail px-2">
+                        <div style="aspect-ratio: 1 / 1; overflow: hidden;">
+                          <NuxtLink :to="`/product/${item.slug}`">
+                            <NuxtImg :src="item.image" :alt="item.title" class="img-responsive" />
+                          </NuxtLink>
+                        </div>
+                      </td>
+                      <td class="product-name">
+                        <NuxtLink :to="`/product/${item.slug}`" class="lh-1">
+                          <p>{{ item.title }}{{ item.weight_kg ? `, ${item.weight_kg} кг` : '' }}</p>
+                        </NuxtLink>
+                      </td>
+                      <td class="product-price-cart"><span class="amount">{{ formatPrice(item.price) }}</span></td>
+                      <td class="product-quantity">
+                        <div class="cart-plus-minus">
+                          <div class="dec qtybutton" @click="updateQuantity(item.id, item.quantity - 1)"
+                            :disabled="item.quantity <= 1">-</div>
+                          <input class="cart-plus-minus-box" type="text" :value="item.quantity"
+                            @input="updateQuantity(item.id, parseInt($event.target.value) || 1)" min="1" />
+                          <div class="inc qtybutton" @click="updateQuantity(item.id, item.quantity + 1)">+</div>
+                        </div>
+                      </td>
+                      <td>
+                        {{ item.unit === 'шт' ? 'шт.' : item.unit === 'кв.м' ? 'м²' : item.unit }}
+                      </td>
+                      <td class="product-subtotal">{{ formatPrice(item.price * item.quantity) }}</td>
+                      <td class="product-remove">
+                        <a href="#" @click="removeItem(item.id)"><i class="fa fa-times"></i></a>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <th colspan="2">Общая стоимость:</th>
+                      <th class="cart-total">{{ formatPrice(cartStore.total) }}</th>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="cart-shiping-update-wrapper justify-content-end">
+                    <div class="cart-clear">
+                      <NuxtLink to="/checkout">Оформить заказ</NuxtLink>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="cart-summary">
-          <div class="summary-row">
-            <span>Итого:</span>
-            <span class="total-amount">{{ formatPrice(cartStore.total) }} &#8381;</span>
-          </div>
-          <NuxtLink to="/checkout" class="btn checkout-btn">Оформить заказ</NuxtLink>
-        </div>
       </div>
-      </div>
-    </div>
-  </div>
+    </main>
   </ClientOnly>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useCartStore } from '~/stores/useCartStore';
+import { useRuntimeConfig } from '#imports';
 
 const cartStore = useCartStore();
+const config = useRuntimeConfig();
 const loading = ref(true);
 
 onMounted(() => {
@@ -70,8 +106,13 @@ onMounted(() => {
   }, 500);
 });
 
+const formatter = new Intl.NumberFormat('ru-RU', {
+  style: 'currency',
+  currency: 'RUB',
+});
+
 const formatPrice = (price) => {
-  return Number(price).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  return formatter.format(price);;
 };
 
 const removeItem = (id) => {
@@ -81,189 +122,278 @@ const removeItem = (id) => {
 const updateQuantity = (id, quantity) => {
   cartStore.updateQuantity(id, Math.max(1, quantity));
 };
+
+const structuredData = computed(() => {
+  if (cartStore.items.length === 0) return null
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Корзина покупок',
+    itemListElement: cartStore.items.map((item, index) => ({
+      '@type': 'Product',
+      position: index + 1,
+      name: item.title,
+      image: item.image,
+      offers: {
+        '@type': 'Offer',
+        price: item.price,
+        priceCurrency: 'RUB',
+        availability: 'https://schema.org/InStock'
+      }
+    }))
+  }
+})
+
+useHead(computed(() => ({
+  title: 'Корзина - AgatCeramic',
+  meta: [
+    {
+      name: 'description',
+      content: 'Ваша корзина покупок в интернет-магазине AgatCeramic'
+    },
+    {
+      name: 'keywords',
+      content: 'корзина, покупки, AgatCeramic'
+    },
+    {
+      name: 'robots',
+      content: 'noindex, nofollow'
+    }
+  ],
+  link: [
+    {
+      rel: 'canonical',
+      href: `${config.public.siteUrl}/cart`
+    }
+  ],
+  script: structuredData.value ? [{ type: 'application/ld+json', children: JSON.stringify(structuredData.value) }] : []
+})))
 </script>
 
 <style scoped lang="scss">
-.cart-page {
-  padding: 50px 0;
-  min-height: 60vh;
-
-  .page-title {
-    text-align: center;
-    margin-bottom: 40px;
-    font-size: 2rem;
-    color: $heading-color;
+.empty-text-contant {
+  i {
+    font-size: 60px;
+    color: $black;
   }
 
-  .empty-cart {
-    text-align: center;
-    padding: 50px 0;
+  h3 {
+    font-size: 20px;
+    color: $black;
+    margin: 20px 0 20px;
+    font-weight: 500;
 
-    p {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      color: $heading-color;
+    @media #{$small-mobile} {
+      font-size: 18px;
     }
+  }
 
-    .btn {
+  a {
+    &.empty-cart-btn {
+      padding: 15px 25px;
+      display: inline-block;
       background: $theme-color;
       color: $white;
-      padding: 10px 20px;
-      text-decoration: none;
-      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 20px;
+      transition: 0.3s;
+      text-transform: uppercase;
 
       &:hover {
-        background: darken($theme-color, 10%);
+        background-color: $body-color;
+
+        i {
+          transform: translate(-5px, 0px);
+        }
+      }
+
+      i {
+        font-size: 14px !important;
+        color: $white;
+        transition: 0.3s;
+        display: inline-block;
       }
     }
   }
+}
 
-  .cart-content {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 40px;
-
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .cart-items {
-    .cart-item {
-      display: grid;
-      grid-template-columns: 100px 1fr 150px 100px 50px;
-      gap: 20px;
-      align-items: center;
-      padding: 20px 0;
-      border-bottom: 1px solid $border-color;
-
-      @media (max-width: 768px) {
-        grid-template-columns: 80px 1fr;
-        gap: 10px;
-      }
-
-      .item-image {
-        img {
-          max-width: 100%;
-          height: auto;
-          border: 1px solid $border-color;
-        }
-      }
-
-      .item-details {
-        .item-title {
-          margin: 0 0 10px 0;
-          font-size: 1.1rem;
-
-          a {
-            color: $heading-color;
-            text-decoration: none;
-
-            &:hover {
-              color: $theme-color;
-            }
-          }
-        }
-
-        .item-weight {
-          color: $body-color;
-          margin-bottom: 5px;
-        }
-
-        .item-price {
-          font-weight: 500;
-          color: $theme-color;
-        }
-      }
-
-      .item-quantity {
-        .quantity-controls {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-
-          button {
-            width: 30px;
-            height: 30px;
-            border: 1px solid $border-color;
-            background: $white;
-            cursor: pointer;
-
-            &:hover {
-              background: $theme-color;
-              color: $white;
-            }
-
-            &:disabled {
-              opacity: 0.5;
-              cursor: not-allowed;
-            }
-          }
-
-          input {
-            width: 50px;
-            text-align: center;
-            border: 1px solid $border-color;
-            padding: 5px;
-          }
-        }
-      }
-
-      .item-total {
-        font-weight: 600;
-        color: $theme-color;
-      }
-
-      .item-remove {
-        .remove-btn {
-          background: none;
-          border: none;
-          font-size: 1.5rem;
-          color: $red;
-          cursor: pointer;
-
-          &:hover {
-            color: darken($red, 10%);
-          }
-        }
-      }
-    }
-  }
-
-  .cart-summary {
-    background: $white;
-    padding: 20px;
-    border: 1px solid $border-color;
-    border-radius: 5px;
-
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      font-size: 1.2rem;
-      font-weight: 600;
-
-      .total-amount {
-        color: $theme-color;
-      }
-    }
-
-    .checkout-btn {
-      display: block;
+.cart-main-area {
+  .table-content {
+    table {
+      border: 1px solid $border-color;
       width: 100%;
-      text-align: center;
-      background: $theme-color;
-      color: $white;
-      padding: 15px;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: 600;
 
-      &:hover {
-        background: darken($theme-color, 10%);
+      thead,
+      tfoot {
+        &>tr {
+          background-color: $border-color;
+          border: 1px solid $border-color;
+
+          &>th {
+            border-top: medium none;
+            color: $black;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 21px 45px 22px;
+            text-align: center;
+            text-transform: uppercase;
+            vertical-align: middle;
+            white-space: nowrap;
+          }
+        }
+      }
+
+      tbody {
+        &>tr {
+          border-bottom: 1px solid $border-color;
+
+          td {
+            font-size: 16px;
+            padding: 30px 0;
+            text-align: center;
+
+            &.product-thumbnail {
+              width: 150px;
+            }
+
+            &.product-name {
+              text-align: left;
+              width: 435px;
+
+              a {
+                color: $body-color;
+                font-size: 16px;
+                font-weight: 400;
+              }
+            }
+
+            &.product-price-cart {
+              width: 435px;
+            }
+
+            &.product-quantity {
+              width: 435px;
+
+              .cart-plus-minus {
+                display: inline-block;
+                height: 40px;
+                padding: 0;
+                position: relative;
+                width: 110px;
+
+                .dec {
+                  &.qtybutton {
+                    border-right: 1px solid $border-color;
+                    height: 40px;
+                    left: 0;
+                    padding-top: 6px;
+                    top: 0;
+                  }
+                }
+
+                .inc {
+                  &.qtybutton {
+                    border-left: 1px solid $border-color;
+                    height: 40px;
+                    padding-top: 6px;
+                    right: 0;
+                    top: 0;
+                  }
+                }
+
+                .qtybutton {
+                  color: $body-color;
+                  cursor: pointer;
+                  float: inherit;
+                  font-size: 16px;
+                  margin: 0;
+                  position: absolute;
+                  -webkit-transition: all 0.3s ease 0s;
+                  -o-transition: all 0.3s ease 0s;
+                  transition: all 0.3s ease 0s;
+                  width: 20px;
+                  text-align: center;
+                }
+
+                input {
+                  &.cart-plus-minus-box {
+                    color: $body-color;
+                    float: left;
+                    font-size: 16px;
+                    height: 40px;
+                    margin: 0;
+                    width: 110px;
+                    background: transparent none repeat scroll 0 0;
+                    border: 1px solid $border-color;
+                    padding: 0;
+                    text-align: center;
+                  }
+                }
+              }
+            }
+
+            &.product-remove {
+              width: 100px;
+
+              a {
+                color: $body-color;
+                font-size: 16px;
+                margin: 0 10px;
+
+                &:hover {
+                  color: $red;
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
+
+  .cart-shiping-update-wrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 30px 0 60px;
+
+    @media #{$large-mobile} {
+      display: block;
+      padding: 30px 0 15px;
+    }
+  }
+}
+
+.cart-shiping-update-wrapper .cart-shiping-update>a,
+.cart-shiping-update-wrapper .cart-clear>button,
+.cart-shiping-update-wrapper .cart-clear>a {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 18px 63px 17px;
+  text-transform: uppercase;
+
+  @media #{$tablet-device} {
+    padding: 18px 25px;
+  }
+
+  @media #{$large-mobile} {
+    padding: 18px 25px;
+    margin: 0 0 15px;
+  }
+}
+
+.cart-shiping-update-wrapper .cart-clear>a {
+  background-color: $theme-color;
+  color: $white;
+}
+
+.cart-shiping-update-wrapper .cart-clear>a:hover {
+  background-color: $body-color;
+  color: $white;
 }
 </style>
