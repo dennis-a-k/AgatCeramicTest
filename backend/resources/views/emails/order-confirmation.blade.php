@@ -23,20 +23,25 @@
 
             .header {
                 text-align: center;
-                padding: 20px 0;
+                padding: 20px 10px;
                 background-color: #f2f6f9;
             }
 
             .header .logo {
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                display: table;
             }
 
-            .header img {
+            .header .logo img {
+                display: table-cell;
+                vertical-align: middle;
                 width: 60px;
                 height: auto;
                 margin-right: 10px;
+            }
+
+            .header .logo p {
+                display: table-cell;
+                vertical-align: middle;
             }
 
             .header p {
@@ -134,7 +139,7 @@
         <div class="container">
             <div class="header">
                 <div class="logo">
-                    <img src="{{ $message->embed(public_path('images/logo.svg')) }}" alt="AgatCeramic Logo" />
+                    <img src="{{ $message->embed(public_path('images/logo.jpg')) }}" alt="AgatCeramic Logo" />
                     <p>Agat<span>Ceramic</span></p>
                 </div>
             </div>
