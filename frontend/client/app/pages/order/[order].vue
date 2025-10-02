@@ -32,11 +32,12 @@
 
 <script setup>
 import { computed } from 'vue';
-import { useRuntimeConfig } from '#imports';
+import { useRuntimeConfig, useRoute } from '#imports';
 
 const config = useRuntimeConfig();
+const route = useRoute();
 
-const order = '2827-VHNT9OIIGN'
+const order = route.params.order;
 
 const structuredData = computed(() => {
   if (!order) return null

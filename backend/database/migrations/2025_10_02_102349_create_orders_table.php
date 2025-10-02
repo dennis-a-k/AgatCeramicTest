@@ -21,6 +21,9 @@ return new class extends Migration
             $table->text('comment')->nullable(); // комментарий к заказу
             $table->decimal('total_amount', 10, 2); // общая сумма
             $table->string('status')->default('pending'); // статус заказа
+            $table->string('searchable_name')->nullable(); // хэш для поиска по имени
+            $table->string('searchable_email')->nullable(); // хэш для поиска по email
+            $table->string('searchable_phone')->nullable(); // хэш для поиска по телефону
             $table->timestamps();
         });
 

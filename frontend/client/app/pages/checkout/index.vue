@@ -152,17 +152,16 @@ const submitOrder = async () => {
   loading.value = true;
 
   try {
-    // Здесь можно отправить заказ на сервер
     const orderData = {
       customer: form.value,
       items: cartStore.items,
       total: cartStore.total
     };
 
-    console.log('Order data:', orderData);
-
-    // Имитация отправки
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    const response = await $fetch(`${config.public.apiBase}/api/checkout`, {
+      method: 'POST',
+      body: orderData
+    });
 
     // Очистка корзины
     cartStore.clearCart();
@@ -179,8 +178,8 @@ const submitOrder = async () => {
     // Уведомление
     $toast.success('Заказ успешно оформлен! Мы свяжемся с вами в ближайшее время.');
 
-    // Перенаправление на главную
-    await navigateTo('/');
+    // Перенаправление на страницу заказа
+    await navigateTo('/order/' + response.order);
 
   } catch (error) {
     console.error('Error submitting order:', error);

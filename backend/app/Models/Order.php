@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Support\Facades\Crypt;
 
 class Order extends Model
 {
@@ -31,13 +30,13 @@ class Order extends Model
 
         static::saving(function ($order) {
             if ($order->isDirty('name')) {
-                $order->searchable_name = self::hashWithPepper(strtolower($order->name));
+                $order->searchable_name = self::hashWithPepper(strtolower($order->getOriginal('name')));
             }
             if ($order->isDirty('email')) {
-                $order->searchable_email = self::hashWithPepper(strtolower($order->email));
+                $order->searchable_email = self::hashWithPepper(strtolower($order->getOriginal('email')));
             }
             if ($order->isDirty('phone')) {
-                $phone = preg_replace('/[^0-9]/', '', $order->phone);
+                $phone = preg_replace('/[^0-9]/', '', $order->getOriginal('phone'));
                 $order->searchable_phone = self::hashWithPepper($phone);
             }
         });
@@ -48,36 +47,53 @@ class Order extends Model
         return hash('sha256', $value . config('app.key'));
     }
 
-    protected function customerName(): Attribute
+    protected function name(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Crypt::decryptString($value),
-            set: fn($value) => Crypt::encryptString($value)
+            get: fn($value) => $this->decryptData($value),
+            set: fn($value) => $this->encryptData($value)
         );
     }
 
-    protected function customerEmail(): Attribute
+    protected function email(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Crypt::decryptString($value),
-            set: fn($value) => Crypt::encryptString($value)
+            get: fn($value) => $this->decryptData($value),
+            set: fn($value) => $this->encryptData($value)
         );
     }
 
-    protected function customerPhone(): Attribute
+    protected function phone(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Crypt::decryptString($value),
-            set: fn($value) => Crypt::encryptString($value)
+            get: fn($value) => $this->decryptData($value),
+            set: fn($value) => $this->encryptData($value)
         );
     }
 
-    protected function shippingAddress(): Attribute
+    protected function address(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Crypt::decryptString($value),
-            set: fn($value) => Crypt::encryptString($value)
+            get: fn($value) => $this->decryptData($value),
+            set: fn($value) => $this->encryptData($value)
         );
+    }
+
+    private function encryptData($data)
+    {
+        $key = config('app.key');
+        $iv = random_bytes(16);
+        $encrypted = openssl_encrypt($data, 'AES-256-CBC', substr($key, 7), 0, $iv);
+        return base64_encode($iv . $encrypted);
+    }
+
+    private function decryptData($data)
+    {
+        $key = config('app.key');
+        $data = base64_decode($data);
+        $iv = substr($data, 0, 16);
+        $encrypted = substr($data, 16);
+        return openssl_decrypt($encrypted, 'AES-256-CBC', substr($key, 7), 0, $iv);
     }
 
     public function scopeSearchByEmail($query, $email)
