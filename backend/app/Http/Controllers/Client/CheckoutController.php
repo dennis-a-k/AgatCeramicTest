@@ -54,7 +54,7 @@ class CheckoutController extends Controller
                 $product = Product::find($item['id']);
                 $productName = $item['title'];
                 if (isset($item['weight_kg']) && $item['weight_kg']) {
-                    $productName .= ' ' . $item['weight_kg'] . 'кг';
+                    $productName .= ', ' . $item['weight_kg'] . ' кг';
                 }
                 OrderItem::create([
                     'order_id' => $order->id,
