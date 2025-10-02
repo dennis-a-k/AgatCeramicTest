@@ -74,8 +74,30 @@ class CheckoutController extends Controller
             // Отправка уведомления админу
             Mail::to(env('ADMIN_EMAIL'))->send(new OrderNotification($order));
 
+
+//
+            $adminEmail = env('ADMIN_EMAIL');
+            Log::info('Admin email: ' . $adminEmail);
+            if ($adminEmail) {
+                Mail::to($adminEmail)->send(new OrderNotification($order));
+            }
+//
+
+
+
             return response()->json(['order' => $orderNumber], 201);
         } catch (\Exception $e) {
+
+
+//
+            $adminEmail = env('ADMIN_EMAIL');
+            Log::info('Admin email: ' . $adminEmail);
+            if ($adminEmail) {
+                Mail::to($adminEmail)->send(new OrderNotification($order));
+            }
+//
+
+
             Log::error('Checkout error: ' . $e->getMessage());
             return response()->json(['error' => 'Internal server error'], 500);
         }
