@@ -238,6 +238,53 @@ useHead(computed(() => ({
 </script>
 
 <style scoped lang="scss">
+.empty-text-contant {
+  i {
+    font-size: 60px;
+    color: $black;
+  }
+
+  h3 {
+    font-size: 20px;
+    color: $black;
+    margin: 20px 0 20px;
+    font-weight: 500;
+
+    @media #{$small-mobile} {
+      font-size: 18px;
+    }
+  }
+
+  a {
+    &.empty-cart-btn {
+      padding: 15px 25px;
+      display: inline-block;
+      background: $theme-color;
+      color: $white;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 20px;
+      transition: 0.3s;
+      text-transform: uppercase;
+
+      &:hover {
+        background-color: $body-color;
+
+        i {
+          transform: translate(-5px, 0px);
+        }
+      }
+
+      i {
+        font-size: 14px !important;
+        color: $white;
+        transition: 0.3s;
+        display: inline-block;
+      }
+    }
+  }
+}
+
 .billing-info-wrap {
   & h3 {
     font-weight: 600;
