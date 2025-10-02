@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderConfirmation;
+use App\Mail\OrderNotification;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -49,17 +52,27 @@ class CheckoutController extends Controller
             // Создание элементов заказа
             foreach ($request->input('items') as $item) {
                 $product = Product::find($item['id']);
+                $productName = $item['title'];
+                if (isset($item['weight_kg']) && $item['weight_kg']) {
+                    $productName .= ' ' . $item['weight_kg'] . 'кг';
+                }
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $item['id'],
                     'product_article' => $product->article ?? '',
-                    'product_name' => $item['title'],
+                    'product_name' => $productName,
                     'product_unit' => $item['unit'],
                     'price' => $item['price'],
                     'quantity' => $item['quantity'],
                     'subtotal' => $item['price'] * $item['quantity'],
                 ]);
             }
+
+            // Отправка email подтверждения клиенту
+            Mail::to($order->email)->send(new OrderConfirmation($order));
+
+            // Отправка уведомления админу
+            Mail::to(env('ADMIN_EMAIL'))->send(new OrderNotification($order));
 
             return response()->json(['order' => $orderNumber], 201);
         } catch (\Exception $e) {
