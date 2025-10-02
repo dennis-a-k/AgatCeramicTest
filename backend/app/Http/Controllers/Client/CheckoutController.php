@@ -76,11 +76,9 @@ class CheckoutController extends Controller
 
 
 //
+            Log::info('All env vars: ' . json_encode($_ENV)); // Проверьте, есть ли ADMIN_EMAIL
             $adminEmail = env('ADMIN_EMAIL');
-            Log::info('Admin email: ' . $adminEmail);
-            if ($adminEmail) {
-                Mail::to($adminEmail)->send(new OrderNotification($order));
-            }
+            Log::info('Admin email: "' . $adminEmail . '"');
 //
 
 
@@ -90,11 +88,9 @@ class CheckoutController extends Controller
 
 
 //
+            Log::info('All env vars: ' . json_encode($_ENV)); // Проверьте, есть ли ADMIN_EMAIL
             $adminEmail = env('ADMIN_EMAIL');
-            Log::info('Admin email: ' . $adminEmail);
-            if ($adminEmail) {
-                Mail::to($adminEmail)->send(new OrderNotification($order));
-            }
+            Log::info('Admin email: "' . $adminEmail . '"');
 //
 
 
