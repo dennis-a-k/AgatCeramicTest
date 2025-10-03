@@ -1,49 +1,53 @@
 <template>
   <ClientOnly>
     <!-- Overlay -->
-    <div v-if="isVisible" class="modal-overlay" @click="closeModal" aria-hidden="true"></div>
+    <transition name="overlay">
+      <div v-if="isVisible" class="modal-overlay" @click="closeModal" aria-hidden="true"></div>
+    </transition>
 
     <!-- Modal -->
-    <div v-if="isVisible" class="custom-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <div class="modal-content">
-        <div class="modal-body">
-          <button type="button" class="btn-close-modal" @click="closeModal" aria-label="Закрыть"></button>
+    <transition name="modal">
+      <div v-if="isVisible" class="custom-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+          <div class="modal-body">
+            <button type="button" class="btn-close-modal" @click="closeModal" aria-label="Закрыть"></button>
 
-          <div v-if="isSuccess" class="success-message">
-            <div class="success-icon">✓</div>
-            <h4 id="modal-title">Заявка принята!</h4>
-            <p>Спасибо за обращение. Мы свяжемся с вами в ближайшее время.</p>
-            <button type="button" class="btn btn-primary" @click="closeModal">Закрыть</button>
+            <div v-if="isSuccess" class="success-message">
+              <div class="success-icon">✓</div>
+              <h4 id="modal-title">Заявка принята!</h4>
+              <p>Спасибо за обращение. Мы свяжемся с вами в ближайшее время.</p>
+              <button type="button" class="btn btn-primary" @click="closeModal">Закрыть</button>
+            </div>
+
+            <form v-else @submit.prevent="submitForm">
+              <div class="mb-3">
+                <label for="name" class="form-label">ФИО</label>
+                <input type="text" class="form-control" id="name" v-model="form.name" required
+                  placeholder="Введите ваше ФИО" ref="nameInput">
+              </div>
+              <div class="mb-3">
+                <label for="phone" class="form-label">Номер телефона</label>
+                <input type="tel" class="form-control" id="phone" v-model="form.phone" @input="formatPhone" required
+                  placeholder="+7 (___) ___-__-__">
+              </div>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
+                  <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"
+                    aria-hidden="true"></span>
+                  {{ isSubmitting ? 'Отправка...' : 'Заказать звонок' }}
+                </button>
+              </div>
+              <p class="text-center">
+                Нажимая кнопку «Заказать звонок», я даю <NuxtLink to="/personal-data" target="_blank">согласие
+                </NuxtLink>
+                на обработку персональных данных, в соответствии с <NuxtLink to="/policy" target="_blank">
+                  Политикой</NuxtLink>
+              </p>
+            </form>
           </div>
-
-          <form v-else @submit.prevent="submitForm">
-            <div class="mb-3">
-              <label for="name" class="form-label">ФИО</label>
-              <input type="text" class="form-control" id="name" v-model="form.name" required
-                placeholder="Введите ваше ФИО" ref="nameInput">
-            </div>
-            <div class="mb-3">
-              <label for="phone" class="form-label">Номер телефона</label>
-              <input type="tel" class="form-control" id="phone" v-model="form.phone" @input="formatPhone" required
-                placeholder="+7 (___) ___-__-__">
-            </div>
-            <div class="d-grid">
-              <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
-                <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"
-                  aria-hidden="true"></span>
-                {{ isSubmitting ? 'Отправка...' : 'Заказать звонок' }}
-              </button>
-            </div>
-            <p class="text-center">
-              Нажимая кнопку «Заказать звонок», я даю <NuxtLink to="/personal-data" target="_blank">согласие
-              </NuxtLink>
-              на обработку персональных данных, в соответствии с <NuxtLink to="/policy" target="_blank">
-                Политикой</NuxtLink>
-            </p>
-          </form>
         </div>
       </div>
-    </div>
+    </transition>
   </ClientOnly>
 </template>
 
@@ -168,10 +172,11 @@ defineExpose({
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   z-index: 1050;
   padding: 1rem;
+  padding-top: 20vh;
 
   .modal-content {
     background-color: $white;
@@ -326,6 +331,24 @@ defineExpose({
     padding: 0.75rem 2rem;
     font-weight: 500;
   }
+}
+
+// Transitions
+.overlay-enter-active, .overlay-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.overlay-enter-from, .overlay-leave-to {
+  opacity: 0;
+}
+
+.modal-enter-active, .modal-leave-active {
+  transition: all 0.3s ease;
+}
+
+.modal-enter-from, .modal-leave-to {
+  opacity: 0;
+  transform: translateY(-50px);
 }
 
 // Адаптивность
