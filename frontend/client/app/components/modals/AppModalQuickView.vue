@@ -18,17 +18,26 @@
               </div>
               <div class="product-info">
                 <span class="category">{{ product.category.name }}</span>
-                <h4 id="modal-title" class="product-title">{{ product.name }}</h4>
+                <h4 id="modal-title" class="product-title">{{ product.name }}{{ weight ? `, ${weight} кг` : '' }}</h4>
                 <div class="price">
                   <span class="new">{{ formattedPrice }}</span>
                 </div>
+                <div class="info">
+                  <p><span>Артикул:</span> {{ product.article }}</p>
+                  <p><span>Бренд:</span> {{ product.brand.name }}</p>
+                  <p v-if="product.collection"><span>Коллекция:</span> {{ product.collection }}</p>
+                  <p v-if="product.color"><span>Цвет:</span> {{ product.color.name }}</p>
+                  <p v-if="sizes"><span>Размеры:</span> {{ sizes }}мм</p>
+                </div>
                 <div class="actions">
-                  <div class="quantity-selector">
-                    <div class="cart-plus-minus">
+                  <div class="quantity-selector d-flex">
+                    <div class="cart-plus-minus me-2">
                       <div class="dec qtybutton" @click="decrement">-</div>
                       <input class="cart-plus-minus-box" type="text" name="qtybutton" v-model="quantity" />
                       <div class="inc qtybutton" @click="increment">+</div>
                     </div>
+                    <p v-if="product.unit">{{ product.unit === 'шт' ? 'шт.' : product.unit === 'кв.м' ? 'м²' :
+                      product.unit }}</p>
                   </div>
                   <button class="btn btn-primary add-to-cart" @click="addToCart">В корзину</button>
                   <NuxtLink :to="`/product/${product.slug}`" class="btn btn-outline-primary">Подробнее</NuxtLink>
@@ -62,6 +71,16 @@ const productImage = computed(() => {
   return (product.value.imgSrc && product.value.imgSrc.trim() !== '')
     ? product.value.imgSrc
     : '/images/stock/stock-image.png'
+})
+
+const weight = computed(() => {
+  const attr = product.value?.attribute_values?.find(a => a.attribute.name === 'Вес')
+  return attr ? attr.number_value : null
+})
+
+const sizes = computed(() => {
+  const attr = product.value?.attribute_values?.find(a => a.attribute.name === 'Размеры')
+  return attr ? attr.string_value : null
 })
 
 const formattedPrice = computed(() => {
@@ -195,17 +214,29 @@ defineExpose({
         margin-bottom: 2rem;
       }
 
+      .info {
+        p {
+          color: $black;
+        }
+
+        span {
+          font-weight: 500;
+          color: $theme-color;
+          margin-right: 0.5rem;
+        }
+      }
+
       .quantity-selector {
+        align-items: center;
+
         .cart-plus-minus {
           border: 1px solid $body-color;
-          display: inline-block;
           height: 40px;
           overflow: hidden;
           padding: 0;
           position: relative;
           width: 80px;
           background: $white;
-          border-radius: 5px;
 
           .qtybutton {
             color: $body-color;
@@ -267,23 +298,27 @@ defineExpose({
         justify-content: flex-end;
 
         .btn {
+          height: 40px;
           padding: 0.5rem 0.75rem;
           font-size: 14px;
           font-weight: 500;
           border-radius: 0;
           text-decoration: none;
           text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
           &.btn-primary {
             background-color: $theme-color;
             border: 1px solid $theme-color;
             color: $white;
             width: auto;
-            height: auto;
 
             &:hover {
               background-color: $body-color;
               border-color: $body-color;
+              transform: none;
             }
           }
 
@@ -292,7 +327,6 @@ defineExpose({
             border: 1px solid $theme-color;
             color: $theme-color;
             width: auto;
-            height: auto;
 
             &:hover {
               background-color: $theme-color;
@@ -333,19 +367,23 @@ defineExpose({
 }
 
 // Transitions
-.overlay-enter-active, .overlay-leave-active {
+.overlay-enter-active,
+.overlay-leave-active {
   transition: opacity 0.3s ease;
 }
 
-.overlay-enter-from, .overlay-leave-to {
+.overlay-enter-from,
+.overlay-leave-to {
   opacity: 0;
 }
 
-.modal-enter-active, .modal-leave-active {
+.modal-enter-active,
+.modal-leave-active {
   transition: all 0.3s ease;
 }
 
-.modal-enter-from, .modal-leave-to {
+.modal-enter-from,
+.modal-leave-to {
   opacity: 0;
   transform: translateY(-50px);
 }
@@ -390,7 +428,6 @@ defineExpose({
 
         .quantity-selector {
           margin-right: 0;
-          margin-bottom: 1rem;
         }
       }
     }
