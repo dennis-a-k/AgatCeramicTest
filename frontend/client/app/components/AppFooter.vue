@@ -47,8 +47,7 @@
                 <h4 class="footer-heading">Контакты</h4>
                 <div class="footer-links">
                   <p class="contact-item">
-                    <a href="#" class="modal-call" data-link-action="modal-call" data-bs-toggle="modal"
-                      data-bs-target="#modalCall">
+                    <a href="#" class="modal-call" @click.prevent="openCallModal">
                       Заказать звонок
                     </a>
                   </p>
@@ -101,7 +100,10 @@
 </template>
 
 <script setup>
+import { inject } from 'vue'
+
 const currentYear = ref(new Date().getFullYear())
+const openCallModal = inject('openCallModal')
 </script>
 
 <style scoped lang="scss">

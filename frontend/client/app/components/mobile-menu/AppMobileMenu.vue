@@ -4,8 +4,7 @@
         <div class="user-panel">
             <ul>
                 <li>
-                    <a href="#" class="modal-call" data-link-action="modal-call" data-bs-toggle="modal"
-                        data-bs-target="#modalCall">
+                    <a href="#" class="modal-call" @click.prevent="openCallModal">
                         Заказать звонок
                     </a>
                 </li>
@@ -120,7 +119,9 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, inject } from 'vue';
+
+const openCallModal = inject('openCallModal')
 
 onMounted(() => {
     // Get mobile menu elements

@@ -1,45 +1,46 @@
 <template>
   <ClientOnly>
-    <div class="modal fade" id="modalCall" tabindex="-1" aria-labelledby="modalCallLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-body">
-            <button type="button" class="btn-close-modal" data-bs-dismiss="modal" aria-label="Закрыть"
-              @click="resetForm"></button>
+    <!-- Overlay -->
+    <div v-if="isVisible" class="modal-overlay" @click="closeModal" aria-hidden="true"></div>
 
-            <div v-if="isSuccess" class="success-message">
-              <div class="success-icon">✓</div>
-              <h4>Заявка принята!</h4>
-              <p>Спасибо за обращение. Мы свяжемся с вами в ближайшее время.</p>
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="resetForm">Закрыть</button>
-            </div>
+    <!-- Modal -->
+    <div v-if="isVisible" class="custom-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-content">
+        <div class="modal-body">
+          <button type="button" class="btn-close-modal" @click="closeModal" aria-label="Закрыть"></button>
 
-            <form v-else @submit.prevent="submitForm">
-              <div class="mb-3">
-                <label for="name" class="form-label">ФИО</label>
-                <input type="text" class="form-control" id="name" v-model="form.name" required
-                  placeholder="Введите ваше ФИО">
-              </div>
-              <div class="mb-3">
-                <label for="phone" class="form-label">Номер телефона</label>
-                <input type="tel" class="form-control" id="phone" v-model="form.phone" @input="formatPhone" required
-                  placeholder="+7 (999) 999-99-99">
-              </div>
-              <div class="d-grid">
-                <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
-                  <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"
-                    aria-hidden="true"></span>
-                  {{ isSubmitting ? 'Отправка...' : 'Заказать звонок' }}
-                </button>
-              </div>
-              <p class="text-center">
-                Нажимая кнопку «Заказать звонок», я даю <NuxtLink to="/personal-data" target="_blank">согласие
-                </NuxtLink>
-                на обработку персональных данных, в соответствии с <NuxtLink to="/policy" target="_blank">
-                  Политикой</NuxtLink>
-              </p>
-            </form>
+          <div v-if="isSuccess" class="success-message">
+            <div class="success-icon">✓</div>
+            <h4 id="modal-title">Заявка принята!</h4>
+            <p>Спасибо за обращение. Мы свяжемся с вами в ближайшее время.</p>
+            <button type="button" class="btn btn-primary" @click="closeModal">Закрыть</button>
           </div>
+
+          <form v-else @submit.prevent="submitForm">
+            <div class="mb-3">
+              <label for="name" class="form-label">ФИО</label>
+              <input type="text" class="form-control" id="name" v-model="form.name" required
+                placeholder="Введите ваше ФИО" ref="nameInput">
+            </div>
+            <div class="mb-3">
+              <label for="phone" class="form-label">Номер телефона</label>
+              <input type="tel" class="form-control" id="phone" v-model="form.phone" @input="formatPhone" required
+                placeholder="+7 (999) 999-99-99">
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
+                <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"
+                  aria-hidden="true"></span>
+                {{ isSubmitting ? 'Отправка...' : 'Заказать звонок' }}
+              </button>
+            </div>
+            <p class="text-center">
+              Нажимая кнопку «Заказать звонок», я даю <NuxtLink to="/personal-data" target="_blank">согласие
+              </NuxtLink>
+              на обработку персональных данных, в соответствии с <NuxtLink to="/policy" target="_blank">
+                Политикой</NuxtLink>
+            </p>
+          </form>
         </div>
       </div>
     </div>
@@ -47,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, nextTick } from 'vue'
 
 const form = ref({
   name: '',
@@ -56,19 +57,24 @@ const form = ref({
 
 const isSubmitting = ref(false)
 const isSuccess = ref(false)
+const isVisible = ref(false)
+const nameInput = ref(null)
 
-onMounted(() => {
-  const modal = document.getElementById('modalCall')
-  if (modal) {
-    modal.addEventListener('hide.bs.modal', () => {
-      // Снимаем фокус перед скрытием модального окна
-      const focusedElement = document.activeElement
-      if (modal.contains(focusedElement)) {
-        focusedElement.blur()
-      }
-    })
-  }
-})
+// Управление видимостью модального окна
+const openModal = () => {
+  isVisible.value = true
+  // Фокус на первом поле ввода
+  nextTick(() => {
+    if (nameInput.value) {
+      nameInput.value.focus()
+    }
+  })
+}
+
+const closeModal = () => {
+  isVisible.value = false
+  resetForm()
+}
 
 const formatPhone = (event) => {
   let value = event.target.value.replace(/\D/g, '')
@@ -127,13 +133,49 @@ const submitForm = async () => {
     isSubmitting.value = false
   }
 }
+
+// Экспортируем функции для использования в других компонентах
+defineExpose({
+  openModal,
+  closeModal
+})
 </script>
 
 <style scoped lang="scss">
-.modal-content {
-  border-radius: 0;
-  border: none;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+// Overlay
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+}
+
+// Custom Modal
+.custom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  padding: 1rem;
+
+  .modal-content {
+    background-color: $white;
+    border-radius: 0;
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
 }
 
 .modal-body {

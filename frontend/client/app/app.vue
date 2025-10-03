@@ -4,12 +4,25 @@
     <div class="offcanvas-overlay"></div>
     <CartAppOffcanvasCart />
     <MobileMenuAppMobileMenu />
-    <ModalsAppModalCall />
+    <ModalsAppModalCall ref="modalCallRef" />
   </NuxtLayout>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref, provide } from 'vue';
+
+// Ссылка на компонент модального окна
+const modalCallRef = ref(null)
+
+// Функция для открытия модального окна
+const openCallModal = () => {
+  if (modalCallRef.value) {
+    modalCallRef.value.openModal()
+  }
+}
+
+// Предоставляем функцию для дочерних компонентов
+provide('openCallModal', openCallModal)
 
 onMounted(() => {
   const offCanvasOverlay = document.querySelector(".offcanvas-overlay");

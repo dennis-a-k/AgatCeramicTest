@@ -16,7 +16,7 @@
               <li>
                 <NuxtLink to="/return">Возврат и замена</NuxtLink>
               </li>
-              <li><a href="#" class="modal-call" data-link-action="modal-call" data-bs-toggle="modal" data-bs-target="#modalCall">Заказать звонок</a></li>
+              <li><a href="#" class="modal-call" @click.prevent="openCallModal">Заказать звонок</a></li>
               <li>
                 <a href="tel:+79999999999">
                   <i class="fa fa-phone"></i>
@@ -120,3 +120,9 @@ $spacing-between-items-mobile: 10px;
   }
 }
 </style>
+
+<script setup>
+import { inject } from 'vue'
+
+const openCallModal = inject('openCallModal')
+</script>
