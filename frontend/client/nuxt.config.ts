@@ -59,6 +59,7 @@ export default defineNuxtConfig({
   plugins: [
     'plugins/bootstrap.client.js',
     'plugins/toast.client.js',
+    'plugins/mask.client.js',
   ],
   runtimeConfig: {
     public: {
