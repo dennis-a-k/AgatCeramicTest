@@ -90,6 +90,7 @@
             <div class="content">
                 <div class="order-info">
                     <h2>Заказ №{{ $order->order }}</h2>
+                    <div class="info-item"><strong>Дата:</strong> {{ $order->created_at->format('d.m.Y H:i') }}</div>
                     <div class="info-item"><strong>Имя:</strong> {{ $order->name }}</div>
                     <div class="info-item"><strong>Email:</strong> {{ $order->email }}</div>
                     <div class="info-item"><strong>Телефон:</strong> {{ $order->phone }}</div>

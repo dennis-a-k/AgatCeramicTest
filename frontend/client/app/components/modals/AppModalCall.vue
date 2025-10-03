@@ -49,6 +49,7 @@
 
 <script setup>
 import { ref, nextTick } from 'vue'
+import { useRuntimeConfig } from '#imports';
 
 const form = ref({
   name: '',
@@ -59,6 +60,7 @@ const isSubmitting = ref(false)
 const isSuccess = ref(false)
 const isVisible = ref(false)
 const nameInput = ref(null)
+const config = useRuntimeConfig();
 
 // Управление видимостью модального окна
 const openModal = () => {
@@ -116,12 +118,17 @@ const submitForm = async () => {
   isSubmitting.value = true
 
   try {
-    // Здесь можно добавить логику отправки данных на сервер
-    // Например, через fetch или axios
-    console.log('Отправка данных:', form.value)
+    const response = await fetch(`${config.public.apiBase}/api/call-request`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(form.value)
+    })
 
-    // Имитация отправки
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    if (!response.ok) {
+      throw new Error('Ошибка при отправке заявки')
+    }
 
     // Показываем success сообщение
     isSuccess.value = true
