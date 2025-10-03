@@ -25,7 +25,7 @@
             <div class="mb-3">
               <label for="phone" class="form-label">Номер телефона</label>
               <input type="tel" class="form-control" id="phone" v-model="form.phone" @input="formatPhone" required
-                placeholder="+7 (999) 999-99-99">
+                placeholder="+7 (___) ___-__-__">
             </div>
             <div class="d-grid">
               <button type="submit" class="btn btn-primary" :disabled="isSubmitting">

@@ -34,7 +34,7 @@
                     <div class="col-lg-6 col-md-6">
                       <div class="billing-info mb-4">
                         <label for="phone">Телефон</label>
-                        <input type="tel" id="phone" v-model="form.phone" @input="formatPhone" required />
+                        <input type="tel" id="phone" v-model="form.phone" @input="formatPhone" placeholder="+7 (___) ___-__-__" required />
                       </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
