@@ -47,10 +47,10 @@
                 <h4 class="footer-heading">Контакты</h4>
                 <div class="footer-links">
                   <p class="contact-item">
-                    <NuxtLink to="#" class="modal-call" data-link-action="modal-call" data-bs-toggle="modal"
+                    <a href="#" class="modal-call" data-link-action="modal-call" data-bs-toggle="modal"
                       data-bs-target="#modalCall">
                       Заказать звонок
-                    </NuxtLink>
+                    </a>
                   </p>
                   <p class="contact-item">
                     <i class="icon fa fa-phone"></i>

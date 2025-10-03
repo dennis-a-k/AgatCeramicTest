@@ -16,7 +16,7 @@
               <li>
                 <NuxtLink to="/return">Возврат и замена</NuxtLink>
               </li>
-              <li><a href="#"> Заказать звонок </a></li>
+              <li><a href="#" class="modal-call" data-link-action="modal-call" data-bs-toggle="modal" data-bs-target="#modalCall">Заказать звонок</a></li>
               <li>
                 <a href="tel:+79999999999">
                   <i class="fa fa-phone"></i>
@@ -104,6 +104,15 @@ $spacing-between-items-mobile: 10px;
             font-size: 15px;
             color: $theme-color;
             margin-right: 5px;
+          }
+        }
+
+        &.modal-call {
+          color: $theme-color !important;
+          font-weight: 500;
+
+          &:hover {
+            text-decoration: underline !important;
           }
         }
       }

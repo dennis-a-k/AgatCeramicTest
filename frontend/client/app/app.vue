@@ -7,6 +7,10 @@
     <CartAppOffcanvasCart />
 
     <MobileMenuAppMobileMenu />
+
+    <ClientOnly>
+      <AppModalCall />
+    </ClientOnly>
   </NuxtLayout>
 </template>
 
