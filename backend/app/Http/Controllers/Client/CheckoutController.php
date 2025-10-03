@@ -91,6 +91,7 @@ class CheckoutController extends Controller
 
 //
             Log::info('All env vars: ' . json_encode($_ENV)); // Проверьте, есть ли ADMIN_EMAIL
+            $adminEmail = env('ADMIN_EMAIL');
             $key_gen = env('APP_KEY');
             Log::info('Admin email: "' . $adminEmail . '"');
             Log::info('ADMIN_EMAIL: "' . $key_gen . '"');
