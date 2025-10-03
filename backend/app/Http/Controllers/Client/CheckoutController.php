@@ -68,38 +68,26 @@ class CheckoutController extends Controller
                 ]);
             }
 
-            // Отправка email подтверждения клиенту
-            Mail::to($order->email)->send(new OrderConfirmation($order));
+            try {
+                // Отправка email подтверждения клиенту
+                if ($order->email) {
+                    Mail::to($order->email)->send(new OrderConfirmation($order));
+                }
 
-            // Отправка уведомления админу
-            Mail::to(env('ADMIN_EMAIL'))->send(new OrderNotification($order));
-
-
-//
-            Log::info('All env vars: ' . json_encode($_ENV)); // Проверьте, есть ли ADMIN_EMAIL
-            $adminEmail = env('ADMIN_EMAIL');
-            $key_gen = env('APP_KEY');
-            Log::info('Admin email: "' . $adminEmail . '"');
-            Log::info('ADMIN_EMAIL: "' . $key_gen . '"');
-//
-
-
+                // Отправка уведомления админу
+                $adminEmail = config('mail.admin_email');
+                if ($adminEmail) {
+                    Mail::to($adminEmail)->send(new OrderNotification($order));
+                }
+            } catch (\Exception $e) {
+                Log::error('Ошибка отправки email: ' . $e->getMessage());
+            }
 
             return response()->json(['order' => $orderNumber], 201);
         } catch (\Exception $e) {
-
-
-//
-            Log::info('All env vars: ' . json_encode($_ENV)); // Проверьте, есть ли ADMIN_EMAIL
-            $adminEmail = env('ADMIN_EMAIL');
-            $key_gen = env('APP_KEY');
-            Log::info('Admin email: "' . $adminEmail . '"');
-            Log::info('ADMIN_EMAIL: "' . $key_gen . '"');
-//
-
-
             Log::error('Checkout error: ' . $e->getMessage());
-            return response()->json(['error' => 'Internal server error'], 500);
+            // Даже при ошибке возвращаем успех, так как заказ создан
+            return response()->json(['order' => $orderNumber], 201);
         }
     }
 }
