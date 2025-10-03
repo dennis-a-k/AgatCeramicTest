@@ -27,21 +27,24 @@
           <i class="pe-7s-cart"></i>
         </button>
 
-        <button class="action quickview" data-link-action="quickview" title="Посмотреть" :data-id="product.id"
-          data-bs-toggle="modal" data-bs-target="#modalProduct">
+        <button class="action quickview" title="Посмотреть" :data-id="product.id" @click="openQuickView">
           <i class="pe-7s-look"></i>
         </button>
       </div>
     </div>
   </div>
+
+  <AppModalQuickView ref="quickViewModal" />
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useCartStore } from '~/stores/useCartStore';
+import AppModalQuickView from '~/components/modals/AppModalQuickView.vue';
 
 const cartStore = useCartStore();
 const { $toast } = useNuxtApp();
+const quickViewModal = ref(null);
 
 const formatter = new Intl.NumberFormat('ru-RU', {
   style: 'currency',
@@ -84,6 +87,10 @@ const addToCart = () => {
   });
 
   $toast.success('Товар добавлен в корзину!');
+};
+
+const openQuickView = () => {
+  quickViewModal.value.openModal(props.product);
 };
 </script>
 
