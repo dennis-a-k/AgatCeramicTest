@@ -5,7 +5,7 @@
                 <div class="col-md-8">
                     <div class="inner_complated">
                         <div class="img_cmpted">
-                            <NuxtImg src="/images/stock/checkmark.png" alt="check" />
+                            <img src="/images/stock/checkmark.png" alt="check" />
                         </div>
                         <p class="dsc_cmpted">
                             Спасибо за заказ в нашем магазине.<br>Скоро вы получите письмо с подтверждением.
