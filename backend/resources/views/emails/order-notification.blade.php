@@ -117,7 +117,7 @@
                                 <td>{{ $item->product_name }}</td>
                                 <td>{{ number_format($item->price, 2, ',', ' ') }} ₽</td>
                                 <td>{{ $item->quantity }}</td>
-                                <td>{{ $item->product_unit }}</td>
+                                <td>{{ $item->product_unit === 'шт' ? 'шт.' : ($item->product_unit === 'кв.м' ? 'м²' : $item->product_unit) }}</td>
                                 <td>{{ number_format($item->subtotal, 2, ',', ' ') }} ₽</td>
                             </tr>
                         @endforeach

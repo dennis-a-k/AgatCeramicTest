@@ -21,7 +21,8 @@
                 padding: 20px;
             }
 
-            .header, .footer {
+            .header,
+            .footer {
                 text-align: center;
                 padding: 20px 10px;
                 background-color: #f2f6f9;
@@ -100,6 +101,10 @@
                 background-color: #f2f6f9;
                 font-family: 'Poppins', sans-serif;
                 color: #000;
+            }
+
+            .text-center {
+                text-align: center;
             }
 
             .total {
@@ -183,8 +188,8 @@
                                 <td>{{ $item->product_article }}</td>
                                 <td>{{ $item->product_name }}</td>
                                 <td>{{ number_format($item->price, 2, ',', ' ') }} ₽</td>
-                                <td>{{ $item->quantity }}</td>
-                                <td>{{ $item->product_unit }}</td>
+                                <td class="text-center">{{ $item->quantity }}</td>
+                                <td class="text-center">{{ $item->product_unit === 'шт' ? 'шт.' : ($item->product_unit === 'кв.м' ? 'м²' : $item->product_unit) }}</td>
                                 <td>{{ number_format($item->subtotal, 2, ',', ' ') }} ₽</td>
                             </tr>
                         @endforeach
@@ -202,6 +207,7 @@
             <div class="footer">
                 <p>Благодарим вас за покупку в нашем интернет-магазине.</p>
                 <strong>Мы свяжемся с вами в ближайшее время для подтверждения заказа.</strong>
+                <br>
                 <strong>Москва (пн.-пт. 10:00-18:00)</strong>
                 <p>Если у вас возникли вопросы, свяжитесь с нами:</p>
                 <p>Email: <a href="mailto:zakaz@agatceramic.ru">zakaz@agatceramic.ru</a> | Телефон: <a href="tel:+79999999999">+7 (999) 999-99-99</a></p>
