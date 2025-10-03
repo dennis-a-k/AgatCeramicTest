@@ -21,7 +21,7 @@
                 padding: 20px;
             }
 
-            .header {
+            .header, .footer {
                 text-align: center;
                 padding: 20px 10px;
                 background-color: #f2f6f9;
@@ -132,6 +132,11 @@
             .btn_cmpted .shop-btn:hover {
                 background-color: #6e7f89;
             }
+
+            .footer a {
+                text-decoration: none;
+                color: #788da3;
+            }
         </style>
     </head>
 
@@ -146,6 +151,7 @@
             <div class="content">
                 <div class="order-info">
                     <h2>Заказ №{{ $order->order }}</h2>
+                    <strong>Информация о доставке:</strong>
                     <div class="info-item"><strong>Имя:</strong> {{ $order->name }}</div>
                     <div class="info-item"><strong>Email:</strong> {{ $order->email }}</div>
                     <div class="info-item"><strong>Телефон:</strong> {{ $order->phone }}</div>
@@ -155,8 +161,10 @@
                     @endif
                 </div>
                 <p class="thank-you-text">
-                    Спасибо за заказ в нашем магазине. В ближайшее время с Вами свяжутся по московскому времени с 10:00 до 18:00.
+                    Спасибо за заказ в нашем магазине.<br>
+                    В ближайшее время с Вами свяжутся по московскому времени пн.-пт. с 10:00 до 18:00.
                 </p>
+                <strong>Детали заказа:</strong>
                 <table class="items-table">
                     <thead>
                         <tr>
@@ -189,6 +197,14 @@
                         Продолжить покупки
                     </a>
                 </div>
+            </div>
+            <div class="footer">
+                <p>Благодарим вас за покупку в нашем интернет-магазине.</p>
+                <strong>Мы свяжемся с вами в ближайшее время для подтверждения заказа.</strong>
+                <strong>Москва (пн.-пт. 10:00-18:00)</strong>
+                <p>Если у вас возникли вопросы, свяжитесь с нами:</p>
+                <p>Email: <a href="mailto:zakaz@agatceramic.ru">zakaz@agatceramic.ru</a> | Телефон: <a href="tel:+79999999999">+7 (999) 999-99-99</a></p>
+                <p>Спасибо, что выбрали AgatCeramic!</p>
             </div>
         </div>
     </body>

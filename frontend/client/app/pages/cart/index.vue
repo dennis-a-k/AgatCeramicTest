@@ -33,7 +33,7 @@
                       <td class="product-thumbnail px-2">
                         <div style="aspect-ratio: 1 / 1; overflow: hidden;">
                           <NuxtLink :to="`/product/${item.slug}`">
-                            <NuxtImg :src="item.image" :alt="item.title" class="img-responsive" />
+                            <img :src="item.image" :alt="item.title" class="img-responsive" />
                           </NuxtLink>
                         </div>
                       </td>
