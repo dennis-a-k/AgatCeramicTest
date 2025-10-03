@@ -1,16 +1,10 @@
 <template>
   <NuxtLayout>
     <NuxtPage />
-
     <div class="offcanvas-overlay"></div>
-
     <CartAppOffcanvasCart />
-
     <MobileMenuAppMobileMenu />
-
-    <ClientOnly>
-      <AppModalCall />
-    </ClientOnly>
+    <ModalsAppModalCall />
   </NuxtLayout>
 </template>
 
