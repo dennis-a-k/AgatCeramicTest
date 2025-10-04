@@ -2,46 +2,88 @@
   <ClientOnly>
     <!-- Overlay -->
     <transition name="overlay">
-      <div v-if="isVisible" class="modal-overlay" @click="closeModal" aria-hidden="true"></div>
+      <div
+        v-if="isVisible"
+        class="modal-overlay"
+        @click="closeModal"
+        aria-hidden="true"
+      ></div>
     </transition>
 
     <!-- Modal -->
     <transition name="modal">
-      <div v-if="isVisible" class="custom-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div
+        v-if="isVisible"
+        class="custom-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
         <div class="modal-content">
           <div class="modal-body">
-            <button type="button" class="btn-close-modal" @click="closeModal" aria-label="Закрыть"></button>
+            <button
+              type="button"
+              class="btn-close-modal"
+              @click="closeModal"
+              aria-label="Закрыть"
+            ></button>
 
             <div v-if="isSuccess" class="success-message">
               <div class="success-icon">✓</div>
               <h4 id="modal-title">Заявка принята!</h4>
               <p>Спасибо за обращение. Мы свяжемся с вами в ближайшее время.</p>
-              <button type="button" class="btn btn-primary" @click="closeModal">Закрыть</button>
+              <button type="button" class="btn btn-primary" @click="closeModal">
+                Закрыть
+              </button>
             </div>
 
             <form v-else @submit.prevent="submitForm">
               <div class="mb-3">
                 <label for="name" class="form-label">ФИО</label>
-                <input type="text" class="form-control" id="name" v-model="form.name" required
-                  placeholder="Введите ваше ФИО" ref="nameInput">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  v-model="form.name"
+                  required
+                  placeholder="Введите ваше ФИО"
+                  ref="nameInput"
+                />
               </div>
               <div class="mb-3">
                 <label for="phone" class="form-label">Номер телефона</label>
-                <input type="tel" class="form-control" id="phone" v-model="form.phone" @input="formatPhone" required
-                  placeholder="+7 (___) ___-__-__">
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="phone"
+                  v-model="form.phone"
+                  @input="formatPhone"
+                  required
+                  placeholder="+7 (___) ___-__-__"
+                />
               </div>
               <div class="d-grid">
-                <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
-                  <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status"
-                    aria-hidden="true"></span>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  :disabled="isSubmitting"
+                >
+                  <span
+                    v-if="isSubmitting"
+                    class="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
                   {{ isSubmitting ? 'Отправка...' : 'Заказать звонок' }}
                 </button>
               </div>
               <p class="text-center">
-                Нажимая кнопку «Заказать звонок», я даю <NuxtLink to="/personal-data" target="_blank">согласие
+                Нажимая кнопку «Заказать звонок», я даю
+                <NuxtLink to="/personal-data" target="_blank"
+                  >согласие
                 </NuxtLink>
-                на обработку персональных данных, в соответствии с <NuxtLink to="/policy" target="_blank">
-                  Политикой</NuxtLink>
+                на обработку персональных данных, в соответствии с
+                <NuxtLink to="/policy" target="_blank"> Политикой</NuxtLink>
               </p>
             </form>
           </div>
@@ -52,74 +94,68 @@
 </template>
 
 <script setup>
-import { ref, nextTick } from 'vue'
+import { ref, nextTick } from 'vue';
 import { useRuntimeConfig } from '#imports';
 
 const form = ref({
   name: '',
-  phone: ''
-})
+  phone: '',
+});
 
-const isSubmitting = ref(false)
-const isSuccess = ref(false)
-const isVisible = ref(false)
-const nameInput = ref(null)
+const isSubmitting = ref(false);
+const isSuccess = ref(false);
+const isVisible = ref(false);
+const nameInput = ref(null);
 const config = useRuntimeConfig();
 
 // Управление видимостью модального окна
 const openModal = () => {
-  isVisible.value = true
-  // Фокус на первом поле ввода
-  nextTick(() => {
-    if (nameInput.value) {
-      nameInput.value.focus()
-    }
-  })
-}
+  isVisible.value = true;
+};
 
 const closeModal = () => {
-  isVisible.value = false
-  resetForm()
-}
+  isVisible.value = false;
+  resetForm();
+};
 
 const formatPhone = (event) => {
-  let value = event.target.value.replace(/\D/g, '')
+  let value = event.target.value.replace(/\D/g, '');
   if (value.startsWith('7')) {
-    value = value.substring(1)
+    value = value.substring(1);
   }
   if (value.length > 10) {
-    value = value.substring(0, 10)
+    value = value.substring(0, 10);
   }
-  let formatted = '+7'
+  let formatted = '+7';
   if (value.length > 0) {
-    formatted += ' (' + value.substring(0, 3)
+    formatted += ' (' + value.substring(0, 3);
   }
   if (value.length >= 4) {
-    formatted += ') ' + value.substring(3, 6)
+    formatted += ') ' + value.substring(3, 6);
   }
   if (value.length >= 7) {
-    formatted += '-' + value.substring(6, 8)
+    formatted += '-' + value.substring(6, 8);
   }
   if (value.length >= 9) {
-    formatted += '-' + value.substring(8, 10)
+    formatted += '-' + value.substring(8, 10);
   }
-  form.value.phone = formatted
-}
+  form.value.phone = formatted;
+};
 
 // Функция сброса формы
 const resetForm = () => {
-  isSuccess.value = false
-  form.value = { name: '', phone: '' }
-}
+  isSuccess.value = false;
+  form.value = { name: '', phone: '' };
+};
 
 // Обработчик отправки формы
 const submitForm = async () => {
   if (!form.value.name || !form.value.phone) {
-    alert('Пожалуйста, заполните все поля')
-    return
+    alert('Пожалуйста, заполните все поля');
+    return;
   }
 
-  isSubmitting.value = true
+  isSubmitting.value = true;
 
   try {
     const response = await fetch(`${config.public.apiBase}/api/call-request`, {
@@ -127,29 +163,28 @@ const submitForm = async () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(form.value)
-    })
+      body: JSON.stringify(form.value),
+    });
 
     if (!response.ok) {
-      throw new Error('Ошибка при отправке заявки')
+      throw new Error('Ошибка при отправке заявки');
     }
 
     // Показываем success сообщение
-    isSuccess.value = true
-
+    isSuccess.value = true;
   } catch (error) {
-    console.error('Ошибка при отправке:', error)
-    alert('Произошла ошибка. Попробуйте еще раз.')
+    console.error('Ошибка при отправке:', error);
+    alert('Произошла ошибка. Попробуйте еще раз.');
   } finally {
-    isSubmitting.value = false
+    isSubmitting.value = false;
   }
-}
+};
 
 // Экспортируем функции для использования в других компонентах
 defineExpose({
   openModal,
-  closeModal
-})
+  closeModal,
+});
 </script>
 
 <style scoped lang="scss">
@@ -334,19 +369,23 @@ defineExpose({
 }
 
 // Transitions
-.overlay-enter-active, .overlay-leave-active {
+.overlay-enter-active,
+.overlay-leave-active {
   transition: opacity 0.3s ease;
 }
 
-.overlay-enter-from, .overlay-leave-to {
+.overlay-enter-from,
+.overlay-leave-to {
   opacity: 0;
 }
 
-.modal-enter-active, .modal-leave-active {
+.modal-enter-active,
+.modal-leave-active {
   transition: all 0.3s ease;
 }
 
-.modal-enter-from, .modal-leave-to {
+.modal-enter-from,
+.modal-leave-to {
   opacity: 0;
   transform: translateY(-50px);
 }
