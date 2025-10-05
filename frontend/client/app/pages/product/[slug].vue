@@ -77,7 +77,8 @@
                           <td>
                             <span v-if="attr.attribute.type === 'boolean'">{{ attr.boolean_value ? 'Да' : 'Нет'
                             }}</span>
-                            <span v-else-if="attr.attribute.type === 'number'">{{ attr.number_value }}</span>
+                            <span v-else-if="attr.attribute.type === 'number'">{{ formattedNumberAttribute(attr) }}</span>
+                            <span v-else-if="attr.attribute.type === 'string' || attr.attribute.type === 'text'">{{ formattedStringAttribute(attr) }}</span>
                             <span v-else>{{ attr.string_value || attr.text_value }}</span>
                           </td>
                         </tr>
@@ -186,8 +187,27 @@ const formattedPrice = computed(() => {
 })
 
 const weight = computed(() => {
-  const attr = productData.value?.attribute_values?.find(a => a.attribute.name === 'Вес')
+  const attr = productData.value?.attribute_values?.find(a => a.attribute.slug === 'ves')
   return attr ? attr.number_value : null
+})
+
+const formattedNumberAttribute = computed(() => (attr) => {
+  const formatter = new Intl.NumberFormat('ru-RU', {
+    maximumFractionDigits: 2
+  })
+  if (attr.attribute.slug === 'ves') {
+    return `${formatter.format(attr.number_value)} кг`
+  } else if (attr.attribute.slug === 'tolshhina') {
+    return `${formatter.format(attr.number_value)} мм`
+  }
+  return formatter.format(attr.number_value)
+})
+
+const formattedStringAttribute = computed(() => (attr) => {
+  if (attr.attribute.slug === 'sirina-sva' || attr.attribute.slug === 'razmery') {
+    return `${attr.string_value || attr.text_value} мм`
+  }
+  return attr.string_value || attr.text_value
 })
 
 const productMeta = computed(() => {

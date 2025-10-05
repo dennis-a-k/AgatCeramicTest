@@ -2,15 +2,31 @@
   <ClientOnly>
     <!-- Overlay -->
     <transition name="overlay">
-      <div v-if="isVisible" class="modal-overlay" @click="closeModal" aria-hidden="true"></div>
+      <div
+        v-if="isVisible"
+        class="modal-overlay"
+        @click="closeModal"
+        aria-hidden="true"
+      ></div>
     </transition>
 
     <!-- Modal -->
     <transition name="modal">
-      <div v-if="isVisible" class="custom-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div
+        v-if="isVisible"
+        class="custom-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
         <div class="modal-content">
           <div class="modal-body">
-            <button type="button" class="btn-close-modal" @click="closeModal" aria-label="Закрыть"></button>
+            <button
+              type="button"
+              class="btn-close-modal"
+              @click="closeModal"
+              aria-label="Закрыть"
+            ></button>
 
             <div class="product-quickview">
               <div class="product-image">
@@ -18,29 +34,56 @@
               </div>
               <div class="product-info">
                 <span class="category">{{ product.category.name }}</span>
-                <h4 id="modal-title" class="product-title">{{ product.name }}{{ weight ? `, ${weight} кг` : '' }}</h4>
+                <h4 id="modal-title" class="product-title">
+                  {{ product.name }}{{ weight ? `, ${weight} кг` : '' }}
+                </h4>
                 <div class="price">
                   <span class="new">{{ formattedPrice }}</span>
                 </div>
                 <div class="info">
                   <p><span>Артикул:</span> {{ product.article }}</p>
                   <p><span>Бренд:</span> {{ product.brand.name }}</p>
-                  <p v-if="product.collection"><span>Коллекция:</span> {{ product.collection }}</p>
-                  <p v-if="product.color"><span>Цвет:</span> {{ product.color.name }}</p>
+                  <p v-if="product.collection">
+                    <span>Коллекция:</span> {{ product.collection }}
+                  </p>
+                  <p v-if="product.color">
+                    <span>Цвет:</span> {{ product.color.name }}
+                  </p>
                   <p v-if="sizes"><span>Размеры:</span> {{ sizes }}мм</p>
                 </div>
                 <div class="actions">
                   <div class="quantity-selector d-flex">
                     <div class="cart-plus-minus me-2">
                       <div class="dec qtybutton" @click="decrement">-</div>
-                      <input class="cart-plus-minus-box" type="text" name="qtybutton" v-model="quantity" />
+                      <input
+                        class="cart-plus-minus-box"
+                        type="text"
+                        name="qtybutton"
+                        v-model="quantity"
+                      />
                       <div class="inc qtybutton" @click="increment">+</div>
                     </div>
-                    <p v-if="product.unit">{{ product.unit === 'шт' ? 'шт.' : product.unit === 'кв.м' ? 'м²' :
-                      product.unit }}</p>
+                    <p v-if="product.unit">
+                      {{
+                        product.unit === 'шт'
+                          ? 'шт.'
+                          : product.unit === 'кв.м'
+                          ? 'м²'
+                          : product.unit
+                      }}
+                    </p>
                   </div>
-                  <button class="btn btn-primary add-to-cart" @click="addToCart">В корзину</button>
-                  <NuxtLink :to="`/product/${product.slug}`" class="btn btn-outline-primary">Подробнее</NuxtLink>
+                  <button
+                    class="btn btn-primary add-to-cart"
+                    @click="addToCart"
+                  >
+                    В корзину
+                  </button>
+                  <NuxtLink
+                    :to="`/product/${product.slug}`"
+                    class="btn btn-outline-primary"
+                    >Подробнее</NuxtLink
+                  >
                 </div>
               </div>
             </div>
@@ -52,64 +95,70 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useCartStore } from '~/stores/useCartStore'
+import { ref, computed } from 'vue';
+import { useCartStore } from '~/stores/useCartStore';
 
-const cartStore = useCartStore()
-const { $toast } = useNuxtApp()
+const cartStore = useCartStore();
+const { $toast } = useNuxtApp();
 
-const isVisible = ref(false)
-const product = ref({})
-const quantity = ref(1)
+const isVisible = ref(false);
+const product = ref({});
+const quantity = ref(1);
 
 const formatter = new Intl.NumberFormat('ru-RU', {
   style: 'currency',
   currency: 'RUB',
-})
+});
 
 const productImage = computed(() => {
-  return (product.value.imgSrc && product.value.imgSrc.trim() !== '')
+  return product.value.imgSrc && product.value.imgSrc.trim() !== ''
     ? product.value.imgSrc
-    : '/images/stock/stock-image.png'
-})
+    : '/images/stock/stock-image.png';
+});
 
 const weight = computed(() => {
-  const attr = product.value?.attribute_values?.find(a => a.attribute.name === 'Вес')
-  return attr ? attr.number_value : null
-})
+  const attr = product.value?.attribute_values?.find(
+    (a) => a.attribute.slug === 'ves'
+  );
+  return attr ? attr.number_value : null;
+});
 
 const sizes = computed(() => {
-  const attr = product.value?.attribute_values?.find(a => a.attribute.name === 'Размеры')
-  return attr ? attr.string_value : null
-})
+  const attr = product.value?.attribute_values?.find(
+    (a) => a.attribute.slug === 'razmery'
+  );
+  return attr ? attr.string_value : null;
+});
 
 const formattedPrice = computed(() => {
-  return formatter.format(product.value.price || 0)
-})
+  return formatter.format(product.value.price || 0);
+});
 
 // Управление видимостью модального окна
 const openModal = (prod) => {
-  product.value = prod
-  isVisible.value = true
-}
+  product.value = prod;
+  isVisible.value = true;
+};
 
 const closeModal = () => {
-  isVisible.value = false
-  quantity.value = 1
-}
+  isVisible.value = false;
+  quantity.value = 1;
+};
 
 const increment = () => {
-  quantity.value += 1
-}
+  quantity.value += 1;
+};
 
 const decrement = () => {
   if (quantity.value > 1) {
-    quantity.value -= 1
+    quantity.value -= 1;
   }
-}
+};
 
 const addToCart = () => {
-  const weightAttribute = product.value.attribute_values?.find(a => a.attribute.name === 'Вес')
+  const weightAttribute = product.value.attribute_values?.find(
+    (a) => a.attribute.slug === 'ves'
+  );
 
   cartStore.addToCart({
     id: product.value.id,
@@ -119,18 +168,18 @@ const addToCart = () => {
     quantity: quantity.value,
     price: product.value.price,
     unit: product.value.unit,
-    image: productImage.value
-  })
+    image: productImage.value,
+  });
 
-  $toast.success('Товар добавлен в корзину!')
-  closeModal()
-}
+  $toast.success('Товар добавлен в корзину!');
+  closeModal();
+};
 
 // Экспортируем функции для использования в других компонентах
 defineExpose({
   openModal,
-  closeModal
-})
+  closeModal,
+});
 </script>
 
 <style scoped lang="scss">

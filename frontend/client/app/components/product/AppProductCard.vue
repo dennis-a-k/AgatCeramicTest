@@ -5,42 +5,60 @@
         <span class="new">Распродажа</span>
       </span>
 
-      <div class="thumb d-flex justify-content-center align-items-center" style="aspect-ratio: 1 / 1;">
+      <div
+        class="thumb d-flex justify-content-center align-items-center"
+        style="aspect-ratio: 1 / 1"
+      >
         <NuxtLink :to="`/product/${product.slug}`" class="image">
           <img :src="productImage" :alt="product.name" />
           <img :src="productImage" :alt="product.name" class="hover-image" />
         </NuxtLink>
       </div>
       <div class="content text-center">
-        <span class="category"><NuxtLink :to="`/category/${product.category.slug}`">{{ product.category.name }}</NuxtLink></span>
+        <span class="category"
+          ><NuxtLink :to="`/category/${product.category.slug}`">{{
+            product.category.name
+          }}</NuxtLink></span
+        >
 
         <span class="price">
           <span class="new">{{ formattedPrice }}</span>
         </span>
 
         <h5 class="title">
-          <NuxtLink :to="`/product/${product.slug}`">{{ truncatedTitle }}</NuxtLink>
+          <NuxtLink :to="`/product/${product.slug}`"
+            >{{ truncatedTitle }}{{ weight ? `, ${weight} кг` : '' }}</NuxtLink
+          >
         </h5>
       </div>
       <div class="actions">
-        <button class="action add-cart" :data-product-id="product.id" @click="addToCart" title="В корзину">
+        <button
+          class="action add-cart"
+          :data-product-id="product.id"
+          @click="addToCart"
+          title="В корзину"
+        >
           <i class="pe-7s-cart"></i>
         </button>
 
-        <button class="action quickview" title="Посмотреть" :data-id="product.id" @click="openQuickView">
+        <button
+          class="action quickview"
+          title="Посмотреть"
+          :data-id="product.id"
+          @click="openQuickView"
+        >
           <i class="pe-7s-look"></i>
         </button>
       </div>
     </div>
   </div>
 
-  <AppModalQuickView ref="quickViewModal" />
+  <ModalsAppModalQuickView ref="quickViewModal" />
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
 import { useCartStore } from '~/stores/useCartStore';
-import AppModalQuickView from '~/components/modals/AppModalQuickView.vue';
 
 const cartStore = useCartStore();
 const { $toast } = useNuxtApp();
@@ -54,12 +72,19 @@ const formatter = new Intl.NumberFormat('ru-RU', {
 const props = defineProps({
   product: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
+});
+
+const weight = computed(() => {
+  const attr = props.product.attribute_values?.find(
+    (a) => a.attribute.slug === 'ves'
+  );
+  return attr ? attr.number_value : null;
 });
 
 const productImage = computed(() => {
-  return (props.product.imgSrc && props.product.imgSrc.trim() !== '')
+  return props.product.imgSrc && props.product.imgSrc.trim() !== ''
     ? props.product.imgSrc
     : '/images/stock/stock-image.png';
 });
@@ -73,7 +98,9 @@ const truncatedTitle = computed(() => {
 });
 
 const addToCart = () => {
-  const weightAttribute = props.product.attribute_values?.find(a => a.attribute.name === 'Вес');
+  const weightAttribute = props.product.attribute_values?.find(
+    (a) => a.attribute.slug === 'ves'
+  );
 
   cartStore.addToCart({
     id: props.product.id,
@@ -83,7 +110,7 @@ const addToCart = () => {
     quantity: 1,
     price: props.product.price,
     unit: props.product.unit,
-    image: productImage.value
+    image: productImage.value,
   });
 
   $toast.success('Товар добавлен в корзину!');
@@ -161,7 +188,7 @@ const openQuickView = () => {
       background-color: $theme-color;
       font-size: 24px;
 
-      &+.action {
+      & + .action {
         margin-left: 10px;
       }
 
