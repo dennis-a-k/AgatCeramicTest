@@ -1,5 +1,5 @@
 <template>
-  <div class="select-shoing-wrap d-flex align-items-center col-sm-12 col-md-6">
+  <div class="select-shoing-wrap d-flex align-items-center col-sm-12 col-md-6 ms-3">
     <div class="shot-product">
       <p>Сортировать:</p>
     </div>

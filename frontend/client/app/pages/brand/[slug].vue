@@ -4,8 +4,8 @@
       <UiAppSelectedFilters :selectedFilters="store.selectedFilters" @removeFilter="store.removeFilter" />
       <div class="row">
         <div class="col-lg-9 order-lg-last col-md-12 order-md-first">
-          <div class="shop-top-bar d-flex justify-content-between mb-3">
-            <div class="category-text">
+          <div class="shop-top-bar d-flex justify-content-between mb-3 row">
+            <div class="category-text col-sm-12 col-md-6 mb-3 mb-md-0">
               <h1 class="h3 m-0" v-if="brandData">{{ brandData.name }}</h1>
               <p v-if="brandData">{{ brandData.description }}</p>
             </div>
