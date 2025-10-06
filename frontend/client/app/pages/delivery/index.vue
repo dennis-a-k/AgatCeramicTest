@@ -120,6 +120,7 @@
 import { useRuntimeConfig } from '#imports'
 
 const config = useRuntimeConfig()
+const siteUrl = config.public.siteUrl || 'https://agatceramic.ru'
 
 useHead({
     title: 'Оплата и доставка - AgatCeramic',
@@ -131,13 +132,50 @@ useHead({
         {
             name: 'keywords',
             content: 'оплата, доставка, стоимость доставки, способы оплаты, AgatCeramic, керамическая плитка, сантехника'
+        },
+        {
+            property: 'og:image',
+            content: `${siteUrl}/images/stock/logo.png`
+        },
+        {
+            property: 'og:title',
+            content: 'AgatCeramic - Интернет-магазин плитки, керамогранита и сантехники'
+        },
+        {
+            property: 'og:description',
+            content: 'Условия оплаты и доставки в интернет-магазине AgatCeramic. Способы оплаты, стоимость доставки по Москве и регионам России.'
+        },
+        {
+            property: 'og:url',
+            content: `${siteUrl}/delivery`
+        },
+        {
+            name: 'twitter:image',
+            content: `${siteUrl}/images/stock/logo.png`
         }
     ],
     link: [
         {
             rel: 'canonical',
-            href: `${config.public.siteUrl}/delivery`
+            href: `${siteUrl}/delivery`
         }
-    ]
+    ],
+    script: [{
+        type: 'application/ld+json',
+        children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'AgatCeramic',
+            url: siteUrl,
+            logo: `${siteUrl}/images/stock/logo.png`,
+            description: 'Интернет-магазин плитки, керамогранита и сантехники',
+            email: 'zakaz@agatceramic.ru',
+            contactPoint: {
+                '@type': 'ContactPoint',
+                telephone: '+7 (999) 999-99-99',
+                contactType: 'customer service'
+            }
+        })
+    }]
 })
 </script>
