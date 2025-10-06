@@ -24,6 +24,26 @@ useHead({
     {
       name: 'keywords',
       content: 'керамическая плитка, керамогранит, сантехника, купить плитку, интернет-магазин, AgatCeramic'
+    },
+    {
+      property: 'og:image',
+      content: `${config.public.siteUrl}/images/stock/logo.png`
+    },
+    {
+      property: 'og:title',
+      content: 'AgatCeramic - Интернет-магазин плитки, керамогранита и сантехники'
+    },
+    {
+      property: 'og:description',
+      content: 'Купить керамическую плитку, керамогранит и сантехнику в интернет-магазине AgatCeramic. Широкий ассортимент, низкие цены, доставка по Москве и России.'
+    },
+    {
+      property: 'og:url',
+      content: `${config.public.siteUrl}/`
+    },
+    {
+      name: 'twitter:image',
+      content: `${config.public.siteUrl}/images/stock/logo.png`
     }
   ],
   link: [
