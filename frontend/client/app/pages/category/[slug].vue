@@ -8,7 +8,7 @@
       <div class="row">
         <div class="col-lg-9 order-lg-last col-md-12 order-md-first">
           <div class="shop-top-bar d-flex justify-content-between mb-3 row">
-            <div class="category-text col-sm-12 col-md-6 mb-sm-3 mb-md-0">
+            <div class="category-text col-sm-12 col-md-6 mb-3 mb-md-0">
               <h1 class="h3 m-0" v-if="categoryData">
                 {{ categoryData.name }}
               </h1>
@@ -109,6 +109,8 @@ onMounted(() => {
 });
 
 const config = useRuntimeConfig();
+const siteUrl = config.public.siteUrl || 'https://agatceramic.ru'
+
 const {
   data: fetchData,
   pending,
@@ -183,7 +185,7 @@ const structuredData = computed(() => {
 useHead(
   computed(() => ({
     title: categoryData.value?.name
-      ? `${categoryData.value.name} - AgatCeramic`
+      ? `${categoryData.value.name} - AgatCeramic. Купить в Москве по низкой цене с доставкой`
       : 'Категория товаров - AgatCeramic',
     meta: [
       {
@@ -198,21 +200,61 @@ useHead(
           ? `${categoryData.value.name}, керамическая плитка, сантехника`
           : 'керамическая плитка, сантехника',
       },
+      {
+        property: 'og:image',
+        content: `${siteUrl}/images/stock/logo.png`
+      },
+      {
+        property: 'og:title',
+        content: 'AgatCeramic - Интернет-магазин плитки, керамогранита и сантехники'
+      },
+      {
+        property: 'og:description',
+        content: categoryData.value?.description ||
+          'Купить товары категории в интернет-магазине AgatCeramic',
+      },
+      {
+        property: 'og:url',
+        content: `${siteUrl}/category/${slug}`
+      },
+      {
+        name: 'twitter:image',
+        content: `${siteUrl}/images/stock/logo.png`
+      }
     ],
     link: [
       {
         rel: 'canonical',
-        href: `${config.public.siteUrl}/category/${slug}`,
+        href: `${siteUrl}/category/${slug}`,
       },
     ],
-    script: structuredData.value
-      ? [
-          {
-            type: 'application/ld+json',
-            children: JSON.stringify(structuredData.value),
-          },
-        ]
-      : [],
+    script: [
+      ...(structuredData.value
+        ? [
+            {
+              type: 'application/ld+json',
+              children: JSON.stringify(structuredData.value),
+            },
+          ]
+        : []),
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          name: 'AgatCeramic',
+          url: siteUrl,
+          logo: `${siteUrl}/images/stock/logo.png`,
+          description: 'Интернет-магазин плитки, керамогранита и сантехники',
+          email: 'zakaz@agatceramic.ru',
+          contactPoint: {
+            '@type': 'ContactPoint',
+            telephone: '+7 (999) 999-99-99',
+            contactType: 'customer service'
+          }
+        })
+      }
+    ],
   }))
 );
 </script>
