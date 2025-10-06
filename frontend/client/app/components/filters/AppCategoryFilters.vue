@@ -61,7 +61,7 @@
                     <ul>
                         <li class="color-list weight" v-for="weight in weights" :key="weight.id">
                             <a href="#" class="text-white" @click.prevent="selectFilter('weight', weight.id)">
-                                {{ weight.value }}
+                                {{ weight.name }}
                             </a>
                         </li>
                     </ul>
@@ -216,7 +216,7 @@
                     <ul>
                         <li class="color-list weight" v-for="volume in volumes" :key="volume.id">
                             <a href="#" class="text-white" @click.prevent="selectFilter('volume', volume.id)">
-                                {{ volume.value }}
+                                {{ volume.name }}
                             </a>
                         </li>
                     </ul>
@@ -229,7 +229,7 @@
                     <ul>
                         <li class="color-list weight" v-for="weight in product_weights" :key="weight.id">
                             <a href="#" class="text-white" @click.prevent="selectFilter('product_weight', weight.id)">
-                                {{ weight.value }}
+                                {{ weight.name }}
                             </a>
                         </li>
                     </ul>

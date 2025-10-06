@@ -232,8 +232,8 @@ class AvailableFiltersRetriever implements AvailableFiltersInterface
             }
         }
 
-        // Дополнительно собираем sizes, glues, waterproofs если не собраны
-        $additionalAttributes = ['sizes', 'glues', 'waterproofs'];
+        // Дополнительно собираем атрибуты если не собраны
+        $additionalAttributes = ['sizes', 'glues', 'waterproofs', 'weights', 'seams', 'product_weights', 'installation_types', 'shapes'];
         foreach ($additionalAttributes as $attrKey) {
             if (empty($result[$attrKey])) {
                 $config = $this->attributeConfigs[$attrKey];
