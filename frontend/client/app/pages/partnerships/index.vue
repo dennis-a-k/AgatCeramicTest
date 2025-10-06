@@ -170,25 +170,63 @@
 import { useRuntimeConfig } from '#imports'
 
 const config = useRuntimeConfig()
+const siteUrl = config.public.siteUrl || 'https://agatceramic.ru'
 
 useHead({
   title: 'Партнерство с дизайнерами - AgatCeramic',
   meta: [
     {
       name: 'description',
-      content: 'Станьте партнером AgatCeramic и получайте до 15% комиссионных с заказов клиентов. Эксклюзивные коллекции, персональный менеджер, готовый контент.'
+      content: 'Станьте партнером AgatCeramic и получайте до 15% комиссионных с заказов клиентов. Эксклюзивные условия, широкий ассортимент керамической плитки и керамогранита, профессиональная поддержка. Увеличьте возможности ваших проектов с нами!'
     },
     {
       name: 'keywords',
       content: 'партнерство, дизайнеры, комиссионные, эксклюзивные коллекции, персональный менеджер, AgatCeramic'
+    },
+    {
+      property: 'og:image',
+      content: `${siteUrl}/images/stock/logo.png`
+    },
+    {
+      property: 'og:title',
+      content: 'AgatCeramic - Интернет-магазин плитки, керамогранита и сантехники'
+    },
+    {
+      property: 'og:description',
+      content: 'Станьте партнером AgatCeramic и получайте до 15% комиссионных с заказов клиентов. Эксклюзивные условия, широкий ассортимент керамической плитки и керамогранита, профессиональная поддержка. Увеличьте возможности ваших проектов с нами!'
+    },
+    {
+      property: 'og:url',
+      content: `${siteUrl}/partnerships`
+    },
+    {
+      name: 'twitter:image',
+      content: `${siteUrl}/images/stock/logo.png`
     }
   ],
   link: [
     {
       rel: 'canonical',
-      href: `${config.public.siteUrl}/partnerships`
+      href: `${siteUrl}/partnerships`
     }
-  ]
+  ],
+  script: [{
+    type: 'application/ld+json',
+    children: JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'AgatCeramic',
+      url: siteUrl,
+      logo: `${siteUrl}/images/stock/logo.png`,
+      description: 'Интернет-магазин плитки, керамогранита и сантехники',
+      email: 'zakaz@agatceramic.ru',
+      contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: '+7 (999) 999-99-99',
+        contactType: 'customer service'
+      }
+    })
+  }]
 })
 import { ref, onMounted, onUnmounted } from 'vue';
 
