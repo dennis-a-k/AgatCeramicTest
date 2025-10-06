@@ -296,6 +296,7 @@
 import { useRuntimeConfig } from '#imports'
 
 const config = useRuntimeConfig()
+const siteUrl = config.public.siteUrl || 'https://agatceramic.ru'
 
 useHead({
   title: 'Обмен и возврат товара - AgatCeramic',
@@ -307,14 +308,51 @@ useHead({
     {
       name: 'keywords',
       content: 'обмен товара, возврат товара, правила возврата, условия возврата, AgatCeramic'
+    },
+    {
+      property: 'og:image',
+      content: `${siteUrl}/images/stock/logo.png`
+    },
+    {
+      property: 'og:title',
+      content: 'AgatCeramic - Интернет-магазин плитки, керамогранита и сантехники'
+    },
+    {
+      property: 'og:description',
+      content: 'Правила обмена и возврата товара в интернет-магазине AgatCeramic. Условия возврата, сроки и порядок действий.'
+    },
+    {
+      property: 'og:url',
+      content: `${siteUrl}/return`
+    },
+    {
+      name: 'twitter:image',
+      content: `${siteUrl}/images/stock/logo.png`
     }
   ],
   link: [
     {
       rel: 'canonical',
-      href: `${config.public.siteUrl}/return`
+      href: `${siteUrl}/return`
     }
-  ]
+  ],
+  script: [{
+    type: 'application/ld+json',
+    children: JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'AgatCeramic',
+      url: siteUrl,
+      logo: `${siteUrl}/images/stock/logo.png`,
+      description: 'Интернет-магазин плитки, керамогранита и сантехники',
+      email: 'zakaz@agatceramic.ru',
+      contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: '+7 (999) 999-99-99',
+        contactType: 'customer service'
+      }
+    })
+  }]
 })
 </script>
 
