@@ -68,6 +68,8 @@ onMounted(() => {
 })
 
 const config = useRuntimeConfig()
+const siteUrl = config.public.siteUrl || 'https://agatceramic.ru'
+
 const { data: fetchData, pending, error, execute } = useAsyncData(`sale-products`, () => $fetch(`${config.public.apiBase}/api/sale/products`, {
   query: store.queryParams
 }), {
@@ -123,20 +125,59 @@ useHead(computed(() => ({
   meta: [
     {
       name: 'description',
-      content: 'Купить товары на распродаже в интернет-магазине AgatCeramic'
+      content: 'Успейте купить товар со скидкой в Москве и Московской области. Ограниченные коллекции, остатки премиальных серий и выгодные акции – только сейчас!'
     },
     {
       name: 'keywords',
       content: 'распродажа, скидки, керамическая плитка, сантехника'
+    },
+    {
+      property: 'og:image',
+      content: `${siteUrl}/images/stock/logo.png`
+    },
+    {
+      property: 'og:title',
+      content: 'AgatCeramic - Интернет-магазин плитки, керамогранита и сантехники'
+    },
+    {
+      property: 'og:description',
+      content: 'Успейте купить товар со скидкой в Москве и Московской области. Ограниченные коллекции, остатки премиальных серий и выгодные акции – только сейчас!'
+    },
+    {
+      property: 'og:url',
+      content: `${siteUrl}/sale`
+    },
+    {
+      name: 'twitter:image',
+      content: `${siteUrl}/images/stock/logo.png`
     }
   ],
   link: [
     {
       rel: 'canonical',
-      href: `${config.public.siteUrl}/sale`
+      href: `${siteUrl}/sale`
     }
   ],
-  script: structuredData.value ? [{ type: 'application/ld+json', children: JSON.stringify(structuredData.value) }] : []
+  script: [
+    ...(structuredData.value ? [{ type: 'application/ld+json', children: JSON.stringify(structuredData.value) }] : []),
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'AgatCeramic',
+        url: siteUrl,
+        logo: `${siteUrl}/images/stock/logo.png`,
+        description: 'Интернет-магазин плитки, керамогранита и сантехники',
+        email: 'zakaz@agatceramic.ru',
+        contactPoint: {
+          '@type': 'ContactPoint',
+          telephone: '+7 (999) 999-99-99',
+          contactType: 'customer service'
+        }
+      })
+    }
+  ]
 })))
 </script>
 
