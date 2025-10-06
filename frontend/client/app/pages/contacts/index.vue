@@ -9,7 +9,7 @@
                 <h1 class="title">Контактная информация</h1>
               </div>
               <section class="contact-info" itemscope itemtype="http://schema.org/Organization">
-                <link itemprop="url" href="/" />
+                <link itemprop="url" :href="`${siteUrl}/contacts`" />
                 <div class="single-contact">
                   <div class="icon-box">
                     <i class="fa fa-phone"></i>
@@ -30,10 +30,10 @@
                   <div class="info-box">
                     <h5 class="title">Telegram/WhatsApp</h5>
                     <p>
-                      <a itemprop="sameAs" href="https://t.me/" target="_blanc">@agatceramic</a>
+                      <a itemprop="sameAs" href="https://t.me/agatceramic" target="_blank">@agatceramic</a>
                     </p>
                     <p>
-                      <a itemprop="sameAs" href="https://wa.me/" target="_blanc">https://wa.me/79999999999</a>
+                      <a itemprop="sameAs" href="https://wa.me/79999999999" target="_blank">https://wa.me/79999999999</a>
                     </p>
                   </div>
                 </div>
@@ -61,6 +61,7 @@
 import { useRuntimeConfig } from '#imports'
 
 const config = useRuntimeConfig()
+const siteUrl = config.public.siteUrl || 'https://agatceramic.ru'
 
 useHead({
   title: 'Контакты - AgatCeramic',
@@ -72,14 +73,51 @@ useHead({
     {
       name: 'keywords',
       content: 'контакты, телефон, email, адрес, AgatCeramic, керамическая плитка, сантехника'
+    },
+    {
+      property: 'og:image',
+      content: `${siteUrl}/images/stock/logo.png`
+    },
+    {
+      property: 'og:title',
+      content: 'Контакты - AgatCeramic'
+    },
+    {
+      property: 'og:description',
+      content: 'Контактная информация интернет-магазина AgatCeramic. Телефон, email, адрес. Свяжитесь с нами для консультации по выбору плитки и сантехники.'
+    },
+    {
+      property: 'og:url',
+      content: `${siteUrl}/contacts`
+    },
+    {
+      name: 'twitter:image',
+      content: `${siteUrl}/images/stock/logo.png`
     }
   ],
   link: [
     {
       rel: 'canonical',
-      href: `${config.public.siteUrl}/contacts`
+      href: `${siteUrl}/contacts`
     }
-  ]
+  ],
+  script: [{
+    type: 'application/ld+json',
+    children: JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'AgatCeramic',
+      url: siteUrl,
+      logo: `${siteUrl}/images/stock/logo.png`,
+      description: 'Интернет-магазин плитки, керамогранита и сантехники',
+      email: 'zakaz@agatceramic.ru',
+      contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: '+7 (999) 999-99-99',
+        contactType: 'customer service'
+      }
+    })
+  }]
 })
 </script>
 
