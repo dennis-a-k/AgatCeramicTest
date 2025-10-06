@@ -118,7 +118,7 @@ useHead({
     .btn-primary {
       border-color: $theme-color;
       background-color: $theme-color;
-      color: #fff;
+      color: $white;
       height: auto;
       width: auto;
       margin-right: 20px;
@@ -144,16 +144,16 @@ useHead({
     }
 
     .btn-dark {
-      border-color: #000;
-      background-color: #000;
-      color: #fff;
+      border-color: $black;
+      background-color: $black;
+      color: $white;
       margin-bottom: 20px;
     }
 
     .btn-outline-hover-dark:hover,
     .btn-outline-hover-dark:not(:disabled):not(.disabled).active {
-      color: #000;
-      border-color: #000;
+      color: $black;
+      border-color: $black;
       background-color: transparent;
     }
   }
