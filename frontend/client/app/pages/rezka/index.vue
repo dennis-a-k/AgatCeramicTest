@@ -169,24 +169,62 @@
 import { useRuntimeConfig } from '#imports'
 
 const config = useRuntimeConfig()
+const siteUrl = config.public.siteUrl || 'https://agatceramic.ru'
 
 useHead({
   title: 'Резка керамогранита и керамической плитки - AgatCeramic',
   meta: [
     {
       name: 'description',
-      content: 'Услуги резки керамогранита и керамической плитки в AgatCeramic. Изготовление ступеней, плинтусов, гидроабразивная резка.'
+      content: 'Услуги резки керамогранита и керамической плитки в AgatCeramic. Изготовление ступеней, плинтусов, гидроабразивная резка. Профессиональная резка керамогранита и керамической плитки любой сложности. Современное оборудование, чистые края, доставка по Москве и МО'
     },
     {
       name: 'keywords',
       content: 'резка плитки, керамогранит, ступени, плинтусы, гидроабразивная резка, AgatCeramic'
+    },
+    {
+      property: 'og:image',
+      content: `${siteUrl}/images/stock/logo.png`
+    },
+    {
+      property: 'og:title',
+      content: 'AgatCeramic - Интернет-магазин плитки, керамогранита и сантехники'
+    },
+    {
+      property: 'og:description',
+      content: 'Услуги резки керамогранита и керамической плитки в AgatCeramic. Изготовление ступеней, плинтусов, гидроабразивная резка. Профессиональная резка керамогранита и керамической плитки любой сложности.'
+    },
+    {
+      property: 'og:url',
+      content: `${siteUrl}/rezka`
+    },
+    {
+      name: 'twitter:image',
+      content: `${siteUrl}/images/stock/logo.png`
     }
   ],
   link: [
     {
       rel: 'canonical',
-      href: `${config.public.siteUrl}/rezka`
+      href: `${siteUrl}/rezka`
     }
-  ]
+  ],
+  script: [{
+    type: 'application/ld+json',
+    children: JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'AgatCeramic',
+      url: siteUrl,
+      logo: `${siteUrl}/images/stock/logo.png`,
+      description: 'Интернет-магазин плитки, керамогранита и сантехники',
+      email: 'zakaz@agatceramic.ru',
+      contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: '+7 (999) 999-99-99',
+        contactType: 'customer service'
+      }
+    })
+  }]
 })
 </script>
