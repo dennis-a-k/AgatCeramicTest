@@ -56,7 +56,7 @@
             </div>
 
             <div class="sidebar-widget" v-if="weights && weights.length">
-                <h4 class="sidebar-title">Толщина шва</h4>
+                <h4 class="sidebar-title">Толщина шва (мм)</h4>
                 <div class="sidebar-widget-category">
                     <ul>
                         <li class="color-list weight" v-for="weight in weights" :key="weight.id">
@@ -146,7 +146,7 @@
             </div>
 
             <div class="sidebar-widget" v-if="sizes && sizes.length">
-                <h4 class="sidebar-title">Размер</h4>
+                <h4 class="sidebar-title">Размер (мм)</h4>
                 <div class="sidebar-widget-category">
                     <ul>
                         <li class="color-list weight" v-for="size in sizes" :key="size.id">
