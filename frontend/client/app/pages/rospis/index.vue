@@ -125,25 +125,63 @@
 import { useRuntimeConfig } from '#imports'
 
 const config = useRuntimeConfig()
+const siteUrl = config.public.siteUrl || 'https://agatceramic.ru'
 
 useHead({
-  title: 'Художественная роспись плитки - AgatCeramic',
+  title: 'Художественная роспись плитки для дома и офиса - AgatCeramic',
   meta: [
     {
       name: 'description',
-      content: 'Художественная роспись керамической плитки в AgatCeramic. Авторская роспись для дома и офиса, уникальные дизайны.'
+      content: 'Художественная роспись керамической плитки в AgatCeramic. Авторская роспись для дома и офиса, уникальные дизайны. Эскизы от художников, экологичные краски, долговечное покрытие.'
     },
     {
       name: 'keywords',
       content: 'художественная роспись, роспись плитки, керамическая плитка, авторская роспись, AgatCeramic'
+    },
+    {
+      property: 'og:image',
+      content: `${siteUrl}/images/stock/logo.png`
+    },
+    {
+      property: 'og:title',
+      content: 'AgatCeramic - Интернет-магазин плитки, керамогранита и сантехники'
+    },
+    {
+      property: 'og:description',
+      content: 'Художественная роспись керамической плитки в AgatCeramic. Авторская роспись для дома и офиса, уникальные дизайны. Эскизы от художников, экологичные краски, долговечное покрытие.'
+    },
+    {
+      property: 'og:url',
+      content: `${siteUrl}/rospis`
+    },
+    {
+      name: 'twitter:image',
+      content: `${siteUrl}/images/stock/logo.png`
     }
   ],
   link: [
     {
       rel: 'canonical',
-      href: `${config.public.siteUrl}/rospis`
+      href: `${siteUrl}/rospis`
     }
-  ]
+  ],
+  script: [{
+    type: 'application/ld+json',
+    children: JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'AgatCeramic',
+      url: siteUrl,
+      logo: `${siteUrl}/images/stock/logo.png`,
+      description: 'Интернет-магазин плитки, керамогранита и сантехники',
+      email: 'zakaz@agatceramic.ru',
+      contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: '+7 (999) 999-99-99',
+        contactType: 'customer service'
+      }
+    })
+  }]
 })
 import { ref, watch } from 'vue';
 
