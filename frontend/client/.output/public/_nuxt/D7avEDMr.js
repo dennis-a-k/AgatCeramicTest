@@ -1,0 +1,1 @@
+import{_ as n,e as a,f as o,j as e,t as p}from"#entry";const r={class:"loading-overlay"},_={__name:"UiAppSpinner",props:{text:{type:String,default:"Загрузка..."}},setup(s){return(c,t)=>(o(),a("div",r,[t[0]||(t[0]=e("div",{class:"spinner"},null,-1)),e("p",null,p(s.text),1)]))}},i=n(_,[["__scopeId","data-v-682ac697"]]);export{i as _};
