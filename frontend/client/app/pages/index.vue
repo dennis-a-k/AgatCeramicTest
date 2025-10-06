@@ -13,6 +13,7 @@
 import { useRuntimeConfig } from '#imports'
 
 const config = useRuntimeConfig()
+const siteUrl = config.public.siteUrl || 'https://agatceramic.ru'
 
 useHead({
   title: 'AgatCeramic - Интернет-магазин плитки, керамогранита и сантехники',
@@ -27,7 +28,7 @@ useHead({
     },
     {
       property: 'og:image',
-      content: `${config.public.siteUrl}/images/stock/logo.png`
+      content: `${siteUrl}/images/stock/logo.png`
     },
     {
       property: 'og:title',
@@ -39,17 +40,17 @@ useHead({
     },
     {
       property: 'og:url',
-      content: `${config.public.siteUrl}/`
+      content: `${siteUrl}/`
     },
     {
       name: 'twitter:image',
-      content: `${config.public.siteUrl}/images/stock/logo.png`
+      content: `${siteUrl}/images/stock/logo.png`
     }
   ],
   link: [
     {
       rel: 'canonical',
-      href: `${config.public.siteUrl}/`
+      href: `${siteUrl}/`
     }
   ],
   script: [{
@@ -58,12 +59,13 @@ useHead({
       '@context': 'https://schema.org',
       '@type': 'Organization',
       name: 'AgatCeramic',
-      url: config.public.siteUrl,
-      logo: `${config.public.siteUrl}/images/stock/logo.png`,
+      url: siteUrl,
+      logo: `${siteUrl}/images/stock/logo.png`,
       description: 'Интернет-магазин плитки, керамогранита и сантехники',
+      email: 'zakaz@agatceramic.ru',
       contactPoint: {
         '@type': 'ContactPoint',
-        telephone: '+7-999-999-99-99',
+        telephone: '+7 (999) 999-99-99',
         contactType: 'customer service'
       }
     })
