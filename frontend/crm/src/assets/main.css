@@ -35,6 +35,8 @@ layer(base);
   --text-theme-sm--line-height: 20px;
   --text-theme-xs: 12px;
   --text-theme-xs--line-height: 18px;
+  --text-theme-2xs: 10px;
+  --text-theme-2xs--line-height: 15px;
 
   --color-current: currentColor;
   --color-transparent: transparent;

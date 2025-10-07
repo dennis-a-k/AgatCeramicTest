@@ -9,5 +9,8 @@ const currentPageTitle = ref('Товары')
 <template>
   <AdminLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
+    <div class="space-y-5 sm:space-y-6">
+
+    </div>
   </AdminLayout>
 </template>
