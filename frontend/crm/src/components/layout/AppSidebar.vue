@@ -19,26 +19,45 @@
         !isExpanded && !isHovered ? 'lg:justify-center' : 'justify-start',
       ]"
     >
-      <router-link to="/">
+      <router-link to="/" :class="['flex flex-row items-center']">
         <img
           v-if="isExpanded || isHovered || isMobileOpen"
+          class="dark:hidden mr-2"
+          src="/images/logo/logo.svg"
+          alt="Logo"
+          width="50"
+          height="50"
+        />
+        <div v-if="isExpanded || isHovered || isMobileOpen" class="dark:hidden text-title-sm font-bold">
+          <p>Agat<span class="text-gray-400">Ceramic</span></p>
+          <p class="text-theme-xs text-end">Админ-панель</p>
+        </div>
+        <img
+          v-if="isExpanded || isHovered || isMobileOpen"
+          class="hidden dark:block mr-2"
+          src="/images/logo/logo.svg"
+          style="filter: invert(1) brightness(2)"
+          alt="Logo"
+          width="50"
+          height="50"
+        />
+        <div v-if="isExpanded || isHovered || isMobileOpen" class="hidden dark:block text-title-sm font-bold">
+          <p class="text-white">Agat<span class="text-gray-400">Ceramic</span></p>
+          <p class="text-white text-theme-xs text-end">Админ-панель</p>
+        </div>
+        <img
+          v-if="!isMobileOpen && !(isExpanded || isHovered)"
           class="dark:hidden"
           src="/images/logo/logo.svg"
           alt="Logo"
-          width="150"
-          height="40"
+          width="32"
+          height="32"
         />
         <img
-          v-if="isExpanded || isHovered || isMobileOpen"
+          v-if="!isMobileOpen && !(isExpanded || isHovered)"
           class="hidden dark:block"
-          src="/images/logo/logo-dark.svg"
-          alt="Logo"
-          width="150"
-          height="40"
-        />
-        <img
-          v-else
-          src="/images/logo/logo-icon.svg"
+          src="/images/logo/logo.svg"
+          style="filter: invert(1) brightness(2)"
           alt="Logo"
           width="32"
           height="32"
@@ -229,6 +248,7 @@ import {
   TableIcon,
   ListIcon,
   PlugInIcon,
+  PackageIcon,
 } from "../../icons";
 import SidebarWidget from "./SidebarWidget.vue";
 import BoxCubeIcon from "@/icons/BoxCubeIcon.vue";
@@ -240,12 +260,17 @@ const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
 
 const menuGroups = [
   {
-    title: "Menu",
+    title: "Меню",
     items: [
       {
         icon: GridIcon,
-        name: "Dashboard",
-        subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+        name: "Статистика",
+        path: "/",
+      },
+      {
+        icon: PackageIcon,
+        name: "Товары",
+        path: "/products",
       },
       {
         icon: CalenderIcon,
