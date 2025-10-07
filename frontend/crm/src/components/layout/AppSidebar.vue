@@ -19,7 +19,7 @@
         !isExpanded && !isHovered ? 'lg:justify-center' : 'justify-start',
       ]"
     >
-      <router-link to="/" :class="['flex flex-row items-center']">
+      <router-link to="/" class="flex flex-row items-center">
         <img
           v-if="isExpanded || isHovered || isMobileOpen"
           class="dark:hidden mr-2"
@@ -28,7 +28,7 @@
           width="50"
           height="50"
         />
-        <div v-if="isExpanded || isHovered || isMobileOpen" class="dark:hidden text-title-sm font-bold">
+        <div v-if="isExpanded || isHovered || isMobileOpen" class="dark:hidden text-logo font-bold">
           <p>Agat<span class="text-gray-400">Ceramic</span></p>
           <p class="text-theme-xs text-end">Админ-панель</p>
         </div>
@@ -41,7 +41,7 @@
           width="50"
           height="50"
         />
-        <div v-if="isExpanded || isHovered || isMobileOpen" class="hidden dark:block text-title-sm font-bold">
+        <div v-if="isExpanded || isHovered || isMobileOpen" class="hidden dark:block text-logo font-bold">
           <p class="text-white">Agat<span class="text-gray-400">Ceramic</span></p>
           <p class="text-white text-theme-xs text-end">Админ-панель</p>
         </div>
