@@ -45,7 +45,10 @@ import LayoutDashboardIcon from "./LayoutDashboardIcon.vue";
 import UserGroupIcon from "./UserGroupIcon.vue";
 import BellIcon from "./BellIcon.vue";
 import BarChartIcon from "./BarChartIcon.vue";
-import PackageIcon from "./Package.vue";
+import PackageIcon from "./PackageIcon.vue";
+import DownloadIcon from "./DownloadIcon.vue";
+import Settings2Icon from "./Settings-2Icon.vue";
+import SearchIcon from "./SearchIcon.vue";
 
 export {
   BellIcon,
@@ -96,4 +99,7 @@ export {
   SendIcon,
   DraftIcon,
   PackageIcon,
+  DownloadIcon,
+  Settings2Icon,
+  SearchIcon,
 };
