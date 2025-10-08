@@ -172,25 +172,29 @@ class FilterBuilder implements FilterBuilderInterface
         $query = $this->buildBaseQuery($request)->with(['category', 'brand', 'color', 'attributeValues.attribute']);
 
         // Сортировка
-        $sortOption = $request->get('sort', 'default');
+        if ($request->has('sort_key') && $request->has('sort_direction')) {
+            $query->orderBy($request->sort_key, $request->sort_direction);
+        } else {
+            $sortOption = $request->get('sort', 'default');
 
-        switch ($sortOption) {
-            case 'alphabetical':
-                $query->orderBy('name', 'asc');
-                break;
-            case 'price_asc':
-                $query->orderBy('price', 'asc');
-                break;
-            case 'price_desc':
-                $query->orderBy('price', 'desc');
-                break;
-            case 'default':
-            case 'newest':
-                $query->orderBy('created_at', 'desc');
-                break;
-            default:
-                $query->orderBy('created_at', 'desc');
-                break;
+            switch ($sortOption) {
+                case 'alphabetical':
+                    $query->orderBy('name', 'asc');
+                    break;
+                case 'price_asc':
+                    $query->orderBy('price', 'asc');
+                    break;
+                case 'price_desc':
+                    $query->orderBy('price', 'desc');
+                    break;
+                case 'default':
+                case 'newest':
+                    $query->orderBy('created_at', 'desc');
+                    break;
+                default:
+                    $query->orderBy('created_at', 'desc');
+                    break;
+            }
         }
 
         // Пагинация
