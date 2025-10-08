@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Client\SearchController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 // Основной поиск товаров
