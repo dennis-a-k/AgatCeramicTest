@@ -18,7 +18,7 @@
           <table v-else class="min-w-full">
             <thead>
               <tr class="border-gray-100 border-y bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
-                <th class="cursor-pointer px-5 py-3 text-center w-1/10 sm:px-6" @click="handleSortBy('article')">
+                <th class="cursor-pointer px-5 py-3 text-center w-1/11 sm:px-6" @click="handleSortBy('article')">
                   <div class="flex items-center gap-3">
                     <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Артикул</p>
                     <span class="flex flex-col gap-0.5">
@@ -33,7 +33,7 @@
                     </span>
                   </div>
                 </th>
-                <th class="cursor-pointer px-5 py-3 text-center w-2/10 sm:px-6" @click="handleSortBy('name')">
+                <th class="cursor-pointer px-5 py-3 text-center w-2/11 sm:px-6" @click="handleSortBy('name')">
                   <div class="flex items-center gap-3">
                     <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Наименование</p>
                     <span class="flex flex-col gap-0.5">
@@ -48,25 +48,25 @@
                     </span>
                   </div>
                 </th>
-                <th class="px-5 py-3 text-center w-1/10 sm:px-6">
+                <th class="px-5 py-3 text-center w-1/11 sm:px-6">
                   <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Код товара</p>
                 </th>
-                <th class="px-5 py-3 text-center w-1/10 sm:px-6">
+                <th class="px-5 py-3 text-center w-2/11 sm:px-6">
                   <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Категория</p>
                 </th>
-                <th class="px-5 py-3 text-center w-1/10 sm:px-6">
+                <th class="px-5 py-3 text-center w-1/11 sm:px-6">
                   <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Цена</p>
                 </th>
-                <th class="px-5 py-3 text-center w-1/10 sm:px-6">
+                <th class="px-5 py-3 text-center w-1/11 sm:px-6">
                   <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">ед.изм</p>
                 </th>
-                <th class="px-5 py-3 text-center w-1/10 sm:px-6">
+                <th class="px-5 py-3 text-center w-1/11 sm:px-6">
                   <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Статус</p>
                 </th>
-                <th class="px-5 py-3 text-center w-1/10 sm:px-6">
+                <th class="px-5 py-3 text-center w-1/11 sm:px-6">
                   <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Распродажа</p>
                 </th>
-                <th class="px-5 py-3 text-center w-1/10 sm:px-6">
+                <th class="px-5 py-3 text-center w-1/11 sm:px-6">
                   <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Действие</p>
                 </th>
               </tr>
@@ -82,11 +82,11 @@
                 <td class="px-5 py-4 sm:px-6">
                   <p class="text-gray-500 text-center text-theme-sm dark:text-gray-400">{{ product.product_code }}</p>
                 </td>
-                <td class="px-5 py-4 sm:px-6">
-                  <p class="text-gray-500 text-center text-theme-sm dark:text-gray-400">{{ product.category.name }}</p>
+                <td class="px-5 py-4 sm:px-6 text-center">
+                  <span class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-blue-light-50 text-blue-light-500 dark:bg-blue-light-500/15 dark:text-blue-light-500">{{ product.category.name }}</span>
                 </td>
                 <td class="px-5 py-4 sm:px-6">
-                  <p class="text-gray-500 text-center text-theme-sm dark:text-gray-400">{{ formatter.format(product.price) }}</p>
+                  <p class="font-medium text-center text-gray-800 text-theme-sm dark:text-white/90">{{ formatter.format(product.price) }}</p>
                 </td>
                 <td class="px-5 py-4 sm:px-6">
                   <p v-if="product.unit === 'шт'" class="text-gray-500 text-center text-theme-sm dark:text-gray-400">шт.</p>
