@@ -114,7 +114,22 @@ class FilterBuilder implements FilterBuilderInterface
 
         // Фильтрация по распродаже
         if ($request->has('is_sale')) {
-            $query->onSale();
+            $saleValues = array_map(function($value) {
+                return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+            }, (array)$request->is_sale);
+            if (!empty($saleValues)) {
+                $query->whereIn('is_sale', $saleValues);
+            }
+        }
+
+        // Фильтрация по публикации
+        if ($request->has('is_published')) {
+            $publishedValues = array_map(function($value) {
+                return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+            }, (array)$request->is_published);
+            if (!empty($publishedValues)) {
+                $query->whereIn('is_published', $publishedValues);
+            }
         }
 
         // Динамическая фильтрация по атрибутам

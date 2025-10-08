@@ -533,16 +533,38 @@ const fetchProducts = async () => {
   loading.value = true
   error.value = null
 
-  let url = `${API_BASE_URL}/api/products?page=${page.value}&per_page=${itemsPerPage.value}`
+  const params = new URLSearchParams({
+    page: page.value,
+    per_page: itemsPerPage.value
+  })
+
   if (sort.value.key) {
-    url += `&sort_key=${sort.value.key}&sort_direction=${sort.value.asc ? 'asc' : 'desc'}`
+    params.append('sort_key', sort.value.key)
+    params.append('sort_direction', sort.value.asc ? 'asc' : 'desc')
   }
   if (selectedItem.value) {
-    url += `&category_id=${selectedItem.value.value}`
+    params.append('category_id', selectedItem.value.value)
   }
   if (searchQuery.value.trim()) {
-    url += `&search=${encodeURIComponent(searchQuery.value.trim())}`
+    params.append('search', searchQuery.value.trim())
   }
+
+  // Фильтры
+  const saleFilters = []
+  if (checkboxSale.value) saleFilters.push('true')
+  if (checkboxNoSale.value) saleFilters.push('false')
+  if (saleFilters.length > 0) {
+    saleFilters.forEach(val => params.append('is_sale[]', val))
+  }
+
+  const publishedFilters = []
+  if (checkboxPublished.value) publishedFilters.push('true')
+  if (checkboxNoPublished.value) publishedFilters.push('false')
+  if (publishedFilters.length > 0) {
+    publishedFilters.forEach(val => params.append('is_published[]', val))
+  }
+
+  const url = `${API_BASE_URL}/api/products?${params.toString()}`
 
   try {
     const response = await fetch(url)
@@ -578,6 +600,26 @@ watch(searchQuery, (newQuery) => {
     page.value = 1
     fetchProducts()
   }, 500) // debounce 500ms
+})
+
+watch(checkboxSale, () => {
+  page.value = 1
+  fetchProducts()
+})
+
+watch(checkboxNoSale, () => {
+  page.value = 1
+  fetchProducts()
+})
+
+watch(checkboxPublished, () => {
+  page.value = 1
+  fetchProducts()
+})
+
+watch(checkboxNoPublished, () => {
+  page.value = 1
+  fetchProducts()
 })
 
 // Функция для построения плоского списка категорий с дочерними
