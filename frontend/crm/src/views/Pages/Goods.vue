@@ -27,7 +27,7 @@
             <div class="flex gap-3">
               <button
                 class="shadow-theme-xs inline-flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 ring-1 ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
-                Скачать Excel
+                Скачать товары
                 <component :is="downloadIcon" />
               </button>
               <a href="add-product.html"
@@ -39,12 +39,33 @@
           </div>
           <div class="border-b border-gray-200 px-5 py-4 dark:border-gray-800">
             <div class="flex gap-3 sm:justify-between">
-              <div class="relative flex-1 sm:flex-auto">
-                <span class="absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                  <component :is="searchIcon" />
-                </span>
-                <input type="text" placeholder="Поиск товар"
-                  class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden sm:w-[300px] sm:min-w-[300px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+              <div class="flex">
+                <div class="relative flex-1 sm:flex-auto mr-3">
+                  <span class="absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                    <component :is="searchIcon" />
+                  </span>
+                  <input type="text" placeholder="Поиск товара"
+                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden sm:w-[300px] sm:min-w-[300px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                </div>
+                <button type="button" role="combobox" aria-controls="radix-:r4:" aria-expanded="false"
+                  aria-autocomplete="none" dir="ltr" data-state="closed" data-lov-id="src/pages/Products.tsx:145:16"
+                  data-lov-name="SelectTrigger" data-component-path="src/pages/Products.tsx" data-component-line="145"
+                  data-component-file="Products.tsx" data-component-name="SelectTrigger"
+                  data-component-content="%7B%22className%22%3A%22w-40%22%7D"
+                  class="flex h-10 items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&amp;&gt;span]:line-clamp-1 w-40"><span
+                    data-lov-id="src/pages/Products.tsx:146:18" data-lov-name="SelectValue"
+                    data-component-path="src/pages/Products.tsx" data-component-line="146"
+                    data-component-file="Products.tsx" data-component-name="SelectValue"
+                    data-component-content="%7B%22placeholder%22%3A%22%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F%22%7D"
+                    style="pointer-events: none;">Смартфоны</span><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down h-4 w-4 opacity-50"
+                    data-lov-id="src/components/ui/select.tsx:27:6" data-lov-name="ChevronDown"
+                    data-component-path="src/components/ui/select.tsx" data-component-line="27"
+                    data-component-file="select.tsx" data-component-name="ChevronDown"
+                    data-component-content="%7B%22className%22%3A%22h-4%20w-4%20opacity-50%22%7D" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6"></path>
+                  </svg></button>
               </div>
               <div class="relative" @click="showFilter = false">
                 <button
@@ -54,27 +75,103 @@
                   Фильтр
                 </button>
                 <div v-show="showFilter" @click.stop
-                  class="absolute right-0 z-10 mt-2 w-56 rounded-lg border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                  class="absolute right-0 z-10 mt-2 w-45 rounded-lg border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-700 dark:bg-gray-800">
                   <div class="mb-5">
-                    <label class="mb-2 block text-xs font-medium text-gray-700 dark:text-gray-300">
-                      Category
-                    </label>
-                    <input type="text"
-                      class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-10 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                      placeholder="Search category...">
+                    <div>
+                      <label for="checkboxLabelSale"
+                        class="flex items-center text-sm font-medium text-gray-700 cursor-pointer select-none dark:text-gray-400">
+                        <div class="relative">
+                          <input type="checkbox" id="checkboxLabelSale" v-model="checkboxSale" class="sr-only" />
+                          <div :class="checkboxSale
+                            ? 'border-brand-500 bg-brand-500'
+                            : 'bg-transparent border-gray-300 dark:border-gray-700'
+                            "
+                            class="mr-3 flex h-5 w-5 items-center justify-center rounded-md border-[1.25px] hover:border-brand-500 dark:hover:border-brand-500">
+                            <span :class="checkboxSale ? '' : 'opacity-0'">
+                              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="white" stroke-width="1.94437"
+                                  stroke-linecap="round" stroke-linejoin="round" />
+                              </svg>
+                            </span>
+                          </div>
+                        </div>
+                        Распродажа
+                      </label>
+                    </div>
                   </div>
                   <div class="mb-5">
-                    <label class="mb-2 block text-xs font-medium text-gray-700 dark:text-gray-300">
-                      Company
-                    </label>
-                    <input type="text"
-                      class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-10 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                      placeholder="Search company...">
+                    <div>
+                      <label for="checkboxLabelNoSale"
+                        class="flex items-center text-sm font-medium text-gray-700 cursor-pointer select-none dark:text-gray-400">
+                        <div class="relative">
+                          <input type="checkbox" id="checkboxLabelNoSale" v-model="checkboxNoSale" class="sr-only" />
+                          <div :class="checkboxNoSale
+                            ? 'border-brand-500 bg-brand-500'
+                            : 'bg-transparent border-gray-300 dark:border-gray-700'
+                            "
+                            class="mr-3 flex h-5 w-5 items-center justify-center rounded-md border-[1.25px] hover:border-brand-500 dark:hover:border-brand-500">
+                            <span :class="checkboxNoSale ? '' : 'opacity-0'">
+                              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="white" stroke-width="1.94437"
+                                  stroke-linecap="round" stroke-linejoin="round" />
+                              </svg>
+                            </span>
+                          </div>
+                        </div>
+                        Не распродажа
+                      </label>
+                    </div>
                   </div>
-                  <button
-                    class="bg-brand-500 hover:bg-brand-600 h-10 w-full rounded-lg px-3 py-2 text-sm font-medium text-white">
-                    Apply
-                  </button>
+                  <div class="mb-5">
+                    <div>
+                      <label for="checkboxLabelPublished"
+                        class="flex items-center text-sm font-medium text-gray-700 cursor-pointer select-none dark:text-gray-400">
+                        <div class="relative">
+                          <input type="checkbox" id="checkboxLabelPublished" v-model="checkboxPublished"
+                            class="sr-only" />
+                          <div :class="checkboxPublished
+                            ? 'border-brand-500 bg-brand-500'
+                            : 'bg-transparent border-gray-300 dark:border-gray-700'
+                            "
+                            class="mr-3 flex h-5 w-5 items-center justify-center rounded-md border-[1.25px] hover:border-brand-500 dark:hover:border-brand-500">
+                            <span :class="checkboxPublished ? '' : 'opacity-0'">
+                              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="white" stroke-width="1.94437"
+                                  stroke-linecap="round" stroke-linejoin="round" />
+                              </svg>
+                            </span>
+                          </div>
+                        </div>
+                        Опубликован
+                      </label>
+                    </div>
+                  </div>
+                  <div>
+                    <label for="checkboxLabelNoPublished"
+                      class="flex items-center text-sm font-medium text-gray-700 cursor-pointer select-none dark:text-gray-400">
+                      <div class="relative">
+                        <input type="checkbox" id="checkboxLabelNoPublished" v-model="checkboxNoPublished"
+                          class="sr-only" />
+                        <div :class="checkboxNoPublished
+                          ? 'border-brand-500 bg-brand-500'
+                          : 'bg-transparent border-gray-300 dark:border-gray-700'
+                          "
+                          class="mr-3 flex h-5 w-5 items-center justify-center rounded-md border-[1.25px] hover:border-brand-500 dark:hover:border-brand-500">
+                          <span :class="checkboxNoPublished ? '' : 'opacity-0'">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="white" stroke-width="1.94437"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                          </span>
+                        </div>
+                      </div>
+                      Не опубликован
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -203,6 +300,10 @@ const products = ref([])
 const loading = ref(false)
 const error = ref(null)
 const showFilter = ref(false)
+const checkboxSale = ref(true)
+const checkboxNoSale = ref(true)
+const checkboxPublished = ref(true)
+const checkboxNoPublished = ref(true)
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
