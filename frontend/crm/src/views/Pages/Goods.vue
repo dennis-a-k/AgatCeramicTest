@@ -537,7 +537,6 @@ const fetchProducts = async () => {
   if (selectedItem.value) {
     url += `&category_id=${selectedItem.value.value}`
   }
-  console.log('Fetching products with URL:', url)
 
   try {
     const response = await fetch(url)
@@ -566,13 +565,26 @@ watch(selectedItem, () => {
   fetchProducts()
 })
 
+// Функция для построения плоского списка категорий с дочерними
+const buildCategoryList = (categories, level = 0) => {
+  const result = []
+  categories.forEach((cat, index) => {
+    const indent = '  '.repeat(level) // отступ для дочерних
+    result.push({
+      id: `${level}-${index + 2}`,
+      value: cat.id,
+      label: `${indent}${cat.name}`
+    })
+    if (cat.children && cat.children.length > 0) {
+      result.push(...buildCategoryList(cat.children, level + 1))
+    }
+  })
+  return result
+}
+
 // Селект
 const categories = computed(() => {
-  const cats = allCategories.value.map((cat, index) => ({
-    id: (index + 2).toString(),
-    value: cat.id,
-    label: cat.name
-  }))
+  const cats = buildCategoryList(allCategories.value)
   return [{ id: '1', value: null, label: 'Все категории' }, ...cats]
 })
 
