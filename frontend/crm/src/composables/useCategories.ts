@@ -1,0 +1,61 @@
+import { ref, computed } from 'vue'
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
+interface Category {
+  id: number
+  name: string
+  children?: Category[]
+}
+
+interface CategoryItem {
+  id: string
+  value: number | null
+  label: string
+}
+
+export function useCategories() {
+  const allCategories = ref<Category[]>([])
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/categories`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const data = await response.json()
+      allCategories.value = data.categories || data
+    } catch (err) {
+      console.error('Ошибка загрузки категорий:', err)
+    }
+  }
+
+  // Функция для построения плоского списка категорий с дочерними
+  const buildCategoryList = (categories: Category[], level = 0): CategoryItem[] => {
+    const result: CategoryItem[] = []
+    categories.forEach((cat, index) => {
+      const indent = '  '.repeat(level) // отступ для дочерних
+      result.push({
+        id: `${level}-${index + 2}`,
+        value: cat.id,
+        label: `${indent}${cat.name}`
+      })
+      if (cat.children && cat.children.length > 0) {
+        result.push(...buildCategoryList(cat.children, level + 1))
+      }
+    })
+    return result
+  }
+
+  // Селект
+  const categories = computed(() => {
+    const cats = buildCategoryList(allCategories.value)
+    return [{ id: '1', value: null, label: 'Все категории' }, ...cats]
+  })
+
+  return {
+    allCategories,
+    categories,
+    fetchCategories
+  }
+}
