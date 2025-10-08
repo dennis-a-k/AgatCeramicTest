@@ -57,13 +57,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
-import GoodsHeader from './components/GoodsHeader.vue'
-import GoodsFilters from './components/GoodsFilters.vue'
-import GoodsTable from './components/GoodsTable.vue'
-import GoodsPagination from './components/GoodsPagination.vue'
+import GoodsHeader from '@/components/goods-page/GoodsHeader.vue'
+import GoodsFilters from '@/components/goods-page/GoodsFilters.vue'
+import GoodsTable from '@/components/goods-page/GoodsTable.vue'
+import GoodsPagination from '@/components/goods-page/GoodsPagination.vue'
 import { PackageIcon, DownloadIcon, PlusIcon, Settings2Icon, SearchIcon } from "../../icons";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
