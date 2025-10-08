@@ -72,7 +72,7 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-              <tr v-for="product in products" :key="product.id" class="border-t border-gray-100 dark:border-gray-800">
+              <tr v-for="product in products" :key="product.id" class="border-t border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800">
                 <td class="px-5 py-4 sm:px-6">
                   <p class="font-medium text-center text-gray-800 text-theme-sm dark:text-white/90">{{ product.article }}</p>
                 </td>
