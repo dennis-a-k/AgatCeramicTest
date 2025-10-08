@@ -15,23 +15,6 @@ class CategoryController extends Controller
         $this->categoryService = $categoryService;
     }
 
-    public function index(): JsonResponse
-    {
-        $categories = $this->categoryService->getAllCategories();
-        return response()->json($categories);
-    }
-
-    public function show($id): JsonResponse
-    {
-        $category = $this->categoryService->getCategoryById($id);
-
-        if (!$category) {
-            return response()->json(['message' => 'Category not found'], 404);
-        }
-
-        return response()->json($category);
-    }
-
     public function slugs(): JsonResponse
     {
         $slugs = $this->categoryService->getAllCategorySlugs();
