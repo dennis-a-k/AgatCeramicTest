@@ -19,23 +19,6 @@ class ProductController extends Controller
         $this->searchService = $searchService;
     }
 
-    public function index(Request $request): JsonResponse
-    {
-        $result = $this->productService->getProductsWithFilters($request);
-        return response()->json($result);
-    }
-
-    public function show($id): JsonResponse
-    {
-        $product = $this->productService->getProductById($id);
-
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
-        }
-
-        return response()->json($product);
-    }
-
     public function showBySlug($slug): JsonResponse
     {
         $product = $this->productService->getProductBySlug($slug);

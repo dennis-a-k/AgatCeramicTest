@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Client;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\ProductService;
@@ -34,18 +34,5 @@ class ProductController extends Controller
         }
 
         return response()->json($product);
-    }
-
-    /**
-     * Получение товаров по категории с фильтрами
-     *
-     * @param string $slug Slug категории
-     * @param Request $request Параметры фильтрации
-     * @return JsonResponse
-     */
-    public function getByCategory($slug, Request $request): JsonResponse
-    {
-        $result = $this->searchService->getProductsByCategory($slug, $request);
-        return response()->json($result);
     }
 }
