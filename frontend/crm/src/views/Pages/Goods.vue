@@ -71,7 +71,7 @@
                 </transition>
               </div>
             </div>
-            <div class="relative" @click="showFilter = false">
+            <div class="relative" ref="filterRef" @click="showFilter = false">
               <button
                 class="shadow-theme-xs flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
                 @click.stop="showFilter = !showFilter" type="button">
@@ -647,6 +647,7 @@ const categories = computed(() => {
 
 const isOpen = ref(false)
 const multiSelectRef = ref(null)
+const filterRef = ref(null)
 
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value
@@ -671,11 +672,19 @@ const handleClickOutside = (event) => {
   }
 }
 
+const handleClickOutsideFilter = (event) => {
+  if (filterRef.value && !filterRef.value.contains(event.target)) {
+    showFilter.value = false
+  }
+}
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
+  document.addEventListener('click', handleClickOutsideFilter)
 })
 
 onBeforeUnmount(() => {
   document.removeEventListener('click', handleClickOutside)
+  document.removeEventListener('click', handleClickOutsideFilter)
 })
 </script>
