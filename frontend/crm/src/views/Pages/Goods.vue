@@ -67,12 +67,12 @@
                       <ul
                         class="overflow-y-auto divide-y divide-gray-200 custom-scrollbar max-h-60 dark:divide-gray-800"
                         role="listbox">
-                        <li v-for="item in options" :key="item.value" @click="toggleItem(item)"
+                        <li v-for="category in categories" :key="category.id" @click="toggleItem(category)"
                           class="relative flex items-center w-full px-3 py-2 border-transparent cursor-pointer first:rounded-t-lg last:rounded-b-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-                          :class="{ 'bg-gray-50 dark:bg-white/[0.03]': isSelected(item) }" role="option"
-                          :aria-selected="isSelected(item)">
-                          <span class="grow">{{ item.label }}</span>
-                          <svg v-if="isSelected(item)" class="w-5 h-5 text-gray-400 dark:text-gray-300" fill="none"
+                          :class="{ 'bg-gray-50 dark:bg-white/[0.03]': isSelected(category) }" role="option"
+                          :aria-selected="isSelected(category)">
+                          <span class="grow">{{ category.label }}</span>
+                          <svg v-if="isSelected(category)" class="w-5 h-5 text-gray-400 dark:text-gray-300" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
                             </path>
@@ -412,7 +412,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue'
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import { PackageIcon, DownloadIcon, PlusIcon, Settings2Icon, SearchIcon } from "../../icons";
@@ -434,6 +434,8 @@ const checkboxNoSale = ref(true)
 const checkboxPublished = ref(true)
 const checkboxNoPublished = ref(true)
 
+const allCategories = ref([])
+
 const sort = ref({ key: null, asc: true })
 
 const page = ref(1)
@@ -441,6 +443,8 @@ const itemsPerPage = ref(50)
 const totalItems = ref(0)
 
 const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value))
+
+const selectedItem = ref(null)
 
 const visiblePages = computed(() => {
   const pages = [];
@@ -509,6 +513,19 @@ const sortBy = (key) => {
   fetchProducts()
 }
 
+const fetchCategories = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/categories`)
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    const data = await response.json()
+    allCategories.value = data.categories || data
+  } catch (err) {
+    console.error('Ошибка загрузки категорий:', err)
+  }
+}
+
 const fetchProducts = async () => {
   loading.value = true
   error.value = null
@@ -516,6 +533,9 @@ const fetchProducts = async () => {
   let url = `${API_BASE_URL}/api/products?page=${page.value}&per_page=${itemsPerPage.value}`
   if (sort.value.key) {
     url += `&sort_key=${sort.value.key}&sort_direction=${sort.value.asc ? 'asc' : 'desc'}`
+  }
+  if (selectedItem.value) {
+    url += `&category=${selectedItem.value.value}`
   }
 
   try {
@@ -537,22 +557,25 @@ const fetchProducts = async () => {
 }
 
 onMounted(() => {
+  fetchCategories()
+  fetchProducts()
+})
+
+watch(selectedItem, () => {
   fetchProducts()
 })
 
 // Селект
-const options = [
-  { value: null, label: 'Все категории' },
-  { value: 'apple', label: 'Apple' },
-  { value: 'banana', label: 'Banana' },
-  { value: 'cherry', label: 'Cherry' },
-  { value: 'date', label: 'Date' },
-  { value: 'elderberry', label: 'Elderberry' },
-  { value: 'graphs', label: 'Graphs' },
-]
+const categories = computed(() => {
+  const cats = allCategories.value.map((cat, index) => ({
+    id: (index + 2).toString(),
+    value: cat.name,
+    label: cat.name
+  }))
+  return [{ id: '1', value: null, label: 'Все категории' }, ...cats]
+})
 
 const isOpen = ref(false)
-const selectedItem = ref(null)
 const multiSelectRef = ref(null)
 
 const toggleDropdown = () => {
