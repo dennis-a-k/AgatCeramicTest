@@ -139,6 +139,23 @@ export function useGoods() {
     fetchProducts()
   }
 
+  const deleteProduct = async (id: number): Promise<boolean> => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      return true
+    } catch (err) {
+      console.error('Ошибка удаления товара:', err)
+      return false
+    }
+  }
+
   const resetPage = () => {
     page.value = 1
   }
@@ -182,6 +199,7 @@ export function useGoods() {
     handlePrevPage,
     handleNextPage,
     handleGoToPage,
+    deleteProduct,
     resetPage
   }
 }

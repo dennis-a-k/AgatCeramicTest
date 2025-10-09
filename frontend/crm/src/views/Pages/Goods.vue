@@ -93,7 +93,8 @@ const {
   handleSortBy,
   handlePrevPage,
   handleNextPage,
-  handleGoToPage
+  handleGoToPage,
+  deleteProduct
 } = useGoods()
 
 const { categories, fetchCategories } = useCategories()
@@ -115,9 +116,9 @@ const handleEdit = (product) => {
   console.log('Edit product:', product)
 }
 
-const handleDelete = (product) => {
-  // Handle delete logic here
-  console.log('Delete product:', product)
+const handleDelete = async (product, callback) => {
+  const success = await deleteProduct(product.id)
+  callback(success)
 }
 
 onMounted(() => {

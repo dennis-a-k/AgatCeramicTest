@@ -35,4 +35,15 @@ class ProductController extends Controller
 
         return response()->json($product);
     }
+
+    public function destroy($id): JsonResponse
+    {
+        $deleted = $this->productService->deleteProduct($id);
+
+        if (!$deleted) {
+            return response()->json(['message' => 'Product not found or could not be deleted'], 404);
+        }
+
+        return response()->json(['message' => 'Product deleted successfully']);
+    }
 }
