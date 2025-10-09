@@ -571,14 +571,67 @@ const handleSubmit = async () => {
   }
   try {
     loading.value = true
-    const success = await updateProduct(Number(route.params.id), product.value)
-    if (success) {
+    const result = await updateProduct(Number(route.params.id), product.value)
+    if (result.success) {
       showAlert('success', 'Успешно', 'Товар обновлен')
       setTimeout(() => {
         router.push('/products')
       }, 1500)
     } else {
-      showAlert('error', 'Ошибка', 'Не удалось обновить товар')
+      if (result.errors) {
+        // Очищаем предыдущие ошибки
+        articleError.value = ''
+        nameError.value = ''
+        priceError.value = ''
+        productCodeError.value = ''
+        unitError.value = ''
+        categoryError.value = ''
+        brandError.value = ''
+        colorError.value = ''
+        descriptionError.value = ''
+        textureError.value = ''
+        patternError.value = ''
+        countryError.value = ''
+        collectionError.value = ''
+        product.value.attribute_values.forEach(attr => {
+          attr.error = ''
+        })
+
+        // Присваиваем ошибки валидации
+        if (result.errors.article) articleError.value = result.errors.article[0]
+        if (result.errors.name) nameError.value = result.errors.name[0]
+        if (result.errors.price) priceError.value = result.errors.price[0]
+        if (result.errors.product_code) productCodeError.value = result.errors.product_code[0]
+        if (result.errors.unit) unitError.value = result.errors.unit[0]
+        if (result.errors.category_id) categoryError.value = result.errors.category_id[0]
+        if (result.errors.brand_id) brandError.value = result.errors.brand_id[0]
+        if (result.errors.color_id) colorError.value = result.errors.color_id[0]
+        if (result.errors.description) descriptionError.value = result.errors.description[0]
+        if (result.errors.texture) textureError.value = result.errors.texture[0]
+        if (result.errors.pattern) patternError.value = result.errors.pattern[0]
+        if (result.errors.country) countryError.value = result.errors.country[0]
+        if (result.errors.collection) collectionError.value = result.errors.collection[0]
+
+        // Для attribute_values
+        Object.keys(result.errors).forEach(key => {
+          if (key.startsWith('attribute_values.')) {
+            const parts = key.split('.')
+            if (parts.length >= 3) {
+              const index = parseInt(parts[1])
+              const field = parts[2]
+              if (field === 'string_value' || field === 'number_value' || field === 'boolean_value') {
+                if (product.value.attribute_values[index]) {
+                  product.value.attribute_values[index].error = result.errors[key][0]
+                }
+              }
+            }
+          }
+        })
+
+        showAlert('error', 'Ошибка валидации', 'Пожалуйста, исправьте ошибки в форме')
+      } else {
+        showAlert('error', 'Ошибка', 'Не удалось обновить товар')
+      }
     }
   } catch (error) {
     showAlert('error', 'Ошибка', 'Не удалось обновить товар')

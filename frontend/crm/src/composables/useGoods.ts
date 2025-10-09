@@ -172,24 +172,30 @@ export function useGoods() {
     }
   }
 
-  const updateProduct = async (id: number, productData: any): Promise<boolean> => {
+  const updateProduct = async (id: number, productData: any): Promise<{ success: boolean, errors?: Record<string, string[]> }> => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify(productData),
       })
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+      if (response.ok) {
+        return { success: true }
       }
 
-      return true
+      if (response.status === 422) {
+        const errorData = await response.json()
+        return { success: false, errors: errorData.errors }
+      }
+
+      throw new Error(`HTTP error! status: ${response.status}`)
     } catch (err) {
       console.error('Ошибка обновления товара:', err)
-      return false
+      return { success: false }
     }
   }
 
