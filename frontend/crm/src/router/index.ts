@@ -23,6 +23,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/products/edit/:id',
+      name: 'EditProduct',
+      component: () => import('../views/Pages/product/EditProduct.vue'),
+      meta: {
+        title: 'Редактирование товара',
+      },
+    },
+    {
       path: '/calendar',
       name: 'Calendar',
       component: () => import('../views/Others/Calendar.vue'),

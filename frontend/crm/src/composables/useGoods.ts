@@ -156,6 +156,43 @@ export function useGoods() {
     }
   }
 
+  const getProduct = async (id: number) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/products/${id}`)
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
+      return data.product
+    } catch (err) {
+      console.error('Ошибка загрузки товара:', err)
+      throw err
+    }
+  }
+
+  const updateProduct = async (id: number, productData: any): Promise<boolean> => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(productData),
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      return true
+    } catch (err) {
+      console.error('Ошибка обновления товара:', err)
+      return false
+    }
+  }
+
   const resetPage = () => {
     page.value = 1
   }
@@ -200,6 +237,8 @@ export function useGoods() {
     handleNextPage,
     handleGoToPage,
     deleteProduct,
+    getProduct,
+    updateProduct,
     resetPage
   }
 }

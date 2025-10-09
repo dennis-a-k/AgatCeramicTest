@@ -33,7 +33,18 @@ class ProductController extends Controller
             return response()->json(['message' => 'Product not found'], 404);
         }
 
-        return response()->json($product);
+        return response()->json(['product' => $product]);
+    }
+
+    public function update(Request $request, $id): JsonResponse
+    {
+        $updated = $this->productService->updateProduct($id, $request->all());
+
+        if (!$updated) {
+            return response()->json(['message' => 'Product not found or could not be updated'], 404);
+        }
+
+        return response()->json(['message' => 'Product updated successfully']);
     }
 
     public function destroy($id): JsonResponse

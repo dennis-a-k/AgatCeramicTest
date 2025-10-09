@@ -58,6 +58,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import GoodsHeader from '@/components/goods-page/GoodsHeader.vue'
@@ -68,6 +69,7 @@ import { PackageIcon, DownloadIcon, PlusIcon, Settings2Icon, SearchIcon } from "
 import { useGoods } from '@/composables/useGoods'
 import { useCategories } from '@/composables/useCategories'
 
+const router = useRouter()
 const currentPageTitle = ref('Товары')
 const packageIcon = PackageIcon
 const downloadIcon = DownloadIcon
@@ -112,8 +114,7 @@ const handleToggleItem = (item) => {
 }
 
 const handleEdit = (product) => {
-  // Handle edit logic here
-  console.log('Edit product:', product)
+  router.push(`/products/edit/${product.id}`)
 }
 
 const handleDelete = async (product, callback) => {
