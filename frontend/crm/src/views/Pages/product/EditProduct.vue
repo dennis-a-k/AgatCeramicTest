@@ -18,31 +18,20 @@
                   class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                   placeholder="Наименование товара" v-model="product.name">
               </div>
-              <div>
+              <div class="relative z-20 bg-transparent">
                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                   Категория
                 </label>
-                <div x-data="{ isOptionSelected: false }" class="relative z-20 bg-transparent">
-                  <select
+                <div class="relative z-20 bg-transparent">
+                  <select v-model="product.category_id"
                     class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                    :class="'text-gray-800 dark:text-white/90'" @change="isOptionSelected = true">
+                    required>
                     <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                      Select Category
+                      Выберите категорию
                     </option>
-                    <option value="Laptop" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                      Laptop
-                    </option>
-                    <option value="Phone" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                      Phone
-                    </option>
-                    <option value="Watch" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                      Watch
-                    </option>
-                    <option value="Electronics" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                      Electronics
-                    </option>
-                    <option value="Accessories" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                      Accessories
+                    <option v-for="category in categories.slice(1)" :key="category.id" :value="category.value"
+                      class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                      {{ category.label }}
                     </option>
                   </select>
                   <span
@@ -50,42 +39,62 @@
                     <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
                       xmlns="http://www.w3.org/2000/svg">
                       <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round"></path>
+                        stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                   </span>
                 </div>
               </div>
-              <div>
+              <div class="relative z-20 bg-transparent">
                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                   Бренд
                 </label>
-                <select v-model="product.brand_id"
-                  class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                  required>
-                  <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                    Выберите бренд
-                  </option>
-                  <option v-for="brand in brands" :key="brand.id" :value="brand.id"
-                    class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                    {{ brand.name }}
-                  </option>
-                </select>
+                <div class="relative z-20 bg-transparent">
+                  <select v-model="product.brand_id"
+                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                    required>
+                    <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                      Выберите бренд
+                    </option>
+                    <option v-for="brand in brands" :key="brand.id" :value="brand.id"
+                      class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                      {{ brand.name }}
+                    </option>
+                  </select>
+                  <span
+                    class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-700 dark:text-gray-400">
+                    <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </span>
+                </div>
               </div>
-              <div>
+              <div class="relative z-20 bg-transparent">
                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                   Цвет
                 </label>
-                <select v-model="product.color_id"
-                  class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                  required>
-                  <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                    Выберите цвет
-                  </option>
-                  <option v-for="color in colors" :key="color.id" :value="color.id"
-                    class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                    {{ color.name }}
-                  </option>
-                </select>
+                <div class="relative z-20 bg-transparent">
+                  <select v-model="product.color_id"
+                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                    required>
+                    <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                      Выберите цвет
+                    </option>
+                    <option v-for="color in colors" :key="color.id" :value="color.id"
+                      class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                      {{ color.name }}
+                    </option>
+                  </select>
+                  <span
+                    class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-700 dark:text-gray-400">
+                    <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </span>
+                </div>
               </div>
               <div>
                 <label for="product-article"
@@ -162,7 +171,8 @@
         <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
           <h2 class="text-lg font-medium text-gray-800 dark:text-white">
             Дополнительные характеристики товара<br>
-            <span class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-orange-400">
+            <span
+              class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-orange-400">
               Размеры указываются в милиметрах. Вес в килограммах
             </span>
           </h2>
@@ -182,7 +192,7 @@
                 <input type="number" step="0.01" min="0" v-model.number="attr.number_value"
                   class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
               </div>
-              <div v-else-if="attr.attribute.type === 'boolean'" class="flex items-end">
+              <div v-else-if="attr.attribute.type === 'boolean'" class="h-full flex">
                 <FilterCheckbox :id="'attr-' + attr.id" :label="attr.attribute.name"
                   v-model:checked="attr.boolean_value" />
               </div>
