@@ -14,8 +14,9 @@
               <label for="product-name"
                 class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Наименование</label>
               <input type="text" id="product-name"
-                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                :class="inputClass(nameError)"
                 placeholder="Наименование товара" v-model="product.name">
+              <p v-if="nameError" class="mt-1.5 text-theme-xs text-error-500">{{ nameError }}</p>
             </div>
             <div>
               <label for="product-country"
@@ -32,7 +33,7 @@
               </label>
               <div class="relative z-20 bg-transparent">
                 <select v-model="product.category_id"
-                  class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                  :class="inputClass(categoryError)"
                   required>
                   <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                     Выберите категорию
@@ -51,6 +52,7 @@
                   </svg>
                 </span>
               </div>
+              <p v-if="categoryError" class="mt-1.5 text-theme-xs text-error-500">{{ categoryError }}</p>
             </div>
             <div class="relative z-20 bg-transparent">
               <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -58,7 +60,7 @@
               </label>
               <div class="relative z-20 bg-transparent">
                 <select v-model="product.brand_id"
-                  class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                  :class="inputClass(brandError)"
                   required>
                   <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                     Выберите бренд
@@ -77,6 +79,7 @@
                   </svg>
                 </span>
               </div>
+              <p v-if="brandError" class="mt-1.5 text-theme-xs text-error-500">{{ brandError }}</p>
             </div>
             <div class="relative z-20 bg-transparent">
               <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -84,7 +87,7 @@
               </label>
               <div class="relative z-20 bg-transparent">
                 <select v-model="product.color_id"
-                  class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                  :class="inputClass(colorError)"
                   required>
                   <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                     Выберите цвет
@@ -103,27 +106,31 @@
                   </svg>
                 </span>
               </div>
+              <p v-if="colorError" class="mt-1.5 text-theme-xs text-error-500">{{ colorError }}</p>
             </div>
             <div>
               <label for="product-price"
                 class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Цена</label>
               <input type="number" step="0.01" id="product-price" min="0"
-                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                :class="inputClass(priceError)"
                 placeholder="Стоимость товара" v-model.number="product.price">
+              <p v-if="priceError" class="mt-1.5 text-theme-xs text-error-500">{{ priceError }}</p>
             </div>
             <div>
               <label for="product-article"
                 class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Артикул</label>
               <input type="text" id="product-article"
-                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                :class="inputClass(articleError)"
                 placeholder="Артикул товара" v-model="product.article">
+              <p v-if="articleError" class="mt-1.5 text-theme-xs text-error-500">{{ articleError }}</p>
             </div>
             <div>
               <label for="product-product_code"
                 class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Код товара</label>
               <input type="text" id="product-product_code"
-                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                :class="inputClass(productCodeError)"
                 placeholder="Код товара" v-model="product.product_code">
+              <p v-if="productCodeError" class="mt-1.5 text-theme-xs text-error-500">{{ productCodeError }}</p>
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Единица измерения</label>
@@ -161,8 +168,9 @@
                 Описание
               </label>
               <textarea placeholder="Полное описание товара" type="text" rows="7" v-model="product.description"
-                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full resize-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                :class="textareaClass">
                 </textarea>
+              <p v-if="descriptionError" class="mt-1.5 text-theme-xs text-error-500">{{ descriptionError }}</p>
             </div>
           </div>
         </div>
@@ -278,7 +286,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import AdminLayout from '@/components/layout/AdminLayout.vue'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
@@ -317,10 +325,113 @@ const product = ref({
 })
 const loading = ref(false)
 const alert = ref(null)
+const descriptionError = ref('')
+const articleError = ref('')
+const nameError = ref('')
+const priceError = ref('')
+const productCodeError = ref('')
+const unitError = ref('')
+const categoryError = ref('')
+const brandError = ref('')
+const colorError = ref('')
 
 const showAlert = (variant, title, message) => {
   alert.value = { variant, title, message }
   setTimeout(() => alert.value = null, 3000)
+}
+
+const validateDescription = () => {
+  if (!product.value.description.trim()) {
+    descriptionError.value = 'Описание товара обязательно для заполнения.'
+  } else if (product.value.description.length < 10) {
+    descriptionError.value = 'Описание должно содержать не менее 10 символов.'
+  } else {
+    descriptionError.value = ''
+  }
+}
+
+const validateArticle = () => {
+  if (!product.value.article.trim()) {
+    articleError.value = 'Артикул обязателен.'
+  } else {
+    articleError.value = ''
+  }
+}
+
+const validateName = () => {
+  if (!product.value.name.trim()) {
+    nameError.value = 'Наименование обязательно.'
+  } else {
+    nameError.value = ''
+  }
+}
+
+const validatePrice = () => {
+  if (!product.value.price || product.value.price <= 0) {
+    priceError.value = 'Цена должна быть положительным числом.'
+  } else {
+    priceError.value = ''
+  }
+}
+
+const validateProductCode = () => {
+  // product_code nullable, так что валидация не обязательна, но можно проверить формат если нужно
+  productCodeError.value = ''
+}
+
+const validateUnit = () => {
+  if (!product.value.unit) {
+    unitError.value = 'Единица измерения обязательна.'
+  } else {
+    unitError.value = ''
+  }
+}
+
+const validateCategory = () => {
+  if (!product.value.category_id) {
+    categoryError.value = 'Категория обязательна.'
+  } else {
+    categoryError.value = ''
+  }
+}
+
+const validateBrand = () => {
+  if (!product.value.brand_id) {
+    brandError.value = 'Бренд обязателен.'
+  } else {
+    brandError.value = ''
+  }
+}
+
+const validateColor = () => {
+  if (!product.value.color_id) {
+    colorError.value = 'Цвет обязателен.'
+  } else {
+    colorError.value = ''
+  }
+}
+
+watch(() => product.value.description, validateDescription)
+watch(() => product.value.article, validateArticle)
+watch(() => product.value.name, (newName) => {
+  validateName()
+  if (newName) {
+    product.value.slug = newName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+  }
+})
+watch(() => product.value.price, validatePrice)
+watch(() => product.value.product_code, validateProductCode)
+watch(() => product.value.unit, validateUnit)
+watch(() => product.value.category_id, validateCategory)
+watch(() => product.value.brand_id, validateBrand)
+watch(() => product.value.color_id, validateColor)
+
+const textareaClass = computed(() => {
+  return descriptionError.value ? 'dark:bg-dark-900 w-full resize-none rounded-lg border border-error-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-error-300 focus:outline-hidden focus:ring-3 focus:ring-error-500/10 dark:border-error-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-error-800' : 'dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full resize-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30'
+})
+
+const inputClass = (error) => {
+  return error ? 'dark:bg-dark-900 shadow-theme-xs focus:border-error-300 focus:ring-error-500/10 dark:focus:border-error-800 h-11 w-full rounded-lg border border-error-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-error-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30' : 'dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30'
 }
 
 const loadProduct = async () => {
@@ -337,6 +448,32 @@ const loadProduct = async () => {
 }
 
 const handleSubmit = async () => {
+  validateArticle()
+  validateName()
+  validatePrice()
+  validateProductCode()
+  validateUnit()
+  validateCategory()
+  validateBrand()
+  validateColor()
+  validateDescription()
+
+  const errors = [
+    articleError.value,
+    nameError.value,
+    priceError.value,
+    productCodeError.value,
+    unitError.value,
+    categoryError.value,
+    brandError.value,
+    colorError.value,
+    descriptionError.value
+  ].filter(e => e)
+
+  if (errors.length > 0) {
+    showAlert('error', 'Ошибка валидации', errors.join(' '))
+    return
+  }
   try {
     loading.value = true
     const success = await updateProduct(Number(route.params.id), product.value)

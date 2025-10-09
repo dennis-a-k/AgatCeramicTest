@@ -38,7 +38,26 @@ class ProductController extends Controller
 
     public function update(Request $request, $id): JsonResponse
     {
-        $updated = $this->productService->updateProduct($id, $request->all());
+        $validated = $request->validate([
+            'article' => 'required|string|unique:products,article,' . $id,
+            'name' => 'required|string',
+            'slug' => 'required|string|unique:products,slug,' . $id,
+            'price' => 'required|numeric|min:0',
+            'unit' => 'required|string',
+            'product_code' => 'nullable|string',
+            'description' => 'nullable|string|min:10',
+            'category_id' => 'required|exists:categories,id',
+            'color_id' => 'required|exists:colors,id',
+            'brand_id' => 'required|exists:brands,id',
+            'is_published' => 'boolean',
+            'is_sale' => 'boolean',
+            'texture' => 'nullable|string',
+            'pattern' => 'nullable|string',
+            'country' => 'nullable|string',
+            'collection' => 'nullable|string',
+        ]);
+
+        $updated = $this->productService->updateProduct($id, $validated);
 
         if (!$updated) {
             return response()->json(['message' => 'Product not found or could not be updated'], 404);
