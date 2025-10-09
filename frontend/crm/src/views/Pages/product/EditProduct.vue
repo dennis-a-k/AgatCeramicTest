@@ -8,163 +8,195 @@
             Характеристики товара
           </h2>
         </div>
-        <div class="p-4 sm:p-6 dark:border-gray-800">
-          <form>
-            <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-              <div>
-                <label for="product-name"
-                  class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Наименование</label>
-                <input type="text" id="product-name"
-                  class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                  placeholder="Наименование товара" v-model="product.name">
-              </div>
+        <div class="space-y-5 p-4 sm:p-6 dark:border-gray-800">
+          <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+            <div>
+              <label for="product-name"
+                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Наименование</label>
+              <input type="text" id="product-name"
+                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                placeholder="Наименование товара" v-model="product.name">
+            </div>
+            <div>
+              <label for="product-country"
+                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Страна</label>
+              <input type="text" id="product-country"
+                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                placeholder="Страна производитель" v-model="product.country">
+            </div>
+          </div>
+          <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
+            <div class="relative z-20 bg-transparent">
+              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                Категория
+              </label>
               <div class="relative z-20 bg-transparent">
-                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                  Категория
-                </label>
-                <div class="relative z-20 bg-transparent">
-                  <select v-model="product.category_id"
-                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                    required>
-                    <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                      Выберите категорию
-                    </option>
-                    <option v-for="category in categories.slice(1)" :key="category.id" :value="category.value"
-                      class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                      {{ category.label }}
-                    </option>
-                  </select>
-                  <span
-                    class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-700 dark:text-gray-400">
-                    <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                  </span>
-                </div>
-              </div>
-              <div class="relative z-20 bg-transparent">
-                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                  Бренд
-                </label>
-                <div class="relative z-20 bg-transparent">
-                  <select v-model="product.brand_id"
-                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                    required>
-                    <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                      Выберите бренд
-                    </option>
-                    <option v-for="brand in brands" :key="brand.id" :value="brand.id"
-                      class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                      {{ brand.name }}
-                    </option>
-                  </select>
-                  <span
-                    class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-700 dark:text-gray-400">
-                    <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                  </span>
-                </div>
-              </div>
-              <div class="relative z-20 bg-transparent">
-                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                  Цвет
-                </label>
-                <div class="relative z-20 bg-transparent">
-                  <select v-model="product.color_id"
-                    class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                    required>
-                    <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                      Выберите цвет
-                    </option>
-                    <option v-for="color in colors" :key="color.id" :value="color.id"
-                      class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                      {{ color.name }}
-                    </option>
-                  </select>
-                  <span
-                    class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-700 dark:text-gray-400">
-                    <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                  </span>
-                </div>
-              </div>
-              <div>
-                <label for="product-article"
-                  class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Артикул</label>
-                <input type="text" id="product-article"
-                  class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                  placeholder="Артикул товара" v-model="product.article">
-              </div>
-              <div>
-                <label for="product-collection"
-                  class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Коллекция</label>
-                <input type="text" id="product-collection"
-                  class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                  placeholder="Коллекция товара" v-model="product.collection">
-              </div>
-              <div>
-                <label for="product-product_code"
-                  class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Код товара</label>
-                <input type="text" id="product-product_code"
-                  class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                  placeholder="Код товара" v-model="product.product_code">
-              </div>
-              <div>
-                <label for="product-price"
-                  class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Цена</label>
-                <input type="number" step="0.01" id="product-price" min="0"
-                  class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                  placeholder="Стоимость товара" v-model.number="product.price">
-              </div>
-              <div class="flex space-x-6">
-                <FilterCheckbox id="is_published" label="Опубликован" v-model:checked="product.is_published" />
-                <FilterCheckbox id="is_sale" label="Распродажа" v-model:checked="product.is_sale" />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Единица измерения</label>
-                <div class="flex space-x-6">
-                  <label
-                    class="flex cursor-pointer items-center text-sm font-medium text-gray-700 select-none dark:text-gray-400">
-                    <input type="radio" v-model="product.unit" value="шт" class="sr-only" />
-                    <div
-                      :class="product.unit === 'шт' ? 'border-brand-500 bg-brand-500' : 'bg-transparent border-gray-300 dark:border-gray-700'"
-                      class="hover:border-brand-500 dark:hover:border-brand-500 mr-3 flex h-5 w-5 items-center justify-center rounded-full border-[1.25px]">
-                      <span :class="product.unit === 'шт' ? '' : 'opacity-0'"
-                        class="h-2 w-2 rounded-full bg-white"></span>
-                    </div>
-                    шт.
-                  </label>
-                  <label
-                    class="flex cursor-pointer items-center text-sm font-medium text-gray-700 select-none dark:text-gray-400">
-                    <input type="radio" v-model="product.unit" value="кв.м" class="sr-only" />
-                    <div
-                      :class="product.unit === 'кв.м' ? 'border-brand-500 bg-brand-500' : 'bg-transparent border-gray-300 dark:border-gray-700'"
-                      class="hover:border-brand-500 dark:hover:border-brand-500 mr-3 flex h-5 w-5 items-center justify-center rounded-full border-[1.25px]">
-                      <span :class="product.unit === 'кв.м' ? '' : 'opacity-0'"
-                        class="h-2 w-2 rounded-full bg-white"></span>
-                    </div>
-                    м²
-                  </label>
-                </div>
-              </div>
-              <div class="col-span-full">
-                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                  Описание
-                </label>
-                <textarea placeholder="Полное описание товара" type="text" rows="7" v-model="product.description"
-                  class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full resize-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-                </textarea>
+                <select v-model="product.category_id"
+                  class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                  required>
+                  <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                    Выберите категорию
+                  </option>
+                  <option v-for="category in categories.slice(1)" :key="category.id" :value="category.value"
+                    class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                    {{ category.label }}
+                  </option>
+                </select>
+                <span
+                  class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-700 dark:text-gray-400">
+                  <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5"
+                      stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
               </div>
             </div>
-          </form>
+            <div class="relative z-20 bg-transparent">
+              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                Бренд
+              </label>
+              <div class="relative z-20 bg-transparent">
+                <select v-model="product.brand_id"
+                  class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                  required>
+                  <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                    Выберите бренд
+                  </option>
+                  <option v-for="brand in brands" :key="brand.id" :value="brand.id"
+                    class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                    {{ brand.name }}
+                  </option>
+                </select>
+                <span
+                  class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-700 dark:text-gray-400">
+                  <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5"
+                      stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+            <div class="relative z-20 bg-transparent">
+              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                Цвет
+              </label>
+              <div class="relative z-20 bg-transparent">
+                <select v-model="product.color_id"
+                  class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                  required>
+                  <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                    Выберите цвет
+                  </option>
+                  <option v-for="color in colors" :key="color.id" :value="color.id"
+                    class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                    {{ color.name }}
+                  </option>
+                </select>
+                <span
+                  class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-700 dark:text-gray-400">
+                  <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5"
+                      stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+            <div>
+              <label for="product-price"
+                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Цена</label>
+              <input type="number" step="0.01" id="product-price" min="0"
+                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                placeholder="Стоимость товара" v-model.number="product.price">
+            </div>
+            <div>
+              <label for="product-article"
+                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Артикул</label>
+              <input type="text" id="product-article"
+                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                placeholder="Артикул товара" v-model="product.article">
+            </div>
+            <div>
+              <label for="product-product_code"
+                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Код товара</label>
+              <input type="text" id="product-product_code"
+                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                placeholder="Код товара" v-model="product.product_code">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Единица измерения</label>
+              <div class="flex space-x-6">
+                <label
+                  class="flex cursor-pointer items-center text-sm font-medium text-gray-700 select-none dark:text-gray-400">
+                  <input type="radio" v-model="product.unit" value="шт" class="sr-only" />
+                  <div
+                    :class="product.unit === 'шт' ? 'border-brand-500 bg-brand-500' : 'bg-transparent border-gray-300 dark:border-gray-700'"
+                    class="hover:border-brand-500 dark:hover:border-brand-500 mr-3 flex h-5 w-5 items-center justify-center rounded-full border-[1.25px]">
+                    <span :class="product.unit === 'шт' ? '' : 'opacity-0'"
+                      class="h-2 w-2 rounded-full bg-white"></span>
+                  </div>
+                  шт.
+                </label>
+                <label
+                  class="flex cursor-pointer items-center text-sm font-medium text-gray-700 select-none dark:text-gray-400">
+                  <input type="radio" v-model="product.unit" value="кв.м" class="sr-only" />
+                  <div
+                    :class="product.unit === 'кв.м' ? 'border-brand-500 bg-brand-500' : 'bg-transparent border-gray-300 dark:border-gray-700'"
+                    class="hover:border-brand-500 dark:hover:border-brand-500 mr-3 flex h-5 w-5 items-center justify-center rounded-full border-[1.25px]">
+                    <span :class="product.unit === 'кв.м' ? '' : 'opacity-0'"
+                      class="h-2 w-2 rounded-full bg-white"></span>
+                  </div>
+                  м²
+                </label>
+              </div>
+            </div>
+            <div class="flex space-x-6">
+              <FilterCheckbox id="is_published" label="Опубликован" v-model:checked="product.is_published" />
+              <FilterCheckbox id="is_sale" label="Распродажа" v-model:checked="product.is_sale" />
+            </div>
+            <div class="col-span-full">
+              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                Описание
+              </label>
+              <textarea placeholder="Полное описание товара" type="text" rows="7" v-model="product.description"
+                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full resize-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                </textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+        <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+          <h2 class="text-lg font-medium text-gray-800 dark:text-white">
+            Характеристики для керамики
+          </h2>
+        </div>
+        <div class="space-y-5 p-4 sm:p-6">
+          <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
+            <div>
+              <label for="product-texture"
+                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Поверхность</label>
+              <input type="text" id="product-texture"
+                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                placeholder="Тип поверхности" v-model="product.texture">
+            </div>
+            <div>
+              <label for="product-pattern"
+                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Рисунок</label>
+              <input type="text" id="product-pattern"
+                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                placeholder="Тип рисунка или монотон" v-model="product.pattern">
+            </div>
+            <div>
+              <label for="product-collection"
+                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Коллекция</label>
+              <input type="text" id="product-collection"
+                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                placeholder="Коллекция товара" v-model="product.collection">
+            </div>
+          </div>
         </div>
       </div>
       <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
@@ -178,7 +210,7 @@
           </h2>
         </div>
         <div class="space-y-5 p-4 sm:p-6">
-          <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
             <div v-for="attr in product.attribute_values" :key="attr.id">
               <div v-if="attr.attribute.type === 'string'">
                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -230,7 +262,6 @@
           </label>
         </div>
       </div>
-      <!-- Button -->
       <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
         <button @click="goBack"
           class="shadow-theme-xs inline-flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 ring-1 ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
