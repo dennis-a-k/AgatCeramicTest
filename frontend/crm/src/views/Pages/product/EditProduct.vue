@@ -416,7 +416,7 @@ watch(() => product.value.article, validateArticle)
 watch(() => product.value.name, (newName) => {
   validateName()
   if (newName) {
-    product.value.slug = newName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+    product.value.slug = newName.toLowerCase().replace(/[^a-zа-яё0-9]+/g, '-').replace(/^-|-$/g, '')
   }
 })
 watch(() => product.value.price, validatePrice)
