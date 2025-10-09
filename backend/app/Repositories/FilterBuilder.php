@@ -48,7 +48,7 @@ class FilterBuilder implements FilterBuilderInterface
      */
     public function buildBaseQuery(Request $request): Builder
     {
-        $query = $this->model->published();
+        $query = $request->has('admin') && $request->admin ? $this->model->query() : $this->model->published();
         $this->applyBaseFilters($query, $request);
         return $query;
     }

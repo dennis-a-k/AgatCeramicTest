@@ -21,6 +21,7 @@ class ProductController extends Controller
 
     public function index(Request $request): JsonResponse
     {
+        $request->merge(['admin' => true]);
         $result = $this->productService->getProductsWithFilters($request);
         return response()->json($result);
     }
