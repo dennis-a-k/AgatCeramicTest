@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProductAttributeValue;
 use App\Services\ProductService;
 use App\Services\SearchService;
 use Illuminate\Http\Request;
@@ -56,12 +57,29 @@ class ProductController extends Controller
             'pattern' => 'nullable|string',
             'country' => 'nullable|string',
             'collection' => 'nullable|string',
+            'attribute_values' => 'nullable|array',
+            'attribute_values.*.id' => 'required|integer|exists:product_attribute_values,id,product_id,' . $id,
+            'attribute_values.*.string_value' => 'nullable|string',
+            'attribute_values.*.number_value' => 'nullable|numeric',
+            'attribute_values.*.boolean_value' => 'nullable|boolean',
         ]);
 
         $updated = $this->productService->updateProduct($id, $validated);
 
         if (!$updated) {
             return response()->json(['message' => 'Product not found or could not be updated'], 404);
+        }
+
+        // Update attribute values
+        if (isset($validated['attribute_values'])) {
+            foreach ($validated['attribute_values'] as $attrValue) {
+                ProductAttributeValue::where('id', $attrValue['id'])
+                    ->update([
+                        'string_value' => $attrValue['string_value'] ?? null,
+                        'number_value' => $attrValue['number_value'] ?? null,
+                        'boolean_value' => $attrValue['boolean_value'] ?? null,
+                    ]);
+            }
         }
 
         return response()->json(['message' => 'Product updated successfully']);
