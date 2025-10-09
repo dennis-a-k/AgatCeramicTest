@@ -167,21 +167,24 @@
         <div class="space-y-5 p-4 sm:p-6">
           <div v-for="attr in product.attribute_values" :key="attr.id" class="grid grid-cols-1 gap-5 md:grid-cols-2">
             <div v-if="attr.attribute.type === 'string'">
-              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ attr.attribute.name }}</label>
+              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ attr.attribute.name
+              }}</label>
               <input type="text" v-model="attr.string_value"
                 class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
             </div>
             <div v-else-if="attr.attribute.type === 'number'">
-              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ attr.attribute.name }}</label>
+              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ attr.attribute.name
+              }}</label>
               <input type="number" step="0.01" v-model.number="attr.number_value"
                 class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
             </div>
             <div v-else-if="attr.attribute.type === 'boolean'">
-              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ attr.attribute.name }}</label>
-              <input type="checkbox" v-model="attr.boolean_value" class="h-5 w-5 text-brand-600 focus:ring-brand-500 border-gray-300 rounded">
+              <FilterCheckbox :id="'attr-' + attr.id" :label="attr.attribute.name"
+                v-model:checked="attr.boolean_value" />
             </div>
             <div v-else-if="attr.attribute.type === 'text'" class="col-span-full">
-              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ attr.attribute.name }}</label>
+              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">{{ attr.attribute.name
+              }}</label>
               <textarea v-model="attr.text_value" rows="4"
                 class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full resize-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"></textarea>
             </div>
