@@ -28,7 +28,7 @@ class ProductRepository implements FilterableRepositoryInterface
 
     public function find($id): ?Product
     {
-        return $this->model->with(['category', 'brand', 'color', 'attributeValues.attribute'])
+        return $this->model->with(['category', 'brand', 'color', 'attributeValues.attribute', 'images'])
             ->find($id);
     }
 
