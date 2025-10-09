@@ -64,7 +64,7 @@ import GoodsHeader from '@/components/goods-page/GoodsHeader.vue'
 import GoodsFilters from '@/components/goods-page/GoodsFilters.vue'
 import GoodsTable from '@/components/goods-page/GoodsTable.vue'
 import GoodsPagination from '@/components/goods-page/GoodsPagination.vue'
-import { PackageIcon, DownloadIcon, PlusIcon, Settings2Icon, SearchIcon } from "../../icons";
+import { PackageIcon, DownloadIcon, PlusIcon, Settings2Icon, SearchIcon } from "../../../icons";
 import { useGoods } from '@/composables/useGoods'
 import { useCategories } from '@/composables/useCategories'
 

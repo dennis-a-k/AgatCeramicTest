@@ -17,7 +17,7 @@ const router = createRouter({
     {
       path: '/products',
       name: 'Goods',
-      component: () => import('../views/Pages/Goods.vue'),
+      component: () => import('../views/Pages/product/Goods.vue'),
       meta: {
         title: 'Товары',
       },
