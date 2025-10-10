@@ -97,9 +97,11 @@
                     {{ product.article }}</p>
                 </td>
                 <td class="px-5 py-4 sm:px-6">
-                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                    {{ truncateText(product.name) }}
-                  </p>
+                  <a :href="`${FRONTEND_URL}/product/${product.slug}`" target="_blank">
+                    <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                      {{ truncateText(product.name) }}
+                    </p>
+                  </a>
                 </td>
                 <td class="px-5 py-4 sm:px-6">
                   <p class="text-gray-500 text-center text-theme-sm dark:text-gray-400">
@@ -181,6 +183,8 @@ defineProps({
   formatter: Object,
   sort: Object
 })
+
+const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL
 
 const emit = defineEmits(['sortBy', 'fetchProducts', 'edit', 'delete'])
 
