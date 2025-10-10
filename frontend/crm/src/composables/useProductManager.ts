@@ -123,29 +123,27 @@ export function useProductManager() {
           })
 
           // Присваиваем ошибки валидации
-          if (result.errors) {
-            Object.keys(result.errors).forEach(key => {
-              if (key in errors && result.errors[key]) {
-                errors[key] = result.errors[key][0]
-              }
-            })
+          Object.keys(result.errors).forEach(key => {
+            if (key in errors && result.errors![key]) {
+              errors[key] = result.errors![key][0]
+            }
+          })
 
-            // Для attribute_values
-            Object.keys(result.errors).forEach(key => {
-              if (key.startsWith('attribute_values.') && result.errors[key]) {
-                const parts = key.split('.')
-                if (parts.length >= 3) {
-                  const index = parseInt(parts[1])
-                  const field = parts[2]
-                  if (field === 'string_value' || field === 'number_value' || field === 'boolean_value') {
-                    if (product.value.attribute_values[index]) {
-                      product.value.attribute_values[index].error = result.errors[key][0]
-                    }
+          // Для attribute_values
+          Object.keys(result.errors).forEach(key => {
+            if (key.startsWith('attribute_values.') && result.errors![key]) {
+              const parts = key.split('.')
+              if (parts.length >= 3) {
+                const index = parseInt(parts[1])
+                const field = parts[2]
+                if (field === 'string_value' || field === 'number_value' || field === 'boolean_value') {
+                  if (product.value.attribute_values[index]) {
+                    product.value.attribute_values[index].error = result.errors![key][0]
                   }
                 }
               }
-            })
-          }
+            }
+          })
 
           showAlert('error', 'Ошибка валидации', 'Пожалуйста, исправьте ошибки в форме')
         } else {
