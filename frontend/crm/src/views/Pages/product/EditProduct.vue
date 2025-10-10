@@ -258,7 +258,7 @@
         <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
           <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
             <h2 class="text-lg font-medium text-gray-800 dark:text-white">
-              Products Images
+              Фото товара
             </h2>
           </div>
           <div class="p-4 sm:p-6">
@@ -275,8 +275,8 @@
                     </svg>
                   </div>
                   <p class="text-center text-sm text-gray-500 dark:text-gray-400">
-                    <span class="font-medium text-gray-800 dark:text-white/90">Click to upload</span>
-                    or drag and drop SVG, PNG, JPG or GIF (MAX. 800x400px)
+                    <span class="font-medium text-gray-800 dark:text-white/90">Щелкните, чтобы загрузить,</span>
+                    или перетащите PNG, JPG, JPEG или WEBP (макс. 800x400 пикселей)
                   </p>
                 </div>
               </div>
