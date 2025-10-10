@@ -1,4 +1,4 @@
-import { ref, watch, type Ref } from 'vue'
+import { reactive, watch, type Ref } from 'vue'
 
 interface Product {
   name: string
@@ -35,109 +35,109 @@ interface Errors {
 }
 
 export function useProductValidation(product: Ref<Product>) {
-  const errors = ref<Errors>({})
+  const errors = reactive<Errors>({})
 
   const validateName = () => {
     if (!product.value.name.trim()) {
-      errors.value.name = 'Наименование обязательно.'
+      errors.name = 'Наименование обязательно.'
     } else if (product.value.name.length > 255) {
-      errors.value.name = 'Наименование не должно превышать 255 символов.'
+      errors.name = 'Наименование не должно превышать 255 символов.'
     } else {
-      errors.value.name = ''
+      errors.name = ''
     }
   }
 
   const validateArticle = () => {
     if (!product.value.article.trim()) {
-      errors.value.article = 'Артикул обязателен.'
+      errors.article = 'Артикул обязателен.'
     } else {
-      errors.value.article = ''
+      errors.article = ''
     }
   }
 
   const validatePrice = () => {
     if (!product.value.price || product.value.price <= 0) {
-      errors.value.price = 'Цена должна быть положительным числом.'
+      errors.price = 'Цена должна быть положительным числом.'
     } else {
-      errors.value.price = ''
+      errors.price = ''
     }
   }
 
   const validateProductCode = () => {
-    errors.value.productCode = ''
+    errors.productCode = ''
   }
 
   const validateUnit = () => {
     if (!product.value.unit) {
-      errors.value.unit = 'Единица измерения обязательна.'
+      errors.unit = 'Единица измерения обязательна.'
     } else {
-      errors.value.unit = ''
+      errors.unit = ''
     }
   }
 
   const validateCategory = () => {
     if (!product.value.category_id) {
-      errors.value.category = 'Категория обязательна.'
+      errors.category = 'Категория обязательна.'
     } else {
-      errors.value.category = ''
+      errors.category = ''
     }
   }
 
   const validateBrand = () => {
     if (!product.value.brand_id) {
-      errors.value.brand = 'Бренд обязателен.'
+      errors.brand = 'Бренд обязателен.'
     } else {
-      errors.value.brand = ''
+      errors.brand = ''
     }
   }
 
   const validateColor = () => {
     if (!product.value.color_id) {
-      errors.value.color = 'Цвет обязателен.'
+      errors.color = 'Цвет обязателен.'
     } else {
-      errors.value.color = ''
+      errors.color = ''
     }
   }
 
   const validateDescription = () => {
     if (!product.value.description.trim()) {
-      errors.value.description = 'Описание товара обязательно для заполнения.'
+      errors.description = 'Описание товара обязательно для заполнения.'
     } else if (product.value.description.length < 10) {
-      errors.value.description = 'Описание должно содержать не менее 10 символов.'
+      errors.description = 'Описание должно содержать не менее 10 символов.'
     } else {
-      errors.value.description = ''
+      errors.description = ''
     }
   }
 
   const validateTexture = () => {
     if (product.value.texture && product.value.texture.length > 100) {
-      errors.value.texture = 'Поверхность не должна превышать 100 символов.'
+      errors.texture = 'Поверхность не должна превышать 100 символов.'
     } else {
-      errors.value.texture = ''
+      errors.texture = ''
     }
   }
 
   const validatePattern = () => {
     if (product.value.pattern && product.value.pattern.length > 100) {
-      errors.value.pattern = 'Рисунок не должен превышать 100 символов.'
+      errors.pattern = 'Рисунок не должен превышать 100 символов.'
     } else {
-      errors.value.pattern = ''
+      errors.pattern = ''
     }
   }
 
   const validateCountry = () => {
     if (product.value.country && product.value.country.length > 100) {
-      errors.value.country = 'Страна не должна превышать 100 символов.'
+      errors.country = 'Страна не должна превышать 100 символов.'
     } else {
-      errors.value.country = ''
+      errors.country = ''
     }
   }
 
   const validateCollection = () => {
     if (product.value.collection && product.value.collection.length > 255) {
-      errors.value.collection = 'Коллекция не должна превышать 255 символов.'
+      errors.collection = 'Коллекция не должна превышать 255 символов.'
     } else {
-      errors.value.collection = ''
+      errors.collection = ''
     }
   }
 
@@ -171,37 +171,33 @@ export function useProductValidation(product: Ref<Product>) {
   }
 
   const hasErrors = () => {
-    return Object.values(errors.value).some(error => error) || product.value.attribute_values.some((attr: any) => attr.error)
+    return Object.values(errors).some(error => error) || product.value.attribute_values.some((attr: any) => attr.error)
   }
 
-  // Watchers - only clear errors on change
-  watch(() => product.value.description, () => { errors.value.description = '' })
-  watch(() => product.value.article, () => { errors.value.article = '' })
+  // Watchers - validate on change
+  watch(() => product.value.description, validateDescription)
+  watch(() => product.value.article, validateArticle)
   watch(() => product.value.name, (newName) => {
-    errors.value.name = ''
+    validateName()
     if (newName) {
       product.value.slug = newName.toLowerCase().replace(/[^a-zа-яё0-9]+/g, '-').replace(/^-|-$/g, '')
     }
   })
-  watch(() => product.value.price, () => { errors.value.price = '' })
-  watch(() => product.value.product_code, () => { errors.value.productCode = '' })
-  watch(() => product.value.unit, () => { errors.value.unit = '' })
-  watch(() => product.value.category_id, () => { errors.value.category = '' })
-  watch(() => product.value.brand_id, () => { errors.value.brand = '' })
-  watch(() => product.value.color_id, () => { errors.value.color = '' })
-  watch(() => product.value.texture, () => { errors.value.texture = '' })
-  watch(() => product.value.pattern, () => { errors.value.pattern = '' })
-  watch(() => product.value.country, () => { errors.value.country = '' })
-  watch(() => product.value.collection, () => { errors.value.collection = '' })
-  watch(() => product.value.attribute_values, () => {
-    product.value.attribute_values.forEach(attr => {
-      attr.error = ''
-    })
-  }, { deep: true })
+  watch(() => product.value.price, validatePrice)
+  watch(() => product.value.product_code, validateProductCode)
+  watch(() => product.value.unit, validateUnit)
+  watch(() => product.value.category_id, validateCategory)
+  watch(() => product.value.brand_id, validateBrand)
+  watch(() => product.value.color_id, validateColor)
+  watch(() => product.value.texture, validateTexture)
+  watch(() => product.value.pattern, validatePattern)
+  watch(() => product.value.country, validateCountry)
+  watch(() => product.value.collection, validateCollection)
+  watch(() => product.value.attribute_values, validateAttributes, { deep: true })
 
   const resetErrors = () => {
-    Object.keys(errors.value).forEach(key => {
-      errors.value[key as keyof Errors] = ''
+    Object.keys(errors).forEach(key => {
+      errors[key as keyof Errors] = ''
     })
   }
 

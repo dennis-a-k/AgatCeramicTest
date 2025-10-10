@@ -91,7 +91,7 @@ export function useProductManager() {
   const handleSubmit = async (validateAll: () => void, hasErrors: () => boolean, errors: any) => {
     validateAll()
 
-    const validationErrors = Object.values(errors.value).filter(e => e)
+    const validationErrors = Object.values(errors).filter(e => e)
     // Добавляем ошибки атрибутов
     for (const attr of product.value.attribute_values) {
       if (attr.error) {
@@ -115,8 +115,8 @@ export function useProductManager() {
       } else {
         if (result.errors) {
           // Очищаем предыдущие ошибки
-          Object.keys(errors.value).forEach(key => {
-            errors.value[key] = ''
+          Object.keys(errors).forEach(key => {
+            errors[key] = ''
           })
           product.value.attribute_values.forEach(attr => {
             attr.error = ''
@@ -125,8 +125,8 @@ export function useProductManager() {
           // Присваиваем ошибки валидации
           if (result.errors) {
             Object.keys(result.errors).forEach(key => {
-              if (key in errors.value && result.errors[key]) {
-                errors.value[key] = result.errors[key][0]
+              if (key in errors && result.errors[key]) {
+                errors[key] = result.errors[key][0]
               }
             })
 

@@ -119,7 +119,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, type Ref } from 'vue'
 import Checkbox from '@/components/ui/Checkbox.vue'
 
 interface Product {
@@ -167,7 +167,7 @@ interface Color {
 
 defineProps<{
   product: Product
-  errors: Errors
+  errors: any
   categories: Category[]
   brands: Brand[]
   colors: Color[]

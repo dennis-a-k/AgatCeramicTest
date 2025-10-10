@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, type Ref } from 'vue'
 
 interface Product {
   texture: string
@@ -49,7 +49,7 @@ interface Category {
 
 defineProps<{
   product: Product
-  errors: Errors
+  errors: any
   categories: Category[]
   isCeramicCategory: boolean
 }>()
