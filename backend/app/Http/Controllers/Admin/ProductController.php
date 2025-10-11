@@ -65,20 +65,24 @@ class ProductController extends Controller
             'attribute_values.*.boolean_value' => 'nullable|boolean',
         ]);
 
-        $slug = Str::slug($validated['name']);
-        $originalSlug = $slug;
-        $count = 1;
-        while (Product::where('slug', $slug)->where('id', '!=', $id)->exists()) {
-            $slug = $originalSlug . '-' . $count++;
-        }
-
-        $validated['slug'] = $slug;
-
-        $updated = $this->productService->updateProduct($id, $validated);
+        $updated = $this->productService->updateProduct($id, $validated); // Обновляем все поля, кроме slug
 
         if (!$updated) {
             return response()->json(['message' => 'Product not found or could not be updated'], 404);
         }
+
+        $product = $this->productService->getProductById($id); // Получаем свежий объект продукта
+
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
+        // Генерируем slug с id товара
+        $slug = Str::slug($validated['name']) . '-' . $product->id;
+
+        // Обновляем slug в продукте и сохраняем его
+        $product->slug = $slug;
+        $product->save();
 
         // Update attribute values
         if (isset($validated['attribute_values'])) {
