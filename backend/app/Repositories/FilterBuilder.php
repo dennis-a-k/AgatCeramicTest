@@ -114,7 +114,7 @@ class FilterBuilder implements FilterBuilderInterface
 
         // Фильтрация по распродаже
         if ($request->has('is_sale')) {
-            $saleValues = array_map(function($value) {
+            $saleValues = array_map(function ($value) {
                 return filter_var($value, FILTER_VALIDATE_BOOLEAN);
             }, (array)$request->is_sale);
             if (!empty($saleValues)) {
@@ -124,7 +124,7 @@ class FilterBuilder implements FilterBuilderInterface
 
         // Фильтрация по публикации
         if ($request->has('is_published')) {
-            $publishedValues = array_map(function($value) {
+            $publishedValues = array_map(function ($value) {
                 return filter_var($value, FILTER_VALIDATE_BOOLEAN);
             }, (array)$request->is_published);
             if (!empty($publishedValues)) {
@@ -164,7 +164,7 @@ class FilterBuilder implements FilterBuilderInterface
                     $query->whereHas('attributeValues', function ($q) use ($attribute, $request, $key, $config) {
                         $q->where('attribute_id', $attribute->id);
                         if ($config['type'] === 'boolean') {
-                            $booleanValues = array_map(function($value) {
+                            $booleanValues = array_map(function ($value) {
                                 return $value === '1' || $value === 1 || $value === true || $value === 'true';
                             }, (array)$request->$key);
                             $q->whereIn($config['field'], $booleanValues);
@@ -184,7 +184,7 @@ class FilterBuilder implements FilterBuilderInterface
      */
     public function applyFilters(Request $request): LengthAwarePaginator
     {
-        $query = $this->buildBaseQuery($request)->with(['category', 'brand', 'color', 'attributeValues.attribute']);
+        $query = $this->buildBaseQuery($request)->with(['category', 'brand', 'color', 'attributeValues.attribute', 'images']);
 
         // Сортировка
         if ($request->has('sort_key') && $request->has('sort_direction')) {

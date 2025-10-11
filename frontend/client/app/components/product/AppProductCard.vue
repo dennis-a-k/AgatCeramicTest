@@ -59,10 +59,12 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { useCartStore } from '~/stores/useCartStore';
+import { useRuntimeConfig } from '#imports';
 
 const cartStore = useCartStore();
 const { $toast } = useNuxtApp();
 const quickViewModal = ref(null);
+const config = useRuntimeConfig();
 
 const formatter = new Intl.NumberFormat('ru-RU', {
   style: 'currency',
@@ -83,7 +85,17 @@ const weight = computed(() => {
   return attr ? attr.number_value : null;
 });
 
+const getImageUrl = (image) => {
+  if (image.image_path.startsWith('http')) {
+    return image.image_path;
+  }
+  return `${config.public.apiBase}/storage/${image.image_path}`;
+};
+
 const productImage = computed(() => {
+  if (props.product.images && props.product.images.length > 0) {
+    return getImageUrl(props.product.images[0]);
+  }
   return props.product.imgSrc && props.product.imgSrc.trim() !== ''
     ? props.product.imgSrc
     : '/images/stock/stock-image.png';

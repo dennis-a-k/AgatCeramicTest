@@ -3,23 +3,34 @@
     <div class="container">
       <UiAppSpinner v-if="pending" text="Загрузка товара..." />
       <div v-else-if="showErrorMessage" class="error text-center mt-5">
-        <h2>Произошла ошибка при загрузке товара.<br>Попробуйте перезагрузить страницу.</h2>
+        <h2>
+          Произошла ошибка при загрузке товара.<br />Попробуйте перезагрузить
+          страницу.
+        </h2>
       </div>
       <div v-else-if="!productData" class="text-center mt-5">
         <h2>Товар не найден</h2>
       </div>
       <div v-else class="row">
-        <div class="col-lg-5 col-sm-12 col-xs-12 mb-lm-30px mb-md-30px mb-sm-30px">
+        <div
+          class="col-lg-5 col-sm-12 col-xs-12 mb-lm-30px mb-md-30px mb-sm-30px"
+        >
           <ClientOnly>
             <SlidersAppProductPageSlider :images="productImages" />
           </ClientOnly>
         </div>
-        <div class="col-lg-7 col-sm-12 col-xs-12" data-aos="fade-up" data-aos-delay="200">
+        <div
+          class="col-lg-7 col-sm-12 col-xs-12"
+          data-aos="fade-up"
+          data-aos-delay="200"
+        >
           <div class="product-details-content quickview-content ml-25px">
             <span v-if="productData.is_sale" class="badges">
               <span class="sale">Распродажа</span>
             </span>
-            <h1 class="h3">{{ productData.name }}{{ weight ? `, ${weight} кг` : '' }}</h1>
+            <h1 class="h3">
+              {{ productData.name }}{{ weight ? `, ${weight} кг` : '' }}
+            </h1>
             <div class="pricing-meta">
               <ul class="d-flex">
                 <li class="new-price">
@@ -27,11 +38,17 @@
                 </li>
               </ul>
             </div>
-            <div v-for="meta in productMeta" :key="meta.label" class="pro-details-categories-info pro-details-same-style d-flex m-0">
+            <div
+              v-for="meta in productMeta"
+              :key="meta.label"
+              class="pro-details-categories-info pro-details-same-style d-flex m-0"
+            >
               <span>{{ meta.label }}</span>
               <ul class="d-flex">
                 <li>
-                  <NuxtLink v-if="meta.link" :to="meta.link">{{ meta.value }}</NuxtLink>
+                  <NuxtLink v-if="meta.link" :to="meta.link">{{
+                    meta.value
+                  }}</NuxtLink>
                   <span v-else>{{ meta.value }}</span>
                 </li>
               </ul>
@@ -39,20 +56,47 @@
             <div class="pro-details-quality">
               <div class="cart-plus-minus">
                 <div class="dec qtybutton" @click="decrement">-</div>
-                <input class="cart-plus-minus-box" type="text" name="qtybutton" v-model="quantity" />
+                <input
+                  class="cart-plus-minus-box"
+                  type="text"
+                  name="qtybutton"
+                  v-model="quantity"
+                />
                 <div class="inc qtybutton" @click="increment">+</div>
               </div>
-              <p v-if="productData.unit">{{ productData.unit === 'шт' ? 'шт.' : productData.unit === 'кв.м' ? 'м²' : productData.unit }}</p>
+              <p v-if="productData.unit">
+                {{
+                  productData.unit === 'шт'
+                    ? 'шт.'
+                    : productData.unit === 'кв.м'
+                    ? 'м²'
+                    : productData.unit
+                }}
+              </p>
               <div class="pro-details-cart">
-                <button class="add-cart" :data-product-id="productData.id" @click="addToCartProduct">В корзину</button>
+                <button
+                  class="add-cart"
+                  :data-product-id="productData.id"
+                  @click="addToCartProduct"
+                >
+                  В корзину
+                </button>
               </div>
             </div>
           </div>
 
           <div class="description-review-wrapper">
             <div class="description-review-topbar nav">
-              <button data-bs-toggle="tab" data-bs-target="#des-details2">Характеристики</button>
-              <button class="active" data-bs-toggle="tab" data-bs-target="#des-details1">Описание</button>
+              <button data-bs-toggle="tab" data-bs-target="#des-details2">
+                Характеристики
+              </button>
+              <button
+                class="active"
+                data-bs-toggle="tab"
+                data-bs-target="#des-details1"
+              >
+                Описание
+              </button>
             </div>
             <div class="tab-content description-review-bottom">
               <div id="des-details2" class="tab-pane">
@@ -62,29 +106,52 @@
                       <tbody>
                         <tr v-if="productData.color">
                           <td>Цвет</td>
-                          <td><span>{{ productData.color.name }}</span></td>
+                          <td>
+                            <span>{{ productData.color.name }}</span>
+                          </td>
                         </tr>
                         <tr v-if="productData.texture">
                           <td>Поверхность</td>
-                          <td><span>{{ productData.texture }}</span></td>
+                          <td>
+                            <span>{{ productData.texture }}</span>
+                          </td>
                         </tr>
                         <tr v-if="productData.pattern">
                           <td>Узор</td>
-                          <td><span>{{ productData.pattern }}</span></td>
+                          <td>
+                            <span>{{ productData.pattern }}</span>
+                          </td>
                         </tr>
-                        <tr v-for="attr in productData.attribute_values" :key="attr.id">
+                        <tr
+                          v-for="attr in productData.attribute_values"
+                          :key="attr.id"
+                        >
                           <td>{{ attr.attribute.name }}</td>
                           <td>
-                            <span v-if="attr.attribute.type === 'boolean'">{{ attr.boolean_value ? 'Да' : 'Нет'
+                            <span v-if="attr.attribute.type === 'boolean'">{{
+                              attr.boolean_value ? 'Да' : 'Нет'
                             }}</span>
-                            <span v-else-if="attr.attribute.type === 'number'">{{ formattedNumberAttribute(attr) }}</span>
-                            <span v-else-if="attr.attribute.type === 'string' || attr.attribute.type === 'text'">{{ formattedStringAttribute(attr) }}</span>
-                            <span v-else>{{ attr.string_value || attr.text_value }}</span>
+                            <span
+                              v-else-if="attr.attribute.type === 'number'"
+                              >{{ formattedNumberAttribute(attr) }}</span
+                            >
+                            <span
+                              v-else-if="
+                                attr.attribute.type === 'string' ||
+                                attr.attribute.type === 'text'
+                              "
+                              >{{ formattedStringAttribute(attr) }}</span
+                            >
+                            <span v-else>{{
+                              attr.string_value || attr.text_value
+                            }}</span>
                           </td>
                         </tr>
                         <tr v-if="productData.country">
                           <td>Страна</td>
-                          <td><span>{{ productData.country }}</span></td>
+                          <td>
+                            <span>{{ productData.country }}</span>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -113,54 +180,76 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import { useRuntimeConfig } from '#imports'
-import { useCartStore } from '~/stores/useCartStore'
+import { computed, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { useRuntimeConfig } from '#imports';
+import { useCartStore } from '~/stores/useCartStore';
 
-const cartStore = useCartStore()
-const { $toast } = useNuxtApp()
+const cartStore = useCartStore();
+const { $toast } = useNuxtApp();
 
-const route = useRoute()
-const slug = route.params.slug
-const config = useRuntimeConfig()
-const siteUrl = config.public.siteUrl || 'https://agatceramic.ru'
+const route = useRoute();
+const slug = route.params.slug;
+const config = useRuntimeConfig();
+const siteUrl = config.public.siteUrl || 'https://agatceramic.ru';
 
-const quantity = ref(1)
+const quantity = ref(1);
+
+const getImageUrl = (image) => {
+  if (image.image_path.startsWith('http')) {
+    return image.image_path;
+  }
+  return `${config.public.apiBase}/storage/${image.image_path}`;
+};
 
 const productImages = computed(() => {
   if (productData.value?.images && productData.value.images.length > 0) {
     return productData.value.images.map((img, index) => ({
-      url: img.url || img.src,
-      alt: img.alt || `Изображение продукта ${index + 1}`
-    }))
+      url: getImageUrl(img),
+      alt: `Фото ${index + 1}`,
+    }));
   }
   // Fallback to single image if no images array
-  return productData.value?.imgSrc ? [{
-    url: productData.value.imgSrc,
-    alt: productData.value.name || 'Изображение продукта'
-  }] : [{
-    url: '/images/stock/stock-image.png',
-    alt: 'Изображение продукта'
-  }]
-})
+  return productData.value?.imgSrc
+    ? [
+        {
+          url: productData.value.imgSrc,
+          alt: productData.value.name || 'Изображение продукта',
+        },
+      ]
+    : [
+        {
+          url: '/images/stock/stock-image.png',
+          alt: 'Изображение продукта',
+        },
+      ];
+});
 
-const { data: productData, pending, error, execute } = useAsyncData(`product-${slug}`, () => $fetch(`${config.public.apiBase}/api/products/slug/${slug}`), {
-  immediate: true
-})
+const {
+  data: productData,
+  pending,
+  error,
+  execute,
+} = useAsyncData(
+  `product-${slug}`,
+  () => $fetch(`${config.public.apiBase}/api/products/slug/${slug}`),
+  {
+    immediate: true,
+  }
+);
 
 const increment = () => {
-  quantity.value += 1
-}
+  quantity.value += 1;
+};
 
 const decrement = () => {
   if (quantity.value > 1) {
-    quantity.value -= 1
+    quantity.value -= 1;
   }
-}
+};
 
 const addToCartProduct = () => {
-  if (!productData.value) return
+  if (!productData.value) return;
 
   cartStore.addToCart({
     id: productData.value.id,
@@ -170,160 +259,191 @@ const addToCartProduct = () => {
     quantity: quantity.value,
     price: productData.value.price,
     unit: productData.value.unit,
-    image: productImages.value[0]?.url || '/images/stock/stock-image.png'
-  })
+    image: productImages.value[0]?.url || '/images/stock/stock-image.png',
+  });
 
-  $toast.success('Товар добавлен в корзину!')
-}
+  $toast.success('Товар добавлен в корзину!');
+};
 
 const showErrorMessage = computed(() => {
-  return error.value && !pending.value
-})
+  return error.value && !pending.value;
+});
 
 const formattedPrice = computed(() => {
   const formatter = new Intl.NumberFormat('ru-RU', {
     style: 'currency',
     currency: 'RUB',
-  })
-  return formatter.format(productData.value?.price || 0)
-})
+  });
+  return formatter.format(productData.value?.price || 0);
+});
 
 const weight = computed(() => {
-  const attr = productData.value?.attribute_values?.find(a => a.attribute.slug === 'ves')
-  return attr ? attr.number_value : null
-})
+  const attr = productData.value?.attribute_values?.find(
+    (a) => a.attribute.slug === 'ves'
+  );
+  return attr ? attr.number_value : null;
+});
 
 const formattedNumberAttribute = computed(() => (attr) => {
   const formatter = new Intl.NumberFormat('ru-RU', {
-    maximumFractionDigits: 2
-  })
+    maximumFractionDigits: 2,
+  });
   if (attr.attribute.slug === 'ves') {
-    return `${formatter.format(attr.number_value)} кг`
+    return `${formatter.format(attr.number_value)} кг`;
   } else if (attr.attribute.slug === 'tolshhina') {
-    return `${formatter.format(attr.number_value)} мм`
+    return `${formatter.format(attr.number_value)} мм`;
   }
-  return formatter.format(attr.number_value)
-})
+  return formatter.format(attr.number_value);
+});
 
 const formattedStringAttribute = computed(() => (attr) => {
-  if (attr.attribute.slug === 'sirina-sva' || attr.attribute.slug === 'razmery') {
-    return `${attr.string_value || attr.text_value} мм`
+  if (
+    attr.attribute.slug === 'sirina-sva' ||
+    attr.attribute.slug === 'razmery'
+  ) {
+    return `${attr.string_value || attr.text_value} мм`;
   }
-  return attr.string_value || attr.text_value
-})
+  return attr.string_value || attr.text_value;
+});
 
 const productMeta = computed(() => {
-  if (!productData.value) return []
-  const meta = []
+  if (!productData.value) return [];
+  const meta = [];
   if (productData.value.article) {
-    meta.push({ label: 'Артикул:', value: productData.value.article })
+    meta.push({ label: 'Артикул:', value: productData.value.article });
   }
   if (productData.value.product_code) {
-    meta.push({ label: 'Код товара:', value: productData.value.product_code })
+    meta.push({ label: 'Код товара:', value: productData.value.product_code });
   }
   if (productData.value.category) {
     meta.push({
       label: 'Категория:',
       value: productData.value.category.name,
-      link: `/category/${productData.value.category.slug}`
-    })
+      link: `/category/${productData.value.category.slug}`,
+    });
   }
   if (productData.value.brand) {
     meta.push({
       label: 'Производитель:',
       value: productData.value.brand.name,
-      link: `/brand/${productData.value.brand.slug}`
-    })
+      link: `/brand/${productData.value.brand.slug}`,
+    });
   }
   if (productData.value.collection) {
-    meta.push({ label: 'Коллекция:', value: productData.value.collection })
+    meta.push({ label: 'Коллекция:', value: productData.value.collection });
   }
-  return meta
-})
+  return meta;
+});
 
 const structuredData = computed(() => {
-  if (!productData.value) return null
+  if (!productData.value) return null;
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: productData.value.name,
     description: productData.value.description,
-    image: productImages.value.map(img => img.url),
+    image: productImages.value.map((img) => img.url),
     sku: productData.value.article || productData.value.product_code,
     offers: {
       '@type': 'Offer',
       price: productData.value.price,
       priceCurrency: 'RUB',
-      availability: productData.value.in_stock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
+      availability: productData.value.in_stock
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
     },
-    brand: productData.value.brand ? {
-      '@type': 'Brand',
-      name: productData.value.brand.name
-    } : undefined,
-    category: productData.value.category ? productData.value.category.name : undefined,
-    manufacturer: productData.value.brand ? productData.value.brand.name : undefined
-  }
-})
-
-useHead(computed(() => ({
-  title: productData.value?.name ? `${productData.value.name} купить в Москве по низкой цене с доставкой в AgatCeramic` : 'Товар - AgatCeramic',
-  meta: [
-    {
-      name: 'description',
-      content: productData.value?.description || 'Купить товар в интернет-магазине AgatCeramic'
-    },
-    {
-      name: 'keywords',
-      content: productData.value?.name ? `${productData.value.name}, керамическая плитка, сантехника` : 'керамическая плитка, сантехника'
-    },
-    {
-      property: 'og:image',
-      content: productImages.value[0]?.url || '/images/stock/stock-image.png'
-    },
-    {
-      property: 'og:title',
-      content: 'AgatCeramic - Интернет-магазин плитки, керамогранита и сантехники'
-    },
-    {
-      property: 'og:description',
-      content: productData.value?.description || 'Купить товар в интернет-магазине AgatCeramic'
-    },
-    {
-      property: 'og:url',
-      content: `${siteUrl}/product/${slug}`
-    },
-    {
-      name: 'twitter:image',
-      content: productImages.value[0]?.url || '/images/stock/stock-image.png'
-    }
-  ],
-  link: [
-    {
-      rel: 'canonical',
-      href: `${siteUrl}/product/${slug}`
-    }
-  ],
-  script: [
-    ...(structuredData.value ? [{ type: 'application/ld+json', children: JSON.stringify(structuredData.value) }] : []),
-    {
-      type: 'application/ld+json',
-      children: JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'Organization',
-        name: 'AgatCeramic',
-        url: siteUrl,
-        logo: `${siteUrl}/images/stock/logo.png`,
-        description: 'Интернет-магазин плитки, керамогранита и сантехники',
-        email: 'zakaz@agatceramic.ru',
-        contactPoint: {
-          '@type': 'ContactPoint',
-          telephone: '+7 (999) 999-99-99',
-          contactType: 'customer service'
+    brand: productData.value.brand
+      ? {
+          '@type': 'Brand',
+          name: productData.value.brand.name,
         }
-      })
-    }
-  ]
-})))
+      : undefined,
+    category: productData.value.category
+      ? productData.value.category.name
+      : undefined,
+    manufacturer: productData.value.brand
+      ? productData.value.brand.name
+      : undefined,
+  };
+});
+
+useHead(
+  computed(() => ({
+    title: productData.value?.name
+      ? `${productData.value.name} купить в Москве по низкой цене с доставкой в AgatCeramic`
+      : 'Товар - AgatCeramic',
+    meta: [
+      {
+        name: 'description',
+        content:
+          productData.value?.description ||
+          'Купить товар в интернет-магазине AgatCeramic',
+      },
+      {
+        name: 'keywords',
+        content: productData.value?.name
+          ? `${productData.value.name}, керамическая плитка, сантехника`
+          : 'керамическая плитка, сантехника',
+      },
+      {
+        property: 'og:image',
+        content: productImages.value[0]?.url || '/images/stock/stock-image.png',
+      },
+      {
+        property: 'og:title',
+        content:
+          'AgatCeramic - Интернет-магазин плитки, керамогранита и сантехники',
+      },
+      {
+        property: 'og:description',
+        content:
+          productData.value?.description ||
+          'Купить товар в интернет-магазине AgatCeramic',
+      },
+      {
+        property: 'og:url',
+        content: `${siteUrl}/product/${slug}`,
+      },
+      {
+        name: 'twitter:image',
+        content: productImages.value[0]?.url || '/images/stock/stock-image.png',
+      },
+    ],
+    link: [
+      {
+        rel: 'canonical',
+        href: `${siteUrl}/product/${slug}`,
+      },
+    ],
+    script: [
+      ...(structuredData.value
+        ? [
+            {
+              type: 'application/ld+json',
+              children: JSON.stringify(structuredData.value),
+            },
+          ]
+        : []),
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          name: 'AgatCeramic',
+          url: siteUrl,
+          logo: `${siteUrl}/images/stock/logo.png`,
+          description: 'Интернет-магазин плитки, керамогранита и сантехники',
+          email: 'zakaz@agatceramic.ru',
+          contactPoint: {
+            '@type': 'ContactPoint',
+            telephone: '+7 (999) 999-99-99',
+            contactType: 'customer service',
+          },
+        }),
+      },
+    ],
+  }))
+);
 </script>
 
 <style scoped lang="scss">
@@ -377,7 +497,7 @@ useHead(computed(() => ({
 
   .pricing-meta {
     ul {
-      li+li {
+      li + li {
         margin-left: 10px;
       }
 
@@ -519,7 +639,6 @@ useHead(computed(() => ({
     align-items: center;
   }
 
-
   .pro-details-same-style {
     span {
       font-weight: 500;
@@ -592,7 +711,7 @@ useHead(computed(() => ({
         width: 0%;
         height: 2px;
         background-color: $border-color;
-        content: "";
+        content: '';
         transition: $baseTransition;
       }
 
@@ -655,7 +774,6 @@ useHead(computed(() => ({
   }
 
   .product-anotherinfo-wrapper {
-
     span {
       color: $body-color;
       display: inline-block;

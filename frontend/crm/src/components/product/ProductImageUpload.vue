@@ -2,6 +2,7 @@
   <div
     class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
   >
+    <ToastAlert :alert="toastAlert" />
     <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
       <h2 class="text-lg font-medium text-gray-800 dark:text-white">
         Фото товара (макс. 5 изображений)
@@ -120,6 +121,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import ToastAlert from '../common/ToastAlert.vue'
 
 interface ProductImage {
   id?: number
@@ -141,6 +143,7 @@ const emit = defineEmits<Emits>()
 const images = ref<ProductImage[]>([...props.modelValue])
 const newFiles = ref<File[]>([])
 const draggedIndex = ref<number | null>(null)
+const toastAlert = ref<{ variant: string; title: string; message: string } | null>(null)
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -172,6 +175,13 @@ const getFilePreviewUrl = (file: File): string => {
   return window.URL.createObjectURL(file)
 }
 
+const showToast = (variant: string, title: string, message: string) => {
+  toastAlert.value = { variant, title, message }
+  setTimeout(() => {
+    toastAlert.value = null
+  }, 5000)
+}
+
 const onFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   const files = target.files
@@ -184,19 +194,29 @@ const onFileChange = (event: Event) => {
     const file = files[i]
 
     if (!allowedTypes.includes(file.type)) {
-      alert(
+      showToast(
+        'error',
+        'Неподдерживаемый формат',
         `Файл ${file.name} имеет неподдерживаемый формат. Разрешены только PNG, JPG, JPEG, WEBP.`,
       )
       continue
     }
 
     if (file.size > maxSize) {
-      alert(`Файл ${file.name} слишком большой. Максимальный размер 5MB.`)
+      showToast(
+        'error',
+        'Файл слишком большой',
+        `Файл ${file.name} слишком большой. Максимальный размер 5MB.`,
+      )
       continue
     }
 
     if (images.value.length + newFiles.value.length >= 5) {
-      alert('Максимальное количество изображений - 5.')
+      showToast(
+        'error',
+        'Максимальное количество изображений',
+        'Максимальное количество изображений - 5.',
+      )
       break
     }
 

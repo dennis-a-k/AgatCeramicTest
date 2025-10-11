@@ -8,7 +8,7 @@
           :key="index"
           class="swiper-slide d-flex"
         >
-          <NuxtImg
+          <img
             class="img-responsive m-auto align-items-center"
             :src="image.url"
             :alt="image.alt"
@@ -27,14 +27,18 @@
     </div>
 
     <!-- Мини-слайдер для навигации -->
-    <div v-if="images.length > 1" class="swiper-container mt-20px zoom-thumbs slider-nav-style-1 small-nav" ref="thumbsSwiper">
+    <div
+      v-if="images.length > 1"
+      class="swiper-container mt-20px zoom-thumbs slider-nav-style-1 small-nav"
+      ref="thumbsSwiper"
+    >
       <div class="swiper-wrapper">
         <div
           v-for="(image, index) in images"
           :key="index"
           class="swiper-slide d-flex"
         >
-          <NuxtImg
+          <img
             class="img-responsive m-auto align-items-center"
             :src="image.url"
             :alt="image.alt"
@@ -61,9 +65,9 @@ const props = defineProps({
     type: Array,
     default: () => [],
     validator: (value) => {
-      return value.every(img => img.url && img.alt);
-    }
-  }
+      return value.every((img) => img.url && img.alt);
+    },
+  },
 });
 
 const mainSwiper = ref(null);
@@ -89,9 +93,12 @@ const initSwipers = () => {
   // Основной слайдер
   mainSwiperInstance = new Swiper(mainSwiper.value, {
     spaceBetween: 10,
-    thumbs: props.images.length > 1 ? {
-      swiper: thumbsSwiperInstance,
-    } : {},
+    thumbs:
+      props.images.length > 1
+        ? {
+            swiper: thumbsSwiperInstance,
+          }
+        : {},
   });
 };
 
