@@ -8,10 +8,16 @@
   </div>
 </template>
 
-<script setup>
-import Alert from '@/components/ui/Alert.vue'
+<script setup lang="ts">
+import Alert from '../ui/Alert.vue'
 
-defineProps({
-  alert: Object
-})
+interface AlertData {
+  variant: 'success' | 'error' | 'warning' | 'info'
+  title: string
+  message: string
+}
+
+defineProps<{
+  alert: AlertData | null
+}>()
 </script>
