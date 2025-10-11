@@ -12,7 +12,7 @@ export function useGoods() {
   const products = ref([])
   const loading = ref(false)
   const error = ref<string | null>(null)
-  const sort = ref<{ key: string | null, asc: boolean }>({ key: null, asc: true })
+  const sort = ref<{ key: string | null; asc: boolean }>({ key: null, asc: true })
   const page = ref(1)
   const itemsPerPage = ref(50)
   const totalItems = ref(0)
@@ -22,42 +22,42 @@ export function useGoods() {
   const selectedCategory = ref<CategoryItem | null>(null)
   const filters = ref({
     sale: { true: true, false: true } as Record<string, boolean>,
-    published: { true: true, false: true } as Record<string, boolean>
+    published: { true: true, false: true } as Record<string, boolean>,
   })
 
   const visiblePages = computed(() => {
-    const pages: (number | string)[] = [];
-    const total = totalPages.value;
-    const current = page.value;
-    const delta = 2;
-    const range: number[] = [];
-    const rangeWithDots: (number | string)[] = [];
+    const pages: (number | string)[] = []
+    const total = totalPages.value
+    const current = page.value
+    const delta = 2
+    const range: number[] = []
+    const rangeWithDots: (number | string)[] = []
 
     for (let i = Math.max(2, current - delta); i <= Math.min(total - 1, current + delta); i++) {
-      range.push(i);
+      range.push(i)
     }
 
     if (current - delta > 2) {
-      rangeWithDots.push(1, '...');
+      rangeWithDots.push(1, '...')
     } else {
-      rangeWithDots.push(1);
+      rangeWithDots.push(1)
     }
 
-    rangeWithDots.push(...range);
+    rangeWithDots.push(...range)
 
     if (current + delta < total - 1) {
-      rangeWithDots.push('...', total);
+      rangeWithDots.push('...', total)
     } else if (total > 1) {
-      rangeWithDots.push(total);
+      rangeWithDots.push(total)
     }
 
-    return rangeWithDots;
-  });
+    return rangeWithDots
+  })
 
   const formatter = new Intl.NumberFormat('ru-RU', {
     style: 'currency',
     currency: 'RUB',
-  });
+  })
 
   const fetchProducts = async () => {
     loading.value = true
@@ -65,7 +65,7 @@ export function useGoods() {
 
     const params = new URLSearchParams({
       page: page.value.toString(),
-      per_page: itemsPerPage.value.toString()
+      per_page: itemsPerPage.value.toString(),
     })
 
     if (sort.value.key) {
@@ -80,14 +80,16 @@ export function useGoods() {
     }
 
     // Фильтры
-    const saleFilters = Object.keys(filters.value.sale).filter(key => filters.value.sale[key])
+    const saleFilters = Object.keys(filters.value.sale).filter((key) => filters.value.sale[key])
     if (saleFilters.length > 0) {
-      saleFilters.forEach(val => params.append('is_sale[]', val))
+      saleFilters.forEach((val) => params.append('is_sale[]', val))
     }
 
-    const publishedFilters = Object.keys(filters.value.published).filter(key => filters.value.published[key])
+    const publishedFilters = Object.keys(filters.value.published).filter(
+      (key) => filters.value.published[key],
+    )
     if (publishedFilters.length > 0) {
-      publishedFilters.forEach(val => params.append('is_published[]', val))
+      publishedFilters.forEach((val) => params.append('is_published[]', val))
     }
 
     const url = `${API_BASE_URL}/api/products?${params.toString()}`
@@ -172,15 +174,69 @@ export function useGoods() {
     }
   }
 
-  const updateProduct = async (id: number, productData: any): Promise<{ success: boolean, errors?: Record<string, string[]> }> => {
+  const updateProduct = async (
+    id: number,
+    productData: any,
+    newFiles?: File[],
+  ): Promise<{ success: boolean; errors?: Record<string, string[]> }> => {
     try {
+      const formData = new FormData()
+
+      // Добавляем все поля продукта
+      Object.keys(productData).forEach((key) => {
+        if (key === 'images') {
+          // Для изображений добавляем только sort_order
+          productData.images.forEach((image: any, index: number) => {
+            formData.append(`images[${index}][id]`, image.id?.toString() || '')
+            formData.append(`images[${index}][sort_order]`, image.sort_order.toString())
+          })
+        } else if (key === 'attribute_values') {
+          productData.attribute_values.forEach((attr: any, index: number) => {
+            formData.append(`attribute_values[${index}][id]`, attr.id?.toString() || '')
+            formData.append(`attribute_values[${index}][string_value]`, attr.string_value || '')
+            formData.append(
+              `attribute_values[${index}][number_value]`,
+              attr.number_value?.toString() || '',
+            )
+            // Handle boolean_value properly
+            if (typeof attr.boolean_value === 'boolean') {
+              formData.append(
+                `attribute_values[${index}][boolean_value]`,
+                attr.boolean_value ? '1' : '0',
+              )
+            } else {
+              formData.append(
+                `attribute_values[${index}][boolean_value]`,
+                attr.boolean_value?.toString() || '',
+              )
+            }
+          })
+        } else {
+          // Handle boolean fields properly for FormData
+          if (typeof productData[key] === 'boolean') {
+            formData.append(key, productData[key] ? '1' : '0')
+          } else {
+            formData.append(key, productData[key]?.toString() || '')
+          }
+        }
+      })
+
+      // Добавляем _method для Laravel
+      formData.append('_method', 'PUT')
+
+      // Добавляем новые файлы
+      if (newFiles && newFiles.length > 0) {
+        newFiles.forEach((file, index) => {
+          formData.append(`new_images[${index}]`, file)
+        })
+      }
+
       const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
-        method: 'PUT',
+        method: 'POST', // Используем POST с _method=PUT для FormData
         headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
-        body: JSON.stringify(productData),
+        body: formData,
       })
 
       if (response.ok) {
@@ -213,10 +269,14 @@ export function useGoods() {
     }, 500)
   })
 
-  watch(() => filters.value, () => {
-    resetPage()
-    fetchProducts()
-  }, { deep: true })
+  watch(
+    () => filters.value,
+    () => {
+      resetPage()
+      fetchProducts()
+    },
+    { deep: true },
+  )
 
   watch(selectedCategory, () => {
     resetPage()
@@ -245,6 +305,6 @@ export function useGoods() {
     deleteProduct,
     getProduct,
     updateProduct,
-    resetPage
+    resetPage,
   }
 }

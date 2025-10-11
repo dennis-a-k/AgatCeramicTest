@@ -5,6 +5,12 @@ import { useCategories } from '@/composables/useCategories'
 import { useBrands } from '@/composables/useBrands'
 import { useColors } from '@/composables/useColors'
 
+interface ProductImage {
+  id?: number
+  image_path: string
+  sort_order: number
+}
+
 interface Product {
   id: number | null
   article: string
@@ -24,6 +30,7 @@ interface Product {
   country: string
   collection: string
   attribute_values: any[]
+  images: ProductImage[]
 }
 
 export function useProductManager() {
@@ -52,7 +59,8 @@ export function useProductManager() {
     pattern: '',
     country: '',
     collection: '',
-    attribute_values: []
+    attribute_values: [],
+    images: [],
   })
 
   const loading = ref(false)
@@ -61,7 +69,7 @@ export function useProductManager() {
 
   const showAlert = (variant: string, title: string, message: string) => {
     alert.value = { variant, title, message }
-    setTimeout(() => alert.value = null, 3000)
+    setTimeout(() => (alert.value = null), 3000)
   }
 
   const loadProduct = async () => {
@@ -71,7 +79,7 @@ export function useProductManager() {
       const productData = await getProduct(Number(route.params.id))
       product.value = { ...productData }
       // Инициализируем ошибки для атрибутов
-      product.value.attribute_values.forEach(attr => {
+      product.value.attribute_values.forEach((attr) => {
         attr.error = ''
       })
     } catch (err) {
@@ -88,10 +96,10 @@ export function useProductManager() {
     loadProduct()
   }
 
-  const handleSubmit = async (validateAll: () => void, hasErrors: () => boolean, errors: any) => {
+  const handleSubmit = async (validateAll: () => void, hasErrors: () => boolean, errors: any, imageUploadRef?: any) => {
     validateAll()
 
-    const validationErrors = Object.values(errors).filter(e => e)
+    const validationErrors = Object.values(errors).filter((e) => e)
     // Добавляем ошибки атрибутов
     for (const attr of product.value.attribute_values) {
       if (attr.error) {
@@ -106,7 +114,8 @@ export function useProductManager() {
 
     try {
       loading.value = true
-      const result = await updateProduct(Number(route.params.id), product.value)
+      const newFiles = imageUploadRef?.newFiles || []
+      const result = await updateProduct(Number(route.params.id), product.value, newFiles)
       if (result.success) {
         showAlert('success', 'Успешно', 'Товар обновлен')
         setTimeout(() => {
@@ -115,28 +124,32 @@ export function useProductManager() {
       } else {
         if (result.errors) {
           // Очищаем предыдущие ошибки
-          Object.keys(errors).forEach(key => {
+          Object.keys(errors).forEach((key) => {
             errors[key] = ''
           })
-          product.value.attribute_values.forEach(attr => {
+          product.value.attribute_values.forEach((attr) => {
             attr.error = ''
           })
 
           // Присваиваем ошибки валидации
-          Object.keys(result.errors).forEach(key => {
+          Object.keys(result.errors).forEach((key) => {
             if (key in errors && result.errors![key]) {
               errors[key] = result.errors![key][0]
             }
           })
 
           // Для attribute_values
-          Object.keys(result.errors).forEach(key => {
+          Object.keys(result.errors).forEach((key) => {
             if (key.startsWith('attribute_values.') && result.errors![key]) {
               const parts = key.split('.')
               if (parts.length >= 3) {
                 const index = parseInt(parts[1])
                 const field = parts[2]
-                if (field === 'string_value' || field === 'number_value' || field === 'boolean_value') {
+                if (
+                  field === 'string_value' ||
+                  field === 'number_value' ||
+                  field === 'boolean_value'
+                ) {
                   if (product.value.attribute_values[index]) {
                     product.value.attribute_values[index].error = result.errors![key][0]
                   }
@@ -181,6 +194,6 @@ export function useProductManager() {
     handleFetchProducts,
     handleSubmit,
     goBack,
-    init
+    init,
   }
 }

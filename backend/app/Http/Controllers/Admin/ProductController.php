@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ProductAttributeValue;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Services\ProductService;
 use App\Services\SearchService;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
@@ -15,11 +17,13 @@ class ProductController extends Controller
 {
     protected $productService;
     protected $searchService;
+    protected $imageService;
 
-    public function __construct(ProductService $productService, SearchService $searchService)
+    public function __construct(ProductService $productService, SearchService $searchService, ImageService $imageService)
     {
         $this->productService = $productService;
         $this->searchService = $searchService;
+        $this->imageService = $imageService;
     }
 
     public function index(Request $request): JsonResponse
@@ -63,6 +67,11 @@ class ProductController extends Controller
             'attribute_values.*.string_value' => 'nullable|string',
             'attribute_values.*.number_value' => 'nullable|numeric',
             'attribute_values.*.boolean_value' => 'nullable|boolean',
+            'images' => 'nullable|array',
+            'images.*.id' => 'nullable|integer|exists:product_images,id,product_id,' . $id,
+            'images.*.sort_order' => 'required|integer|min:0',
+            'new_images' => 'nullable|array',
+            'new_images.*' => 'required|file|image|mimes:png,jpg,jpeg,webp|max:5120', // 5MB
         ]);
 
         $updated = $this->productService->updateProduct($id, $validated); // Обновляем все поля, кроме slug
@@ -96,7 +105,48 @@ class ProductController extends Controller
             }
         }
 
+        // Обработка изображений
+        $this->handleProductImages($request, $id, $validated);
+
         return response()->json(['message' => 'Product updated successfully']);
+    }
+
+    protected function handleProductImages(Request $request, $productId, array $validated): void
+    {
+        $product = $this->productService->getProductById($productId);
+        if (!$product) {
+            return;
+        }
+
+        // Обновляем порядок существующих изображений
+        if (isset($validated['images'])) {
+            $this->imageService->updateImageOrder($productId, $validated['images']);
+
+            // Получаем ID существующих изображений
+            $existingImageIds = array_filter(array_column($validated['images'], 'id'));
+
+            // Удаляем изображения, которые больше не в списке
+            $imagesToDelete = ProductImage::where('product_id', $productId)
+                ->whereNotIn('id', $existingImageIds)
+                ->pluck('id')
+                ->toArray();
+
+            if (!empty($imagesToDelete)) {
+                $this->imageService->deleteImages($imagesToDelete);
+            }
+        } else {
+            // Если изображения не переданы, удаляем все
+            $imagesToDelete = ProductImage::where('product_id', $productId)->pluck('id')->toArray();
+            if (!empty($imagesToDelete)) {
+                $this->imageService->deleteImages($imagesToDelete);
+            }
+        }
+
+        // Сохраняем новые изображения
+        if ($request->hasFile('new_images')) {
+            $newFiles = $request->file('new_images');
+            $this->imageService->saveProductImages($productId, $product->article, $newFiles);
+        }
     }
 
     public function destroy($id): JsonResponse
