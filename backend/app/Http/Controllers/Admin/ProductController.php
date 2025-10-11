@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProductAttributeValue;
+use App\Models\Product;
 use App\Services\ProductService;
 use App\Services\SearchService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -43,7 +45,6 @@ class ProductController extends Controller
         $validated = $request->validate([
             'article' => 'required|string|unique:products,article,' . $id,
             'name' => 'required|string',
-            'slug' => 'required|string|unique:products,slug,' . $id,
             'price' => 'required|numeric|min:0',
             'unit' => 'required|string',
             'product_code' => 'nullable|string',
@@ -63,6 +64,15 @@ class ProductController extends Controller
             'attribute_values.*.number_value' => 'nullable|numeric',
             'attribute_values.*.boolean_value' => 'nullable|boolean',
         ]);
+
+        $slug = Str::slug($validated['name']);
+        $originalSlug = $slug;
+        $count = 1;
+        while (Product::where('slug', $slug)->where('id', '!=', $id)->exists()) {
+            $slug = $originalSlug . '-' . $count++;
+        }
+
+        $validated['slug'] = $slug;
 
         $updated = $this->productService->updateProduct($id, $validated);
 
