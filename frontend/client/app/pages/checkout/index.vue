@@ -2,7 +2,10 @@
   <ClientOnly>
     <main class="checkout-area pt-100px pb-100px">
       <div class="container">
-        <UiAppSpinner v-if="pageLoading" text="Загрузка страницы оформления..." />
+        <UiAppSpinner
+          v-if="pageLoading"
+          text="Загрузка страницы оформления..."
+        />
         <div v-else>
           <div class="col-md-12" v-if="cartStore.items.length === 0">
             <div class="empty-text-contant text-center">
@@ -22,25 +25,51 @@
                     <div class="col-lg-12">
                       <div class="billing-info mb-4">
                         <label for="name">ФИО</label>
-                        <input type="text" id="name" v-model="form.name" required />
+                        <input
+                          type="text"
+                          id="name"
+                          v-model="form.name"
+                          autocomplete="name"
+                          required
+                        />
                       </div>
                     </div>
                     <div class="col-lg-12">
                       <div class="billing-info mb-4">
                         <label for="address">Адрес доставки</label>
-                        <input type="text" id="address" v-model="form.address" required />
+                        <input
+                          type="text"
+                          id="address"
+                          v-model="form.address"
+                          autocomplete="address"
+                          required
+                        />
                       </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
                       <div class="billing-info mb-4">
                         <label for="phone">Телефон</label>
-                        <input type="tel" id="phone" v-model="form.phone" @input="formatPhone" placeholder="+7 (___) ___-__-__" required />
+                        <input
+                          type="tel"
+                          id="phone"
+                          v-model="form.phone"
+                          @input="formatPhone"
+                          placeholder="+7 (___) ___-__-__"
+                          autocomplete="phone"
+                          required
+                        />
                       </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
                       <div class="billing-info mb-4">
                         <label for="email">Электронная почта</label>
-                        <input type="email" id="email" v-model="form.email" required />
+                        <input
+                          type="email"
+                          id="email"
+                          v-model="form.email"
+                          autocomplete="email"
+                          required
+                        />
                       </div>
                     </div>
                   </div>
@@ -52,7 +81,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-lg-6 mt-md-30px mt-lm-30px ">
+              <div class="col-lg-6 mt-md-30px mt-lm-30px">
                 <div class="your-order-area">
                   <h3>Ваш заказ</h3>
                   <div class="your-order-wrap gray-bg-4">
@@ -64,18 +93,33 @@
                         </ul>
                       </div>
                       <div class="your-order-middle">
-                        <div v-for="item in cartStore.items" :key="item.id" class="row align-items-center lh-1 mb-3">
+                        <div
+                          v-for="item in cartStore.items"
+                          :key="item.id"
+                          class="row align-items-center lh-1 mb-3"
+                        >
                           <div class="col-7">
                             <span class="order-middle-left">
-                              {{ item.title }}{{ item.weight_kg ? `, ${item.weight_kg} кг` : '' }}
+                              {{ item.title
+                              }}{{
+                                item.weight_kg ? `, ${item.weight_kg} кг` : ''
+                              }}
                             </span>
                           </div>
                           <div class="col-2 text-end">
-                            × {{ item.quantity }} {{ item.unit === 'шт' ? 'шт.' : item.unit === 'кв.м' ? 'м²' :
-                              item.unit }}
+                            × {{ item.quantity }}
+                            {{
+                              item.unit === 'шт'
+                                ? 'шт.'
+                                : item.unit === 'кв.м'
+                                ? 'м²'
+                                : item.unit
+                            }}
                           </div>
                           <div class="col-3 text-end">
-                            <span class="order-price">{{ formatPrice(item.price * item.quantity) }}</span>
+                            <span class="order-price">{{
+                              formatPrice(item.price * item.quantity)
+                            }}</span>
                           </div>
                         </div>
                       </div>
@@ -89,18 +133,31 @@
                   </div>
                   <div class="row Place-order mt-25">
                     <div class="col-md-6 mb-3 mb-md-0">
-                      <NuxtLink to="/cart" class="btn-change">Изменить</NuxtLink>
+                      <NuxtLink to="/cart" class="btn-change"
+                        >Изменить</NuxtLink
+                      >
                     </div>
                     <div class="col-md-6">
-                      <button type="submit" class="btn-order" style="width: 100%;" :disabled="loading">{{ loading ?
-                        'Оформление...' : 'Заказать' }}</button>
+                      <button
+                        type="submit"
+                        class="btn-order"
+                        style="width: 100%"
+                        :disabled="loading"
+                      >
+                        {{ loading ? 'Оформление...' : 'Заказать' }}
+                      </button>
                     </div>
                   </div>
                   <div class="your-order-foot mt-3">
                     <p class="text-end">
-                      Нажимая кнопку «Заказать», я даю <NuxtLink to="/personal-data" target="_blank">согласие</NuxtLink>
-                      на обработку персональных данных, в соответствии с <NuxtLink to="/policy" target="_blank">
-                        Политикой</NuxtLink>
+                      Нажимая кнопку «Заказать», я даю
+                      <NuxtLink to="/personal-data" target="_blank"
+                        >согласие</NuxtLink
+                      >
+                      на обработку персональных данных, в соответствии с
+                      <NuxtLink to="/policy" target="_blank">
+                        Политикой</NuxtLink
+                      >
                     </p>
                   </div>
                 </div>
@@ -136,7 +193,7 @@ const form = ref({
   email: '',
   phone: '',
   address: '',
-  comment: ''
+  comment: '',
 });
 
 const formatPhone = (event) => {
@@ -169,7 +226,7 @@ const formatter = new Intl.NumberFormat('ru-RU', {
 });
 
 const formatPrice = (price) => {
-  return formatter.format(price);;
+  return formatter.format(price);
 };
 
 const submitOrder = async () => {
@@ -179,12 +236,12 @@ const submitOrder = async () => {
     const orderData = {
       customer: form.value,
       items: cartStore.items,
-      total: cartStore.total
+      total: cartStore.total,
     };
 
     const response = await $fetch(`${config.public.apiBase}/api/checkout`, {
       method: 'POST',
-      body: orderData
+      body: orderData,
     });
 
     // Очистка корзины
@@ -196,15 +253,16 @@ const submitOrder = async () => {
       email: '',
       phone: '',
       address: '',
-      comment: ''
+      comment: '',
     };
 
     // Уведомление
-    $toast.success('Заказ успешно оформлен! Мы свяжемся с вами в ближайшее время.');
+    $toast.success(
+      'Заказ успешно оформлен! Мы свяжемся с вами в ближайшее время.'
+    );
 
     // Перенаправление на страницу заказа
     await navigateTo('/order/' + response.order);
-
   } catch (error) {
     console.error('Error submitting order:', error);
     $toast.error('Произошла ошибка при оформлении заказа. Попробуйте еще раз.');
@@ -214,7 +272,7 @@ const submitOrder = async () => {
 };
 
 const structuredData = computed(() => {
-  if (cartStore.items.length === 0) return null
+  if (cartStore.items.length === 0) return null;
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -228,36 +286,45 @@ const structuredData = computed(() => {
         '@type': 'Offer',
         price: item.price,
         priceCurrency: 'RUB',
-        availability: 'https://schema.org/InStock'
-      }
-    }))
-  }
-})
+        availability: 'https://schema.org/InStock',
+      },
+    })),
+  };
+});
 
-useHead(computed(() => ({
-  title: 'Оформление заказа - AgatCeramic',
-  meta: [
-    {
-      name: 'description',
-      content: 'Оформите заказ в интернет-магазине AgatCeramic'
-    },
-    {
-      name: 'keywords',
-      content: 'оформление заказа, заказ, AgatCeramic'
-    },
-    {
-      name: 'robots',
-      content: 'noindex, nofollow'
-    }
-  ],
-  link: [
-    {
-      rel: 'canonical',
-      href: `${config.public.siteUrl}/checkout`
-    }
-  ],
-  script: structuredData.value ? [{ type: 'application/ld+json', children: JSON.stringify(structuredData.value) }] : []
-})))
+useHead(
+  computed(() => ({
+    title: 'Оформление заказа - AgatCeramic',
+    meta: [
+      {
+        name: 'description',
+        content: 'Оформите заказ в интернет-магазине AgatCeramic',
+      },
+      {
+        name: 'keywords',
+        content: 'оформление заказа, заказ, AgatCeramic',
+      },
+      {
+        name: 'robots',
+        content: 'noindex, nofollow',
+      },
+    ],
+    link: [
+      {
+        rel: 'canonical',
+        href: `${config.public.siteUrl}/checkout`,
+      },
+    ],
+    script: structuredData.value
+      ? [
+          {
+            type: 'application/ld+json',
+            children: JSON.stringify(structuredData.value),
+          },
+        ]
+      : [],
+  }))
+);
 </script>
 
 <style scoped lang="scss">

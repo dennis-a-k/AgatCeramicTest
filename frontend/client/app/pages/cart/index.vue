@@ -29,35 +29,87 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="item in cartStore.items" :key="item.id" :data-product-id="item.id">
+                    <tr
+                      v-for="item in cartStore.items"
+                      :key="item.id"
+                      :data-product-id="item.id"
+                    >
                       <td class="product-thumbnail px-2">
-                        <div style="aspect-ratio: 1 / 1; overflow: hidden;">
+                        <div style="aspect-ratio: 1 / 1; overflow: hidden">
                           <NuxtLink :to="`/product/${item.slug}`">
-                            <img :src="item.image" :alt="item.title" class="img-responsive" />
+                            <img
+                              :src="item.image"
+                              :alt="item.title"
+                              class="img-responsive"
+                            />
                           </NuxtLink>
                         </div>
                       </td>
                       <td class="product-name">
                         <NuxtLink :to="`/product/${item.slug}`" class="lh-1">
-                          <p>{{ item.title }}{{ item.weight_kg ? `, ${item.weight_kg} кг` : '' }}</p>
+                          <p>
+                            {{ item.title
+                            }}{{
+                              item.weight_kg ? `, ${item.weight_kg} кг` : ''
+                            }}
+                          </p>
                         </NuxtLink>
                       </td>
-                      <td class="product-price-cart"><span class="amount">{{ formatPrice(item.price) }}</span></td>
+                      <td class="product-price-cart">
+                        <span class="amount">{{
+                          formatPrice(item.price)
+                        }}</span>
+                      </td>
                       <td class="product-quantity">
                         <div class="cart-plus-minus">
-                          <div class="dec qtybutton" @click="updateQuantity(item.id, item.quantity - 1)"
-                            :disabled="item.quantity <= 1">-</div>
-                          <input class="cart-plus-minus-box" type="text" :value="item.quantity"
-                            @input="updateQuantity(item.id, parseInt($event.target.value) || 1)" min="1" />
-                          <div class="inc qtybutton" @click="updateQuantity(item.id, item.quantity + 1)">+</div>
+                          <label
+                            :for="`quantity${item.id}`"
+                            class="d-none"
+                          ></label>
+                          <div
+                            class="dec qtybutton"
+                            @click="updateQuantity(item.id, item.quantity - 1)"
+                            :disabled="item.quantity <= 1"
+                          >
+                            -
+                          </div>
+                          <input
+                            :id="`quantity${item.id}`"
+                            class="cart-plus-minus-box"
+                            type="text"
+                            :value="item.quantity"
+                            @input="
+                              updateQuantity(
+                                item.id,
+                                parseInt($event.target.value) || 1
+                              )
+                            "
+                            min="1"
+                          />
+                          <div
+                            class="inc qtybutton"
+                            @click="updateQuantity(item.id, item.quantity + 1)"
+                          >
+                            +
+                          </div>
                         </div>
                       </td>
                       <td>
-                        {{ item.unit === 'шт' ? 'шт.' : item.unit === 'кв.м' ? 'м²' : item.unit }}
+                        {{
+                          item.unit === 'шт'
+                            ? 'шт.'
+                            : item.unit === 'кв.м'
+                            ? 'м²'
+                            : item.unit
+                        }}
                       </td>
-                      <td class="product-subtotal">{{ formatPrice(item.price * item.quantity) }}</td>
+                      <td class="product-subtotal">
+                        {{ formatPrice(item.price * item.quantity) }}
+                      </td>
                       <td class="product-remove">
-                        <a href="#" @click="removeItem(item.id)"><i class="fa fa-times"></i></a>
+                        <a href="#" @click="removeItem(item.id)"
+                          ><i class="fa fa-times"></i
+                        ></a>
                       </td>
                     </tr>
                   </tbody>
@@ -67,7 +119,9 @@
                       <td></td>
                       <td></td>
                       <th colspan="2">Общая стоимость:</th>
-                      <th class="cart-total">{{ formatPrice(cartStore.total) }}</th>
+                      <th class="cart-total">
+                        {{ formatPrice(cartStore.total) }}
+                      </th>
                       <td></td>
                     </tr>
                   </tfoot>
@@ -112,7 +166,7 @@ const formatter = new Intl.NumberFormat('ru-RU', {
 });
 
 const formatPrice = (price) => {
-  return formatter.format(price);;
+  return formatter.format(price);
 };
 
 const removeItem = (id) => {
@@ -124,7 +178,7 @@ const updateQuantity = (id, quantity) => {
 };
 
 const structuredData = computed(() => {
-  if (cartStore.items.length === 0) return null
+  if (cartStore.items.length === 0) return null;
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -138,36 +192,45 @@ const structuredData = computed(() => {
         '@type': 'Offer',
         price: item.price,
         priceCurrency: 'RUB',
-        availability: 'https://schema.org/InStock'
-      }
-    }))
-  }
-})
+        availability: 'https://schema.org/InStock',
+      },
+    })),
+  };
+});
 
-useHead(computed(() => ({
-  title: 'Корзина - AgatCeramic',
-  meta: [
-    {
-      name: 'description',
-      content: 'Ваша корзина покупок в интернет-магазине AgatCeramic'
-    },
-    {
-      name: 'keywords',
-      content: 'корзина, покупки, AgatCeramic'
-    },
-    {
-      name: 'robots',
-      content: 'noindex, nofollow'
-    }
-  ],
-  link: [
-    {
-      rel: 'canonical',
-      href: `${config.public.siteUrl}/cart`
-    }
-  ],
-  script: structuredData.value ? [{ type: 'application/ld+json', children: JSON.stringify(structuredData.value) }] : []
-})))
+useHead(
+  computed(() => ({
+    title: 'Корзина - AgatCeramic',
+    meta: [
+      {
+        name: 'description',
+        content: 'Ваша корзина покупок в интернет-магазине AgatCeramic',
+      },
+      {
+        name: 'keywords',
+        content: 'корзина, покупки, AgatCeramic',
+      },
+      {
+        name: 'robots',
+        content: 'noindex, nofollow',
+      },
+    ],
+    link: [
+      {
+        rel: 'canonical',
+        href: `${config.public.siteUrl}/cart`,
+      },
+    ],
+    script: structuredData.value
+      ? [
+          {
+            type: 'application/ld+json',
+            children: JSON.stringify(structuredData.value),
+          },
+        ]
+      : [],
+  }))
+);
 </script>
 
 <style scoped lang="scss">
@@ -226,11 +289,11 @@ useHead(computed(() => ({
 
       thead,
       tfoot {
-        &>tr {
+        & > tr {
           background-color: $border-color;
           border: 1px solid $border-color;
 
-          &>th {
+          & > th {
             border-top: medium none;
             color: $black;
             font-size: 16px;
@@ -245,7 +308,7 @@ useHead(computed(() => ({
       }
 
       tbody {
-        &>tr {
+        & > tr {
           border-bottom: 1px solid $border-color;
 
           td {
@@ -368,9 +431,9 @@ useHead(computed(() => ({
   }
 }
 
-.cart-shiping-update-wrapper .cart-shiping-update>a,
-.cart-shiping-update-wrapper .cart-clear>button,
-.cart-shiping-update-wrapper .cart-clear>a {
+.cart-shiping-update-wrapper .cart-shiping-update > a,
+.cart-shiping-update-wrapper .cart-clear > button,
+.cart-shiping-update-wrapper .cart-clear > a {
   font-size: 14px;
   font-weight: 600;
   line-height: 1;
@@ -387,12 +450,12 @@ useHead(computed(() => ({
   }
 }
 
-.cart-shiping-update-wrapper .cart-clear>a {
+.cart-shiping-update-wrapper .cart-clear > a {
   background-color: $theme-color;
   color: $white;
 }
 
-.cart-shiping-update-wrapper .cart-clear>a:hover {
+.cart-shiping-update-wrapper .cart-clear > a:hover {
   background-color: $body-color;
   color: $white;
 }

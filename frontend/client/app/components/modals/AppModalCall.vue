@@ -45,6 +45,7 @@
                   class="form-control"
                   id="name"
                   v-model="form.name"
+                  autocomplete="name"
                   required
                   placeholder="Введите ваше ФИО"
                   ref="nameInput"
@@ -58,6 +59,7 @@
                   id="phone"
                   v-model="form.phone"
                   @input="formatPhone"
+                  autocomplete="phone"
                   required
                   placeholder="+7 (___) ___-__-__"
                 />
