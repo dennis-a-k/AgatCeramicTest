@@ -97,9 +97,11 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useCartStore } from '~/stores/useCartStore';
+import { useRuntimeConfig } from '#imports';
 
 const cartStore = useCartStore();
 const { $toast } = useNuxtApp();
+const config = useRuntimeConfig();
 
 const isVisible = ref(false);
 const product = ref({});
@@ -110,7 +112,17 @@ const formatter = new Intl.NumberFormat('ru-RU', {
   currency: 'RUB',
 });
 
+const getImageUrl = (image) => {
+  if (image.image_path.startsWith('http')) {
+    return image.image_path;
+  }
+  return `${config.public.apiBase}/storage/${image.image_path}`;
+};
+
 const productImage = computed(() => {
+  if (product.value.images && product.value.images.length > 0) {
+    return getImageUrl(product.value.images[0]);
+  }
   return product.value.imgSrc && product.value.imgSrc.trim() !== ''
     ? product.value.imgSrc
     : '/images/stock/stock-image.png';
