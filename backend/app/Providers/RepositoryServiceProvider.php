@@ -21,6 +21,7 @@ use App\Services\BrandService;
 use App\Services\CategoryService;
 use App\Services\ProductService;
 use App\Services\SearchService;
+use App\Services\ImageService;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -75,8 +76,12 @@ class RepositoryServiceProvider extends ServiceProvider
             return new CategoryService($app->make(CategoryRepository::class));
         });
 
+        $this->app->bind(ImageService::class, function ($app) {
+            return new ImageService();
+        });
+
         $this->app->bind(ProductService::class, function ($app) {
-            return new ProductService($app->make(ProductRepository::class));
+            return new ProductService($app->make(ProductRepository::class), $app->make(ImageService::class));
         });
 
         $this->app->bind(SearchService::class, function ($app) {
