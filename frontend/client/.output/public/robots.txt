@@ -2,8 +2,12 @@ User-agent: *
 Disallow: /search
 Disallow: /personal-data
 Disallow: /policy
+Disallow: /cart
+Disallow: /checkout
 Disallow: /*?*
 Disallow: /*&*
+Disallow: /admin/
+Disallow: /api/
 
 Allow: /
 
