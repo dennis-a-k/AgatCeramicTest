@@ -157,7 +157,6 @@ export function useProductCreator() {
   }
 
   const loadCategoryAttributes = async (categoryId: string) => {
-    console.log('loadCategoryAttributes called with categoryId:', categoryId)
     if (!categoryId) {
       product.value.attribute_values = []
       return
@@ -165,7 +164,6 @@ export function useProductCreator() {
 
     try {
       const attributes = await fetchCategoryAttributes(Number(categoryId))
-      console.log('Fetched attributes:', attributes)
       product.value.attribute_values = attributes.map((attr: any) => ({
         attribute_id: attr.id,
         attribute: attr,
@@ -175,7 +173,6 @@ export function useProductCreator() {
         text_value: '',
         error: ''
       }))
-      console.log('Set product.attribute_values:', product.value.attribute_values)
     } catch (err) {
       console.error('Ошибка загрузки атрибутов:', err)
       product.value.attribute_values = []
