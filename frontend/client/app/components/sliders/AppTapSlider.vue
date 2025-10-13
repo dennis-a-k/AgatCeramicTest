@@ -87,7 +87,15 @@ const fetchRandomProducts = async (slug, targetArray) => {
                 href: '/', // пока статический
                 imgSrc: '', // пока пустое, будет дефолтное изображение
                 imgAlt: product.name,
-                title: product.name
+                title: product.name,
+                // Дополнительные поля для модального окна быстрого просмотра
+                article: product.article,
+                brand: product.brand,
+                collection: product.collection,
+                color: product.color,
+                unit: product.unit,
+                images: product.images,
+                attribute_values: product.attribute_values
             }))
             // Перемешиваем массив и берем первые 8 товаров
             const shuffled = transformedProducts.sort(() => 0.5 - Math.random())
