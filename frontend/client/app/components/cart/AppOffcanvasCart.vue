@@ -18,7 +18,7 @@
                                 </NuxtLink>
                                 <span class="quantity-price">
                                     {{ item.quantity }} {{ item.unit === 'шт' ? 'шт.' : item.unit === 'кв.м' ? 'м²' :
-                                    item.unit }}
+                                        item.unit }}
                                     <span class="amount"> x {{ formatPrice(item.price * item.quantity) }}</span>
                                 </span>
                                 <div class="quantity-controls">
@@ -356,6 +356,10 @@ onMounted(() => {
             -webkit-flex: 1 0 75px;
             -ms-flex: 1 0 75px;
             flex: 1 0 75px;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            align-content: center;
+            border: 1px solid $border-color;
 
             img {
                 max-width: 100%;
