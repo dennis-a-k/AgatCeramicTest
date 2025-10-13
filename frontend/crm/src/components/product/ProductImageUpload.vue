@@ -143,7 +143,7 @@ const emit = defineEmits<Emits>()
 const images = ref<ProductImage[]>([...props.modelValue])
 const newFiles = ref<File[]>([])
 const draggedIndex = ref<number | null>(null)
-const toastAlert = ref<{ variant: string; title: string; message: string } | null>(null)
+const toastAlert = ref<{ variant: 'success' | 'error' | 'warning' | 'info'; title: string; message: string } | null>(null)
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -175,7 +175,7 @@ const getFilePreviewUrl = (file: File): string => {
   return window.URL.createObjectURL(file)
 }
 
-const showToast = (variant: string, title: string, message: string) => {
+const showToast = (variant: 'success' | 'error' | 'warning' | 'info', title: string, message: string) => {
   toastAlert.value = { variant, title, message }
   setTimeout(() => {
     toastAlert.value = null

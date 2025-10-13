@@ -171,7 +171,7 @@
                 </td>
                 <td class="px-5 py-4 sm:px-1 text-center">
                   <span
-                    class="rounded-full py-0.5 text-theme-xs font-medium bg-blue-light-50 text-blue-light-500 dark:bg-blue-light-500/15 dark:text-blue-light-500"
+                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-blue-light-50 text-blue-light-500 dark:bg-blue-light-500/15 dark:text-blue-light-500"
                   >
                     {{ product.category.name }}</span
                   >
