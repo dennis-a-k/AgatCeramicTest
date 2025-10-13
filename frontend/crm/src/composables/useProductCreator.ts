@@ -2,6 +2,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGoods } from '@/composables/useGoods'
 import { useCategories } from '@/composables/useCategories'
+import { watch } from 'vue'
 import { useBrands } from '@/composables/useBrands'
 import { useColors } from '@/composables/useColors'
 
@@ -36,7 +37,7 @@ interface Product {
 export function useProductCreator() {
   const router = useRouter()
   const { createProduct } = useGoods()
-  const { categories, fetchCategories } = useCategories()
+  const { categories, fetchCategories, fetchCategoryAttributes } = useCategories()
   const { brands, fetchBrands } = useBrands()
   const { colors, fetchColors } = useColors()
 
@@ -155,10 +156,41 @@ export function useProductCreator() {
     router.push('/products')
   }
 
+  const loadCategoryAttributes = async (categoryId: string) => {
+    console.log('loadCategoryAttributes called with categoryId:', categoryId)
+    if (!categoryId) {
+      product.value.attribute_values = []
+      return
+    }
+
+    try {
+      const attributes = await fetchCategoryAttributes(Number(categoryId))
+      console.log('Fetched attributes:', attributes)
+      product.value.attribute_values = attributes.map((attr: any) => ({
+        attribute_id: attr.id,
+        attribute: attr,
+        string_value: '',
+        number_value: null,
+        boolean_value: false,
+        text_value: '',
+        error: ''
+      }))
+      console.log('Set product.attribute_values:', product.value.attribute_values)
+    } catch (err) {
+      console.error('Ошибка загрузки атрибутов:', err)
+      product.value.attribute_values = []
+    }
+  }
+
   const init = () => {
     fetchCategories()
     fetchBrands()
     fetchColors()
+
+    // Наблюдатель за изменением категории
+    watch(() => product.value.category_id, (newCategoryId) => {
+      loadCategoryAttributes(newCategoryId)
+    })
   }
 
   return {

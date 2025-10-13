@@ -29,6 +29,6 @@ class CategoryController extends Controller
             return response()->json(['message' => 'Category not found'], 404);
         }
 
-        return response()->json($category);
+        return response()->json($category->load('attributes'));
     }
 }

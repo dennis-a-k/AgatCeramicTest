@@ -6,6 +6,13 @@ interface Category {
   id: number
   name: string
   children?: Category[]
+  attributes?: Attribute[]
+}
+
+interface Attribute {
+  id: number
+  name: string
+  type: 'string' | 'number' | 'boolean'
 }
 
 interface CategoryItem {
@@ -27,6 +34,20 @@ export function useCategories() {
       allCategories.value = data.categories || data
     } catch (err) {
       console.error('Ошибка загрузки категорий:', err)
+    }
+  }
+
+  const fetchCategoryAttributes = async (categoryId: number) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/categories/${categoryId}`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const data = await response.json()
+      return data.attributes || []
+    } catch (err) {
+      console.error('Ошибка загрузки атрибутов категории:', err)
+      return []
     }
   }
 
@@ -56,6 +77,7 @@ export function useCategories() {
   return {
     allCategories,
     categories,
-    fetchCategories
+    fetchCategories,
+    fetchCategoryAttributes
   }
 }
