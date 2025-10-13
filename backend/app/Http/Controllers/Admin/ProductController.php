@@ -149,6 +149,79 @@ class ProductController extends Controller
         }
     }
 
+    public function store(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'article' => 'required|string|unique:products,article',
+            'name' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'unit' => 'required|string',
+            'product_code' => 'nullable|string',
+            'description' => 'nullable|string|min:10',
+            'category_id' => 'required|exists:categories,id',
+            'color_id' => 'required|exists:colors,id',
+            'brand_id' => 'required|exists:brands,id',
+            'is_published' => 'boolean',
+            'is_sale' => 'boolean',
+            'texture' => 'nullable|string',
+            'pattern' => 'nullable|string',
+            'country' => 'nullable|string',
+            'collection' => 'nullable|string',
+            'attribute_values' => 'nullable|array',
+            'attribute_values.*.string_value' => 'nullable|string',
+            'attribute_values.*.number_value' => 'nullable|numeric',
+            'attribute_values.*.boolean_value' => 'nullable|boolean',
+            'images' => 'nullable|array',
+            'images.*.sort_order' => 'required|integer|min:0',
+            'new_images' => 'nullable|array',
+            'new_images.*' => 'required|file|image|mimes:png,jpg,jpeg,webp|max:5120', // 5MB
+        ]);
+
+        // Генерируем slug предварительно
+        $slug = Str::slug($validated['name']);
+
+        // Добавляем slug в валидированные данные
+        $validated['slug'] = $slug;
+
+        // Создаем продукт
+        $product = $this->productService->createProduct($validated);
+
+        // Обновляем slug с id товара
+        $product->slug = $slug . '-' . $product->id;
+        $product->save();
+
+        // Создаем attribute values если переданы
+        if (isset($validated['attribute_values'])) {
+            foreach ($validated['attribute_values'] as $attrValue) {
+                if (isset($attrValue['attribute_id'])) {
+                    ProductAttributeValue::create([
+                        'product_id' => $product->id,
+                        'attribute_id' => $attrValue['attribute_id'],
+                        'string_value' => $attrValue['string_value'] ?? null,
+                        'number_value' => $attrValue['number_value'] ?? null,
+                        'boolean_value' => $attrValue['boolean_value'] ?? null,
+                    ]);
+                } elseif (isset($attrValue['id'])) {
+                    // Обновляем существующие атрибуты
+                    ProductAttributeValue::where('id', $attrValue['id'])
+                        ->update([
+                            'string_value' => $attrValue['string_value'] ?? null,
+                            'number_value' => $attrValue['number_value'] ?? null,
+                            'boolean_value' => $attrValue['boolean_value'] ?? null,
+                        ]);
+                }
+            }
+        }
+
+        // Обработка изображений
+        $this->handleProductImages($request, $product->id, $validated);
+
+        return response()->json([
+            'message' => 'Product created successfully',
+            'product' => $product
+        ], 201);
+    }
+
     public function destroy($id): JsonResponse
     {
         $deleted = $this->productService->deleteProduct($id);

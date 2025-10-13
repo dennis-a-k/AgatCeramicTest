@@ -283,6 +283,83 @@ export function useGoods() {
     fetchProducts()
   })
 
+  const createProduct = async (
+    productData: any,
+    newFiles?: File[],
+  ): Promise<{ success: boolean; errors?: Record<string, string[]> }> => {
+    try {
+      const formData = new FormData()
+
+      // Добавляем все поля продукта
+      Object.keys(productData).forEach((key) => {
+        if (key === 'images') {
+          // Для изображений добавляем только sort_order
+          productData.images.forEach((image: any, index: number) => {
+            formData.append(`images[${index}][id]`, image.id?.toString() || '')
+            formData.append(`images[${index}][sort_order]`, image.sort_order.toString())
+          })
+        } else if (key === 'attribute_values') {
+          productData.attribute_values.forEach((attr: any, index: number) => {
+            formData.append(`attribute_values[${index}][id]`, attr.id?.toString() || '')
+            formData.append(`attribute_values[${index}][string_value]`, attr.string_value || '')
+            formData.append(
+              `attribute_values[${index}][number_value]`,
+              attr.number_value?.toString() || '',
+            )
+            // Handle boolean_value properly
+            if (typeof attr.boolean_value === 'boolean') {
+              formData.append(
+                `attribute_values[${index}][boolean_value]`,
+                attr.boolean_value ? '1' : '0',
+              )
+            } else {
+              formData.append(
+                `attribute_values[${index}][boolean_value]`,
+                attr.boolean_value?.toString() || '',
+              )
+            }
+          })
+        } else {
+          // Handle boolean fields properly for FormData
+          if (typeof productData[key] === 'boolean') {
+            formData.append(key, productData[key] ? '1' : '0')
+          } else {
+            formData.append(key, productData[key]?.toString() || '')
+          }
+        }
+      })
+
+      // Добавляем новые файлы
+      if (newFiles && newFiles.length > 0) {
+        newFiles.forEach((file, index) => {
+          formData.append(`new_images[${index}]`, file)
+        })
+      }
+
+      const response = await fetch(`${API_BASE_URL}/api/products`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+        },
+        body: formData,
+      })
+
+      if (response.ok) {
+        return { success: true }
+      }
+
+      if (response.status === 422) {
+        const errorData = await response.json()
+        return { success: false, errors: errorData.errors }
+      }
+
+      throw new Error(`HTTP error! status: ${response.status}`)
+    } catch (err) {
+      console.error('Ошибка создания товара:', err)
+      return { success: false }
+    }
+  }
+
   return {
     products,
     loading,
@@ -305,6 +382,7 @@ export function useGoods() {
     deleteProduct,
     getProduct,
     updateProduct,
+    createProduct,
     resetPage,
   }
 }

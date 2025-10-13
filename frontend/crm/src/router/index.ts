@@ -23,6 +23,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/products/create',
+      name: 'CreateProduct',
+      component: () => import('../views/Pages/product/CreateProduct.vue'),
+      meta: {
+        title: 'Создание товара',
+      },
+    },
+    {
       path: '/products/edit/:id',
       name: 'EditProduct',
       component: () => import('../views/Pages/product/EditProduct.vue'),

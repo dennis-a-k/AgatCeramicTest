@@ -10,11 +10,12 @@
         Скачать товары
         <component :is="downloadIcon" />
       </button>
-      <a href="add-product.html"
+      <router-link
+        to="/products/create"
         class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white transition">
         <component :is="plusIcon" width="20" height="20" />
         Добавить товар
-      </a>
+      </router-link>
     </div>
   </div>
 </template>
