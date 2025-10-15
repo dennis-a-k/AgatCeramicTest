@@ -7,8 +7,12 @@ export function useColors() {
   const loading = ref(false)
   const error = ref(null)
   const searchQuery = ref('')
+  const currentPage = ref(1)
+  const perPage = ref(5)
+  const totalPages = ref(1)
+  const totalItems = ref(0)
 
-  const fetchColors = async () => {
+  const fetchColors = async (page = 1) => {
     loading.value = true
     error.value = null
 
@@ -16,6 +20,8 @@ export function useColors() {
     if (searchQuery.value.trim()) {
       params.append('search', searchQuery.value.trim())
     }
+    params.append('page', page.toString())
+    params.append('per_page', perPage.value.toString())
 
     const url = `${API_BASE_URL}/api/colors${params.toString() ? '?' + params.toString() : ''}`
 
@@ -25,7 +31,10 @@ export function useColors() {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       const data = await response.json()
-      colors.value = data.colors || data
+      colors.value = data.data || []
+      totalPages.value = data.last_page || 1
+      totalItems.value = data.total || 0
+      currentPage.value = data.current_page || 1
     } catch (err) {
       error.value = (err as Error).message
       console.error('Error fetching colors:', err)
@@ -49,7 +58,7 @@ export function useColors() {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       const data = await response.json()
-      colors.value.push(data.color || data)
+      await fetchColors(currentPage.value)
       return data
     } catch (err) {
       error.value = (err as Error).message
@@ -75,10 +84,7 @@ export function useColors() {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       const data = await response.json()
-      const index = colors.value.findIndex((color: any) => color.id === id)
-      if (index !== -1) {
-        colors.value[index] = data.color || data
-      }
+      await fetchColors(currentPage.value)
       return data
     } catch (err) {
       error.value = (err as Error).message
@@ -99,7 +105,7 @@ export function useColors() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-      colors.value = colors.value.filter((color: any) => color.id !== id)
+      await fetchColors(currentPage.value)
     } catch (err) {
       error.value = (err as Error).message
       console.error('Error deleting color:', err)
@@ -142,6 +148,10 @@ export function useColors() {
     loading,
     error,
     searchQuery,
+    currentPage,
+    perPage,
+    totalPages,
+    totalItems,
     fetchColors,
     createColor,
     updateColor,

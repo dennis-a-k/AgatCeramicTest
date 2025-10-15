@@ -1,30 +1,27 @@
 <template>
   <div
     class="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
-    <div class="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Управление цветами</h3>
+    <div class="flex flex-col md:gap-1 gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
+      <div class="relative sm:w-auto sm:min-w-[240px]">
+        <span class="absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+          <component :is="searchIcon" />
+        </span>
+        <label for="searchQuery"></label>
+        <input id="searchQuery" type="text" placeholder="Поиск цвета..." v-model="searchQuery"
+          class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-12 pl-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+        <button v-if="searchQuery" @click="clearSearch"
+          class="absolute top-1/2 right-2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-xl leading-none cursor-pointer bg-white dark:bg-gray-900 px-1 z-10">
+          ✕
+        </button>
       </div>
-      <div class="flex items-center gap-3">
-        <div class="relative flex-1 sm:flex-auto sm:w-auto ">
-          <span class="absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-            <component :is="searchIcon" />
-          </span>
-          <input type="text" placeholder="Поиск..." v-model="searchQuery"
-            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-12 pl-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-          <button v-if="searchQuery" @click="clearSearch"
-            class="absolute top-1/2 right-2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-xl leading-none cursor-pointer bg-white dark:bg-gray-900 px-1 z-10">
-            ✕
-          </button>
-        </div>
         <button type="button"
-          class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white transition"
+          class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-1 rounded-lg px-3 py-3 text-sm font-medium text-white transition"
           @click="openCreateModal">
           <component :is="plusIcon" width="20" height="20" />
           Добавить цвет
         </button>
-      </div>
     </div>
+
     <div class="max-w-full overflow-x-auto custom-scrollbar">
       <table class="min-w-full">
         <thead>
@@ -88,8 +85,8 @@
     </div>
     <div class="border-t border-gray-200 py-4 dark:border-gray-800">
       <div class="flex items-center justify-between">
-        <button
-          class="text-theme-sm shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+        <button @click="previousPage" :disabled="currentPage === 1"
+          class="text-theme-sm shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
           <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
             xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -99,62 +96,24 @@
         </button>
 
         <span class="block text-sm font-medium text-gray-700 sm:hidden dark:text-gray-400">
-          1 из 10
+          {{ currentPage }} из {{ totalPages }}
         </span>
 
         <ul class="hidden items-center gap-0.5 sm:flex">
-          <li>
-            <a href="#"
-              class="bg-brand-500/[0.08] text-theme-sm text-brand-500 hover:bg-brand-500/[0.08] hover:text-brand-500 dark:text-brand-500 dark:hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium">
-              1
-            </a>
-          </li>
-
-          <li>
-            <a href="#"
-              class="text-theme-sm hover:bg-brand-500/[0.08] hover:text-brand-500 dark:hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium text-gray-700 dark:text-gray-400">
-              2
-            </a>
-          </li>
-
-          <li>
-            <a href="#"
-              class="text-theme-sm hover:bg-brand-500/[0.08] hover:text-brand-500 dark:hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium text-gray-700 dark:text-gray-400">
-              3
-            </a>
-          </li>
-
-          <li>
-            <a href="#"
-              class="text-theme-sm hover:bg-brand-500/[0.08] hover:text-brand-500 dark:hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium text-gray-700 dark:text-gray-400">
-              ...
-            </a>
-          </li>
-
-          <li>
-            <a href="#"
-              class="text-theme-sm hover:bg-brand-500/[0.08] hover:text-brand-500 dark:hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium text-gray-700 dark:text-gray-400">
-              8
-            </a>
-          </li>
-
-          <li>
-            <a href="#"
-              class="text-theme-sm hover:bg-brand-500/[0.08] hover:text-brand-500 dark:hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium text-gray-700 dark:text-gray-400">
-              9
-            </a>
-          </li>
-
-          <li>
-            <a href="#"
-              class="text-theme-sm hover:bg-brand-500/[0.08] hover:text-brand-500 dark:hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium text-gray-700 dark:text-gray-400">
-              10
+          <li v-for="page in totalPages" :key="page">
+            <a href="#" @click.prevent="goToPage(page)" :class="[
+              'text-theme-sm hover:bg-brand-500/[0.08] hover:text-brand-500 dark:hover:text-brand-500 flex h-10 w-10 items-center justify-center rounded-lg font-medium',
+              page === currentPage
+                ? 'bg-brand-500/[0.08] text-brand-500 dark:text-brand-500'
+                : 'text-gray-700 dark:text-gray-400'
+            ]">
+              {{ page }}
             </a>
           </li>
         </ul>
 
-        <button
-          class="text-theme-sm shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+        <button @click="nextPage" :disabled="currentPage === totalPages"
+          class="text-theme-sm shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
           <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
             xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -218,7 +177,7 @@ import { PlusIcon, SearchIcon } from "../../icons";
 
 const plusIcon = PlusIcon
 const searchIcon = SearchIcon
-const { colors, searchQuery, fetchColors, createColor, updateColor, deleteColor: deleteColorApi } = useColors()
+const { colors, searchQuery, currentPage, totalPages, totalItems, fetchColors, createColor, updateColor, deleteColor: deleteColorApi } = useColors()
 
 const showModal = ref(false)
 const isEditing = ref(false)
@@ -228,6 +187,24 @@ const emit = defineEmits(['update:searchQuery'])
 
 const clearSearch = () => {
   searchQuery.value = ''
+}
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    fetchColors(page)
+  }
+}
+
+const previousPage = () => {
+  if (currentPage.value > 1) {
+    goToPage(currentPage.value - 1)
+  }
+}
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    goToPage(currentPage.value + 1)
+  }
 }
 
 const form = ref({
