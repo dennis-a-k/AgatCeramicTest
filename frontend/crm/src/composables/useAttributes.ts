@@ -2,117 +2,117 @@ import { ref } from 'vue'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
-export function useBrands() {
-  const brands = ref([])
+export function useAttributes() {
+  const attributes = ref([])
   const loading = ref(false)
   const error = ref(null)
 
-  const fetchBrands = async () => {
+  const fetchAttributes = async () => {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/brands`)
+      const response = await fetch(`${API_BASE_URL}/api/attributes`)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       const data = await response.json()
-      brands.value = data.brands || data
+      attributes.value = data.attributes || data
     } catch (err) {
       error.value = err.message
-      console.error('Error fetching brands:', err)
+      console.error('Error fetching attributes:', err)
     } finally {
       loading.value = false
     }
   }
 
-  const createBrand = async (brandData) => {
+  const createAttribute = async (attributeData) => {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/brands`, {
+      const response = await fetch(`${API_BASE_URL}/api/attributes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(brandData),
+        body: JSON.stringify(attributeData),
       })
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       const data = await response.json()
-      brands.value.push(data.brand || data)
+      attributes.value.push(data.attribute || data)
       return data
     } catch (err) {
       error.value = err.message
-      console.error('Error creating brand:', err)
+      console.error('Error creating attribute:', err)
       throw err
     } finally {
       loading.value = false
     }
   }
 
-  const updateBrand = async (id, brandData) => {
+  const updateAttribute = async (id, attributeData) => {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/brands/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/attributes/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(brandData),
+        body: JSON.stringify(attributeData),
       })
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       const data = await response.json()
-      const index = brands.value.findIndex(brand => brand.id === id)
+      const index = attributes.value.findIndex(attribute => attribute.id === id)
       if (index !== -1) {
-        brands.value[index] = data.brand || data
+        attributes.value[index] = data.attribute || data
       }
       return data
     } catch (err) {
       error.value = err.message
-      console.error('Error updating brand:', err)
+      console.error('Error updating attribute:', err)
       throw err
     } finally {
       loading.value = false
     }
   }
 
-  const deleteBrand = async (id) => {
+  const deleteAttribute = async (id) => {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/brands/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/attributes/${id}`, {
         method: 'DELETE',
       })
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-      brands.value = brands.value.filter(brand => brand.id !== id)
+      attributes.value = attributes.value.filter(attribute => attribute.id !== id)
     } catch (err) {
       error.value = err.message
-      console.error('Error deleting brand:', err)
+      console.error('Error deleting attribute:', err)
       throw err
     } finally {
       loading.value = false
     }
   }
 
-  const getBrandById = async (id) => {
+  const getAttributeById = async (id) => {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/brands/${id}`)
+      const response = await fetch(`${API_BASE_URL}/api/attributes/${id}`)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       const data = await response.json()
-      return data.brand || data
+      return data.attribute || data
     } catch (err) {
       error.value = err.message
-      console.error('Error fetching brand:', err)
+      console.error('Error fetching attribute:', err)
       throw err
     } finally {
       loading.value = false
@@ -120,13 +120,13 @@ export function useBrands() {
   }
 
   return {
-    brands,
+    attributes,
     loading,
     error,
-    fetchBrands,
-    createBrand,
-    updateBrand,
-    deleteBrand,
-    getBrandById
+    fetchAttributes,
+    createAttribute,
+    updateAttribute,
+    deleteAttribute,
+    getAttributeById
   }
 }

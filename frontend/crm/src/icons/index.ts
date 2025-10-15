@@ -49,6 +49,7 @@ import PackageIcon from "./PackageIcon.vue";
 import DownloadIcon from "./DownloadIcon.vue";
 import Settings2Icon from "./Settings-2Icon.vue";
 import SearchIcon from "./SearchIcon.vue";
+import SquareChartGanttIcon from "./SquareChartGanttIcon.vue";
 
 export {
   BellIcon,
@@ -102,4 +103,5 @@ export {
   DownloadIcon,
   Settings2Icon,
   SearchIcon,
+  SquareChartGanttIcon,
 };
