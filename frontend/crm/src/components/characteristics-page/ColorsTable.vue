@@ -14,14 +14,13 @@
           ✕
         </button>
       </div>
-        <button type="button"
-          class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-1 rounded-lg px-3 py-3 text-sm font-medium text-white transition"
-          @click="openCreateModal">
-          <component :is="plusIcon" width="20" height="20" />
-          Добавить цвет
-        </button>
+      <button type="button"
+        class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-1 rounded-lg px-3 py-3 text-sm font-medium text-white transition"
+        @click="openCreateModal">
+        <component :is="plusIcon" width="20" height="20" />
+        Добавить цвет
+      </button>
     </div>
-
     <div class="max-w-full overflow-x-auto custom-scrollbar">
       <table class="min-w-full">
         <thead>
@@ -54,8 +53,9 @@
             <td class="py-3 whitespace-nowrap">
               <p class="text-gray-500 text-theme-sm dark:text-gray-400">{{ color.hex }}</p>
             </td>
-            <td class="py-3 whitespace-nowrap text-center">
-              <div class="color-preview" :style="{ backgroundColor: color.hex }"></div>
+            <td class="py-3 whitespace-nowrap flex justify-center items-center">
+              <div class="w-8 h-8 rounded-full border border-gray-300 dark:border-gray-600"
+                :style="{ backgroundColor: color.hex }"></div>
             </td>
             <td class="py-3 whitespace-nowrap text-center">
               <div
@@ -94,11 +94,9 @@
               fill=""></path>
           </svg>
         </button>
-
         <span class="block text-sm font-medium text-gray-700 sm:hidden dark:text-gray-400">
           {{ currentPage }} из {{ totalPages }}
         </span>
-
         <ul class="hidden items-center gap-0.5 sm:flex">
           <li v-for="page in totalPages" :key="page">
             <a href="#" @click.prevent="goToPage(page)" :class="[
@@ -111,7 +109,6 @@
             </a>
           </li>
         </ul>
-
         <button @click="nextPage" :disabled="currentPage === totalPages"
           class="text-theme-sm shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-2 py-2 font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed sm:px-3.5 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
           <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -125,55 +122,61 @@
     </div>
   </div>
   <!-- Create/Edit Modal -->
-  <div class="modal fade" :class="{ show: showModal }" :style="{ display: showModal ? 'block' : 'none' }">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">
+  <Modal v-if="showModal" @close="closeModal">
+    <template #body>
+      <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg max-w-md w-full mx-4">
+        <div class="p-6">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white text-center mb-4">
             {{ isEditing ? 'Редактировать цвет' : 'Создать цвет' }}
-          </h5>
-          <button type="button" class="close" @click="closeModal">
-            <span>&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form @submit.prevent="saveColor">
-            <div class="form-group">
-              <label for="name">Название</label>
-              <input type="text" class="form-control" id="name" v-model="form.name" required />
+          </h3>
+          <form @submit.prevent="saveColor" class="space-y-4">
+            <div>
+              <label for="nameColor" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Название
+              </label>
+              <input type="text" id="nameColor" v-model="form.name" required
+                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
             </div>
-            <div class="form-group">
-              <label for="hex">HEX код</label>
-              <div class="input-group">
-                <input type="text" class="form-control" id="hex" v-model="form.hex" placeholder="#000000"
-                  pattern="^#[a-fA-F0-9]{6}$" required />
-                <div class="input-group-append">
-                  <div class="input-group-text color-preview-input" :style="{ backgroundColor: form.hex }"></div>
-                </div>
+            <div>
+              <label for="hex" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                HEX код
+              </label>
+              <div class="relative flex">
+                <input type="text" id="hex" v-model="form.hex" placeholder="#000000" pattern="^#[a-fA-F0-9]{6}$"
+                  required
+                  class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-14 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                <div
+                  class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full border border-gray-300 dark:border-gray-600"
+                  :style="{ backgroundColor: form.hex }"></div>
               </div>
-              <small class="form-text text-muted">Введите HEX код цвета в формате #RRGGBB</small>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                Введите HEX код цвета в формате #RRGGBB
+              </p>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" @click="closeModal">
-                Отмена
-              </button>
-              <button type="submit" class="btn btn-primary">
+            <div class="flex justify-end gap-3 pt-4">
+              <Button variant="outline" @click="closeModal">Отмена</Button>
+              <Button variant="primary" type="submit">
                 {{ isEditing ? 'Сохранить' : 'Создать' }}
-              </button>
+              </Button>
             </div>
           </form>
         </div>
       </div>
-    </div>
-  </div>
-  <!-- Modal Backdrop -->
-  <div v-if="showModal" class="modal-backdrop fade show" @click="closeModal"></div>
+    </template>
+  </Modal>
+  <ToastAlert :alert="alert" />
+  <DeleteConfirmationModal :isVisible="showDeleteModal" :productName="selectedColor?.name"
+    :productArticle="selectedColor?.hex" @close="showDeleteModal = false" @confirm="confirmDelete" />
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useColors } from '@/composables/useColors'
 import { PlusIcon, SearchIcon } from "../../icons";
+import DeleteConfirmationModal from '@/components/common/DeleteConfirmationModal.vue'
+import ToastAlert from '@/components/common/ToastAlert.vue'
+import Modal from '@/components/profile/Modal.vue'
+import Button from '@/components/ui/Button.vue'
 
 const plusIcon = PlusIcon
 const searchIcon = SearchIcon
@@ -182,8 +185,21 @@ const { colors, searchQuery, currentPage, totalPages, totalItems, fetchColors, c
 const showModal = ref(false)
 const isEditing = ref(false)
 const currentColor = ref(null)
+const showDeleteModal = ref(false)
+const selectedColor = ref(null)
+const alert = ref(null)
 
 const emit = defineEmits(['update:searchQuery'])
+
+const showAlert = (variant, title, message) => {
+  alert.value = { variant, title, message }
+  setTimeout(() => (alert.value = null), 3000)
+}
+
+const openDeleteModal = (color) => {
+  selectedColor.value = color
+  showDeleteModal.value = true
+}
 
 const clearSearch = () => {
   searchQuery.value = ''
@@ -245,27 +261,36 @@ const saveColor = async () => {
   try {
     if (isEditing.value) {
       await updateColor(currentColor.value.id, form.value)
+      showAlert('success', 'Успешно', 'Цвет успешно обновлён')
     } else {
       await createColor(form.value)
+      showAlert('success', 'Успешно', 'Цвет успешно создан')
     }
 
     await fetchColors()
     closeModal()
   } catch (error) {
     console.error('Error saving color:', error)
-    alert('Ошибка при сохранении цвета')
+    showAlert('error', 'Ошибка', 'Не удалось сохранить цвет')
   }
 }
 
 const deleteColor = async (id) => {
-  if (confirm('Вы уверены, что хотите удалить этот цвет?')) {
-    try {
-      await deleteColorApi(id)
-      await fetchColors()
-    } catch (error) {
-      console.error('Error deleting color:', error)
-      alert('Ошибка при удалении цвета')
-    }
+  const color = colors.value.find(c => c.id === id)
+  if (color) {
+    openDeleteModal(color)
+  }
+}
+
+const confirmDelete = async () => {
+  showDeleteModal.value = false
+  try {
+    await deleteColorApi(selectedColor.value.id)
+    await fetchColors()
+    showAlert('success', 'Успешно', 'Цвет успешно удалён')
+  } catch (error) {
+    console.error('Error deleting color:', error)
+    showAlert('error', 'Ошибка', 'Не удалось удалить цвет')
   }
 }
 
@@ -273,34 +298,3 @@ onMounted(async () => {
   await fetchColors()
 })
 </script>
-
-<style>
-.color-preview {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1px solid #ddd;
-  display: inline-block;
-}
-
-.color-preview-input {
-  width: 40px;
-  height: 38px;
-  border: 1px solid #ced4da;
-  border-left: none;
-}
-
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1040;
-}
-
-.modal {
-  z-index: 1050;
-}
-</style>
