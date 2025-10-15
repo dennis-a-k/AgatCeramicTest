@@ -50,6 +50,9 @@ import DownloadIcon from "./DownloadIcon.vue";
 import Settings2Icon from "./Settings-2Icon.vue";
 import SearchIcon from "./SearchIcon.vue";
 import SquareChartGanttIcon from "./SquareChartGanttIcon.vue";
+import EditIcon from "./EditIcon.vue";
+import DeleteIcon from "./DeleteIcon.vue";
+import ChevronLeftIcon from "./ChevronLeftIcon.vue";
 
 export {
   BellIcon,
@@ -104,4 +107,7 @@ export {
   Settings2Icon,
   SearchIcon,
   SquareChartGanttIcon,
+  EditIcon,
+  DeleteIcon,
+  ChevronLeftIcon,
 };
