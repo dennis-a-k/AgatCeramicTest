@@ -5,7 +5,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 export function useColors() {
   const colors = ref([])
   const loading = ref(false)
-  const error = ref(null)
+  const error = ref<string | null>(null)
   const searchQuery = ref('')
   const currentPage = ref(1)
   const perPage = ref(5)
@@ -43,7 +43,7 @@ export function useColors() {
     }
   }
 
-  const createColor = async (colorData: any) => {
+  const createColor = async (colorData: { name: string; hex: string }) => {
     loading.value = true
     error.value = null
     try {
@@ -69,7 +69,7 @@ export function useColors() {
     }
   }
 
-  const updateColor = async (id: any, colorData: any) => {
+  const updateColor = async (id: number, colorData: { name: string; hex: string }) => {
     loading.value = true
     error.value = null
     try {
@@ -95,7 +95,7 @@ export function useColors() {
     }
   }
 
-  const deleteColor = async (id: any) => {
+  const deleteColor = async (id: number) => {
     loading.value = true
     error.value = null
     try {
@@ -115,7 +115,7 @@ export function useColors() {
     }
   }
 
-  const getColorById = async (id: any) => {
+  const getColorById = async (id: number) => {
     loading.value = true
     error.value = null
     try {
