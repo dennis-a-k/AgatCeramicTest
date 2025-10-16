@@ -39,6 +39,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/characteristics',
+      name: 'Characteristics',
+      component: () => import('../views/Pages/product/Characteristics.vue'),
+      meta: {
+        title: 'Управление характеричтиками товара',
+      },
+    },
+    {
       path: '/calendar',
       name: 'Calendar',
       component: () => import('../views/Others/Calendar.vue'),
