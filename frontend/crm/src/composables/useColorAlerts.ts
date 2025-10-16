@@ -8,20 +8,24 @@ interface Alert {
 }
 
 export function useColorAlerts() {
-  const alert = ref<Alert | null>(null)
+  const alerts = ref<Alert[]>([])
 
   const showAlert = (type: Alert['type'], title: string, message: string) => {
-    alert.value = { show: true, type, title, message }
-    setTimeout(() => (alert.value = null), 3000)
+    const newAlert: Alert = { show: true, type, title, message }
+    alerts.value.push(newAlert)
+    setTimeout(() => {
+      const index = alerts.value.indexOf(newAlert)
+      if (index > -1) alerts.value.splice(index, 1)
+    }, 3000)
   }
 
-  const clearAlert = () => {
-    alert.value = null
+  const clearAlerts = () => {
+    alerts.value = []
   }
 
   return {
-    alert,
+    alerts,
     showAlert,
-    clearAlert
+    clearAlerts
   }
 }

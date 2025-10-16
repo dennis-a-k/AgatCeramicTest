@@ -53,7 +53,7 @@
   <ColorModal :is-visible="showModal" :is-editing="isEditing" :color="currentColor" :errors="backendErrors"
     @close="closeModal" @save="saveColor" />
 
-  <ToastAlert :alert="alert" />
+  <ToastAlert :alerts="alerts" />
   <DeleteConfirmationModal :isVisible="showDeleteModal" :productName="selectedColor?.name"
     :productArticle="selectedColor?.hex" @close="showDeleteModal = false" @confirm="confirmDelete" />
 </template>
@@ -82,7 +82,7 @@ const openEditModal = (color) => {
   originalOpenEditModal(color)
 }
 const { form, resetForm, setForm } = useColorForm()
-const { alert, showAlert } = useColorAlerts()
+const { alerts, showAlert } = useColorAlerts()
 const { errors, validateAll, hasErrors, resetErrors, initializeValidation } = useColorValidation(form)
 const backendErrors = ref({})
 
@@ -139,8 +139,13 @@ const saveColor = async (colorData) => {
       }
       backendErrors.value = processedErrors
       const errorMessages = Object.values(processedErrors)
-      const errorMessage = errorMessages.length > 0 ? errorMessages.join('\n') : (result.message || 'Ошибка валидации')
-      showAlert('error', 'Ошибка валидации', errorMessage)
+      if (errorMessages.length > 0) {
+        errorMessages.forEach(message => {
+          showAlert('error', 'Ошибка валидации', message)
+        })
+      } else {
+        showAlert('error', 'Ошибка валидации', result.message || 'Ошибка валидации')
+      }
     }
   } catch (error) {
     console.error('Error saving color:', error)
