@@ -24,21 +24,21 @@
     <div class="max-w-full overflow-x-auto custom-scrollbar">
       <table class="min-w-full">
         <thead>
-          <tr class="border-t border-gray-100 dark:border-gray-800">
-            <th class="py-3 text-left">
-              <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Атрибут</p>
-            </th>
-            <th class="py-3 text-left">
-              <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Тип</p>
-            </th>
-            <th class="py-3 text-center">
-              <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Категории</p>
-            </th>
-            <th class="py-3 text-center">
-              <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Действие</p>
-            </th>
-          </tr>
-        </thead>
+           <tr class="border-t border-gray-100 dark:border-gray-800">
+             <th class="py-3 text-left w-1/12">
+               <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Атрибут</p>
+             </th>
+             <th class="py-3 text-left w-1/12">
+               <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Тип</p>
+             </th>
+             <th class="py-3 text-center w-3/12">
+               <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Категории</p>
+             </th>
+             <th class="py-3 text-center w-1/12">
+               <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Действие</p>
+             </th>
+           </tr>
+         </thead>
         <tbody>
           <AttributeRow v-for="attribute in attributes" :key="attribute.id" :attribute="attribute"
             @edit="openEditModal" @delete="deleteAttribute" />
