@@ -28,13 +28,7 @@
               <textarea id="description" v-model="form.description" rows="3" :class="textareaClass"></textarea>
               <p v-if="backendErrors.description" class="mt-1.5 text-theme-xs text-error-500">{{ backendErrors.description }}</p>
             </div>
-            <div>
-              <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Изображение (URL)
-              </label>
-              <input type="url" id="image" v-model="form.image" :class="inputClass(backendErrors.image)" />
-              <p v-if="backendErrors.image" class="mt-1.5 text-theme-xs text-error-500">{{ backendErrors.image }}</p>
-            </div>
+            <BrandImageUpload ref="imageUploadRef" v-model="form.image" />
             <Checkbox id="is_active" label="Активен" v-model:checked="form.is_active" />
             <div class="flex justify-end gap-3 pt-4">
               <Button variant="outline" @click="closeModal">Отмена</Button>
@@ -54,6 +48,7 @@ import { ref, watch, computed } from 'vue'
 import Modal from '@/components/profile/Modal.vue'
 import Button from '@/components/ui/Button.vue'
 import Checkbox from '@/components/ui/Checkbox.vue'
+import BrandImageUpload from './BrandImageUpload.vue'
 
 const props = defineProps({
   isVisible: {
@@ -76,6 +71,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'save', 'update:errors'])
 
+const imageUploadRef = ref()
 const form = ref({ name: '', country: '', description: '', is_active: true, image: '' })
 const backendErrors = ref({})
 
@@ -111,6 +107,6 @@ const closeModal = () => {
 }
 
 const saveBrand = () => {
-  emit('save', form.value)
+  emit('save', form.value, imageUploadRef.value?.newFile)
 }
 </script>

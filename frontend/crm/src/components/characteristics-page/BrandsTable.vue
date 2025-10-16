@@ -110,7 +110,7 @@ const openDeleteModal = (brand) => {
   showDeleteModal.value = true
 }
 
-const saveBrand = async (brandData) => {
+const saveBrand = async (brandData, newFile) => {
   try {
     validateAll()
     if (hasErrors()) {
@@ -119,9 +119,9 @@ const saveBrand = async (brandData) => {
 
     let result
     if (isEditing.value) {
-      result = await updateBrand(currentBrand.value.id, brandData)
+      result = await updateBrand(currentBrand.value.id, brandData, newFile)
     } else {
-      result = await createBrand(brandData)
+      result = await createBrand(brandData, newFile)
     }
 
     if (result.success) {

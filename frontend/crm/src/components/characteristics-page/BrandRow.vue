@@ -2,8 +2,8 @@
   <tr class="border-t border-gray-100 dark:border-gray-800">
     <td class="py-3 whitespace-nowrap">
       <div class="flex items-center gap-3">
-        <div class="h-[32px] w-[60px] overflow-hidden rounded-md">
-          <img v-if="brand.image" :src="brand.image" :alt="brand.name" />
+        <div class="h-[32px] w-auto overflow-hidden rounded-md">
+          <img v-if="brand.image" :src="getImageUrl(brand.image)" :alt="brand.name" class="w-full h-full object-cover" />
           <div v-else class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
             <span class="text-gray-500 dark:text-gray-400 text-sm">Нет фото</span>
           </div>
@@ -54,6 +54,8 @@
 <script setup>
 import { EditIcon, DeleteIcon } from '@/icons'
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
 defineProps({
   brand: {
     type: Object,
@@ -62,6 +64,13 @@ defineProps({
 })
 
 const emit = defineEmits(['edit', 'delete'])
+
+const getImageUrl = (imagePath) => {
+  if (imagePath.startsWith('http')) {
+    return imagePath
+  }
+  return `${API_BASE_URL}/storage/${imagePath}`
+}
 
 const openEditModal = (brand) => {
   emit('edit', brand)

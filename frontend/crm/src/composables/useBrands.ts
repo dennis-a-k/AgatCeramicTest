@@ -43,17 +43,33 @@ export function useBrands() {
     }
   }
 
-  const createBrand = async (brandData: { name: string; country?: string; description?: string; is_active: boolean; image?: string }) => {
+  const createBrand = async (brandData: { name: string; country?: string; description?: string; is_active: boolean; image?: string }, newFile?: File) => {
     loading.value = true
     error.value = null
     try {
+      const formData = new FormData()
+
+      // Добавляем все поля бренда
+      Object.keys(brandData).forEach((key) => {
+        const value = (brandData as any)[key]
+        if (typeof value === 'boolean') {
+          formData.append(key, value ? '1' : '0')
+        } else {
+          formData.append(key, value?.toString() || '')
+        }
+      })
+
+      // Добавляем новый файл
+      if (newFile) {
+        formData.append('image', newFile)
+      }
+
       const response = await fetch(`${API_BASE_URL}/api/brands`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        body: JSON.stringify(brandData),
+        body: formData,
       })
       const data = await response.json()
       if (!response.ok) {
@@ -73,17 +89,36 @@ export function useBrands() {
     }
   }
 
-  const updateBrand = async (id: number, brandData: { name: string; country?: string; description?: string; is_active: boolean; image?: string }) => {
+  const updateBrand = async (id: number, brandData: { name: string; country?: string; description?: string; is_active: boolean; image?: string }, newFile?: File) => {
     loading.value = true
     error.value = null
     try {
+      const formData = new FormData()
+
+      // Добавляем все поля бренда
+      Object.keys(brandData).forEach((key) => {
+        const value = (brandData as any)[key]
+        if (typeof value === 'boolean') {
+          formData.append(key, value ? '1' : '0')
+        } else {
+          formData.append(key, value?.toString() || '')
+        }
+      })
+
+      // Добавляем новый файл
+      if (newFile) {
+        formData.append('image', newFile)
+      }
+
+      // Добавляем _method для Laravel
+      formData.append('_method', 'PUT')
+
       const response = await fetch(`${API_BASE_URL}/api/brands/${id}`, {
-        method: 'PUT',
+        method: 'POST', // Используем POST с _method=PUT для FormData
         headers: {
-          'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        body: JSON.stringify(brandData),
+        body: formData,
       })
       const data = await response.json()
       if (!response.ok) {
