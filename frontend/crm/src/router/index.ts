@@ -41,7 +41,7 @@ const router = createRouter({
     {
       path: '/characteristics',
       name: 'Characteristics',
-      component: () => import('../views/Pages/product/Characteristics.vue'),
+      component: () => import('../views/Pages/characteristics/Characteristics.vue'),
       meta: {
         title: 'Управление характеричтиками товара',
       },
