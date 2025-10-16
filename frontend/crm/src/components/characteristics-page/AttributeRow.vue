@@ -10,12 +10,14 @@
       </div>
     </td>
     <td class="py-3 whitespace-nowrap">
-      <p class="text-gray-500 text-theme-sm dark:text-gray-400">{{ attribute.type }}</p>
+      <span :class="badgeClass" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium">
+        {{ typeLabel }}
+      </span>
     </td>
     <td class="py-3 whitespace-nowrap">
       <div class="flex flex-wrap gap-1">
         <span v-for="category in attribute.categories" :key="category.id"
-          class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+          class="inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full font-medium capitalize text-xs bg-blue-light-50 text-blue-light-500 dark:bg-blue-light-500/15 dark:text-blue-light-500">
           {{ category.name }}
         </span>
       </div>
@@ -38,13 +40,36 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { EditIcon, DeleteIcon } from '@/icons'
 
-defineProps({
+const props = defineProps({
   attribute: {
     type: Object,
     required: true
   }
+})
+
+const typeLabel = computed(() => {
+  const typeMap = {
+    text: 'Текст',
+    string: 'Строка',
+    number: 'Число',
+    boolean: 'Да/Нет',
+    select: 'Выбор'
+  }
+  return typeMap[props.attribute.type] || props.attribute.type
+})
+
+const badgeClass = computed(() => {
+  const classMap = {
+    text: 'inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full capitalize bg-blue-light-50 text-blue-light-500 dark:bg-blue-light-500/15 dark:text-blue-light-500',
+    string: 'inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full capitalize bg-brand-50 text-brand-500 dark:bg-brand-500/15 dark:text-brand-400',
+    number: 'inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full capitalize bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500',
+    boolean: 'inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full capitalize bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-orange-400',
+    select: 'inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full capitalize bg-gray-100 text-gray-700 dark:bg-white/5 dark:text-white/80'
+  }
+  return classMap[props.attribute.type] || 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
 })
 
 const emit = defineEmits(['edit', 'delete'])

@@ -20,7 +20,7 @@
               </label>
               <select id="type" v-model="form.type" required :class="inputClass(backendErrors.type)">
                 <option value="">Выберите тип</option>
-                <option value="text">Текст</option>
+                <option value="string">Строка</option>
                 <option value="number">Число</option>
                 <option value="boolean">Да/Нет</option>
                 <option value="select">Выбор</option>
