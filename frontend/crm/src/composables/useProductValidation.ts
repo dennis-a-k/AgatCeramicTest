@@ -64,7 +64,11 @@ export function useProductValidation(product: Ref<Product>) {
   }
 
   const validateProductCode = () => {
-    errors.productCode = ''
+    if (!product.value.product_code.trim()) {
+      errors.productCode = 'Код товара обязателен.'
+    } else {
+      errors.productCode = ''
+    }
   }
 
   const validateUnit = () => {

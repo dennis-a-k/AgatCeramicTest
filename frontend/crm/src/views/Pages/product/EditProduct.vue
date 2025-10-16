@@ -56,7 +56,7 @@
         </div>
       </form>
     </div>
-    <ToastAlert :alert="alert" />
+    <ToastAlert :alerts="alerts" />
   </AdminLayout>
 </template>
 
@@ -81,6 +81,7 @@ const {
   loading,
   error,
   alert,
+  alerts,
   categories,
   brands,
   colors,

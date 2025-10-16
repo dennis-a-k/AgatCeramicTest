@@ -5,6 +5,7 @@ import { useCategories } from '@/composables/useCategories'
 import { watch } from 'vue'
 import { useBrands } from '@/composables/useBrands'
 import { useColors } from '@/composables/useColors'
+import { useProductAlerts } from '@/composables/useProductAlerts'
 
 interface ProductImage {
   id?: number
@@ -40,6 +41,7 @@ export function useProductCreator() {
   const { categories, fetchCategories, fetchCategoryAttributes } = useCategories()
   const { brands, fetchBrands } = useBrands()
   const { colors, fetchColors } = useColors()
+  const { alerts, showAlert } = useProductAlerts()
 
   const product = ref<Product>({
     id: null,
@@ -67,11 +69,6 @@ export function useProductCreator() {
   const error = ref(false)
   const alert = ref<any>(null)
 
-  const showAlert = (variant: string, title: string, message: string) => {
-    alert.value = { variant, title, message }
-    setTimeout(() => (alert.value = null), 3000)
-  }
-
   const handleFetchProducts = () => {
     error.value = false
     // Для создания товара не нужно загружать данные
@@ -89,9 +86,14 @@ export function useProductCreator() {
     }
 
     if (validationErrors.length > 0) {
-      showAlert('error', 'Ошибка валидации', validationErrors.join(' '))
+      validationErrors.forEach(error => {
+        showAlert('error', 'Ошибка валидации', error as string)
+      })
       return
     }
+
+    // Очищаем предыдущие алерты
+    alerts.value = []
 
     try {
       loading.value = true
@@ -136,6 +138,17 @@ export function useProductCreator() {
                   }
                 }
               }
+            }
+          })
+
+          // Выводим ошибки валидации из бэкенда в алерты
+          Object.values(result.errors).forEach((errorArray: any) => {
+            if (Array.isArray(errorArray)) {
+              errorArray.forEach((error: string) => {
+                showAlert('error', 'Ошибка валидации', error)
+              })
+            } else {
+              showAlert('error', 'Ошибка валидации', errorArray)
             }
           })
 
@@ -195,6 +208,7 @@ export function useProductCreator() {
     loading,
     error,
     alert,
+    alerts,
     categories,
     brands,
     colors,
