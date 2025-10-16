@@ -28,7 +28,7 @@
         <thead>
           <tr class="border-t border-gray-100 dark:border-gray-800">
             <th class="py-3 text-left">
-              <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Название</p>
+              <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Бренд</p>
             </th>
             <th class="py-3 text-left">
               <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Страна</p>
