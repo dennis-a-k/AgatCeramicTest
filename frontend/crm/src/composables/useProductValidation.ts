@@ -64,8 +64,8 @@ export function useProductValidation(product: Ref<Product>) {
   }
 
   const validateProductCode = () => {
-    if (!product.value.product_code.trim()) {
-      errors.productCode = 'Код товара обязателен.'
+    if (product.value.product_code && product.value.product_code.length > 15) {
+      errors.productCode = 'Код товара не должен превышать 15 символов.'
     } else {
       errors.productCode = ''
     }
