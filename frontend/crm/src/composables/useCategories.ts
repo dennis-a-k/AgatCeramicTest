@@ -74,9 +74,27 @@ export function useCategories() {
     return [{ id: '1', value: null, label: 'Все категории' }, ...cats]
   })
 
+  // Плоский список всех категорий для мультиселекта
+  const flatCategories = computed(() => {
+    const result: Category[] = []
+
+    const flatten = (cats: Category[]) => {
+      cats.forEach(cat => {
+        result.push(cat)
+        if (cat.children && cat.children.length > 0) {
+          flatten(cat.children)
+        }
+      })
+    }
+
+    flatten(allCategories.value)
+    return result
+  })
+
   return {
     allCategories,
     categories,
+    flatCategories,
     fetchCategories,
     fetchCategoryAttributes
   }

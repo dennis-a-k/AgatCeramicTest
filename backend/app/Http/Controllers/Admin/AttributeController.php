@@ -32,12 +32,25 @@ class AttributeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:attributes,name',
             'type' => 'required|string|max:255',
+            'categories' => 'nullable|array',
+            'categories.*' => 'integer|exists:categories,id',
         ]);
 
-        $data = $request->all();
+        $data = $request->only(['name', 'type']);
         $data['slug'] = Str::slug($request->name);
 
         $attribute = Attribute::create($data);
+
+        if ($request->has('categories') && is_array($request->categories)) {
+            $attribute->categories()->attach($request->categories, [
+                'order' => 0,
+                'is_filterable' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        $attribute->load('categories');
 
         return response()->json(['attribute' => $attribute], 201);
     }
@@ -64,12 +77,25 @@ class AttributeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:attributes,name,' . $id,
             'type' => 'required|string|max:255',
+            'categories' => 'nullable|array',
+            'categories.*' => 'integer|exists:categories,id',
         ]);
 
-        $data = $request->all();
+        $data = $request->only(['name', 'type']);
         $data['slug'] = Str::slug($request->name);
 
         $attribute->update($data);
+
+        if ($request->has('categories')) {
+            $attribute->categories()->sync($request->categories, [
+                'order' => 0,
+                'is_filterable' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        $attribute->load('categories');
 
         return response()->json(['attribute' => $attribute]);
     }
