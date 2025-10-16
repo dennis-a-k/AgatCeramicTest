@@ -3,4 +3,4 @@
 use App\Http\Controllers\Admin\BrandController;
 use Illuminate\Support\Facades\Route;
 
-Route::apiResource('brands', BrandController::class)->only(['index', 'show']);
+Route::apiResource('brands', BrandController::class);

@@ -13,6 +13,7 @@ class Brand extends Model
         'country',
         'description',
         'is_active',
+        'image',
     ];
 
     protected $casts = [

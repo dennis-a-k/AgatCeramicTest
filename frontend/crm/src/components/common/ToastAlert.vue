@@ -1,7 +1,7 @@
 <template>
-  <div v-if="alert" class="fixed top-20 right-4 z-[100000]">
+  <div v-if="alert && alert.show" class="fixed top-20 right-4 z-[100000]">
     <Alert
-      :variant="alert.variant"
+      :variant="alert.type"
       :title="alert.title"
       :message="alert.message"
     />
@@ -12,7 +12,8 @@
 import Alert from '../ui/Alert.vue'
 
 interface AlertData {
-  variant: 'success' | 'error' | 'warning' | 'info'
+  show: boolean
+  type: 'success' | 'error' | 'warning' | 'info'
   title: string
   message: string
 }
