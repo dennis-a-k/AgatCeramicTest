@@ -5,7 +5,6 @@
       <div class="col-span-12 xl:col-span-6">
         <ColorsTable />
       </div>
-
       <div class="col-span-12 xl:col-span-6">
         <BrandsTable />
       </div>
