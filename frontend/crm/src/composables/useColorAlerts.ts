@@ -1,7 +1,8 @@
 import { ref } from 'vue'
 
 interface Alert {
-  variant: 'success' | 'error' | 'warning' | 'info'
+  show: boolean
+  type: 'success' | 'error' | 'warning' | 'info'
   title: string
   message: string
 }
@@ -9,8 +10,8 @@ interface Alert {
 export function useColorAlerts() {
   const alert = ref<Alert | null>(null)
 
-  const showAlert = (variant: Alert['variant'], title: string, message: string) => {
-    alert.value = { variant, title, message }
+  const showAlert = (type: Alert['type'], title: string, message: string) => {
+    alert.value = { show: true, type, title, message }
     setTimeout(() => (alert.value = null), 3000)
   }
 

@@ -50,7 +50,7 @@
     <Pagination :current-page="currentPage" :total-pages="totalPages" @page-change="goToPage" />
   </div>
 
-  <ColorModal :is-visible="showModal" :is-editing="isEditing" :color="currentColor"
+  <ColorModal :is-visible="showModal" :is-editing="isEditing" :color="currentColor" :errors="backendErrors"
     @close="closeModal" @save="saveColor" />
 
   <ToastAlert :alert="alert" />
@@ -64,6 +64,7 @@ import { useColors } from '@/composables/useColors'
 import { useColorModal } from '@/composables/useColorModal'
 import { useColorForm } from '@/composables/useColorForm'
 import { useColorAlerts } from '@/composables/useColorAlerts'
+import { useColorValidation } from '@/composables/useColorValidation'
 import { PlusIcon, SearchIcon } from "../../icons"
 import ColorRow from './ColorRow.vue'
 import ColorModal from './ColorModal.vue'
@@ -74,9 +75,16 @@ import ToastAlert from '@/components/common/ToastAlert.vue'
 const plusIcon = PlusIcon
 const searchIcon = SearchIcon
 const { colors, searchQuery, currentPage, totalPages, fetchColors, createColor, updateColor, deleteColor: deleteColorApi } = useColors()
-const { showModal, isEditing, currentColor, openCreateModal, openEditModal, closeModal } = useColorModal()
+const { showModal, isEditing, currentColor, openCreateModal, openEditModal: originalOpenEditModal, closeModal } = useColorModal()
+
+const openEditModal = (color) => {
+  backendErrors.value = {} // Очищаем ошибки при открытии модального окна редактирования
+  originalOpenEditModal(color)
+}
 const { form, resetForm, setForm } = useColorForm()
 const { alert, showAlert } = useColorAlerts()
+const { errors, validateAll, hasErrors, resetErrors, initializeValidation } = useColorValidation(form)
+const backendErrors = ref({})
 
 const showDeleteModal = ref(false)
 const selectedColor = ref(null)
@@ -100,19 +108,44 @@ const openDeleteModal = (color) => {
 
 const saveColor = async (colorData) => {
   try {
-    if (isEditing.value) {
-      await updateColor(currentColor.value.id, colorData)
-      showAlert('success', 'Успешно', 'Цвет успешно обновлён')
-    } else {
-      await createColor(colorData)
-      showAlert('success', 'Успешно', 'Цвет успешно создан')
+    validateAll()
+    if (hasErrors()) {
+      return
     }
 
-    await fetchColors()
-    closeModal()
+    let result
+    if (isEditing.value) {
+      result = await updateColor(currentColor.value.id, colorData)
+    } else {
+      result = await createColor(colorData)
+    }
+
+    if (result.success) {
+      showAlert('success', 'Успешно', isEditing.value ? 'Цвет успешно обновлён' : 'Цвет успешно создан')
+      await fetchColors()
+      closeModal()
+      resetErrors()
+    } else {
+      // Валидационные ошибки
+      const processedErrors = {}
+      if (result.errors) {
+        for (const [field, messages] of Object.entries(result.errors)) {
+          if (Array.isArray(messages)) {
+            processedErrors[field] = messages[0] // Берем первое сообщение
+          } else {
+            processedErrors[field] = messages
+          }
+        }
+      }
+      backendErrors.value = processedErrors
+      const errorMessages = Object.values(processedErrors)
+      const errorMessage = errorMessages.length > 0 ? errorMessages.join('\n') : (result.message || 'Ошибка валидации')
+      showAlert('error', 'Ошибка валидации', errorMessage)
+    }
   } catch (error) {
     console.error('Error saving color:', error)
-    showAlert('error', 'Ошибка', 'Не удалось сохранить цвет')
+    const errorMessage = error.response?.data?.message || 'Не удалось сохранить цвет'
+    showAlert('error', 'Ошибка', errorMessage)
   }
 }
 
