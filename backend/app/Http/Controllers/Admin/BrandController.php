@@ -30,7 +30,7 @@ class BrandController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:brands,name',
             'country' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|url',
@@ -65,7 +65,7 @@ class BrandController extends Controller
         }
 
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:brands,name,' . $id,
             'country' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|url',

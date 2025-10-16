@@ -30,7 +30,7 @@ class ColorController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:colors,name',
             'hex' => 'required|string|size:7|unique:colors,hex|regex:/^#[a-fA-F0-9]{6}$/',
         ]);
 
@@ -62,7 +62,7 @@ class ColorController extends Controller
         }
 
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:colors,name,' . $id,
             'hex' => 'required|string|size:7|unique:colors,hex,' . $id . '|regex:/^#[a-fA-F0-9]{6}$/',
         ]);
 
