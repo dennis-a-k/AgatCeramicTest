@@ -35,13 +35,7 @@
               <input type="url" id="image" v-model="form.image" :class="inputClass(backendErrors.image)" />
               <p v-if="backendErrors.image" class="mt-1.5 text-theme-xs text-error-500">{{ backendErrors.image }}</p>
             </div>
-            <div class="flex items-center">
-              <input type="checkbox" id="is_active" v-model="form.is_active"
-                class="h-4 w-4 text-brand-600 focus:ring-brand-500 border-gray-300 rounded" />
-              <label for="is_active" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
-                Активен
-              </label>
-            </div>
+            <Checkbox id="is_active" label="Активен" v-model:checked="form.is_active" />
             <div class="flex justify-end gap-3 pt-4">
               <Button variant="outline" @click="closeModal">Отмена</Button>
               <Button variant="primary" type="submit">
@@ -59,6 +53,7 @@
 import { ref, watch, computed } from 'vue'
 import Modal from '@/components/profile/Modal.vue'
 import Button from '@/components/ui/Button.vue'
+import Checkbox from '@/components/ui/Checkbox.vue'
 
 const props = defineProps({
   isVisible: {
