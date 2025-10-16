@@ -11,29 +11,29 @@
               <label for="nameBrand" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Название
               </label>
-              <input type="text" id="nameBrand" v-model="form.name" required
-                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+              <input type="text" id="nameBrand" v-model="form.name" required :class="inputClass(backendErrors.name)" />
+              <p v-if="backendErrors.name" class="mt-1.5 text-theme-xs text-error-500">{{ backendErrors.name }}</p>
             </div>
             <div>
               <label for="country" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Страна
               </label>
-              <input type="text" id="country" v-model="form.country"
-                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+              <input type="text" id="country" v-model="form.country" :class="inputClass(backendErrors.country)" />
+              <p v-if="backendErrors.country" class="mt-1.5 text-theme-xs text-error-500">{{ backendErrors.country }}</p>
             </div>
             <div>
               <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Описание
               </label>
-              <textarea id="description" v-model="form.description" rows="3"
-                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"></textarea>
+              <textarea id="description" v-model="form.description" rows="3" :class="textareaClass"></textarea>
+              <p v-if="backendErrors.description" class="mt-1.5 text-theme-xs text-error-500">{{ backendErrors.description }}</p>
             </div>
             <div>
               <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Изображение (URL)
               </label>
-              <input type="url" id="image" v-model="form.image"
-                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+              <input type="url" id="image" v-model="form.image" :class="inputClass(backendErrors.image)" />
+              <p v-if="backendErrors.image" class="mt-1.5 text-theme-xs text-error-500">{{ backendErrors.image }}</p>
             </div>
             <div class="flex items-center">
               <input type="checkbox" id="is_active" v-model="form.is_active"
@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import Modal from '@/components/profile/Modal.vue'
 import Button from '@/components/ui/Button.vue'
 
@@ -72,18 +72,44 @@ const props = defineProps({
   brand: {
     type: Object,
     default: () => ({ name: '', country: '', description: '', is_active: true, image: '' })
+  },
+  errors: {
+    type: Object,
+    default: () => ({})
   }
 })
 
-const emit = defineEmits(['close', 'save'])
+const emit = defineEmits(['close', 'save', 'update:errors'])
 
 const form = ref({ name: '', country: '', description: '', is_active: true, image: '' })
+const backendErrors = ref({})
+
+const inputClass = (error) => {
+  return error ? 'dark:bg-dark-900 shadow-theme-xs focus:border-error-300 focus:ring-error-500/10 dark:focus:border-error-800 h-11 w-full rounded-lg border border-error-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-error-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 appearance-none' : 'dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 appearance-none'
+}
+
+const textareaClass = computed(() => {
+  return 'dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full resize-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30'
+})
 
 watch(() => props.isVisible, (newVal) => {
   if (newVal) {
-    form.value = { ...props.brand }
+    if (props.isEditing && props.brand) {
+      form.value = { ...props.brand }
+    } else {
+      form.value = { name: '', country: '', description: '', is_active: true, image: '' }
+    }
+    backendErrors.value = { ...props.errors }
+  } else {
+    // Reset form when modal closes
+    form.value = { name: '', country: '', description: '', is_active: true, image: '' }
+    backendErrors.value = {}
   }
 })
+
+watch(() => props.errors, (newErrors) => {
+  backendErrors.value = { ...newErrors }
+}, { deep: true })
 
 const closeModal = () => {
   emit('close')

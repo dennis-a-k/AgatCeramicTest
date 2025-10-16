@@ -1,27 +1,31 @@
 import { ref } from 'vue'
 
-export function useBrandAlerts() {
-  const alert = ref({
-    show: false,
-    type: '',
-    title: '',
-    message: ''
-  })
+interface Alert {
+  show: boolean
+  type: 'success' | 'error' | 'warning' | 'info'
+  title: string
+  message: string
+}
 
-  const showAlert = (type: string, title: string, message: string) => {
-    alert.value = {
-      show: true,
-      type,
-      title,
-      message
-    }
+export function useBrandAlerts() {
+  const alerts = ref<Alert[]>([])
+
+  const showAlert = (type: Alert['type'], title: string, message: string) => {
+    const newAlert: Alert = { show: true, type, title, message }
+    alerts.value.push(newAlert)
     setTimeout(() => {
-      alert.value.show = false
+      const index = alerts.value.indexOf(newAlert)
+      if (index > -1) alerts.value.splice(index, 1)
     }, 3000)
   }
 
+  const clearAlerts = () => {
+    alerts.value = []
+  }
+
   return {
-    alert,
-    showAlert
+    alerts,
+    showAlert,
+    clearAlerts
   }
 }

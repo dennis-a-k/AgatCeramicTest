@@ -53,10 +53,10 @@
     <Pagination :current-page="currentPage" :total-pages="totalPages" @page-change="goToPage" />
   </div>
 
-  <BrandModal :is-visible="showModal" :is-editing="isEditing" :brand="currentBrand"
+  <BrandModal :is-visible="showModal" :is-editing="isEditing" :brand="currentBrand" :errors="backendErrors"
     @close="closeModal" @save="saveBrand" />
 
-  <ToastAlert :alert="alert" />
+  <ToastAlert :alerts="alerts" />
   <DeleteConfirmationModal :isVisible="showDeleteModal" :productName="selectedBrand?.name"
     :productArticle="selectedBrand?.slug" @close="showDeleteModal = false" @confirm="confirmDelete" />
 </template>
@@ -67,6 +67,7 @@ import { useBrands } from '@/composables/useBrands'
 import { useBrandModal } from '@/composables/useBrandModal'
 import { useBrandForm } from '@/composables/useBrandForm'
 import { useBrandAlerts } from '@/composables/useBrandAlerts'
+import { useBrandValidation } from '@/composables/useBrandValidation'
 import { PlusIcon, SearchIcon } from "../../icons"
 import BrandRow from './BrandRow.vue'
 import BrandModal from './BrandModal.vue'
@@ -77,9 +78,17 @@ import ToastAlert from '@/components/common/ToastAlert.vue'
 const plusIcon = PlusIcon
 const searchIcon = SearchIcon
 const { brands, searchQuery, currentPage, totalPages, fetchBrands, createBrand, updateBrand, deleteBrand: deleteBrandApi } = useBrands()
-const { showModal, isEditing, currentBrand, openCreateModal, openEditModal, closeModal } = useBrandModal()
+const { showModal, isEditing, currentBrand, openCreateModal, openEditModal: originalOpenEditModal, closeModal } = useBrandModal()
+
+const openEditModal = (brand) => {
+  backendErrors.value = {} // Очищаем ошибки при открытии модального окна редактирования
+  initializeValidation() // Инициализируем валидацию
+  originalOpenEditModal(brand)
+}
 const { form, resetForm, setForm } = useBrandForm()
-const { alert, showAlert } = useBrandAlerts()
+const { alerts, showAlert } = useBrandAlerts()
+const { errors, validateAll, hasErrors, resetErrors, initializeValidation } = useBrandValidation(form)
+const backendErrors = ref({})
 
 const showDeleteModal = ref(false)
 const selectedBrand = ref(null)
@@ -103,19 +112,49 @@ const openDeleteModal = (brand) => {
 
 const saveBrand = async (brandData) => {
   try {
-    if (isEditing.value) {
-      await updateBrand(currentBrand.value.id, brandData)
-      showAlert('success', 'Успешно', 'Бренд успешно обновлён')
-    } else {
-      await createBrand(brandData)
-      showAlert('success', 'Успешно', 'Бренд успешно создан')
+    validateAll()
+    if (hasErrors()) {
+      return
     }
 
-    await fetchBrands()
-    closeModal()
+    let result
+    if (isEditing.value) {
+      result = await updateBrand(currentBrand.value.id, brandData)
+    } else {
+      result = await createBrand(brandData)
+    }
+
+    if (result.success) {
+      showAlert('success', 'Успешно', isEditing.value ? 'Бренд успешно обновлён' : 'Бренд успешно создан')
+      await fetchBrands()
+      closeModal()
+      resetErrors()
+    } else {
+      // Валидационные ошибки
+      const processedErrors = {}
+      if (result.errors) {
+        for (const [field, messages] of Object.entries(result.errors)) {
+          if (Array.isArray(messages)) {
+            processedErrors[field] = messages[0] // Берем первое сообщение
+          } else {
+            processedErrors[field] = messages
+          }
+        }
+      }
+      backendErrors.value = processedErrors
+      const errorMessages = Object.values(processedErrors)
+      if (errorMessages.length > 0) {
+        errorMessages.forEach(message => {
+          showAlert('error', 'Ошибка валидации', message)
+        })
+      } else {
+        showAlert('error', 'Ошибка валидации', result.message || 'Ошибка валидации')
+      }
+    }
   } catch (error) {
     console.error('Error saving brand:', error)
-    showAlert('error', 'Ошибка', 'Не удалось сохранить бренд')
+    const errorMessage = error.response?.data?.message || 'Не удалось сохранить бренд'
+    showAlert('error', 'Ошибка', errorMessage)
   }
 }
 

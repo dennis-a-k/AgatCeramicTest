@@ -51,15 +51,19 @@ export function useBrands() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify(brandData),
       })
+      const data = await response.json()
       if (!response.ok) {
+        if (response.status === 422) {
+          return { success: false, errors: data.errors, message: data.message }
+        }
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-      const data = await response.json()
       await fetchBrands(currentPage.value)
-      return data
+      return { success: true, data }
     } catch (err) {
       error.value = (err as Error).message
       console.error('Error creating brand:', err)
@@ -77,15 +81,19 @@ export function useBrands() {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify(brandData),
       })
+      const data = await response.json()
       if (!response.ok) {
+        if (response.status === 422) {
+          return { success: false, errors: data.errors, message: data.message }
+        }
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-      const data = await response.json()
       await fetchBrands(currentPage.value)
-      return data
+      return { success: true, data }
     } catch (err) {
       error.value = (err as Error).message
       console.error('Error updating brand:', err)
