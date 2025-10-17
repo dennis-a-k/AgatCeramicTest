@@ -5,6 +5,7 @@ import { useCategories } from '@/composables/useCategories'
 import { useBrands } from '@/composables/useBrands'
 import { useColors } from '@/composables/useColors'
 import { useProductAlerts } from '@/composables/useProductAlerts'
+import { watch } from 'vue'
 
 interface ProductImage {
   id?: number
@@ -38,7 +39,7 @@ export function useProductManager() {
   const route = useRoute()
   const router = useRouter()
   const { getProduct, updateProduct } = useGoods()
-  const { allCategories, categories, fetchCategories } = useCategories()
+  const { allCategories, categories, fetchCategories, fetchCategoryAttributes } = useCategories()
   const { brands, fetchBrands } = useBrands()
   const { colors, fetchColors } = useColors()
   const { alerts, showAlert } = useProductAlerts()
@@ -188,11 +189,39 @@ export function useProductManager() {
     router.push('/products')
   }
 
+  const loadCategoryAttributes = async (categoryId: string) => {
+    if (!categoryId) {
+      product.value.attribute_values = []
+      return
+    }
+
+    try {
+      const attributes = await fetchCategoryAttributes(Number(categoryId))
+      product.value.attribute_values = attributes.map((attr: any) => ({
+        attribute_id: attr.id,
+        attribute: attr,
+        string_value: '',
+        number_value: null,
+        boolean_value: false,
+        text_value: '',
+        error: ''
+      }))
+    } catch (err) {
+      console.error('Ошибка загрузки атрибутов:', err)
+      product.value.attribute_values = []
+    }
+  }
+
   const init = () => {
     fetchCategories()
     fetchBrands()
     fetchColors()
     loadProduct()
+
+    // Наблюдатель за изменением категории
+    watch(() => product.value.category_id, (newCategoryId) => {
+      loadCategoryAttributes(newCategoryId)
+    })
   }
 
   return {
