@@ -192,12 +192,13 @@ export function useGoods() {
           })
         } else if (key === 'attribute_values') {
           productData.attribute_values.forEach((attr: any, index: number) => {
-            formData.append(`attribute_values[${index}][id]`, attr.id?.toString() || '')
+            formData.append(`attribute_values[${index}][attribute_id]`, attr.attribute_id?.toString() || '')
             formData.append(`attribute_values[${index}][string_value]`, attr.string_value || '')
             formData.append(
               `attribute_values[${index}][number_value]`,
               attr.number_value?.toString() || '',
             )
+            formData.append(`attribute_values[${index}][text_value]`, attr.text_value || '')
             // Handle boolean_value properly
             if (typeof attr.boolean_value === 'boolean') {
               formData.append(
@@ -300,12 +301,13 @@ export function useGoods() {
           })
         } else if (key === 'attribute_values') {
           productData.attribute_values.forEach((attr: any, index: number) => {
-            formData.append(`attribute_values[${index}][id]`, attr.id?.toString() || '')
+            formData.append(`attribute_values[${index}][attribute_id]`, attr.attribute_id?.toString() || '')
             formData.append(`attribute_values[${index}][string_value]`, attr.string_value || '')
             formData.append(
               `attribute_values[${index}][number_value]`,
               attr.number_value?.toString() || '',
             )
+            formData.append(`attribute_values[${index}][text_value]`, attr.text_value || '')
             // Handle boolean_value properly
             if (typeof attr.boolean_value === 'boolean') {
               formData.append(

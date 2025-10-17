@@ -83,6 +83,11 @@ export function useProductManager() {
       // Загружаем все бренды и цвета для формы
       await fetchAllBrands()
       await fetchAllColors()
+
+      // Загружаем атрибуты для текущей категории товара
+      if (product.value.category_id) {
+        await loadCategoryAttributes(product.value.category_id)
+      }
     } catch (err) {
       error.value = true
       showAlert('error', 'Ошибка', 'Не удалось загрузить товар')
@@ -200,15 +205,23 @@ export function useProductManager() {
 
     try {
       const attributes = await fetchCategoryAttributes(Number(categoryId))
-      product.value.attribute_values = attributes.map((attr: any) => ({
-        attribute_id: attr.id,
-        attribute: attr,
-        string_value: '',
-        number_value: null,
-        boolean_value: false,
-        text_value: '',
-        error: ''
-      }))
+      const existingAttributes = product.value.attribute_values
+
+      product.value.attribute_values = attributes.map((attr: any) => {
+        // Ищем существующий атрибут с таким же attribute_id
+        const existingAttr = existingAttributes.find((existing: any) => existing.attribute_id === attr.id)
+
+        return {
+          id: existingAttr?.id || null, // Добавляем id для существующих атрибутов
+          attribute_id: attr.id,
+          attribute: attr,
+          string_value: existingAttr?.string_value || '',
+          number_value: existingAttr?.number_value || null,
+          boolean_value: existingAttr?.boolean_value || false,
+          text_value: existingAttr?.text_value || '',
+          error: ''
+        }
+      })
     } catch (err) {
       console.error('Ошибка загрузки атрибутов:', err)
       product.value.attribute_values = []

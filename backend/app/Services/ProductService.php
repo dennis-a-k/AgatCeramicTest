@@ -160,13 +160,27 @@ class ProductService
     protected function updateAttributeValues(int $productId, array $attributeValues): void
     {
         foreach ($attributeValues as $attrValue) {
-            ProductAttributeValue::where('id', $attrValue['id'])
-                ->where('product_id', $productId)
-                ->update([
+            if (isset($attrValue['id'])) {
+                // Обновляем существующий атрибут
+                ProductAttributeValue::where('id', $attrValue['id'])
+                    ->where('product_id', $productId)
+                    ->update([
+                        'string_value' => $attrValue['string_value'] ?? null,
+                        'number_value' => $attrValue['number_value'] ?? null,
+                        'boolean_value' => $attrValue['boolean_value'] ?? null,
+                        'text_value' => $attrValue['text_value'] ?? null,
+                    ]);
+            } elseif (isset($attrValue['attribute_id'])) {
+                // Создаем новый атрибут, если его нет
+                ProductAttributeValue::create([
+                    'product_id' => $productId,
+                    'attribute_id' => $attrValue['attribute_id'],
                     'string_value' => $attrValue['string_value'] ?? null,
                     'number_value' => $attrValue['number_value'] ?? null,
                     'boolean_value' => $attrValue['boolean_value'] ?? null,
+                    'text_value' => $attrValue['text_value'] ?? null,
                 ]);
+            }
         }
     }
 

@@ -30,9 +30,11 @@ class StoreProductRequest extends FormRequest
             'country' => 'nullable|string',
             'collection' => 'nullable|string',
             'attribute_values' => 'nullable|array',
+            'attribute_values.*.attribute_id' => 'required|integer|exists:attributes,id',
             'attribute_values.*.string_value' => 'nullable|string',
             'attribute_values.*.number_value' => 'nullable|numeric',
             'attribute_values.*.boolean_value' => 'nullable|boolean',
+            'attribute_values.*.text_value' => 'nullable|string',
             'images' => 'nullable|array',
             'images.*.sort_order' => 'required|integer|min:0',
             'new_images' => 'nullable|array',
@@ -40,3 +42,4 @@ class StoreProductRequest extends FormRequest
         ];
     }
 }
+
