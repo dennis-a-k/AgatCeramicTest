@@ -108,6 +108,12 @@ class AttributeController extends Controller
             return response()->json(['message' => 'Attribute not found'], 404);
         }
 
+        // Detach categories to avoid foreign key constraint
+        $attribute->categories()->detach();
+
+        // Delete related product attribute values
+        $attribute->productValues()->delete();
+
         $attribute->delete();
 
         return response()->json(['message' => 'Attribute deleted successfully']);
