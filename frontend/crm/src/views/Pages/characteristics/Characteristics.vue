@@ -25,8 +25,13 @@
         <div class="col-span-12 xl:col-span-6">
           <BrandsTable />
         </div>
+        <div class="col-span-12 xl:col-span-8">
+          <AttributesTable />
+        </div>
+        <div class="col-span-12 xl:col-span-4">
+          <CategoriesTable />
+        </div>
       </div>
-      <AttributesTable />
     </div>
   </AdminLayout>
 </template>
@@ -38,9 +43,11 @@ import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import ColorsTable from '@/components/characteristics-page/ColorsTable.vue'
 import BrandsTable from '@/components/characteristics-page/BrandsTable.vue'
 import AttributesTable from '@/components/characteristics-page/AttributesTable.vue'
+import CategoriesTable from '@/components/characteristics-page/CategoriesTable.vue'
 import { useColors } from '@/composables/useColors'
 import { useBrands } from '@/composables/useBrands'
 import { useAttributes } from '@/composables/useAttributes'
+import { useCategoriesTable } from '@/composables/useCategoriesTable'
 
 const currentPageTitle = ref('Характеричтики')
 const loading = ref(true)
@@ -50,11 +57,13 @@ const product = ref({})
 const colorsComposable = useColors()
 const brandsComposable = useBrands()
 const attributesComposable = useAttributes()
+const categoriesComposable = useCategoriesTable()
 
 // Предоставляем данные через provide для дочерних компонентов
 provide('colorsData', colorsComposable)
 provide('brandsData', brandsComposable)
 provide('attributesData', attributesComposable)
+provide('categoriesData', categoriesComposable)
 
 const handleFetchCharacteristics = async () => {
   loading.value = true
@@ -63,7 +72,8 @@ const handleFetchCharacteristics = async () => {
     await Promise.all([
       colorsComposable.fetchColors(),
       brandsComposable.fetchBrands(),
-      attributesComposable.fetchAttributes()
+      attributesComposable.fetchAttributes(),
+      categoriesComposable.fetchCategories()
     ])
     product.value = { id: 1 } // Устанавливаем, что данные загружены
   } catch (err) {
