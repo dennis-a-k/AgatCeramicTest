@@ -2,8 +2,8 @@ import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useGoods } from '@/composables/useGoods'
 import { useCategories } from '@/composables/useCategories'
-import { useBrands } from '@/composables/useBrands'
-import { useColors } from '@/composables/useColors'
+import { useAllBrands } from '@/composables/useAllBrands'
+import { useAllColors } from '@/composables/useAllColors'
 import { useProductAlerts } from '@/composables/useProductAlerts'
 import { watch } from 'vue'
 
@@ -40,8 +40,8 @@ export function useProductManager() {
   const router = useRouter()
   const { getProduct, updateProduct } = useGoods()
   const { allCategories, categories, fetchCategories, fetchCategoryAttributes } = useCategories()
-  const { brands, fetchBrands } = useBrands()
-  const { colors, fetchColors } = useColors()
+  const { brands, fetchAllBrands } = useAllBrands()
+  const { colors, fetchAllColors } = useAllColors()
   const { alerts, showAlert } = useProductAlerts()
 
   const product = ref<Product>({
@@ -80,6 +80,9 @@ export function useProductManager() {
       product.value.attribute_values.forEach((attr) => {
         attr.error = ''
       })
+      // Загружаем все бренды и цвета для формы
+      await fetchAllBrands()
+      await fetchAllColors()
     } catch (err) {
       error.value = true
       showAlert('error', 'Ошибка', 'Не удалось загрузить товар')
@@ -212,11 +215,11 @@ export function useProductManager() {
     }
   }
 
-  const init = () => {
-    fetchCategories()
-    fetchBrands()
-    fetchColors()
-    loadProduct()
+  const init = async () => {
+    await fetchCategories()
+    await fetchAllBrands()
+    await fetchAllColors()
+    await loadProduct()
 
     // Наблюдатель за изменением категории
     watch(() => product.value.category_id, (newCategoryId) => {

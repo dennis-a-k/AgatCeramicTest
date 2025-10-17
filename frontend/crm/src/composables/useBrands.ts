@@ -43,6 +43,36 @@ export function useBrands() {
     }
   }
 
+  const fetchAllBrands = async () => {
+    loading.value = true
+    error.value = null
+
+    const params = new URLSearchParams()
+    if (searchQuery.value.trim()) {
+      params.append('search', searchQuery.value.trim())
+    }
+    params.append('per_page', 'all')
+
+    const url = `${API_BASE_URL}/api/brands${params.toString() ? '?' + params.toString() : ''}`
+
+    try {
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const data = await response.json()
+      brands.value = data.data || []
+      totalPages.value = 1
+      totalItems.value = brands.value.length
+      currentPage.value = 1
+    } catch (err) {
+      error.value = (err as Error).message
+      console.error('Error fetching all brands:', err)
+    } finally {
+      loading.value = false
+    }
+  }
+
   const createBrand = async (brandData: { name: string; country?: string; description?: string; is_active: boolean; image?: string }, newFile?: File) => {
     loading.value = true
     error.value = null
@@ -196,9 +226,10 @@ export function useBrands() {
     totalPages,
     totalItems,
     fetchBrands,
+    fetchAllBrands,
     createBrand,
     updateBrand,
     deleteBrand,
-    getBrandById
+    getBrandById,
   }
 }

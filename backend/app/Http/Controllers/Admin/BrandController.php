@@ -23,9 +23,13 @@ class BrandController extends Controller
 
         // Пагинация
         $perPage = $request->get('per_page', 5);
-        $brands = $query->orderBy('name', 'asc')->paginate($perPage);
-
-        return response()->json($brands);
+        if ($perPage == 'all') {
+            $brands = $query->orderBy('name', 'asc')->get();
+            return response()->json(['data' => $brands]);
+        } else {
+            $brands = $query->orderBy('name', 'asc')->paginate($perPage);
+            return response()->json($brands);
+        }
     }
 
     public function store(Request $request): JsonResponse

@@ -43,6 +43,36 @@ export function useColors() {
     }
   }
 
+  const fetchAllColors = async () => {
+    loading.value = true
+    error.value = null
+
+    const params = new URLSearchParams()
+    if (searchQuery.value.trim()) {
+      params.append('search', searchQuery.value.trim())
+    }
+    params.append('per_page', 'all')
+
+    const url = `${API_BASE_URL}/api/colors${params.toString() ? '?' + params.toString() : ''}`
+
+    try {
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const data = await response.json()
+      colors.value = data.data || []
+      totalPages.value = 1
+      totalItems.value = colors.value.length
+      currentPage.value = 1
+    } catch (err) {
+      error.value = (err as Error).message
+      console.error('Error fetching all colors:', err)
+    } finally {
+      loading.value = false
+    }
+  }
+
   const createColor = async (colorData: { name: string; hex: string }) => {
     loading.value = true
     error.value = null
@@ -161,6 +191,7 @@ export function useColors() {
     totalPages,
     totalItems,
     fetchColors,
+    fetchAllColors,
     createColor,
     updateColor,
     deleteColor,

@@ -23,8 +23,13 @@ class ColorController extends Controller
         }
 
         $perPage = $request->get('per_page', 5);
-        $colors = $query->orderBy('name', 'asc')->paginate($perPage);
-        return response()->json($colors);
+        if ($perPage == 'all') {
+            $colors = $query->orderBy('name', 'asc')->get();
+            return response()->json(['data' => $colors]);
+        } else {
+            $colors = $query->orderBy('name', 'asc')->paginate($perPage);
+            return response()->json($colors);
+        }
     }
 
     public function store(Request $request): JsonResponse

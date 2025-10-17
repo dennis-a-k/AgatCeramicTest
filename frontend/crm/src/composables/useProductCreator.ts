@@ -3,8 +3,8 @@ import { useRouter } from 'vue-router'
 import { useGoods } from '@/composables/useGoods'
 import { useCategories } from '@/composables/useCategories'
 import { watch } from 'vue'
-import { useBrands } from '@/composables/useBrands'
-import { useColors } from '@/composables/useColors'
+import { useAllBrands } from '@/composables/useAllBrands'
+import { useAllColors } from '@/composables/useAllColors'
 import { useProductAlerts } from '@/composables/useProductAlerts'
 
 interface ProductImage {
@@ -39,8 +39,8 @@ export function useProductCreator() {
   const router = useRouter()
   const { createProduct } = useGoods()
   const { categories, fetchCategories, fetchCategoryAttributes } = useCategories()
-  const { brands, fetchBrands } = useBrands()
-  const { colors, fetchColors } = useColors()
+  const { brands, fetchAllBrands } = useAllBrands()
+  const { colors, fetchAllColors } = useAllColors()
   const { alerts, showAlert } = useProductAlerts()
 
   const product = ref<Product>({
@@ -194,8 +194,8 @@ export function useProductCreator() {
 
   const init = () => {
     fetchCategories()
-    fetchBrands()
-    fetchColors()
+    fetchAllBrands()
+    fetchAllColors()
 
     // Наблюдатель за изменением категории
     watch(() => product.value.category_id, (newCategoryId) => {
