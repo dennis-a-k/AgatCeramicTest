@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->foreignId('parent_id')->after('slug')->nullable()->constrained('categories')->onDelete('cascade');
+            $table->integer('order')->nullable()->change();
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->dropColumn('parent_id');
+            $table->integer('order')->default(0)->change();
         });
     }
 };
