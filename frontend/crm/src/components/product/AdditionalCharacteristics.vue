@@ -3,7 +3,7 @@
     <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
       <h2 class="text-lg font-medium text-gray-800 dark:text-white">
         Дополнительные характеристики товара<br>
-        <span class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-orange-400">
+        <span class="inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full font-medium text-xs bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500">
           Размеры указываются в милиметрах. Вес в килограммах
         </span>
       </h2>
