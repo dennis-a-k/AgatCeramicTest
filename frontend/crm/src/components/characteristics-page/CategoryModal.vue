@@ -1,0 +1,109 @@
+<template>
+  <Modal v-if="isVisible" @close="closeModal">
+    <template #body>
+      <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg max-w-md w-full mx-4">
+        <div class="p-6">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white text-center mb-4">
+            {{ isEditing ? 'Редактировать категорию' : 'Создать категорию' }}
+          </h3>
+          <form @submit.prevent="saveCategory" class="space-y-4" @submit="console.log('Form submitted')">
+            <div>
+              <label for="nameCategory" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Название
+              </label>
+              <input type="text" id="nameCategory" v-model="form.name" required :class="inputClass(errors.name)" />
+              <p v-if="errors.name" class="mt-1.5 text-theme-xs text-error-500">{{ errors.name }}</p>
+            </div>
+            <!-- Slug field removed - slug is generated from name -->
+            <div>
+              <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Описание
+              </label>
+              <textarea id="description" v-model="form.description" rows="3" :class="inputClass(errors.description)"></textarea>
+              <p v-if="errors.description" class="mt-1.5 text-theme-xs text-error-500">{{ errors.description }}</p>
+            </div>
+            <div>
+              <label for="order" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Порядок
+              </label>
+              <input type="number" id="order" v-model.number="form.order" min="0" :class="inputClass(errors.order)" />
+              <p v-if="errors.order" class="mt-1.5 text-theme-xs text-error-500">{{ errors.order }}</p>
+            </div>
+            <div class="flex items-center">
+              <input type="checkbox" id="is_plumbing" v-model="form.is_plumbing" class="h-4 w-4 text-brand-600 focus:ring-brand-500 border-gray-300 rounded" />
+              <label for="is_plumbing" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+                Относится к сантехнике
+              </label>
+            </div>
+            <div class="flex justify-end gap-3 pt-4">
+              <Button variant="outline" @click="closeModal">Отмена</Button>
+              <Button variant="primary" type="submit" @click="console.log('Button clicked')">
+                {{ isEditing ? 'Сохранить' : 'Создать' }}
+              </Button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </template>
+  </Modal>
+</template>
+
+<script setup>
+import { ref, watch } from 'vue'
+import Modal from '@/components/profile/Modal.vue'
+import Button from '@/components/ui/Button.vue'
+
+const props = defineProps({
+  isVisible: {
+    type: Boolean,
+    default: false
+  },
+  isEditing: {
+    type: Boolean,
+    default: false
+  },
+  category: {
+    type: Object,
+    default: () => ({ name: '', description: '', order: null, parent_id: null, is_plumbing: false })
+  },
+  errors: {
+    type: Object,
+    default: () => ({})
+  }
+})
+
+const emit = defineEmits(['close', 'save'])
+
+const form = ref({ name: '', description: '', order: null, parent_id: null, is_plumbing: false })
+
+const inputClass = (error) => {
+  return error ? 'dark:bg-dark-900 shadow-theme-xs focus:border-error-300 focus:ring-error-500/10 dark:focus:border-error-800 h-11 w-full rounded-lg border border-error-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-error-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 appearance-none' : 'dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 appearance-none'
+}
+
+watch(() => props.isVisible, (newVal) => {
+  if (newVal) {
+    if (props.isEditing && props.category) {
+      form.value = {
+        ...props.category,
+        is_plumbing: props.category.parent_id === 8 // Assuming "Сантехника" has ID 8
+      }
+    } else {
+      form.value = { name: '', description: '', order: null, parent_id: null, is_plumbing: false }
+    }
+  } else {
+    form.value = { name: '', description: '', order: null, parent_id: null, is_plumbing: false }
+  }
+})
+
+const closeModal = () => {
+  emit('close')
+}
+
+const saveCategory = () => {
+  console.log('Saving category:', form.value)
+  emit('save', {
+    ...form.value,
+    is_plumbing: form.value.is_plumbing ? '1' : '0' // Convert boolean to string for backend
+  })
+}
+</script>

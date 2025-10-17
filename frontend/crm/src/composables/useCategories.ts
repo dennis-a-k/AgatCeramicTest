@@ -26,12 +26,12 @@ export function useCategories() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/categories`)
+      const response = await fetch(`${API_BASE_URL}/api/categories?per_page=all`)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       const data = await response.json()
-      allCategories.value = data.categories || data
+      allCategories.value = data.data || data.categories || data
     } catch (err) {
       console.error('Ошибка загрузки категорий:', err)
     }

@@ -44,4 +44,9 @@ class CategoryService
     {
         return $this->repository->delete($id);
     }
+
+    public function getCategoriesForTable(): Collection
+    {
+        return $this->repository->all();
+    }
 }
