@@ -59,8 +59,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import { useColors } from '@/composables/useColors'
+import { onMounted, ref, inject } from 'vue'
 import { useColorModal } from '@/composables/useColorModal'
 import { useColorForm } from '@/composables/useColorForm'
 import { useColorAlerts } from '@/composables/useColorAlerts'
@@ -74,7 +73,8 @@ import ToastAlert from '@/components/common/ToastAlert.vue'
 
 const plusIcon = PlusIcon
 const searchIcon = SearchIcon
-const { colors, searchQuery, currentPage, totalPages, fetchColors, createColor, updateColor, deleteColor: deleteColorApi } = useColors()
+const colorsComposable = inject('colorsData')
+const { colors, searchQuery, currentPage, totalPages, fetchColors, createColor, updateColor, deleteColor: deleteColorApi } = colorsComposable
 const { showModal, isEditing, currentColor, openCreateModal, openEditModal: originalOpenEditModal, closeModal } = useColorModal()
 
 const openEditModal = (color) => {
@@ -173,7 +173,5 @@ const confirmDelete = async () => {
   }
 }
 
-onMounted(async () => {
-  await fetchColors()
-})
+// Убираем onMounted, так как данные уже загружены в родительском компоненте
 </script>

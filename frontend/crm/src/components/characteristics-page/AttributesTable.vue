@@ -57,8 +57,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import { useAttributes } from '@/composables/useAttributes'
+import { onMounted, ref, inject } from 'vue'
 import { useAttributeModal } from '@/composables/useAttributeModal'
 import { useAttributeForm } from '@/composables/useAttributeForm'
 import { useAttributeAlerts } from '@/composables/useAttributeAlerts'
@@ -72,7 +71,8 @@ import ToastAlert from '@/components/common/ToastAlert.vue'
 
 const plusIcon = PlusIcon
 const searchIcon = SearchIcon
-const { attributes, searchQuery, currentPage, totalPages, fetchAttributes, createAttribute, updateAttribute, deleteAttribute: deleteAttributeApi } = useAttributes()
+const attributesComposable = inject('attributesData')
+const { attributes, searchQuery, currentPage, totalPages, fetchAttributes, createAttribute, updateAttribute, deleteAttribute: deleteAttributeApi } = attributesComposable
 const { showModal, isEditing, currentAttribute, openCreateModal, openEditModal: originalOpenEditModal, closeModal } = useAttributeModal()
 
 const openEditModal = (attribute) => {
@@ -171,7 +171,5 @@ const confirmDelete = async () => {
   }
 }
 
-onMounted(async () => {
-  await fetchAttributes()
-})
+// Убираем onMounted, так как данные уже загружены в родительском компоненте
 </script>

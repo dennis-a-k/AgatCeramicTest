@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, provide } from 'vue'
 import AdminLayout from '@/components/layout/AdminLayout.vue'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import ColorsTable from '@/components/characteristics-page/ColorsTable.vue'
@@ -47,18 +47,23 @@ const loading = ref(true)
 const error = ref(null)
 const product = ref({})
 
-const { fetchColors } = useColors()
-const { fetchBrands } = useBrands()
-const { fetchAttributes } = useAttributes()
+const colorsComposable = useColors()
+const brandsComposable = useBrands()
+const attributesComposable = useAttributes()
+
+// Предоставляем данные через provide для дочерних компонентов
+provide('colorsData', colorsComposable)
+provide('brandsData', brandsComposable)
+provide('attributesData', attributesComposable)
 
 const handleFetchCharacteristics = async () => {
   loading.value = true
   error.value = null
   try {
     await Promise.all([
-      fetchColors(),
-      fetchBrands(),
-      fetchAttributes()
+      colorsComposable.fetchColors(),
+      brandsComposable.fetchBrands(),
+      attributesComposable.fetchAttributes()
     ])
     product.value = { id: 1 } // Устанавливаем, что данные загружены
   } catch (err) {

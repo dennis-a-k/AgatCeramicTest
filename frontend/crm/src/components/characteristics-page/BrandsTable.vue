@@ -62,8 +62,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import { useBrands } from '@/composables/useBrands'
+import { onMounted, ref, inject } from 'vue'
 import { useBrandModal } from '@/composables/useBrandModal'
 import { useBrandForm } from '@/composables/useBrandForm'
 import { useBrandAlerts } from '@/composables/useBrandAlerts'
@@ -77,7 +76,8 @@ import ToastAlert from '@/components/common/ToastAlert.vue'
 
 const plusIcon = PlusIcon
 const searchIcon = SearchIcon
-const { brands, searchQuery, currentPage, totalPages, fetchBrands, createBrand, updateBrand, deleteBrand: deleteBrandApi } = useBrands()
+const brandsComposable = inject('brandsData')
+const { brands, searchQuery, currentPage, totalPages, fetchBrands, createBrand, updateBrand, deleteBrand: deleteBrandApi } = brandsComposable
 const { showModal, isEditing, currentBrand, openCreateModal, openEditModal: originalOpenEditModal, closeModal } = useBrandModal()
 
 const openEditModal = (brand) => {
@@ -177,7 +177,5 @@ const confirmDelete = async () => {
   }
 }
 
-onMounted(async () => {
-  await fetchBrands()
-})
+// Убираем onMounted, так как данные уже загружены в родительском компоненте
 </script>
