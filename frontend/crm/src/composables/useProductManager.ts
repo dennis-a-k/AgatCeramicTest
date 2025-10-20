@@ -76,6 +76,10 @@ export function useProductManager() {
       error.value = false
       const productData = await getProduct(Number(route.params.id))
       product.value = { ...productData }
+      // Убираем дубликаты атрибутов по attribute_id при загрузке
+      product.value.attribute_values = product.value.attribute_values.filter((attr: any, index: number, self: any[]) =>
+        self.findIndex((a: any) => a.attribute_id === attr.attribute_id) === index
+      )
       // Инициализируем ошибки для атрибутов
       product.value.attribute_values.forEach((attr) => {
         attr.error = ''
@@ -126,7 +130,14 @@ export function useProductManager() {
     try {
       loading.value = true
       const newFiles = imageUploadRef?.newFiles || []
-      const result = await updateProduct(Number(route.params.id), product.value, newFiles)
+      // Убираем дубликаты атрибутов перед отправкой
+      const productToUpdate = {
+        ...product.value,
+        attribute_values: product.value.attribute_values.filter((attr: any, index: number, self: any[]) =>
+          self.findIndex((a: any) => a.attribute_id === attr.attribute_id) === index
+        )
+      }
+      const result = await updateProduct(Number(route.params.id), productToUpdate, newFiles)
       if (result.success) {
         showAlert('success', 'Успешно', 'Товар обновлен')
         setTimeout(() => {
@@ -205,9 +216,13 @@ export function useProductManager() {
 
     try {
       const attributes = await fetchCategoryAttributes(Number(categoryId))
+      // Убираем дубликаты атрибутов по id
+      const uniqueAttributes = attributes.filter((attr: any, index: number, self: any[]) =>
+        self.findIndex((a: any) => a.id === attr.id) === index
+      )
       const existingAttributes = product.value.attribute_values
 
-      product.value.attribute_values = attributes.map((attr: any) => {
+      product.value.attribute_values = uniqueAttributes.map((attr: any) => {
         // Ищем существующий атрибут с таким же attribute_id
         const existingAttr = existingAttributes.find((existing: any) => existing.attribute_id === attr.id)
 

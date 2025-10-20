@@ -159,22 +159,35 @@ class ProductService
      */
     protected function updateAttributeValues(int $productId, array $attributeValues): void
     {
+        // Убираем дубликаты по attribute_id перед обработкой
+        $uniqueAttributeValues = [];
         foreach ($attributeValues as $attrValue) {
-            if (isset($attrValue['id'])) {
+            $attributeId = $attrValue['attribute_id'] ?? null;
+            if ($attributeId && !isset($uniqueAttributeValues[$attributeId])) {
+                $uniqueAttributeValues[$attributeId] = $attrValue;
+            }
+        }
+        $attributeValues = array_values($uniqueAttributeValues);
+
+        // Получаем существующие атрибуты для продукта
+        $existingAttributes = ProductAttributeValue::where('product_id', $productId)->get()->keyBy('attribute_id');
+
+        foreach ($attributeValues as $attrValue) {
+            $attributeId = $attrValue['attribute_id'];
+
+            if (isset($existingAttributes[$attributeId])) {
                 // Обновляем существующий атрибут
-                ProductAttributeValue::where('id', $attrValue['id'])
-                    ->where('product_id', $productId)
-                    ->update([
-                        'string_value' => $attrValue['string_value'] ?? null,
-                        'number_value' => $attrValue['number_value'] ?? null,
-                        'boolean_value' => $attrValue['boolean_value'] ?? null,
-                        'text_value' => $attrValue['text_value'] ?? null,
-                    ]);
-            } elseif (isset($attrValue['attribute_id'])) {
+                $existingAttributes[$attributeId]->update([
+                    'string_value' => $attrValue['string_value'] ?? null,
+                    'number_value' => $attrValue['number_value'] ?? null,
+                    'boolean_value' => $attrValue['boolean_value'] ?? null,
+                    'text_value' => $attrValue['text_value'] ?? null,
+                ]);
+            } else {
                 // Создаем новый атрибут, если его нет
                 ProductAttributeValue::create([
                     'product_id' => $productId,
-                    'attribute_id' => $attrValue['attribute_id'],
+                    'attribute_id' => $attributeId,
                     'string_value' => $attrValue['string_value'] ?? null,
                     'number_value' => $attrValue['number_value'] ?? null,
                     'boolean_value' => $attrValue['boolean_value'] ?? null,
