@@ -232,33 +232,31 @@ class AvailableFiltersRetriever implements AvailableFiltersInterface
             }
         }
 
-        // Дополнительно собираем атрибуты если не собраны
+        // Всегда собираем дополнительные атрибуты, перезаписывая если необходимо
         $additionalAttributes = ['sizes', 'glues', 'waterproofs', 'weights', 'seams', 'product_weights', 'installation_types', 'shapes'];
         foreach ($additionalAttributes as $attrKey) {
-            if (empty($result[$attrKey])) {
-                $config = $this->attributeConfigs[$attrKey];
-                $valuesQuery = DB::table('product_attribute_values')
-                    ->join('products', 'product_attribute_values.product_id', '=', 'products.id')
-                    ->join('attributes', 'product_attribute_values.attribute_id', '=', 'attributes.id')
-                    ->where('attributes.slug', $config['slug'])
-                    ->whereIn('products.id', $baseQuery->select('id'))
-                    ->where('products.is_published', true)
-                    ->select($config['field'] . ' as value', DB::raw('COUNT(*) as count'))
-                    ->whereNotNull($config['field'])
-                    ->groupBy($config['field'])
-                    ->get()
-                    ->map(function ($item) use ($config) {
-                        $name = $item->value;
-                        $id = $item->value;
-                        if ($config['type'] === 'boolean') {
-                            $name = ($item->value == 1 || $item->value === true || $item->value === 'true') ? 'Да' : 'Нет';
-                            $id = ($item->value == 1 || $item->value === true || $item->value === 'true') ? true : false;
-                        }
-                        return ['id' => $id, 'name' => $name, 'count' => $item->count];
-                    })
-                    ->toArray();
-                $result[$attrKey] = $valuesQuery;
-            }
+            $config = $this->attributeConfigs[$attrKey];
+            $valuesQuery = DB::table('product_attribute_values')
+                ->join('products', 'product_attribute_values.product_id', '=', 'products.id')
+                ->join('attributes', 'product_attribute_values.attribute_id', '=', 'attributes.id')
+                ->where('attributes.slug', $config['slug'])
+                ->whereIn('products.id', $baseQuery->select('id'))
+                ->where('products.is_published', true)
+                ->select($config['field'] . ' as value', DB::raw('COUNT(*) as count'))
+                ->whereNotNull($config['field'])
+                ->groupBy($config['field'])
+                ->get()
+                ->map(function ($item) use ($config) {
+                    $name = $item->value;
+                    $id = $item->value;
+                    if ($config['type'] === 'boolean') {
+                        $name = ($item->value == 1 || $item->value === true || $item->value === 'true') ? 'Да' : 'Нет';
+                        $id = ($item->value == 1 || $item->value === true || $item->value === 'true') ? true : false;
+                    }
+                    return ['id' => $id, 'name' => $name, 'count' => $item->count];
+                })
+                ->toArray();
+            $result[$attrKey] = $valuesQuery;
         }
 
         // Инициализируем пустые массивы для всех атрибутов
