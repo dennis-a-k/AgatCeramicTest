@@ -5,48 +5,33 @@
         <span class="new">Распродажа</span>
       </span>
 
-      <div
-        class="thumb d-flex justify-content-center align-items-center"
-        style="aspect-ratio: 1 / 1"
-      >
+      <div class="thumb d-flex justify-content-center align-items-center" style="aspect-ratio: 1 / 1">
         <NuxtLink :to="`/product/${product.slug}`" class="image">
           <img :src="productImage" :alt="product.name" />
           <img :src="productImage" :alt="product.name" class="hover-image" />
         </NuxtLink>
       </div>
       <div class="content text-center">
-        <span class="category"
-          ><NuxtLink :to="`/category/${product.category.slug}`">{{
+        <span class="category">
+          <NuxtLink :to="`/category/${product.category.slug}`">{{
             product.category.name
-          }}</NuxtLink></span
-        >
+          }}</NuxtLink>
+        </span>
 
         <span class="price">
           <span class="new">{{ formattedPrice }}</span>
         </span>
 
         <h5 class="title">
-          <NuxtLink :to="`/product/${product.slug}`"
-            >{{ truncatedTitle }}{{ weight ? `, ${weight} кг` : '' }}</NuxtLink
-          >
+          <NuxtLink :to="`/product/${product.slug}`">{{ truncatedTitle }}{{ weight ? `, ${weight} кг` : '' }}</NuxtLink>
         </h5>
       </div>
       <div class="actions">
-        <button
-          class="action add-cart"
-          :data-product-id="product.id"
-          @click="addToCart"
-          title="В корзину"
-        >
+        <button class="action add-cart" :data-product-id="product.id" @click="addToCart" title="В корзину">
           <i class="pe-7s-cart"></i>
         </button>
 
-        <button
-          class="action quickview"
-          title="Посмотреть"
-          :data-id="product.id"
-          @click="openQuickView"
-        >
+        <button class="action quickview" title="Посмотреть" :data-id="product.id" @click="openQuickView">
           <i class="pe-7s-look"></i>
         </button>
       </div>
@@ -82,7 +67,11 @@ const weight = computed(() => {
   const attr = props.product.attribute_values?.find(
     (a) => a.attribute.slug === 'ves'
   );
-  return attr ? attr.number_value : null;
+  if (attr && attr.number_value !== null) {
+    const num = parseFloat(attr.number_value);
+    return isNaN(num) ? attr.number_value : num.toLocaleString('en-US');
+  }
+  return null;
 });
 
 const getImageUrl = (image) => {
@@ -200,7 +189,7 @@ const openQuickView = () => {
       background-color: $theme-color;
       font-size: 24px;
 
-      & + .action {
+      &+.action {
         margin-left: 10px;
       }
 

@@ -12,18 +12,12 @@
         <h2>Товар не найден</h2>
       </div>
       <div v-else class="row">
-        <div
-          class="col-lg-5 col-sm-12 col-xs-12 mb-lm-30px mb-md-30px mb-sm-30px"
-        >
+        <div class="col-lg-5 col-sm-12 col-xs-12 mb-lm-30px mb-md-30px mb-sm-30px">
           <ClientOnly>
             <SlidersAppProductPageSlider :images="productImages" />
           </ClientOnly>
         </div>
-        <div
-          class="col-lg-7 col-sm-12 col-xs-12"
-          data-aos="fade-up"
-          data-aos-delay="200"
-        >
+        <div class="col-lg-7 col-sm-12 col-xs-12" data-aos="fade-up" data-aos-delay="200">
           <div class="product-details-content quickview-content ml-25px">
             <span v-if="productData.is_sale" class="badges">
               <span class="sale">Распродажа</span>
@@ -38,11 +32,8 @@
                 </li>
               </ul>
             </div>
-            <div
-              v-for="meta in productMeta"
-              :key="meta.label"
-              class="pro-details-categories-info pro-details-same-style d-flex m-0"
-            >
+            <div v-for="meta in productMeta" :key="meta.label"
+              class="pro-details-categories-info pro-details-same-style d-flex m-0">
               <span>{{ meta.label }}</span>
               <ul class="d-flex">
                 <li>
@@ -56,12 +47,7 @@
             <div class="pro-details-quality">
               <div class="cart-plus-minus">
                 <div class="dec qtybutton" @click="decrement">-</div>
-                <input
-                  class="cart-plus-minus-box"
-                  type="text"
-                  name="qtybutton"
-                  v-model="quantity"
-                />
+                <input class="cart-plus-minus-box" type="text" name="qtybutton" v-model="quantity" />
                 <div class="inc qtybutton" @click="increment">+</div>
               </div>
               <p v-if="productData.unit">
@@ -69,16 +55,12 @@
                   productData.unit === 'шт'
                     ? 'шт.'
                     : productData.unit === 'кв.м'
-                    ? 'м²'
-                    : productData.unit
+                      ? 'м²'
+                      : productData.unit
                 }}
               </p>
               <div class="pro-details-cart">
-                <button
-                  class="add-cart"
-                  :data-product-id="productData.id"
-                  @click="addToCartProduct"
-                >
+                <button class="add-cart" :data-product-id="productData.id" @click="addToCartProduct">
                   В корзину
                 </button>
               </div>
@@ -90,11 +72,7 @@
               <button data-bs-toggle="tab" data-bs-target="#des-details2">
                 Характеристики
               </button>
-              <button
-                class="active"
-                data-bs-toggle="tab"
-                data-bs-target="#des-details1"
-              >
+              <button class="active" data-bs-toggle="tab" data-bs-target="#des-details1">
                 Описание
               </button>
             </div>
@@ -122,26 +100,18 @@
                             <span>{{ productData.pattern }}</span>
                           </td>
                         </tr>
-                        <tr
-                          v-for="attr in productData.attribute_values"
-                          :key="attr.id"
-                        >
+                        <tr v-for="attr in productData.attribute_values" :key="attr.id">
                           <td>{{ attr.attribute.name }}</td>
                           <td>
                             <span v-if="attr.attribute.type === 'boolean'">{{
                               attr.boolean_value ? 'Да' : 'Нет'
                             }}</span>
-                            <span
-                              v-else-if="attr.attribute.type === 'number'"
-                              >{{ formattedNumberAttribute(attr) }}</span
-                            >
-                            <span
-                              v-else-if="
-                                attr.attribute.type === 'string' ||
-                                attr.attribute.type === 'text'
-                              "
-                              >{{ formattedStringAttribute(attr) }}</span
-                            >
+                            <span v-else-if="attr.attribute.type === 'number'">{{ formattedNumberAttribute(attr)
+                              }}</span>
+                            <span v-else-if="
+                              attr.attribute.type === 'string' ||
+                              attr.attribute.type === 'text'
+                            ">{{ formattedStringAttribute(attr) }}</span>
                             <span v-else>{{
                               attr.string_value || attr.text_value
                             }}</span>
@@ -212,17 +182,17 @@ const productImages = computed(() => {
   // Fallback to single image if no images array
   return productData.value?.imgSrc
     ? [
-        {
-          url: productData.value.imgSrc,
-          alt: productData.value.name || 'Изображение продукта',
-        },
-      ]
+      {
+        url: productData.value.imgSrc,
+        alt: productData.value.name || 'Изображение продукта',
+      },
+    ]
     : [
-        {
-          url: '/images/stock/stock-image.png',
-          alt: 'Изображение продукта',
-        },
-      ];
+      {
+        url: '/images/stock/stock-image.png',
+        alt: 'Изображение продукта',
+      },
+    ];
 });
 
 const {
@@ -281,7 +251,11 @@ const weight = computed(() => {
   const attr = productData.value?.attribute_values?.find(
     (a) => a.attribute.slug === 'ves'
   );
-  return attr ? attr.number_value : null;
+  if (attr && attr.number_value !== null) {
+    const num = parseFloat(attr.number_value);
+    return isNaN(num) ? attr.number_value : num.toLocaleString('en-US');
+  }
+  return null;
 });
 
 const formattedNumberAttribute = computed(() => (attr) => {
@@ -354,9 +328,9 @@ const structuredData = computed(() => {
     },
     brand: productData.value.brand
       ? {
-          '@type': 'Brand',
-          name: productData.value.brand.name,
-        }
+        '@type': 'Brand',
+        name: productData.value.brand.name,
+      }
       : undefined,
     category: productData.value.category
       ? productData.value.category.name
@@ -418,11 +392,11 @@ useHead(
     script: [
       ...(structuredData.value
         ? [
-            {
-              type: 'application/ld+json',
-              children: JSON.stringify(structuredData.value),
-            },
-          ]
+          {
+            type: 'application/ld+json',
+            children: JSON.stringify(structuredData.value),
+          },
+        ]
         : []),
       {
         type: 'application/ld+json',
@@ -497,7 +471,7 @@ useHead(
 
   .pricing-meta {
     ul {
-      li + li {
+      li+li {
         margin-left: 10px;
       }
 

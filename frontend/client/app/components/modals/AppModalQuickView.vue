@@ -2,31 +2,15 @@
   <ClientOnly>
     <!-- Overlay -->
     <transition name="overlay">
-      <div
-        v-if="isVisible"
-        class="modal-overlay"
-        @click="closeModal"
-        aria-hidden="true"
-      ></div>
+      <div v-if="isVisible" class="modal-overlay" @click="closeModal" aria-hidden="true"></div>
     </transition>
 
     <!-- Modal -->
     <transition name="modal">
-      <div
-        v-if="isVisible"
-        class="custom-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="modal-title"
-      >
+      <div v-if="isVisible" class="custom-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div class="modal-content">
           <div class="modal-body">
-            <button
-              type="button"
-              class="btn-close-modal"
-              @click="closeModal"
-              aria-label="Закрыть"
-            ></button>
+            <button type="button" class="btn-close-modal" @click="closeModal" aria-label="Закрыть"></button>
 
             <div class="product-quickview">
               <div class="product-image">
@@ -35,12 +19,12 @@
               <div class="product-info">
                 <span class="category">{{ product.category.name }}</span>
                 <h4 id="modal-title" class="product-title">
-                  {{ product.name }}{{ weight ? `, ${weight} кг` : '' }}
+                  {{ product.name }}{{ weight ? `, ${weight}кг` : '' }}
                 </h4>
                 <div class="price">
                   <span class="new">{{ formattedPrice }}</span>
                 </div>
-                <div class="info">
+                <div class="info mb-5">
                   <p><span>Артикул:</span> {{ product.article }}</p>
                   <p><span>Бренд:</span> {{ product.brand.name }}</p>
                   <p v-if="product.collection">
@@ -55,12 +39,7 @@
                   <div class="quantity-selector d-flex">
                     <div class="cart-plus-minus me-2">
                       <div class="dec qtybutton" @click="decrement">-</div>
-                      <input
-                        class="cart-plus-minus-box"
-                        type="text"
-                        name="qtybutton"
-                        v-model="quantity"
-                      />
+                      <input class="cart-plus-minus-box" type="text" name="qtybutton" v-model="quantity" />
                       <div class="inc qtybutton" @click="increment">+</div>
                     </div>
                     <p v-if="product.unit">
@@ -68,22 +47,15 @@
                         product.unit === 'шт'
                           ? 'шт.'
                           : product.unit === 'кв.м'
-                          ? 'м²'
-                          : product.unit
+                            ? 'м²'
+                            : product.unit
                       }}
                     </p>
                   </div>
-                  <button
-                    class="btn btn-primary add-to-cart"
-                    @click="addToCart"
-                  >
+                  <button class="btn btn-primary add-to-cart" @click="addToCart">
                     В корзину
                   </button>
-                  <NuxtLink
-                    :to="`/product/${product.slug}`"
-                    class="btn btn-outline-primary"
-                    >Подробнее</NuxtLink
-                  >
+                  <NuxtLink :to="`/product/${product.slug}`" class="btn btn-outline-primary">Подробнее</NuxtLink>
                 </div>
               </div>
             </div>
@@ -132,7 +104,11 @@ const weight = computed(() => {
   const attr = product.value?.attribute_values?.find(
     (a) => a.attribute.slug === 'ves'
   );
-  return attr ? attr.number_value : null;
+  if (attr && attr.number_value !== null) {
+    const num = parseFloat(attr.number_value);
+    return isNaN(num) ? attr.number_value : num.toLocaleString('en-US');
+  }
+  return null;
 });
 
 const sizes = computed(() => {

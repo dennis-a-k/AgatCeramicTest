@@ -17,7 +17,7 @@ class ProductAttributeValue extends Model
     ];
 
     protected $casts = [
-        'number_value' => 'decimal:4',
+        'number_value' => 'decimal:2',
         'boolean_value' => 'boolean',
     ];
 

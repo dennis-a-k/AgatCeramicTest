@@ -229,7 +229,7 @@
                     <ul>
                         <li class="color-list weight" v-for="weight in product_weights" :key="weight.id">
                             <a href="#" class="text-white" @click.prevent="selectFilter('product_weight', weight.id)">
-                                {{ weight.name }}
+                                {{ formatWeight(weight.name) }}
                             </a>
                         </li>
                     </ul>
@@ -442,10 +442,15 @@ const toggleShowAllCollections = () => {
 const selectFilter = (type, value) => {
     props.store.selectFilter(type, value);
 };
-
 const resetFilters = () => {
     props.store.resetFilters();
 };
+
+const formatWeight = (name) => {
+    const num = parseFloat(name);
+    return isNaN(num) ? name : num.toLocaleString('ru-RU');
+};
+
 
 
 </script>
