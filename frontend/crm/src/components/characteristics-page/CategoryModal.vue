@@ -30,14 +30,11 @@
               <p v-if="errors.order" class="mt-1.5 text-theme-xs text-error-500">{{ errors.order }}</p>
             </div>
             <div class="flex items-center">
-              <input type="checkbox" id="is_plumbing" v-model="form.is_plumbing" class="h-4 w-4 text-brand-600 focus:ring-brand-500 border-gray-300 rounded" />
-              <label for="is_plumbing" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
-                Относится к сантехнике
-              </label>
+              <Checkbox id="is_active" label="Относится к сантехнике" v-model:checked="form.is_plumbing" />
             </div>
             <div class="flex justify-end gap-3 pt-4">
               <Button variant="outline" @click="closeModal">Отмена</Button>
-              <Button variant="primary" type="submit" @click="console.log('Button clicked')">
+              <Button variant="primary" type="submit">
                 {{ isEditing ? 'Сохранить' : 'Создать' }}
               </Button>
             </div>
@@ -52,6 +49,7 @@
 import { ref, watch } from 'vue'
 import Modal from '@/components/profile/Modal.vue'
 import Button from '@/components/ui/Button.vue'
+import Checkbox from '@/components/ui/Checkbox.vue'
 
 const props = defineProps({
   isVisible: {
