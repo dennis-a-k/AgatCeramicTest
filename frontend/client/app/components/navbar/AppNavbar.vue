@@ -14,10 +14,10 @@
                   <NuxtLink to="/category/stupeni">Ступени</NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to="/category/zatirka">Затирка для плитки</NuxtLink>
+                  <NuxtLink to="/category/zatirka-dlia-plitki">Затирка для плитки</NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to="/category/klei">Клеевые смеси</NuxtLink>
+                  <NuxtLink to="/category/kleevye-smesi">Клеевые смеси</NuxtLink>
                 </li>
                 <li class="dropdown position-static">
                   <NuxtLink to="/category/santexnika">
@@ -25,20 +25,8 @@
                     <i class="fa fa-angle-right"></i>
                   </NuxtLink>
                   <ul class="sub-menu sub-menu-2">
-                    <li>
-                      <NuxtLink to="/category/vanny">Ванны</NuxtLink>
-                    </li>
-                    <li>
-                      <NuxtLink to="/category/smesiteli">Смесители</NuxtLink>
-                    </li>
-                    <li>
-                      <NuxtLink to="/category/unitazy">Унитазы</NuxtLink>
-                    </li>
-                    <li>
-                      <NuxtLink to="/category/installiacii">Инсталляции</NuxtLink>
-                    </li>
-                    <li>
-                      <NuxtLink to="/category/dusevye-kabiny">Душевые кабины</NuxtLink>
+                    <li v-for="subcategory in store.santexnikaSubcategories" :key="subcategory.id">
+                      <NuxtLink :to="`/category/${subcategory.slug}`">{{ subcategory.name }}</NuxtLink>
                     </li>
                   </ul>
                 </li>
@@ -77,6 +65,43 @@
     </div>
   </nav>
 </template>
+<script setup>
+import { onMounted, ref, provide } from 'vue'
+import { useCategoryStore } from '~/stores/useCategoryStore'
+
+// Ссылка на компонент модального окна
+const modalCallRef = ref(null)
+
+const store = useCategoryStore()
+
+// Функция для открытия модального окна
+const openCallModal = () => {
+  if (modalCallRef.value) {
+    modalCallRef.value.openModal()
+  }
+}
+
+// Предоставляем функцию для дочерних компонентов
+provide('openCallModal', openCallModal)
+
+onMounted(() => {
+  const offCanvasOverlay = document.querySelector(".offcanvas-overlay");
+
+  document.querySelectorAll(".offcanvas-overlay").forEach(el => {
+    el.addEventListener("click", function (e) {
+      e.preventDefault();
+      document.body.classList.remove("offcanvas-open");
+      document.querySelectorAll('.offcanvas').forEach(el => {
+        el.classList.remove("offcanvas-open");
+      });
+      offCanvasOverlay.style.display = "none";
+    });
+  });
+
+  // Загружаем подкатегории сантехники при монтировании компонента
+  store.fetchSantexnikaSubcategories()
+});
+</script>
 
 <style scoped lang="scss">
 .header-nav-area {

@@ -20,4 +20,10 @@ class CategoryController extends Controller
         $slugs = $this->categoryService->getAllCategorySlugs();
         return response()->json($slugs);
     }
+
+    public function children($slug): JsonResponse
+    {
+        $children = $this->categoryService->getChildrenBySlug($slug);
+        return response()->json($children);
+    }
 }

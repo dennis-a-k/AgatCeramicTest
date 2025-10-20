@@ -45,4 +45,16 @@ class CategoryRepository implements RepositoryInterface
     {
         return $this->model->find($id)->delete();
     }
+
+    public function getChildrenBySlug($slug): Collection
+    {
+        $parent = $this->model->where('slug', $slug)->first();
+        if (!$parent) {
+            return collect();
+        }
+        return $this->model->where('parent_id', $parent->id)
+            ->where('is_active', true)
+            ->orderBy('order')
+            ->get();
+    }
 }

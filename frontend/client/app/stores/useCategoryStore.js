@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { useRuntimeConfig } from '#imports'
 
 // Конфигурация типов фильтров
 const filterConfigs = {
@@ -82,6 +83,13 @@ export const useCategoryStore = defineStore('category', () => {
   const maxPrice = ref('')
   const sortOption = ref('default')
   const currentPage = ref(1)
+
+  // Подкатегории сантехники
+  const santexnikaSubcategories = ref([])
+  const santexnikaLoading = ref(false)
+  const santexnikaError = ref(null)
+
+  const config = useRuntimeConfig()
 
   // Вычисляемые параметры запроса
   const queryParams = computed(() => {
@@ -180,6 +188,19 @@ export const useCategoryStore = defineStore('category', () => {
     })
   }
 
+  const fetchSantexnikaSubcategories = async () => {
+    santexnikaLoading.value = true
+    santexnikaError.value = null
+    try {
+      const response = await $fetch(`${config.public.apiBase}/api/categories/santexnika/children`)
+      santexnikaSubcategories.value = response
+    } catch (err) {
+      santexnikaError.value = err.message
+    } finally {
+      santexnikaLoading.value = false
+    }
+  }
+
   // Вычисляемые для обратной совместимости
   const selectedComputed = Object.fromEntries(
     filterTypes.map(type => [
@@ -196,6 +217,9 @@ export const useCategoryStore = defineStore('category', () => {
     maxPrice,
     sortOption,
     currentPage,
+    santexnikaSubcategories,
+    santexnikaLoading,
+    santexnikaError,
     ...selectedComputed,
     // Getters
     queryParams,
@@ -208,6 +232,7 @@ export const useCategoryStore = defineStore('category', () => {
     handleSortChange,
     removeFilter,
     selectFilter,
-    resetFilters
+    resetFilters,
+    fetchSantexnikaSubcategories
   }
 })

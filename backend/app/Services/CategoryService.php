@@ -49,4 +49,9 @@ class CategoryService
     {
         return $this->repository->all();
     }
+
+    public function getChildrenBySlug($slug): Collection
+    {
+        return $this->repository->getChildrenBySlug($slug);
+    }
 }

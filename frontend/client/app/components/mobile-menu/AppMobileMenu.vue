@@ -55,29 +55,17 @@
                                 <NuxtLink to="/category/stupeni"><span class="menu-text">Ступени</span></NuxtLink>
                             </li>
                             <li>
-                                <NuxtLink to="/category/zatirka"><span class="menu-text">Затирка для плитки</span>
+                                <NuxtLink to="/category/zatirka-dlia-plitki"><span class="menu-text">Затирка для плитки</span>
                                 </NuxtLink>
                             </li>
                             <li>
-                                <NuxtLink to="/category/klei"><span class="menu-text">Клеевые смеси</span></NuxtLink>
+                                <NuxtLink to="/category/kleevye-smesi"><span class="menu-text">Клеевые смеси</span></NuxtLink>
                             </li>
                             <li>
                                 <NuxtLink to="/category/santexnika"><span class="menu-text">Сантехника</span></NuxtLink>
                                 <ul class="sub-menu">
-                                    <li>
-                                        <NuxtLink to="/category/vanny">Ванны</NuxtLink>
-                                    </li>
-                                    <li>
-                                        <NuxtLink to="/category/smesiteli">Смесители</NuxtLink>
-                                    </li>
-                                    <li>
-                                        <NuxtLink to="/category/unitazy">Унитазы</NuxtLink>
-                                    </li>
-                                    <li>
-                                        <NuxtLink to="/category/installiacii">Инсталляции</NuxtLink>
-                                    </li>
-                                    <li>
-                                        <NuxtLink to="/category/dusevye-kabiny">Душевые кабины</NuxtLink>
+                                    <li v-for="subcategory in store.santexnikaSubcategories" :key="subcategory.id">
+                                        <NuxtLink :to="`/category/${subcategory.slug}`">{{ subcategory.name }}</NuxtLink>
                                     </li>
                                 </ul>
                             </li>
@@ -119,11 +107,16 @@
 </template>
 
 <script setup>
-import { onMounted, inject } from 'vue';
+import { onMounted, inject } from 'vue'
+import { useCategoryStore } from '~/stores/useCategoryStore'
 
 const openCallModal = inject('openCallModal')
+const store = useCategoryStore()
 
 onMounted(() => {
+    // Загружаем подкатегории сантехники при монтировании компонента
+    store.fetchSantexnikaSubcategories()
+
     // Get mobile menu elements
     const mobileMenu = document.getElementById('offcanvas-mobile-menu');
     const offCanvasOverlay = document.querySelector(".offcanvas-overlay");
