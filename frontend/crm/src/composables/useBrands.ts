@@ -125,8 +125,11 @@ export function useBrands() {
     try {
       const formData = new FormData()
 
-      // Добавляем все поля бренда
+      // Добавляем все поля бренда, кроме image, если нет нового файла
       Object.keys(brandData).forEach((key) => {
+        if (key === 'image' && !newFile) {
+          return // Пропускаем поле image, если нет нового файла
+        }
         const value = (brandData as any)[key]
         if (typeof value === 'boolean') {
           formData.append(key, value ? '1' : '0')
