@@ -19,7 +19,12 @@
       <p class="text-gray-500 text-theme-sm dark:text-gray-400">{{ brand.country || 'Не указано' }}</p>
     </td>
     <td class="py-3 whitespace-nowrap">
-      <p class="text-gray-500 text-theme-sm dark:text-gray-400">{{ brand.description || 'Нет описания' }}</p>
+        <div v-if="brand.description" class="flex items-center justify-center w-6 h-6 bg-success-50 dark:bg-success-500/15 rounded-full">
+          <CheckCircleIcon class="w-4 h-4 text-success-600 dark:text-success-500" />
+        </div>
+        <div v-else class="flex items-center justify-center w-6 h-6 bg-error-50 dark:bg-error-500/15 rounded-full">
+          <ErrorIcon class="w-4 h-4 text-error-600 dark:text-error-500" />
+        </div>
     </td>
     <td class="py-3 whitespace-nowrap">
       <span
@@ -52,7 +57,7 @@
 </template>
 
 <script setup>
-import { EditIcon, DeleteIcon } from '@/icons'
+import { EditIcon, DeleteIcon, CheckCircleIcon, ErrorIcon } from '@/icons'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 

@@ -53,6 +53,7 @@ import SquareChartGanttIcon from "./SquareChartGanttIcon.vue";
 import EditIcon from "./EditIcon.vue";
 import DeleteIcon from "./DeleteIcon.vue";
 import ChevronLeftIcon from "./ChevronLeftIcon.vue";
+import CheckCircleIcon from "./CheckCircleIcon.vue";
 
 export {
   BellIcon,
@@ -110,4 +111,5 @@ export {
   EditIcon,
   DeleteIcon,
   ChevronLeftIcon,
+  CheckCircleIcon,
 };
