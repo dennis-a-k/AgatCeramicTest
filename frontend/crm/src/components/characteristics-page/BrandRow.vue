@@ -3,7 +3,7 @@
     <td class="py-3 whitespace-nowrap">
       <div class="flex items-center gap-3">
         <div class="h-[32px] w-auto overflow-hidden rounded-md">
-          <img v-if="brand.image" :src="getImageUrl(brand.image)" :alt="brand.name" class="w-full h-full object-cover" />
+          <img v-if="brand.image" :src="getImageUrl(brand.image)" :alt="brand.name" class="w-[70px] h-full object-contain" />
           <div v-else class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
             <span class="text-gray-500 dark:text-gray-400 text-sm">Нет фото</span>
           </div>
