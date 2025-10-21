@@ -71,6 +71,10 @@ const debounce = (func, delay) => {
 }
 
 export const useBrandStore = defineStore('brand', () => {
+  // Бренды для слайдера
+  const brands = ref([])
+  const brandsLoading = ref(false)
+
   // Доступные фильтры
   const filters = ref(Object.fromEntries(filterTypes.map(type => [type, []])))
 
@@ -180,6 +184,21 @@ export const useBrandStore = defineStore('brand', () => {
     })
   }
 
+  // Получение брендов для слайдера
+  const fetchBrands = async () => {
+    try {
+      brandsLoading.value = true
+      const config = useRuntimeConfig()
+      const response = await $fetch(`${config.public.apiBase}/api/brands`)
+      brands.value = response.data || response
+    } catch (error) {
+      console.error('Error fetching brands:', error)
+      brands.value = []
+    } finally {
+      brandsLoading.value = false
+    }
+  }
+
   // Вычисляемые для обратной совместимости
   const selectedComputed = Object.fromEntries(
     filterTypes.map(type => [
@@ -190,6 +209,8 @@ export const useBrandStore = defineStore('brand', () => {
 
   return {
     // State
+    brands,
+    brandsLoading,
     filters,
     selected,
     minPrice,
@@ -201,6 +222,7 @@ export const useBrandStore = defineStore('brand', () => {
     queryParams,
     selectedFilters,
     // Actions
+    fetchBrands,
     setFilters,
     handleFilterChange,
     debouncedHandleFilterChange,

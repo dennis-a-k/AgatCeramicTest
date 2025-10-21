@@ -28,10 +28,10 @@
                         slidesPerView: 4,
                     },
                 }">
-                <SwiperSlide class="swiper-slide brand-slider-item text-center px-2" v-for="(img, index) in brandsImg"
-                    :key="index">
+                <SwiperSlide class="swiper-slide brand-slider-item text-center px-2" v-for="(brand, index) in brandsWithImages"
+                    :key="brand.id || index">
                     <a href="/">
-                        <NuxtImg :src="img.image" class="img-fluid" :alt="img.image" />
+                        <img :src="`${config.public.apiBase}/storage/${brand.image}`" class="img-fluid" :alt="brand.name" />
                     </a>
                 </SwiperSlide>
             </Swiper>
@@ -42,48 +42,22 @@
 <script setup>
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Autoplay } from 'swiper/modules';
+import { useBrandStore } from '~/stores/useBrandStore';
+import { useRuntimeConfig } from '#imports';
 
-const brandsImg = [
-    {
-        image: '/images/brands/axor_brand.png',
-    },
-    {
-        image: '/images/brands/emac_brand.png',
-    },
-    {
-        image: '/images/brands/geberit_brand.png',
-    },
-    {
-        image: '/images/brands/hansgrohe_brand.png',
-    },
-    {
-        image: '/images/brands/kaldewei_brand.png',
-    },
-    {
-        image: '/images/brands/mosplitka_brand.png',
-    },
-    {
-        image: '/images/brands/ravak_brand.png',
-    },
-    {
-        image: '/images/brands/sanita_brand.png',
-    },
-    {
-        image: '/images/brands/tarkett_brand.png',
-    },
-    {
-        image: '/images/brands/unitile_brand.png',
-    },
-    {
-        image: '/images/brands/akvaton_brand.png',
-    },
-    {
-        image: '/images/brands/alcora_brand.png',
-    },
-    {
-        image: '/images/brands/aquatek_brand.png',
-    },
-];
+const brandStore = useBrandStore();
+const config = useRuntimeConfig();
+const siteUrl = config.public.siteUrl || 'https://agatceramic.ru';
+
+// Получаем бренды при монтировании компонента
+onMounted(async () => {
+  await brandStore.fetchBrands();
+});
+
+// Вычисляем бренды с изображениями
+const brandsWithImages = computed(() => {
+  return brandStore.brands.filter(brand => brand.image);
+});
 </script>
 
 <style scoped lang="scss">
