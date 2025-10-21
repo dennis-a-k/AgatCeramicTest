@@ -3,27 +3,21 @@
     <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
       <h2 class="text-lg font-medium text-gray-800 dark:text-white">
         Дополнительные характеристики товара<br>
-        <span class="inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full font-medium text-xs bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500">
-          Размеры указываются в милиметрах. Вес в килограммах
-        </span>
       </h2>
     </div>
     <div class="space-y-5 p-4 sm:p-6">
-      <div v-if="product.attribute_values.length === 0" class="text-center text-gray-500 dark:text-gray-400">
-        Выберите категорию для отображения дополнительных характеристик
-      </div>
-      <div v-else class="grid grid-cols-1 gap-5 md:grid-cols-3">
+      <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
         <div v-for="(attr, index) in product.attribute_values" :key="attr.attribute.id">
           <div v-if="attr.attribute.type === 'string'">
             <label :for="`attr-string${attr.attribute.id}`" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-              {{ attr.attribute.name }}
+              {{ attr.attribute.name }} {{ attr.attribute.unit ? `(${attr.attribute.unit})` : '' }}
             </label>
             <input :id="`attr-string${attr.attribute.id}`" type="text" v-model="attr.string_value" :class="inputClass">
             <p v-if="attr.error" class="mt-1.5 text-theme-xs text-error-500">{{ attr.error }}</p>
           </div>
           <div v-else-if="attr.attribute.type === 'number'">
             <label :for="`attr-number${attr.attribute.id}`" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-              {{ attr.attribute.name }}
+              {{ attr.attribute.name }} {{ attr.attribute.unit ? `(${attr.attribute.unit})` : '' }}
             </label>
             <input :id="`attr-number${attr.attribute.id}`" type="number" step="0.01" min="0" v-model.number="attr.number_value" :class="inputClass">
           </div>
@@ -32,7 +26,7 @@
           </div>
           <div v-else-if="attr.attribute.type === 'text'">
             <label :for="`attr-text${attr.attribute.id}`" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-              {{ attr.attribute.name }}
+              {{ attr.attribute.name }} {{ attr.attribute.unit ? `(${attr.attribute.unit})` : '' }}
             </label>
             <textarea :id="`attr-text${attr.attribute.id}`" rows="4" v-model="attr.text_value" :class="textareaClass"></textarea>
           </div>
@@ -56,6 +50,7 @@ interface AttributeValue {
     id: number
     type: 'string' | 'number' | 'boolean' | 'text'
     name: string
+    unit?: string
   }
 }
 

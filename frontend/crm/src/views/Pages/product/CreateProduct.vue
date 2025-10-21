@@ -31,7 +31,7 @@
           :categories="categories"
           :is-ceramic-category="isCeramicCategory"
         />
-        <AdditionalCharacteristics :product="product" />
+        <AdditionalCharacteristics v-if="product.attribute_values.length !== 0" :product="product" />
         <ProductImageUpload ref="imageUploadRef" v-model="product.images" />
         <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
           <button
