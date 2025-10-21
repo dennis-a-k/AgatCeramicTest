@@ -23,7 +23,7 @@
               <span class="sale">Распродажа</span>
             </span>
             <h1 class="h3">
-              {{ productData.name }}{{ weight ? `, ${weight} кг` : '' }}
+              {{ productData.name }}{{ weight ? `, ${weight}кг` : '' }}
             </h1>
             <div class="pricing-meta">
               <ul class="d-flex">
@@ -125,14 +125,14 @@
                         </tr>
                       </tbody>
                     </table>
-                    <!-- @if ($product->brand?->img)
-                    <li class="product-anotherinfo-img">
-                      <a href="{{ route('brand.list', $product->brand->slug) }}">
-                        <img src="{{ asset('storage/brands/' . $product->brand->img) }}"
-                          alt="{{ $product->brand->title }}">
-                      </a>
-                    </li>
-                    @endif -->
+                    <ul v-if="productData.brand && productData.brand.image && productData.brand.image.trim()" class="product-anotherinfo-img-list">
+                      <li class="product-anotherinfo-img">
+                        <NuxtLink :to="`/brand/${productData.brand.slug}`">
+                          <img :src="`${productData.brand.image.startsWith('http') ? productData.brand.image : `${config.public.apiBase}/storage/${productData.brand.image}`}`"
+                            :alt="`${productData.brand.name}`">
+                        </NuxtLink>
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>
@@ -776,5 +776,10 @@ useHead(
       }
     }
   }
+}
+
+.product-anotherinfo-img img {
+  max-width: 110px;
+  margin-top: 30px;
 }
 </style>
