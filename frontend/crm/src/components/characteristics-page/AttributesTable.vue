@@ -31,6 +31,9 @@
              <th class="py-3 text-left w-1/12">
                <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Тип</p>
              </th>
+             <th class="py-3 text-center w-1/12">
+               <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Единица</p>
+             </th>
              <th class="py-3 text-center w-3/12">
                <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Категории</p>
              </th>

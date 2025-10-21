@@ -14,6 +14,11 @@
         {{ typeLabel }}
       </span>
     </td>
+    <td class="py-3 whitespace-nowrap text-center">
+      <span class="text-sm text-gray-700 dark:text-gray-300">
+        {{ attribute.unit || '—' }}
+      </span>
+    </td>
     <td class="py-3 whitespace-nowrap">
       <div class="flex flex-wrap gap-1">
         <span v-for="category in attribute.categories" :key="category.id"

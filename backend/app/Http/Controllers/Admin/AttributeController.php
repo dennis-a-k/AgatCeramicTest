@@ -32,11 +32,12 @@ class AttributeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:attributes,name',
             'type' => 'required|string|max:255',
+            'unit' => 'nullable|string|max:255',
             'categories' => 'nullable|array',
             'categories.*' => 'integer|exists:categories,id',
         ]);
 
-        $data = $request->only(['name', 'type']);
+        $data = $request->only(['name', 'type', 'unit']);
         $data['slug'] = Str::slug($request->name);
 
         $attribute = Attribute::create($data);
@@ -77,11 +78,12 @@ class AttributeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:attributes,name,' . $id,
             'type' => 'required|string|max:255',
+            'unit' => 'nullable|string|max:255',
             'categories' => 'nullable|array',
             'categories.*' => 'integer|exists:categories,id',
         ]);
 
-        $data = $request->only(['name', 'type']);
+        $data = $request->only(['name', 'type', 'unit']);
         $data['slug'] = Str::slug($request->name);
 
         $attribute->update($data);

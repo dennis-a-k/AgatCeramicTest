@@ -11,8 +11,44 @@
               <label for="nameAttribute" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Название
               </label>
-              <input type="text" id="nameAttribute" v-model="form.name" required :class="inputClass(backendErrors.name)" />
+              <input type="text" id="nameAttribute" v-model="form.name" required
+                :class="inputClass(backendErrors.name)" />
               <p v-if="backendErrors.name" class="mt-1.5 text-theme-xs text-error-500">{{ backendErrors.name }}</p>
+            </div>
+            <div>
+              <div class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Единица измерения</div>
+              <div class="flex space-x-6">
+                <label for="form-unit1"
+                  class="flex cursor-pointer items-center text-sm font-medium text-gray-700 select-none dark:text-gray-400">
+                  <input id="form-unit1" type="radio" v-model="form.unit" value="кг" class="sr-only" />
+                  <div
+                    :class="form.unit === 'кг' ? 'border-brand-500 bg-brand-500' : 'bg-transparent border-gray-300 dark:border-gray-700'"
+                    class="hover:border-brand-500 dark:hover:border-brand-500 mr-3 flex h-5 w-5 items-center justify-center rounded-full border-[1.25px]">
+                    <span :class="form.unit === 'кг' ? '' : 'opacity-0'" class="h-2 w-2 rounded-full bg-white"></span>
+                  </div>
+                  кг
+                </label>
+                <label for="form-unit2"
+                  class="flex cursor-pointer items-center text-sm font-medium text-gray-700 select-none dark:text-gray-400">
+                  <input id="form-unit2" type="radio" v-model="form.unit" value="мм" class="sr-only" />
+                  <div
+                    :class="form.unit === 'мм' ? 'border-brand-500 bg-brand-500' : 'bg-transparent border-gray-300 dark:border-gray-700'"
+                    class="hover:border-brand-500 dark:hover:border-brand-500 mr-3 flex h-5 w-5 items-center justify-center rounded-full border-[1.25px]">
+                    <span :class="form.unit === 'мм' ? '' : 'opacity-0'" class="h-2 w-2 rounded-full bg-white"></span>
+                  </div>
+                  мм
+                </label>
+                <label for="form-unit3"
+                  class="flex cursor-pointer items-center text-sm font-medium text-gray-700 select-none dark:text-gray-400">
+                  <input id="form-unit3" type="radio" v-model="form.unit" value="" class="sr-only" />
+                  <div
+                    :class="form.unit === '' ? 'border-brand-500 bg-brand-500' : 'bg-transparent border-gray-300 dark:border-gray-700'"
+                    class="hover:border-brand-500 dark:hover:border-brand-500 mr-3 flex h-5 w-5 items-center justify-center rounded-full border-[1.25px]">
+                    <span :class="form.unit === '' ? '' : 'opacity-0'" class="h-2 w-2 rounded-full bg-white"></span>
+                  </div>
+                  нет
+                </label>
+              </div>
             </div>
             <div>
               <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -31,12 +67,9 @@
               <p class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Категории
               </p>
-              <MultiSelect
-                v-model="form.categories"
-                :options="flatCategories"
-                placeholder="Выберите категории..."
-              />
-              <p v-if="backendErrors.categories" class="mt-1.5 text-theme-xs text-error-500">{{ backendErrors.categories }}</p>
+              <MultiSelect v-model="form.categories" :options="flatCategories" placeholder="Выберите категории..." />
+              <p v-if="backendErrors.categories" class="mt-1.5 text-theme-xs text-error-500">{{ backendErrors.categories
+              }}</p>
             </div>
             <div class="flex justify-end gap-3 pt-4">
               <Button variant="outline" @click="closeModal">Отмена</Button>
@@ -57,7 +90,6 @@ import Modal from '@/components/profile/Modal.vue'
 import Button from '@/components/ui/Button.vue'
 import MultiSelect from '@/components/ui/MultiSelect.vue'
 import { useCategories } from '@/composables/useCategories'
-
 const props = defineProps({
   isVisible: {
     type: Boolean,
@@ -80,7 +112,7 @@ const props = defineProps({
 const emit = defineEmits(['close', 'save', 'update:errors'])
 
 const { flatCategories, fetchCategories } = useCategories()
-const form = ref({ name: '', type: '', categories: [] })
+const form = ref({ name: '', type: '', categories: [], unit: '' })
 const backendErrors = ref({})
 
 const inputClass = (error) => {
@@ -93,15 +125,16 @@ watch(() => props.isVisible, async (newVal) => {
     if (props.isEditing && props.attribute) {
       form.value = {
         ...props.attribute,
-        categories: props.attribute.categories || []
+        categories: props.attribute.categories || [],
+        unit: props.attribute.unit || ''
       }
     } else {
-      form.value = { name: '', type: '', categories: [] }
+      form.value = { name: '', type: '', categories: [], unit: '' }
     }
     backendErrors.value = { ...props.errors }
   } else {
     // Reset form when modal closes
-    form.value = { name: '', type: '', categories: [] }
+    form.value = { name: '', type: '', categories: [], unit: '' }
     backendErrors.value = {}
   }
 })

@@ -12,6 +12,7 @@ class Attribute extends Model
         'name',
         'slug',
         'type',
+        'unit',
     ];
 
     public function productValues(): HasMany

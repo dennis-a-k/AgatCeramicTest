@@ -43,7 +43,7 @@ export function useAttributes() {
     }
   }
 
-  const createAttribute = async (attributeData: { name: string; type: string }) => {
+  const createAttribute = async (attributeData: { name: string; type: string; unit?: string }) => {
     loading.value = true
     error.value = null
     try {
@@ -73,7 +73,7 @@ export function useAttributes() {
     }
   }
 
-  const updateAttribute = async (id: number, attributeData: { name: string; type: string }) => {
+  const updateAttribute = async (id: number, attributeData: { name: string; type: string; unit?: string }) => {
     loading.value = true
     error.value = null
     try {
