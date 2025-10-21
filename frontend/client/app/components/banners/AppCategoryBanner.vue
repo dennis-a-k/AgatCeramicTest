@@ -42,7 +42,7 @@ const banners = [
         category: ""
     },
     {
-        href: "/category/zatirka",
+        href: "/category/zatirka-dlia-plitki",
         imgSrc: "/images/page-index/banners/zatirka.jpg",
         imgAlt: "zatirka",
         title: "Затирка для керамической плитки",
@@ -56,7 +56,7 @@ const banners = [
         category: ""
     },
     {
-        href: "/category/klei",
+        href: "/category/kleevye-smesi",
         imgSrc: "/images/page-index/banners/klei.png",
         imgAlt: "klei",
         title: "Клеевые смеси",
