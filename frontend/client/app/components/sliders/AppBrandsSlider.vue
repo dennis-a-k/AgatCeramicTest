@@ -7,7 +7,7 @@
                 :modules="[Autoplay]"
                 :slidesPerView="4"
                 :speed="1500"
-                :loop="true"
+                :loop="brandsWithImages.length >= 4"
                 :autoplay="{
                     delay: 2000,
                     disableOnInteraction: false,
@@ -56,7 +56,12 @@ onMounted(async () => {
 
 // Вычисляем бренды с изображениями
 const brandsWithImages = computed(() => {
-  return brandStore.brands.filter(brand => brand.image);
+  const filtered = brandStore.brands.filter(brand => brand.image);
+  // Если брендов меньше 4, отключаем loop
+  if (filtered.length < 4) {
+    return filtered;
+  }
+  return filtered;
 });
 </script>
 
