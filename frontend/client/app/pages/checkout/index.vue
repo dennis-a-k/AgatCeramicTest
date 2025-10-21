@@ -102,7 +102,7 @@
                             <span class="order-middle-left">
                               {{ item.title
                               }}{{
-                                item.weight_kg ? `, ${item.weight_kg} кг` : ''
+                                item.weight_kg ? `, ${item.weight_kg}кг` : ''
                               }}
                             </span>
                           </div>

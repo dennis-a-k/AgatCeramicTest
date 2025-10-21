@@ -14,7 +14,7 @@
                             </NuxtLink>
                             <div class="content">
                                 <NuxtLink :to="`/product/${item.slug}`" class="title lh-1">
-                                    <p>{{ item.title }}{{ item.weight_kg ? `, ${item.weight_kg} кг` : '' }}</p>
+                                    <p>{{ item.title }}{{ item.weight_kg ? `, ${item.weight_kg}кг` : '' }}</p>
                                 </NuxtLink>
                                 <span class="quantity-price">
                                     {{ item.quantity }} {{ item.unit === 'шт' ? 'шт.' : item.unit === 'кв.м' ? 'м²' :

@@ -42,7 +42,7 @@
                           <p>
                             {{ item.title
                             }}{{
-                              item.weight_kg ? `, ${item.weight_kg} кг` : ''
+                              item.weight_kg ? `, ${item.weight_kg}кг` : ''
                             }}
                           </p>
                         </NuxtLink>

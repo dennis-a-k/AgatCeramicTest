@@ -262,22 +262,11 @@ const formattedNumberAttribute = computed(() => (attr) => {
   const formatter = new Intl.NumberFormat('ru-RU', {
     maximumFractionDigits: 2,
   });
-  if (attr.attribute.slug === 'ves') {
-    return `${formatter.format(attr.number_value)} кг`;
-  } else if (attr.attribute.slug === 'tolshhina') {
-    return `${formatter.format(attr.number_value)} мм`;
-  }
-  return formatter.format(attr.number_value);
+  return `${formatter.format(attr.number_value)} ${attr.attribute.unit || ''}`;
 });
 
 const formattedStringAttribute = computed(() => (attr) => {
-  if (
-    attr.attribute.slug === 'sirina-sva' ||
-    attr.attribute.slug === 'razmery'
-  ) {
-    return `${attr.string_value || attr.text_value} мм`;
-  }
-  return attr.string_value || attr.text_value;
+  return `${attr.string_value || attr.text_value} ${attr.attribute.unit || ''}`;
 });
 
 const productMeta = computed(() => {
