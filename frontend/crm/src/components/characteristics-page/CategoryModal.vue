@@ -46,7 +46,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, inject, computed } from 'vue'
 import Modal from '@/components/profile/Modal.vue'
 import Button from '@/components/ui/Button.vue'
 import Checkbox from '@/components/ui/Checkbox.vue'
@@ -72,18 +72,47 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'save'])
 
+const categoriesComposable = inject('categoriesData')
+const { categories, fetchCategories } = categoriesComposable
+
 const form = ref({ name: '', description: '', order: null, parent_id: null, is_plumbing: false })
+
+// Ref to store all categories for finding plumbing category
+const allCategories = ref([])
+
+// Function to fetch all categories without pagination
+const fetchAllCategories = async () => {
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/categories?per_page=1000`) // Large per_page to get all
+    if (response.ok) {
+      const data = await response.json()
+      allCategories.value = data.data || []
+    }
+  } catch (error) {
+    console.error('Error fetching all categories:', error)
+  }
+}
+
+// Computed property to find the plumbing category by slug
+const plumbingCategory = computed(() => {
+  return allCategories.value.find(cat => cat.slug === 'santexnika')
+})
 
 const inputClass = (error) => {
   return error ? 'dark:bg-dark-900 shadow-theme-xs focus:border-error-300 focus:ring-error-500/10 dark:focus:border-error-800 h-11 w-full rounded-lg border border-error-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-error-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 appearance-none' : 'dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 appearance-none'
 }
 
-watch(() => props.isVisible, (newVal) => {
+watch(() => props.isVisible, async (newVal) => {
   if (newVal) {
+    // Fetch all categories if not already fetched
+    if (allCategories.value.length === 0) {
+      await fetchAllCategories()
+    }
+
     if (props.isEditing && props.category) {
       form.value = {
         ...props.category,
-        is_plumbing: props.category.parent_id === 8 // Assuming "Сантехника" has ID 8
+        is_plumbing: props.category.parent_id === plumbingCategory.value?.id // Check by parent ID, but using the found category
       }
     } else {
       form.value = { name: '', description: '', order: null, parent_id: null, is_plumbing: false }
