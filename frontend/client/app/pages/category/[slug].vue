@@ -58,7 +58,7 @@
           </div>
         </div>
         <ClientOnly>
-          <FiltersAppCategoryFilters
+          <FiltersAppProductsFilters
             :store="store"
             :categories="store.filters.categories"
             :subcategories="store.filters.subcategories"

@@ -37,7 +37,7 @@
           </div>
         </div>
         <ClientOnly>
-          <FiltersAppCategoryFilters :store="store" :showCategoriesFilter="true" :categories="store.filters.categories"
+          <FiltersAppProductsFilters :store="store" :showCategoriesFilter="true" :categories="store.filters.categories"
             :subcategories="store.filters.subcategories" :patterns="store.filters.patterns"
             :weights="store.filters.weights" :colors="store.filters.colors" :glues="store.filters.glues"
             :mixture_types="store.filters.mixture_types" :seams="store.filters.seams" :textures="store.filters.textures"
