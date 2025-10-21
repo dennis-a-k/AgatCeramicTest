@@ -54,6 +54,7 @@ import EditIcon from "./EditIcon.vue";
 import DeleteIcon from "./DeleteIcon.vue";
 import ChevronLeftIcon from "./ChevronLeftIcon.vue";
 import CheckCircleIcon from "./CheckCircleIcon.vue";
+import ShoppingCartIcon from "./ShoppingCartIcon.vue";
 
 export {
   BellIcon,
@@ -112,4 +113,5 @@ export {
   DeleteIcon,
   ChevronLeftIcon,
   CheckCircleIcon,
+  ShoppingCartIcon,
 };

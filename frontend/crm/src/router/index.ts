@@ -47,6 +47,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/orders',
+      name: 'Orders',
+      component: () => import('../views/Pages/orders/Orders.vue'),
+      meta: {
+        title: 'Заказы',
+      },
+    },
+    {
       path: '/calendar',
       name: 'Calendar',
       component: () => import('../views/Others/Calendar.vue'),

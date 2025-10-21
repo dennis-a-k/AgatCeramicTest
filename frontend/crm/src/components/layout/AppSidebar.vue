@@ -150,22 +150,19 @@
           </div>
         </div>
       </nav>
-      <SidebarWidget v-if="isExpanded || isHovered || isMobileOpen" />
+
     </div>
   </aside>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useRoute } from "vue-router";
 
 import {
   GridIcon,
   CalenderIcon,
   UserCircleIcon,
-  ChatIcon,
-  MailIcon,
-  DocsIcon,
   PieChartIcon,
   ChevronDownIcon,
   HorizontalDots,
@@ -175,8 +172,8 @@ import {
   PlugInIcon,
   PackageIcon,
   SquareChartGanttIcon,
+  ShoppingCartIcon,
 } from "../../icons";
-import SidebarWidget from "./SidebarWidget.vue";
 import BoxCubeIcon from "@/icons/BoxCubeIcon.vue";
 import { useSidebar } from "@/composables/useSidebar";
 
@@ -202,6 +199,11 @@ const menuGroups = [
         icon: SquareChartGanttIcon,
         name: "Характеричтики",
         path: "/characteristics",
+      },
+      {
+        icon: ShoppingCartIcon,
+        name: "Заказы",
+        path: "/orders",
       },
       {
         icon: CalenderIcon,
