@@ -2,69 +2,6 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-image/1.1 http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>http://test.dennistp.beget.tech/</loc>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/page-index/sliders/main-slider/inner-img/hero-1-2.jpg</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/page-index/sliders/main-slider/inner-img/hero-1-1.jpg</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/page-index/banners/keramogranit.jpeg</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/page-index/banners/plitka.jpg</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/page-index/banners/mozaika.jpeg</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/page-index/banners/zatirka.jpg</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/page-index/banners/santekhnika.jpeg</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/page-index/banners/klei.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/brands/axor_brand.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/brands/emac_brand.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/brands/geberit_brand.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/brands/hansgrohe_brand.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/brands/kaldewei_brand.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/brands/mosplitka_brand.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/brands/ravak_brand.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/brands/sanita_brand.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/brands/tarkett_brand.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/brands/unitile_brand.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/brands/akvaton_brand.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/brands/alcora_brand.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>http://test.dennistp.beget.tech/_ipx/_/images/brands/aquatek_brand.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>http://test.dennistp.beget.tech/cart</loc>
@@ -163,16 +100,10 @@
         <loc>http://test.dennistp.beget.tech/search</loc>
     </url>
     <url>
-        <loc>http://test.dennistp.beget.tech/category/dusevye-kabiny</loc>
-    </url>
-    <url>
-        <loc>http://test.dennistp.beget.tech/category/installiacii</loc>
-    </url>
-    <url>
         <loc>http://test.dennistp.beget.tech/category/keramogranit</loc>
     </url>
     <url>
-        <loc>http://test.dennistp.beget.tech/category/klei</loc>
+        <loc>http://test.dennistp.beget.tech/category/kleevye-smesi</loc>
     </url>
     <url>
         <loc>http://test.dennistp.beget.tech/category/klinker</loc>
@@ -187,19 +118,10 @@
         <loc>http://test.dennistp.beget.tech/category/santexnika</loc>
     </url>
     <url>
-        <loc>http://test.dennistp.beget.tech/category/smesiteli</loc>
-    </url>
-    <url>
         <loc>http://test.dennistp.beget.tech/category/stupeni</loc>
     </url>
     <url>
-        <loc>http://test.dennistp.beget.tech/category/unitazy</loc>
-    </url>
-    <url>
-        <loc>http://test.dennistp.beget.tech/category/vanny</loc>
-    </url>
-    <url>
-        <loc>http://test.dennistp.beget.tech/category/zatirka</loc>
+        <loc>http://test.dennistp.beget.tech/category/zatirka-dlia-plitki</loc>
     </url>
 </urlset>
-<!-- XML Sitemap generated by @nuxtjs/sitemap v7.4.7 at 2025-10-13T08:58:52.058Z -->
+<!-- XML Sitemap generated by @nuxtjs/sitemap v7.4.7 at 2025-10-21T14:05:50.471Z -->
