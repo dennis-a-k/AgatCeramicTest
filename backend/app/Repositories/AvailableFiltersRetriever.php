@@ -21,7 +21,7 @@ class AvailableFiltersRetriever implements AvailableFiltersInterface
         'glues' => ['slug' => 'ispolzuetsia-v-kacestve-kleia', 'type' => 'boolean', 'field' => 'boolean_value'],
         'mixture_types' => ['slug' => 'tip', 'type' => 'string', 'field' => 'string_value'],
         'seams' => ['slug' => 'sirina-sva', 'type' => 'string', 'field' => 'string_value'],
-        'sizes' => ['slug' => 'razmery', 'type' => 'string', 'field' => 'string_value'],
+        'sizes' => ['slug' => 'gabarity', 'type' => 'string', 'field' => 'string_value'],
         'materials' => ['slug' => 'material', 'type' => 'string', 'field' => 'string_value'],
         'waterproofs' => ['slug' => 'vlagostoikost', 'type' => 'boolean', 'field' => 'boolean_value'],
         'volumes' => ['slug' => 'obem', 'type' => 'number', 'field' => 'number_value'],
