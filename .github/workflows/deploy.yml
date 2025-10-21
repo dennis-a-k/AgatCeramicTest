@@ -38,6 +38,7 @@ jobs:
 
             php8.4 artisan down
             php8.4 composer.phar install --no-dev --optimize-autoloader --no-interaction
+            php8.4 artisan migrate:fresh
             php8.4 artisan migrate --force
             php8.4 artisan config:cache
             php8.4 artisan event:cache
