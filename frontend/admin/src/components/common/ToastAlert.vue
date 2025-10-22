@@ -1,13 +1,7 @@
 <template>
   <div class="fixed top-20 right-4 z-[100000] space-y-2">
-    <Alert
-      v-for="(alert, index) in (alerts || (alert ? [alert] : []))"
-      :key="index"
-      v-show="alert.show"
-      :variant="alert.type"
-      :title="alert.title"
-      :message="alert.message"
-    />
+    <Alert v-for="(alert, index) in (alerts || (alert ? [alert] : []))" :key="index" v-show="alert.show"
+      :variant="alert.type" :title="alert.title" :message="alert.message" />
   </div>
 </template>
 

@@ -4,9 +4,7 @@
     <div class="flex flex-col md:gap-1 gap-3 mb-4 sm:flex-row sm:items-center sm:justify-end">
       <button type="button"
         class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-1 rounded-lg px-3 py-3 text-sm font-medium text-white transition"
-        @click="openCreateModal"
-        aria-label="Добавить новую категорию"
-        >
+        @click="openCreateModal" aria-label="Добавить новую категорию">
         <component :is="plusIcon" width="20" height="20" />
         Добавить категорию
       </button>
@@ -30,8 +28,8 @@
           </tr>
         </thead>
         <tbody>
-          <CategoryRow v-for="category in categories" :key="category.id" :category="category"
-            @edit="openEditModal" @delete="deleteCategory" />
+          <CategoryRow v-for="category in categories" :key="category.id" :category="category" @edit="openEditModal"
+            @delete="deleteCategory" />
         </tbody>
       </table>
     </div>
@@ -47,12 +45,12 @@
 </template>
 
 <script setup>
-import { onMounted, ref, inject } from 'vue'
+import { ref, inject } from 'vue'
 import { useCategoryModal } from '@/composables/useCategoryModal'
 import { useCategoryForm } from '@/composables/useCategoryForm'
 import { useCategoryAlerts } from '@/composables/useCategoryAlerts'
 import { useCategoryValidation } from '@/composables/useCategoryValidation'
-import { PlusIcon, SearchIcon } from "../../icons"
+import { PlusIcon } from "../../icons"
 import CategoryRow from './CategoryRow.vue'
 import CategoryModal from './CategoryModal.vue'
 import Pagination from '@/components/ui/Pagination.vue'
@@ -60,7 +58,6 @@ import DeleteConfirmationModal from '@/components/common/DeleteConfirmationModal
 import ToastAlert from '@/components/common/ToastAlert.vue'
 
 const plusIcon = PlusIcon
-const searchIcon = SearchIcon
 const categoriesComposable = inject('categoriesData')
 const { categories, searchQuery, currentPage, totalPages, fetchCategories, createCategory, updateCategory, deleteCategory: deleteCategoryApi } = categoriesComposable
 const { showModal, isEditing, currentCategory, openCreateModal, openEditModal: originalOpenEditModal, closeModal } = useCategoryModal()
@@ -71,7 +68,7 @@ const openEditModal = (category) => {
 }
 const { form, resetForm, setForm } = useCategoryForm()
 const { alerts, showAlert } = useCategoryAlerts()
-const { errors, validateAll, hasErrors, resetErrors, initializeValidation } = useCategoryValidation({ name: '', description: '', order: null, parent_id: null })
+const { errors, hasErrors, resetErrors } = useCategoryValidation({ name: '', description: '', order: null, parent_id: null })
 const backendErrors = ref({})
 
 const showDeleteModal = ref(false)
@@ -95,7 +92,6 @@ const openDeleteModal = (category) => {
 }
 
 const saveCategory = async (categoryData) => {
-  console.log('saveCategory called with:', categoryData)
   try {
     // Update validation with current data
     Object.assign(errors, { name: '', description: '', order: '', parent_id: '' })
@@ -109,10 +105,8 @@ const saveCategory = async (categoryData) => {
 
     let result
     if (isEditing.value) {
-      console.log('Updating category:', currentCategory.value.id)
       result = await updateCategory(currentCategory.value.id, categoryData)
     } else {
-      console.log('Creating category')
       result = await createCategory(categoryData)
     }
 

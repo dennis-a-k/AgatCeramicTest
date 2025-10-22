@@ -16,9 +16,7 @@
       </div>
       <button type="button"
         class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-1 rounded-lg px-3 py-3 text-sm font-medium text-white transition"
-        @click="openCreateModal"
-        aria-label="Добавить новый бренд"
-        >
+        @click="openCreateModal" aria-label="Добавить новый бренд">
         <component :is="plusIcon" width="20" height="20" />
         Добавить бренд
       </button>
@@ -45,8 +43,8 @@
           </tr>
         </thead>
         <tbody>
-          <BrandRow v-for="brand in brands" :key="brand.id" :brand="brand"
-            @edit="openEditModal" @delete="deleteBrand" />
+          <BrandRow v-for="brand in brands" :key="brand.id" :brand="brand" @edit="openEditModal"
+            @delete="deleteBrand" />
         </tbody>
       </table>
     </div>
@@ -62,7 +60,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, inject } from 'vue'
+import { ref, inject } from 'vue'
 import { useBrandModal } from '@/composables/useBrandModal'
 import { useBrandForm } from '@/composables/useBrandForm'
 import { useBrandAlerts } from '@/composables/useBrandAlerts'
@@ -85,9 +83,9 @@ const openEditModal = (brand) => {
   initializeValidation() // Инициализируем валидацию
   originalOpenEditModal(brand)
 }
-const { form, resetForm, setForm } = useBrandForm()
+const { form } = useBrandForm()
 const { alerts, showAlert } = useBrandAlerts()
-const { errors, validateAll, hasErrors, resetErrors, initializeValidation } = useBrandValidation(form)
+const { validateAll, hasErrors, resetErrors, initializeValidation } = useBrandValidation(form)
 const backendErrors = ref({})
 
 const showDeleteModal = ref(false)
@@ -176,6 +174,4 @@ const confirmDelete = async () => {
     showAlert('error', 'Ошибка', 'Не удалось удалить бренд')
   }
 }
-
-// Убираем onMounted, так как данные уже загружены в родительском компоненте
 </script>

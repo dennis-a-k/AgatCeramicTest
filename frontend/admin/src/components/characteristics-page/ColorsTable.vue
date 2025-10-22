@@ -16,9 +16,7 @@
       </div>
       <button type="button"
         class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-1 rounded-lg px-3 py-3 text-sm font-medium text-white transition"
-        @click="openCreateModal"
-        aria-label="Добавить новый цвет"
-        >
+        @click="openCreateModal" aria-label="Добавить новый цвет">
         <component :is="plusIcon" width="20" height="20" />
         Добавить цвет
       </button>
@@ -42,8 +40,8 @@
           </tr>
         </thead>
         <tbody>
-          <ColorRow v-for="color in colors" :key="color.id" :color="color"
-            @edit="openEditModal" @delete="deleteColor" />
+          <ColorRow v-for="color in colors" :key="color.id" :color="color" @edit="openEditModal"
+            @delete="deleteColor" />
         </tbody>
       </table>
     </div>
@@ -59,7 +57,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, inject } from 'vue'
+import { ref, inject } from 'vue'
 import { useColorModal } from '@/composables/useColorModal'
 import { useColorForm } from '@/composables/useColorForm'
 import { useColorAlerts } from '@/composables/useColorAlerts'
@@ -81,9 +79,9 @@ const openEditModal = (color) => {
   backendErrors.value = {} // Очищаем ошибки при открытии модального окна редактирования
   originalOpenEditModal(color)
 }
-const { form, resetForm, setForm } = useColorForm()
+const { form } = useColorForm()
 const { alerts, showAlert } = useColorAlerts()
-const { errors, validateAll, hasErrors, resetErrors, initializeValidation } = useColorValidation(form)
+const { validateAll, hasErrors, resetErrors } = useColorValidation(form)
 const backendErrors = ref({})
 
 const showDeleteModal = ref(false)
@@ -148,7 +146,6 @@ const saveColor = async (colorData) => {
       }
     }
   } catch (error) {
-    console.error('Error saving color:', error)
     const errorMessage = error.response?.data?.message || 'Не удалось сохранить цвет'
     showAlert('error', 'Ошибка', errorMessage)
   }
@@ -172,6 +169,4 @@ const confirmDelete = async () => {
     showAlert('error', 'Ошибка', 'Не удалось удалить цвет')
   }
 }
-
-// Убираем onMounted, так как данные уже загружены в родительском компоненте
 </script>

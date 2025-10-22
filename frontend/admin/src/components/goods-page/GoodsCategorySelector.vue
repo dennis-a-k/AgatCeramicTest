@@ -5,16 +5,15 @@
       :class="{ 'text-gray-800 dark:text-white/90': isOpen }">
       <span v-if="!selectedItem" class="text-gray-400"> Категория </span>
       <span v-else class="text-gray-800 dark:text-white/90">{{ selectedItem.label }}</span>
-      <svg class="ml-auto" :class="{ 'transform rotate-180': isOpen }" width="20" height="20"
-        viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg class="ml-auto" :class="{ 'transform rotate-180': isOpen }" width="20" height="20" viewBox="0 0 20 20"
+        fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M4.79175 7.39551L10.0001 12.6038L15.2084 7.39551" stroke="currentColor" stroke-width="1.5"
           stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     </div>
-    <transition enter-active-class="transition duration-100 ease-out"
-      enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
-      leave-active-class="transition duration-75 ease-in" leave-from-class="transform scale-100 opacity-100"
-      leave-to-class="transform scale-95 opacity-0">
+    <transition enter-active-class="transition duration-100 ease-out" enter-from-class="transform scale-95 opacity-0"
+      enter-to-class="transform scale-100 opacity-100" leave-active-class="transition duration-75 ease-in"
+      leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0">
       <div v-if="isOpen" class="absolute z-10 w-full mt-1 bg-white rounded-lg shadow-sm dark:bg-gray-900">
         <ul class="overflow-y-auto divide-y divide-gray-200 custom-scrollbar max-h-60 dark:divide-gray-800"
           role="listbox">

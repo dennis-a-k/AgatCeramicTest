@@ -24,27 +24,27 @@
     <div class="max-w-full overflow-x-auto custom-scrollbar">
       <table class="min-w-full">
         <thead>
-           <tr class="border-t border-gray-100 dark:border-gray-800">
-             <th class="py-3 text-left w-1/12">
-               <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Атрибут</p>
-             </th>
-             <th class="py-3 text-left w-1/12">
-               <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Тип</p>
-             </th>
-             <th class="py-3 text-center w-1/12">
-               <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Единица</p>
-             </th>
-             <th class="py-3 text-center w-3/12">
-               <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Категории</p>
-             </th>
-             <th class="py-3 text-center w-1/12">
-               <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Действие</p>
-             </th>
-           </tr>
-         </thead>
+          <tr class="border-t border-gray-100 dark:border-gray-800">
+            <th class="py-3 text-left w-1/12">
+              <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Атрибут</p>
+            </th>
+            <th class="py-3 text-left w-1/12">
+              <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Тип</p>
+            </th>
+            <th class="py-3 text-center w-1/12">
+              <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Единица</p>
+            </th>
+            <th class="py-3 text-center w-3/12">
+              <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Категории</p>
+            </th>
+            <th class="py-3 text-center w-1/12">
+              <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Действие</p>
+            </th>
+          </tr>
+        </thead>
         <tbody>
-          <AttributeRow v-for="attribute in attributes" :key="attribute.id" :attribute="attribute"
-            @edit="openEditModal" @delete="deleteAttribute" />
+          <AttributeRow v-for="attribute in attributes" :key="attribute.id" :attribute="attribute" @edit="openEditModal"
+            @delete="deleteAttribute" />
         </tbody>
       </table>
     </div>
@@ -60,7 +60,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, inject } from 'vue'
+import { ref, inject } from 'vue'
 import { useAttributeModal } from '@/composables/useAttributeModal'
 import { useAttributeForm } from '@/composables/useAttributeForm'
 import { useAttributeAlerts } from '@/composables/useAttributeAlerts'
@@ -82,9 +82,9 @@ const openEditModal = (attribute) => {
   backendErrors.value = {} // Очищаем ошибки при открытии модального окна редактирования
   originalOpenEditModal(attribute)
 }
-const { form, resetForm, setForm } = useAttributeForm()
+const { form } = useAttributeForm()
 const { alerts, showAlert } = useAttributeAlerts()
-const { errors, validateAll, hasErrors, resetErrors, initializeValidation } = useAttributeValidation(form)
+const { validateAll, hasErrors, resetErrors } = useAttributeValidation(form)
 const backendErrors = ref({})
 
 const showDeleteModal = ref(false)

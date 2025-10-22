@@ -69,7 +69,7 @@
               </p>
               <MultiSelect v-model="form.categories" :options="flatCategories" placeholder="Выберите категории..." />
               <p v-if="backendErrors.categories" class="mt-1.5 text-theme-xs text-error-500">{{ backendErrors.categories
-              }}</p>
+                }}</p>
             </div>
             <div class="flex justify-end gap-3 pt-4">
               <Button variant="outline" @click="closeModal">Отмена</Button>
@@ -85,8 +85,8 @@
 </template>
 
 <script setup>
-import { ref, watch, computed, onMounted } from 'vue'
-import Modal from '@/components/profile/Modal.vue'
+import { ref, watch, onMounted } from 'vue'
+import Modal from '@/components/ui/Modal.vue'
 import Button from '@/components/ui/Button.vue'
 import MultiSelect from '@/components/ui/MultiSelect.vue'
 import { useCategories } from '@/composables/useCategories'

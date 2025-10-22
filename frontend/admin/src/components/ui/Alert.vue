@@ -4,19 +4,13 @@
       <div :class="['-mt-0.5', variantClasses[variant].icon]">
         <component :is="icons[variant]" />
       </div>
-
       <div>
         <h4 class="mb-1 text-sm font-semibold text-gray-800 dark:text-white/90">
           {{ title }}
         </h4>
-
         <p class="text-sm text-gray-500 dark:text-gray-400">{{ message }}</p>
-
-        <router-link
-          v-if="showLink"
-          :to="linkHref"
-          class="inline-block mt-3 text-sm font-medium text-gray-500 underline dark:text-gray-400"
-        >
+        <router-link v-if="showLink" :to="linkHref"
+          class="inline-block mt-3 text-sm font-medium text-gray-500 underline dark:text-gray-400">
           {{ linkText }}
         </router-link>
       </div>
@@ -26,7 +20,6 @@
 
 <script setup lang="ts">
 import { SuccessIcon, ErrorIcon, WarningIcon, InfoCircleIcon } from '@/icons'
-import { computed } from 'vue'
 
 interface AlertProps {
   variant: 'success' | 'error' | 'warning' | 'info'

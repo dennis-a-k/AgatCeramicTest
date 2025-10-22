@@ -6,7 +6,7 @@
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white text-center mb-4">
             {{ isEditing ? 'Редактировать категорию' : 'Создать категорию' }}
           </h3>
-          <form @submit.prevent="saveCategory" class="space-y-4" @submit="console.log('Form submitted')">
+          <form @submit.prevent="saveCategory" class="space-y-4">
             <div>
               <label for="nameCategory" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Название
@@ -19,7 +19,8 @@
               <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Описание
               </label>
-              <textarea id="description" v-model="form.description" rows="3" :class="inputClass(errors.description)"></textarea>
+              <textarea id="description" v-model="form.description" rows="3"
+                :class="inputClass(errors.description)"></textarea>
               <p v-if="errors.description" class="mt-1.5 text-theme-xs text-error-500">{{ errors.description }}</p>
             </div>
             <div>
@@ -47,7 +48,7 @@
 
 <script setup>
 import { ref, watch, inject, computed } from 'vue'
-import Modal from '@/components/profile/Modal.vue'
+import Modal from '@/components/ui/Modal.vue'
 import Button from '@/components/ui/Button.vue'
 import Checkbox from '@/components/ui/Checkbox.vue'
 
@@ -127,7 +128,6 @@ const closeModal = () => {
 }
 
 const saveCategory = () => {
-  console.log('Saving category:', form.value)
   emit('save', {
     ...form.value,
     is_plumbing: form.value.is_plumbing ? '1' : '0' // Convert boolean to string for backend

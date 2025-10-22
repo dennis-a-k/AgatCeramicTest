@@ -44,8 +44,8 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue'
-import Modal from '@/components/profile/Modal.vue'
+import { ref, watch } from 'vue'
+import Modal from '@/components/ui/Modal.vue'
 import Button from '@/components/ui/Button.vue'
 
 const props = defineProps({

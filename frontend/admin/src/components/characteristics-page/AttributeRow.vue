@@ -30,14 +30,12 @@
     <td class="py-3 whitespace-nowrap text-center">
       <button
         class="inline-flex items-center justify-center gap-2 rounded-lg transition shadow-theme-xs bg-white text-gray-700 ring-1 ring-gray-300 hover:bg-success-50 hover:ring-success-300 hover:text-success-700 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-success-500/15 dark:hover:ring-success-500/50 dark:hover:text-success-500 cursor-pointer p-1 mr-3"
-        @click="openEditModal(attribute)"
-        :aria-label="`Редактировать атрибут ${attribute.name}`">
+        @click="openEditModal(attribute)" :aria-label="`Редактировать атрибут ${attribute.name}`">
         <EditIcon />
       </button>
       <button
         class="inline-flex items-center justify-center gap-2 rounded-lg transition shadow-theme-xs bg-white text-gray-700 ring-1 ring-gray-300 hover:bg-error-50 hover:ring-error-300 hover:text-error-700 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-error-500/15 dark:hover:ring-error-500/50 dark:hover:text-error-500 cursor-pointer p-1"
-        @click="deleteAttribute(attribute.id)"
-        :aria-label="`Удалить атрибут ${attribute.name}`">
+        @click="deleteAttribute(attribute.id)" :aria-label="`Удалить атрибут ${attribute.name}`">
         <DeleteIcon />
       </button>
     </td>

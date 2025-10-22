@@ -1,7 +1,7 @@
 <template>
-  <AdminLayout>
-    <PageBreadcrumb :pageTitle="currentPageTitle" />
-  </AdminLayout>
+    <AdminLayout>
+        <PageBreadcrumb :pageTitle="currentPageTitle" />
+    </AdminLayout>
 </template>
 
 <script setup>

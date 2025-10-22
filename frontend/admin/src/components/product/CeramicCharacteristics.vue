@@ -1,5 +1,6 @@
 <template>
-  <div v-if="isCeramicCategory" class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+  <div v-if="isCeramicCategory"
+    class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
     <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
       <h2 class="text-lg font-medium text-gray-800 dark:text-white">
         Характеристики для керамики
@@ -8,18 +9,24 @@
     <div class="space-y-5 p-4 sm:p-6">
       <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
         <div>
-          <label for="product-texture" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Поверхность</label>
-          <input type="text" id="product-texture" :class="inputClass(errors.texture)" placeholder="Тип поверхности" v-model="product.texture">
+          <label for="product-texture"
+            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Поверхность</label>
+          <input type="text" id="product-texture" :class="inputClass(errors.texture)" placeholder="Тип поверхности"
+            v-model="product.texture">
           <p v-if="errors.texture" class="mt-1.5 text-theme-xs text-error-500">{{ errors.texture }}</p>
         </div>
         <div>
-          <label for="product-pattern" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Рисунок</label>
-          <input type="text" id="product-pattern" :class="inputClass(errors.pattern)" placeholder="Тип рисунка или монотон" v-model="product.pattern">
+          <label for="product-pattern"
+            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Рисунок</label>
+          <input type="text" id="product-pattern" :class="inputClass(errors.pattern)"
+            placeholder="Тип рисунка или монотон" v-model="product.pattern">
           <p v-if="errors.pattern" class="mt-1.5 text-theme-xs text-error-500">{{ errors.pattern }}</p>
         </div>
         <div>
-          <label for="product-collection" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Коллекция</label>
-          <input type="text" id="product-collection" :class="inputClass(errors.collection)" placeholder="Коллекция товара" v-model="product.collection">
+          <label for="product-collection"
+            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Коллекция</label>
+          <input type="text" id="product-collection" :class="inputClass(errors.collection)"
+            placeholder="Коллекция товара" v-model="product.collection">
           <p v-if="errors.collection" class="mt-1.5 text-theme-xs text-error-500">{{ errors.collection }}</p>
         </div>
       </div>

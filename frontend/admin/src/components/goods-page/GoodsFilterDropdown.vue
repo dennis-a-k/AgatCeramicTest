@@ -9,16 +9,20 @@
     <div v-show="showFilter" @click.stop
       class="absolute right-0 z-10 mt-2 w-45 rounded-lg border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-700 dark:bg-gray-800">
       <div class="mb-5">
-        <Checkbox id="checkboxLabelSale" label="Распродажа" :checked="checkboxSale" @update:checked="emit('update:checkboxSale', $event)" />
+        <Checkbox id="checkboxLabelSale" label="Распродажа" :checked="checkboxSale"
+          @update:checked="emit('update:checkboxSale', $event)" />
       </div>
       <div class="mb-5">
-        <Checkbox id="checkboxLabelNoSale" label="Не распродажа" :checked="checkboxNoSale" @update:checked="emit('update:checkboxNoSale', $event)" />
+        <Checkbox id="checkboxLabelNoSale" label="Не распродажа" :checked="checkboxNoSale"
+          @update:checked="emit('update:checkboxNoSale', $event)" />
       </div>
       <div class="mb-5">
-        <Checkbox id="checkboxLabelPublished" label="Опубликован" :checked="checkboxPublished" @update:checked="emit('update:checkboxPublished', $event)" />
+        <Checkbox id="checkboxLabelPublished" label="Опубликован" :checked="checkboxPublished"
+          @update:checked="emit('update:checkboxPublished', $event)" />
       </div>
       <div>
-        <Checkbox id="checkboxLabelNoPublished" label="Не опубликован" :checked="checkboxNoPublished" @update:checked="emit('update:checkboxNoPublished', $event)" />
+        <Checkbox id="checkboxLabelNoPublished" label="Не опубликован" :checked="checkboxNoPublished"
+          @update:checked="emit('update:checkboxNoPublished', $event)" />
       </div>
     </div>
   </div>
