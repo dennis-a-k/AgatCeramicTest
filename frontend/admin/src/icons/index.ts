@@ -45,6 +45,16 @@ import LayoutDashboardIcon from "./LayoutDashboardIcon.vue";
 import UserGroupIcon from "./UserGroupIcon.vue";
 import BellIcon from "./BellIcon.vue";
 import BarChartIcon from "./BarChartIcon.vue";
+import PackageIcon from "./PackageIcon.vue";
+import DownloadIcon from "./DownloadIcon.vue";
+import Settings2Icon from "./Settings-2Icon.vue";
+import SearchIcon from "./SearchIcon.vue";
+import SquareChartGanttIcon from "./SquareChartGanttIcon.vue";
+import EditIcon from "./EditIcon.vue";
+import DeleteIcon from "./DeleteIcon.vue";
+import ChevronLeftIcon from "./ChevronLeftIcon.vue";
+import CheckCircleIcon from "./CheckCircleIcon.vue";
+import ShoppingCartIcon from "./ShoppingCartIcon.vue";
 
 export {
   BellIcon,
@@ -94,4 +104,14 @@ export {
   MailBox,
   SendIcon,
   DraftIcon,
+  PackageIcon,
+  DownloadIcon,
+  Settings2Icon,
+  SearchIcon,
+  SquareChartGanttIcon,
+  EditIcon,
+  DeleteIcon,
+  ChevronLeftIcon,
+  CheckCircleIcon,
+  ShoppingCartIcon,
 };

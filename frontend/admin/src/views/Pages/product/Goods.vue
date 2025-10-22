@@ -1,5 +1,6 @@
 <template>
   <AdminLayout>
+    <ToastAlert :alerts="alerts" />
     <PageBreadcrumb :pageTitle="currentPageTitle" />
     <div class="space-y-5 sm:space-y-6">
       <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
@@ -58,9 +59,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
+import ToastAlert from '@/components/common/ToastAlert.vue'
 import GoodsHeader from '@/components/goods-page/GoodsHeader.vue'
 import GoodsFilters from '@/components/goods-page/GoodsFilters.vue'
 import GoodsTable from '@/components/goods-page/GoodsTable.vue'
@@ -68,14 +70,18 @@ import GoodsPagination from '@/components/goods-page/GoodsPagination.vue'
 import { PackageIcon, DownloadIcon, PlusIcon, Settings2Icon, SearchIcon } from "../../../icons";
 import { useGoods } from '@/composables/useGoods'
 import { useCategories } from '@/composables/useCategories'
+import { useProductAlerts } from '@/composables/useProductAlerts'
 
 const router = useRouter()
+const route = useRoute()
 const currentPageTitle = ref('Товары')
 const packageIcon = PackageIcon
 const downloadIcon = DownloadIcon
 const plusIcon = PlusIcon
 const settingsIcon = Settings2Icon
 const searchIcon = SearchIcon
+
+const { alerts, showAlert } = useProductAlerts()
 
 const {
   products,
@@ -125,5 +131,12 @@ const handleDelete = async (product, callback) => {
 onMounted(() => {
   fetchCategories()
   fetchProducts()
+
+  // Проверяем query параметры для отображения алерта
+  if (route.query.success === 'created') {
+    showAlert('success', 'Успешно', 'Товар создан')
+  } else if (route.query.success === 'updated') {
+    showAlert('success', 'Успешно', 'Товар обновлен')
+  }
 })
 </script>

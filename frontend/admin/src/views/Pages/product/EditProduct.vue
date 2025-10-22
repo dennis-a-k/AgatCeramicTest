@@ -37,7 +37,7 @@
           :categories="categories"
           :is-ceramic-category="isCeramicCategory"
         />
-        <AdditionalCharacteristics :product="product" />
+        <AdditionalCharacteristics v-if="product.attribute_values.length !== 0" :product="product" />
         <ProductImageUpload ref="imageUploadRef" v-model="product.images" />
         <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
           <button
@@ -56,7 +56,7 @@
         </div>
       </form>
     </div>
-    <ToastAlert :alert="alert" />
+    <ToastAlert :alerts="alerts" />
   </AdminLayout>
 </template>
 
@@ -80,18 +80,17 @@ const {
   product,
   loading,
   error,
-  alert,
+  alerts,
   categories,
   brands,
   colors,
-  loadProduct,
   handleFetchProducts,
   handleSubmit,
   goBack,
   init,
 } = useProductManager()
 
-const { errors, validateAll, hasErrors, resetErrors } = useProductValidation(product)
+const { errors, validateAll, hasErrors } = useProductValidation(product)
 
 const isCeramicCategory = computed(() => {
   if (!product.value.category_id) return false

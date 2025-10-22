@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap')
-layer(base);
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins&family=Quicksand:wght@300..700&display=swap');
 
 @import 'tailwindcss';
 
@@ -7,7 +6,7 @@ layer(base);
 
 @theme {
   --font-*: initial;
-  --font-outfit: Outfit, sans-serif;
+  --font-outfit: Nunito, sans-serif;
 
   --breakpoint-*: initial;
   --breakpoint-2xsm: 375px;
@@ -35,6 +34,10 @@ layer(base);
   --text-theme-sm--line-height: 20px;
   --text-theme-xs: 12px;
   --text-theme-xs--line-height: 18px;
+  --text-theme-2xs: 10px;
+  --text-theme-2xs--line-height: 10px;
+  --text-logo: 30px;
+  --text-logo--line-height: 18px;
 
   --color-current: currentColor;
   --color-transparent: transparent;

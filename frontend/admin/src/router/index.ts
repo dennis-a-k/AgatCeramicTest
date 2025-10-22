@@ -9,7 +9,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'Dashboard',
-      component: () => import('../views/Ecommerce.vue'),
+      component: () => import('../views/Dashboard.vue'),
       meta: {
         title: 'Статистика',
       },
@@ -47,28 +47,11 @@ const router = createRouter({
       },
     },
     {
-      path: '/error-404',
-      name: '404 Error',
-      component: () => import('../views/Errors/FourZeroFour.vue'),
+      path: '/orders',
+      name: 'Orders',
+      component: () => import('../views/Pages/orders/Orders.vue'),
       meta: {
-        title: '404 Error',
-      },
-    },
-
-    {
-      path: '/signin',
-      name: 'Signin',
-      component: () => import('../views/Auth/Signin.vue'),
-      meta: {
-        title: 'Signin',
-      },
-    },
-    {
-      path: '/signup',
-      name: 'Signup',
-      component: () => import('../views/Auth/Signup.vue'),
-      meta: {
-        title: 'Signup',
+        title: 'Заказы',
       },
     },
   ],
