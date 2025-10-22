@@ -1,0 +1,1 @@
+import{r as u}from"./index-CgbsGXzC.js";function i(){const e=u([]);return{alerts:e,showAlert:(s,l,o)=>{const t={show:!0,type:s,title:l,message:o};e.value.push(t),setTimeout(()=>{const r=e.value.indexOf(t);r>-1&&e.value.splice(r,1)},3e3)},clearAlerts:()=>{e.value=[]}}}export{i as u};
