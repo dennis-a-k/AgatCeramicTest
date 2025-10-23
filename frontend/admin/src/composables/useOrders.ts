@@ -2,9 +2,9 @@ import { ref, computed, watch } from 'vue'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
-interface CategoryItem {
+interface StatusItem {
   id: string
-  value: number | null
+  value: string | null
   label: string
 }
 
@@ -18,7 +18,15 @@ export function useOrders() {
   const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value))
 
   const searchQuery = ref('')
-  const selectedCategory = ref<CategoryItem | null>(null)
+  const selectedStatus = ref<StatusItem | null>(null)
+  const statuses = ref<StatusItem[]>([
+    { id: 'all', value: null, label: 'Все статусы' },
+    { id: 'pending', value: 'pending', label: 'Новый' },
+    { id: 'processing', value: 'processing', label: 'В обработке' },
+    { id: 'shipped', value: 'shipped', label: 'Отправлен' },
+    { id: 'return', value: 'return', label: 'Возврат' },
+    { id: 'cancelled', value: 'cancelled', label: 'Отменён' },
+  ])
   const filters = ref({
     sale: { true: true, false: true } as Record<string, boolean>,
     published: { true: true, false: true } as Record<string, boolean>,
@@ -67,24 +75,12 @@ export function useOrders() {
       per_page: itemsPerPage.value.toString(),
     })
 
-    if (selectedCategory.value) {
-      params.append('category_id', selectedCategory.value.value!.toString())
-    }
     if (searchQuery.value.trim()) {
       params.append('search', searchQuery.value.trim())
     }
 
-    // Фильтры
-    const saleFilters = Object.keys(filters.value.sale).filter((key) => filters.value.sale[key])
-    if (saleFilters.length > 0) {
-      saleFilters.forEach((val) => params.append('is_sale[]', val))
-    }
-
-    const publishedFilters = Object.keys(filters.value.published).filter(
-      (key) => filters.value.published[key],
-    )
-    if (publishedFilters.length > 0) {
-      publishedFilters.forEach((val) => params.append('is_published[]', val))
+    if (selectedStatus.value && selectedStatus.value.value !== null) {
+      params.append('status', selectedStatus.value.value)
     }
 
     const url = `${API_BASE_URL}/api/orders?${params.toString()}`
@@ -125,23 +121,6 @@ export function useOrders() {
   const handleGoToPage = (n: number) => {
     page.value = n
     fetchOrders()
-  }
-
-  const deleteOrder = async (id: number): Promise<boolean> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/orders/${id}`, {
-        method: 'DELETE',
-      })
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-
-      return true
-    } catch (err) {
-      console.error('Ошибка удаления заказа:', err)
-      return false
-    }
   }
 
   const getOrder = async (id: number) => {
@@ -226,49 +205,10 @@ export function useOrders() {
     { deep: true },
   )
 
-  watch(selectedCategory, () => {
+  watch(selectedStatus, () => {
     resetPage()
     fetchOrders()
   })
-
-  const createOrder = async (
-    orderData: any,
-  ): Promise<{ success: boolean; errors?: Record<string, string[]> }> => {
-    try {
-      const formData = new FormData()
-
-      // Добавляем все поля заказа
-      Object.keys(orderData).forEach((key) => {
-        if (typeof orderData[key] === 'boolean') {
-          formData.append(key, orderData[key] ? '1' : '0')
-        } else {
-          formData.append(key, orderData[key]?.toString() || '')
-        }
-      })
-
-      const response = await fetch(`${API_BASE_URL}/api/orders`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-        },
-        body: formData,
-      })
-
-      if (response.ok) {
-        return { success: true }
-      }
-
-      if (response.status === 422) {
-        const errorData = await response.json()
-        return { success: false, errors: errorData.errors }
-      }
-
-      throw new Error(`HTTP error! status: ${response.status}`)
-    } catch (err) {
-      console.error('Ошибка создания заказа:', err)
-      return { success: false }
-    }
-  }
 
   return {
     orders,
@@ -279,7 +219,8 @@ export function useOrders() {
     totalItems,
     totalPages,
     searchQuery,
-    selectedCategory,
+    selectedStatus,
+    statuses,
     filters,
     visiblePages,
     formatter,
@@ -287,10 +228,8 @@ export function useOrders() {
     handlePrevPage,
     handleNextPage,
     handleGoToPage,
-    deleteOrder,
     getOrder,
     updateOrder,
-    createOrder,
     resetPage,
   }
 }

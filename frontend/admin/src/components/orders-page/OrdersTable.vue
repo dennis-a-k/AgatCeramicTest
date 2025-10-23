@@ -90,28 +90,24 @@
                 </td>
                 <td class="px-5 py-4 sm:px-6 text-center">
                   <span v-if="order.status === 'pending'"
-                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-warning-50 text-warning-700 dark:bg-warning-500/15 dark:text-warning-500">
+                    class="rounded-full px-2 py-0.5 text-theme-xs font-bold bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-warning-500">
                     Новый
                   </span>
                   <span v-else-if="order.status === 'processing'"
-                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-500">
+                    class="rounded-full px-2 py-0.5 text-theme-xs font-bold bg-info-50 text-info-700 dark:bg-info-500/15 dark:text-info-500">
                     В обработке
                   </span>
                   <span v-else-if="order.status === 'shipped'"
-                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-info-50 text-info-700 dark:bg-info-500/15 dark:text-info-500">
+                    class="rounded-full px-2 py-0.5 text-theme-xs font-bold bg-success-50 text-success-700 dark:bg-success-500/15 dark:text-success-500">
                     Отправлен
                   </span>
-                  <span v-else-if="order.status === 'delivered'"
-                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-success-50 text-success-700 dark:bg-success-500/15 dark:text-success-500">
-                    Доставлен
+                  <span v-else-if="order.status === 'return'"
+                    class="rounded-full px-2 py-0.5 text-theme-xs font-bold bg-error-50 text-error-700 dark:bg-error-500/15 dark:text-error-500">
+                    Возврат
                   </span>
                   <span v-else-if="order.status === 'cancelled'"
-                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-error-50 text-error-700 dark:bg-error-500/15 dark:text-error-500">
+                    class="rounded-full px-2 py-0.5 text-theme-xs font-bold bg-gray-100 text-gray-700 dark:bg-white/5 dark:text-white/80">
                     Отменён
-                  </span>
-                  <span v-else
-                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-gray-100 text-gray-700 dark:bg-white/5 dark:text-white/80">
-                    {{ order.status }}
                   </span>
                 </td>
                 <td class="px-5 py-4 sm:px-2 text-center">

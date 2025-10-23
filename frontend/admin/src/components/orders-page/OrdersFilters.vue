@@ -4,7 +4,7 @@
       <div class="flex flex-col md:flex-row gap-3">
         <OrdersSearch :searchQuery="searchQuery" :searchIcon="searchIcon"
           @update:searchQuery="emit('update:searchQuery', $event)" />
-        <OrdersCategorySelector :categories="categories" :selectedItem="selectedItem" :isOpen="isOpen"
+        <OrdersCategorySelector :statuses="statuses" :selectedItem="selectedItem" :isOpen="isOpen"
           @toggleDropdown="emit('toggleDropdown')" @toggleItem="emit('toggleItem', $event)" />
       </div>
     </div>
@@ -17,7 +17,7 @@ import OrdersCategorySelector from './OrdersCategorySelector.vue'
 
 const props = defineProps({
   searchQuery: String,
-  categories: Array,
+  statuses: Array,
   selectedItem: Object,
   isOpen: Boolean,
   showFilter: Boolean,

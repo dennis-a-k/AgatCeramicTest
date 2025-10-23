@@ -10,8 +10,8 @@
         />
         <OrdersFilters
           :searchQuery="searchQuery"
-          :categories="categories"
-          :selectedItem="selectedCategory"
+          :statuses="statuses"
+          :selectedItem="selectedStatus"
           :isOpen="isOpen"
           :showFilter="showFilter"
           :checkboxSale="filters.sale.true"
@@ -64,7 +64,6 @@ import OrdersTable from '@/components/orders-page/OrdersTable.vue';
 import GoodsPagination from '@/components/goods-page/GoodsPagination.vue'
 import { ShoppingCartIcon, DownloadIcon, Settings2Icon, SearchIcon } from "../../../icons";
 import { useOrders } from '@/composables/useOrders'
-import { useCategories } from '@/composables/useCategories'
 
 const router = useRouter()
 const currentPageTitle = ref('Заказы')
@@ -82,7 +81,8 @@ const {
   totalItems,
   totalPages,
   searchQuery,
-  selectedCategory,
+  selectedStatus,
+  statuses,
   filters,
   visiblePages,
   formatter,
@@ -93,8 +93,6 @@ const {
   deleteOrder
 } = useOrders()
 
-const { categories, fetchCategories } = useCategories()
-
 const showFilter = ref(false)
 const isOpen = ref(false)
 
@@ -103,7 +101,7 @@ const toggleDropdown = () => {
 }
 
 const handleToggleItem = (item) => {
-  selectedCategory.value = item.value === null ? null : item
+  selectedStatus.value = item.value === null ? null : item
   isOpen.value = false
 }
 
@@ -117,7 +115,6 @@ const handleDelete = async (order, callback) => {
 }
 
 onMounted(() => {
-  fetchCategories()
   fetchOrders()
 })
 </script>

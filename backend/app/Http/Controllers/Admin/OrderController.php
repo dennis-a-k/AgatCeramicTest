@@ -33,6 +33,11 @@ class OrderController extends Controller
             });
         }
 
+        // Фильтр по статусу
+        if ($request->has('status') && !empty($request->status)) {
+            $query->where('status', $request->status);
+        }
+
         // Пагинация
         $perPage = $request->get('per_page', 50);
         $orders = $query->orderBy('created_at', 'desc')->paginate($perPage);
