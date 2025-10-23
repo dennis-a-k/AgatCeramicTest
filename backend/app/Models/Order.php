@@ -24,8 +24,6 @@ class Order extends Model
         'searchable_email',
         'searchable_phone',
         'searchable_name',
-        'customer_name',
-        'searchable_customer_name'
     ];
 
     protected static function boot()

@@ -7,7 +7,6 @@
           :totalItems="totalItems"
           :packageIcon="shoppingCartIcon"
           :downloadIcon="downloadIcon"
-          :plusIcon="plusIcon"
         />
         <OrdersFilters
           :searchQuery="searchQuery"
@@ -63,7 +62,7 @@ import OrdersHeader from '@/components/orders-page/OrdersHeader.vue';
 import OrdersFilters from '@/components/orders-page/OrdersFilters.vue';
 import OrdersTable from '@/components/orders-page/OrdersTable.vue';
 import GoodsPagination from '@/components/goods-page/GoodsPagination.vue'
-import { ShoppingCartIcon, DownloadIcon, PlusIcon, Settings2Icon, SearchIcon } from "../../../icons";
+import { ShoppingCartIcon, DownloadIcon, Settings2Icon, SearchIcon } from "../../../icons";
 import { useOrders } from '@/composables/useOrders'
 import { useCategories } from '@/composables/useCategories'
 
@@ -71,7 +70,6 @@ const router = useRouter()
 const currentPageTitle = ref('Заказы')
 const shoppingCartIcon = ShoppingCartIcon
 const downloadIcon = DownloadIcon
-const plusIcon = PlusIcon
 const settingsIcon = Settings2Icon
 const searchIcon = SearchIcon
 
