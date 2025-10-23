@@ -5,6 +5,7 @@ import ChevronRightIcon from "./ChevronRightIcon.vue";
 import DeleteIcon from "./DeleteIcon.vue";
 import DownloadIcon from "./DownloadIcon.vue";
 import EditIcon from "./EditIcon.vue";
+import EllipsisIcon from "./EllipsisIcon.vue";
 import ErrorIcon from "./ErrorIcon.vue";
 import GridIcon from "./GridIcon.vue";
 import HorizontalDots from "./HorizontalDots.vue";
@@ -27,6 +28,7 @@ export {
   DeleteIcon,
   DownloadIcon,
   EditIcon,
+  EllipsisIcon,
   ErrorIcon,
   GridIcon,
   HorizontalDots,
