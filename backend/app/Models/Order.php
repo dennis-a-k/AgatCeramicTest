@@ -23,7 +23,9 @@ class Order extends Model
         'status',
         'searchable_email',
         'searchable_phone',
-        'searchable_name'
+        'searchable_name',
+        'customer_name',
+        'searchable_customer_name'
     ];
 
     protected static function boot()
@@ -42,6 +44,9 @@ class Order extends Model
             if ($order->isDirty('phone')) {
                 $phone = preg_replace('/[^0-9]/', '', $order->getOriginal('phone'));
                 $order->searchable_phone = $hasher->hash($phone);
+            }
+            if ($order->isDirty('customer_name')) {
+                $order->searchable_customer_name = $hasher->hash(strtolower($order->getOriginal('customer_name')));
             }
         });
     }
@@ -83,6 +88,15 @@ class Order extends Model
         );
     }
 
+    protected function customerName(): Attribute
+    {
+        $encryptor = app(EncryptorInterface::class);
+        return Attribute::make(
+            get: fn($value) => $value ? $encryptor->decrypt($value) : null,
+            set: fn($value) => $value ? $encryptor->encrypt($value) : null
+        );
+    }
+
 
     public function scopeSearchByEmail($query, $email)
     {
@@ -104,6 +118,13 @@ class Order extends Model
         $hasher = app(HasherInterface::class);
         $hash = $hasher->hash(strtolower($name));
         return $query->where('searchable_name', $hash);
+    }
+
+    public function scopeSearchByCustomerName($query, $customerName)
+    {
+        $hasher = app(HasherInterface::class);
+        $hash = $hasher->hash(strtolower($customerName));
+        return $query->where('searchable_customer_name', $hash);
     }
 
     public function items()
