@@ -123,6 +123,11 @@ watch(() => props.isVisible, async (newVal) => {
   }
 })
 
+// Watcher to update parent_id when is_plumbing changes
+watch(() => form.value.is_plumbing, (newVal) => {
+  form.value.parent_id = newVal ? plumbingCategory.value?.id : null
+})
+
 const closeModal = () => {
   emit('close')
 }
