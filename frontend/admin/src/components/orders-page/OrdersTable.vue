@@ -11,11 +11,11 @@
             Ошибка при загрузке<br />
             <button
               class="inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-4 py-3 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300 mt-2"
-              @click="handleFetchProducts">
+                @click="handleFetchOrders">
               Попробовать снова
             </button>
           </div>
-          <div v-else-if="products.length === 0"
+          <div v-else-if="orders.length === 0"
             class="flex flex-col justify-center items-center h-screen menu-item-icon-active text-center font-bold text-theme-xl m-5">
             Заказы не найдены
           </div>
@@ -50,63 +50,51 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-              <tr v-for="product in products" :key="product.id"
+              <tr v-for="order in orders" :key="order.id"
                 class="border-t border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800">
                 <td class="px-5 py-4 sm:px-6">
                   <p class="font-medium text-center text-gray-800 text-theme-sm dark:text-white/90">
-                    {{ product.article }}
+                    {{ order.id }}
                   </p>
-                </td>
-                <td class="px-5 py-4 sm:px-2">
-                  <a :href="`${FRONTEND_URL}/product/${product.slug}`" target="_blank">
-                    <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                      {{ truncateText(product.name) }}
-                    </p>
-                  </a>
                 </td>
                 <td class="px-5 py-4 sm:px-6">
                   <p class="text-gray-500 text-center text-theme-sm dark:text-gray-400">
-                    {{ product.product_code }}
+                    {{ new Date(order.created_at).toLocaleDateString('ru-RU') }}
                   </p>
                 </td>
-                <td class="px-5 py-4 sm:px-1 text-center">
-                  <span
-                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-blue-light-50 text-blue-light-500 dark:bg-blue-light-500/15 dark:text-blue-light-500">
-                    {{ product.category.name }}</span>
+                <td class="px-5 py-4 sm:px-6">
+                  <p class="text-gray-500 text-center text-theme-sm dark:text-gray-400">
+                    {{ order.customer_name }}
+                  </p>
+                </td>
+                <td class="px-5 py-4 sm:px-6">
+                  <p class="text-gray-500 text-center text-theme-sm dark:text-gray-400">
+                    {{ order.items ? order.items.length : 0 }} товаров
+                  </p>
                 </td>
                 <td class="px-5 py-4 sm:px-6">
                   <p class="font-medium text-center text-gray-800 text-theme-sm dark:text-white/90">
-                    {{ formatter.format(product.price) }}
-                  </p>
-                </td>
-                <td class="px-5 py-4 sm:px-6">
-                  <p v-if="product.unit === 'шт'" class="text-gray-500 text-center text-theme-sm dark:text-gray-400">
-                    шт.
-                  </p>
-                  <p v-else-if="product.unit === 'кв.м'"
-                    class="text-gray-500 text-center text-theme-sm dark:text-gray-400">
-                    м²
-                  </p>
-                  <p v-else class="text-gray-500 text-center text-theme-sm dark:text-gray-400">
-                    {{ product.unit }}
+                    {{ formatter.format(order.total_amount) }}
                   </p>
                 </td>
                 <td class="px-5 py-4 sm:px-6 text-center">
-                  <span v-if="product.is_published === true"
-                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-success-50 text-success-700 dark:bg-success-500/15 dark:text-success-500">Опубликован</span>
-                  <span v-if="product.is_published === false"
-                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-gray-100 text-gray-700 dark:bg-white/5 dark:text-white/80">Скрыт</span>
-                </td>
-                <td class="px-5 py-4 sm:px-6 text-center">
-                  <span v-if="product.is_sale === true"
-                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-error-50 text-error-700 dark:bg-error-500/15 dark:text-error-500">Распродажа</span>
-                  <span v-if="product.is_sale === false"
-                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-gray-100 text-gray-700 dark:bg-white/5 dark:text-white/80">Нет</span>
+                  <span v-if="order.status === 'pending'"
+                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-warning-50 text-warning-700 dark:bg-warning-500/15 dark:text-warning-500">Ожидает</span>
+                  <span v-else-if="order.status === 'processing'"
+                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-blue-50 text-blue-700 dark:bg-blue-500/15 dark:text-blue-500">В обработке</span>
+                  <span v-else-if="order.status === 'shipped'"
+                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-info-50 text-info-700 dark:bg-info-500/15 dark:text-info-500">Отправлен</span>
+                  <span v-else-if="order.status === 'delivered'"
+                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-success-50 text-success-700 dark:bg-success-500/15 dark:text-success-500">Доставлен</span>
+                  <span v-else-if="order.status === 'cancelled'"
+                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-error-50 text-error-700 dark:bg-error-500/15 dark:text-error-500">Отменен</span>
+                  <span v-else
+                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-gray-100 text-gray-700 dark:bg-white/5 dark:text-white/80">{{ order.status }}</span>
                 </td>
                 <td class="px-5 py-4 sm:px-2 text-center">
                   <div
                     class="inline-flex items-center justify-center gap-2 rounded-lg transition shadow-theme-xs bg-white text-gray-700 ring-1 ring-gray-300 hover:bg-success-50 hover:ring-success-300 hover:text-success-700 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-success-500/15 dark:hover:ring-success-500/50 dark:hover:text-success-500 cursor-pointer p-1 mr-3"
-                    @click="handleEdit(product)">
+                    @click="handleEdit(order)">
                     <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
                       xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" clip-rule="evenodd"
@@ -116,7 +104,7 @@
                   </div>
                   <div
                     class="inline-flex items-center justify-center gap-2 rounded-lg transition shadow-theme-xs bg-white text-gray-700 ring-1 ring-gray-300 hover:bg-error-50 hover:ring-error-300 hover:text-error-700 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-error-500/15 dark:hover:ring-error-500/50 dark:hover:text-error-500 cursor-pointer p-1"
-                    @click="openDeleteModal(product)">
+                    @click="openDeleteModal(order)">
                     <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
                       xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" clip-rule="evenodd"
@@ -138,24 +126,17 @@
 defineProps({
   loading: Boolean,
   error: String,
-  products: Array,
+  orders: Array,
   formatter: Object,
 })
 
-const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL
+const emit = defineEmits(['fetchOrders', 'edit', 'sortBy'])
 
-const emit = defineEmits(['fetchProducts', 'edit'])
-
-const truncateText = (text, maxLength = 50) => {
-  if (text.length <= maxLength) return text
-  return text.substring(0, maxLength) + '...'
+const handleFetchOrders = () => {
+  emit('fetchOrders')
 }
 
-const handleFetchProducts = () => {
-  emit('fetchProducts')
-}
-
-const handleEdit = (product) => {
-  emit('edit', product)
+const handleEdit = (order) => {
+  emit('edit', order)
 }
 </script>

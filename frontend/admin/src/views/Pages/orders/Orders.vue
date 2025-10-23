@@ -33,11 +33,9 @@
         <OrdersTable
           :loading="loading"
           :error="error"
-          :products="products"
+          :orders="orders"
           :formatter="formatter"
-          :sort="sort"
-          @sortBy="handleSortBy"
-          @fetchProducts="fetchProducts"
+          @fetchOrders="fetchOrders"
           @edit="handleEdit"
           @delete="handleDelete"
         />
@@ -66,7 +64,7 @@ import OrdersFilters from '@/components/orders-page/OrdersFilters.vue';
 import OrdersTable from '@/components/orders-page/OrdersTable.vue';
 import GoodsPagination from '@/components/goods-page/GoodsPagination.vue'
 import { ShoppingCartIcon, DownloadIcon, PlusIcon, Settings2Icon, SearchIcon } from "../../../icons";
-import { useGoods } from '@/composables/useGoods'
+import { useOrders } from '@/composables/useOrders'
 import { useCategories } from '@/composables/useCategories'
 
 const router = useRouter()
@@ -78,10 +76,9 @@ const settingsIcon = Settings2Icon
 const searchIcon = SearchIcon
 
 const {
-  products,
+  orders,
   loading,
   error,
-  sort,
   page,
   itemsPerPage,
   totalItems,
@@ -91,13 +88,12 @@ const {
   filters,
   visiblePages,
   formatter,
-  fetchProducts,
-  handleSortBy,
+  fetchOrders,
   handlePrevPage,
   handleNextPage,
   handleGoToPage,
-  deleteProduct
-} = useGoods()
+  deleteOrder
+} = useOrders()
 
 const { categories, fetchCategories } = useCategories()
 
@@ -113,17 +109,17 @@ const handleToggleItem = (item) => {
   isOpen.value = false
 }
 
-const handleEdit = (product) => {
-  router.push(`/products/edit/${product.id}`)
+const handleEdit = (order) => {
+  router.push(`/orders/edit/${order.id}`)
 }
 
-const handleDelete = async (product, callback) => {
-  const success = await deleteProduct(product.id)
+const handleDelete = async (order, callback) => {
+  const success = await deleteOrder(order.id)
   callback(success)
 }
 
 onMounted(() => {
   fetchCategories()
-  fetchProducts()
+  fetchOrders()
 })
 </script>
