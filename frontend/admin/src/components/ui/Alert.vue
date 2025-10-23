@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { SuccessIcon, ErrorIcon, WarningIcon, InfoCircleIcon } from '@/icons'
+import { CheckCircleIcon, ErrorIcon, InfoCircleIcon } from '@/icons'
 
 interface AlertProps {
   variant: 'success' | 'error' | 'warning' | 'info'
@@ -57,9 +57,9 @@ const variantClasses = {
 }
 
 const icons = {
-  success: SuccessIcon,
+  success: CheckCircleIcon,
   error: ErrorIcon,
-  warning: WarningIcon,
+  warning: InfoCircleIcon,
   info: InfoCircleIcon,
 }
 </script>
