@@ -1,8 +1,8 @@
 <template>
   <div class="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
     <div class="space-y-5">
-      <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-        <div class="max-w-full overflow-x-auto custom-scrollbar">
+      <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]" style="overflow: visible;">
+        <div class="max-w-full overflow-x-auto custom-scrollbar" style="overflow: visible;">
           <div v-if="loading" class="flex justify-center items-center h-screen">
             <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-brand-500"></div>
           </div>
