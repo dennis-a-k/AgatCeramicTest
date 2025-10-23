@@ -37,6 +37,7 @@
           @fetchOrders="fetchOrders"
           @edit="handleEdit"
           @delete="handleDelete"
+          @updateStatus="handleUpdateStatus"
         />
         <GoodsPagination
           :page="page"
@@ -112,6 +113,16 @@ const handleEdit = (order) => {
 const handleDelete = async (order, callback) => {
   const success = await deleteOrder(order.id)
   callback(success)
+}
+
+const handleUpdateStatus = async (order, newStatus) => {
+  const { updateOrder } = useOrders()
+  const result = await updateOrder(order.id, { status: newStatus })
+  if (result.success) {
+    fetchOrders() // Перезагрузить список заказов
+  } else {
+    console.error('Ошибка обновления статуса:', result.errors)
+  }
 }
 
 onMounted(() => {

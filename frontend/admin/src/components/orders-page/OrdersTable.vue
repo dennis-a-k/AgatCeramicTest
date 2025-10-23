@@ -90,28 +90,28 @@
                 </td>
                 <td class="px-5 py-4 sm:px-6 text-center">
                   <span v-if="order.status === 'pending'"
-                    class="rounded-full px-2 py-0.5 text-theme-xs font-bold bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-warning-500">
+                    class="px-2.5 py-0.5 rounded-full font-bold text-xs bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-orange-400">
                     Новый
                   </span>
                   <span v-else-if="order.status === 'processing'"
-                    class="rounded-full px-2 py-0.5 text-theme-xs font-bold bg-info-50 text-info-700 dark:bg-info-500/15 dark:text-info-500">
+                    class="px-2.5 py-0.5 rounded-full font-bold text-xs bg-blue-light-50 text-blue-light-500 dark:bg-blue-light-500/15 dark:text-blue-light-500">
                     В обработке
                   </span>
                   <span v-else-if="order.status === 'shipped'"
-                    class="rounded-full px-2 py-0.5 text-theme-xs font-bold bg-success-50 text-success-700 dark:bg-success-500/15 dark:text-success-500">
+                    class="px-2.5 py-0.5 rounded-full font-bold text-xs bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500">
                     Отправлен
                   </span>
                   <span v-else-if="order.status === 'return'"
-                    class="rounded-full px-2 py-0.5 text-theme-xs font-bold bg-error-50 text-error-700 dark:bg-error-500/15 dark:text-error-500">
+                    class="px-2.5 py-0.5 rounded-full font-bold text-xs bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500">
                     Возврат
                   </span>
                   <span v-else-if="order.status === 'cancelled'"
-                    class="rounded-full px-2 py-0.5 text-theme-xs font-bold bg-gray-100 text-gray-700 dark:bg-white/5 dark:text-white/80">
+                    class="px-2.5 py-0.5 rounded-full font-bold text-xs bg-gray-100 text-gray-700 dark:bg-white/5 dark:text-white/80">
                     Отменён
                   </span>
                 </td>
                 <td class="px-5 py-4 sm:px-2 text-center">
-                  <DropdownMenu :menu-items="menuItems">
+                  <DropdownMenu :menu-items="getStatusMenuItems(order)">
                     <template #icon>
                       <component :is="ellipsisIcon" width="24" height="24" />
                     </template>
@@ -131,13 +131,6 @@ import DropdownMenu from '../common/DropdownMenu.vue'
 import { EllipsisIcon } from "../../icons"
 
 const ellipsisIcon = EllipsisIcon
-const menuItems = [
-  { label: 'Новый', onClick: () => console.log('Новый') },
-  { label: 'В обработке', onClick: () => console.log('В обработке') },
-  { label: 'Отправлен', onClick: () => console.log('Отправлен') },
-  { label: 'Отменён', onClick: () => console.log('Отменён') },
-  { label: 'Возврат', onClick: () => console.log('Возврат') },
-]
 
 defineProps({
   loading: Boolean,
@@ -146,13 +139,21 @@ defineProps({
   formatter: Object,
 })
 
-const emit = defineEmits(['fetchOrders', 'edit'])
+const emit = defineEmits(['fetchOrders', 'edit', 'updateStatus'])
 
 const handleFetchOrders = () => {
   emit('fetchOrders')
 }
 
-const handleEdit = (order) => {
-  emit('edit', order)
+const handleUpdateStatus = (order, newStatus) => {
+  emit('updateStatus', order, newStatus)
 }
+
+const getStatusMenuItems = (order) => [
+  { label: 'Новый', onClick: () => handleUpdateStatus(order, 'pending') },
+  { label: 'В обработке', onClick: () => handleUpdateStatus(order, 'processing') },
+  { label: 'Отправлен', onClick: () => handleUpdateStatus(order, 'shipped') },
+  { label: 'Отменён', onClick: () => handleUpdateStatus(order, 'cancelled') },
+  { label: 'Возврат', onClick: () => handleUpdateStatus(order, 'return') },
+]
 </script>

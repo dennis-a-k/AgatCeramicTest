@@ -67,7 +67,7 @@ class OrderController extends Controller
         }
 
         $validated = $request->validate([
-            'status' => 'sometimes|in:pending,processing,shipped,delivered,cancelled',
+            'status' => 'sometimes|in:pending,processing,shipped,return,cancelled',
             'comment' => 'nullable|string|max:1000',
         ]);
 
