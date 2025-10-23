@@ -3,13 +3,13 @@
     <PageBreadcrumb :pageTitle="currentPageTitle" />
     <div class="space-y-5 sm:space-y-6">
       <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-        <GoodsHeader
+        <OrdersHeader
           :totalItems="totalItems"
-          :packageIcon="packageIcon"
+          :packageIcon="shoppingCartIcon"
           :downloadIcon="downloadIcon"
           :plusIcon="plusIcon"
         />
-        <GoodsFilters
+        <OrdersFilters
           :searchQuery="searchQuery"
           :categories="categories"
           :selectedItem="selectedCategory"
@@ -30,7 +30,7 @@
           @update:checkboxPublished="filters.published.true = $event"
           @update:checkboxNoPublished="filters.published.false = $event"
         />
-        <GoodsTable
+        <OrdersTable
           :loading="loading"
           :error="error"
           :products="products"
@@ -61,17 +61,17 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
-import GoodsHeader from '@/components/goods-page/GoodsHeader.vue'
-import GoodsFilters from '@/components/goods-page/GoodsFilters.vue'
-import GoodsTable from '@/components/goods-page/GoodsTable.vue'
+import OrdersHeader from '@/components/orders-page/OrdersHeader.vue';
+import OrdersFilters from '@/components/orders-page/OrdersFilters.vue';
+import OrdersTable from '@/components/orders-page/OrdersTable.vue';
 import GoodsPagination from '@/components/goods-page/GoodsPagination.vue'
-import { PackageIcon, DownloadIcon, PlusIcon, Settings2Icon, SearchIcon } from "../../../icons";
+import { ShoppingCartIcon, DownloadIcon, PlusIcon, Settings2Icon, SearchIcon } from "../../../icons";
 import { useGoods } from '@/composables/useGoods'
 import { useCategories } from '@/composables/useCategories'
 
 const router = useRouter()
 const currentPageTitle = ref('Заказы')
-const packageIcon = PackageIcon
+const shoppingCartIcon = ShoppingCartIcon
 const downloadIcon = DownloadIcon
 const plusIcon = PlusIcon
 const settingsIcon = Settings2Icon
