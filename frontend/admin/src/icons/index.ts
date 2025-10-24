@@ -1,3 +1,7 @@
+import ArrowDownIcon from "./ArrowDownIcon.vue";
+import ArrowUpIcon from "./ArrowUpIcon.vue";
+import CalendarClockIcon from "./CalendarClockIcon.vue";
+import CalendarDaysIcon from "./CalendarDaysIcon.vue";
 import CheckCircleIcon from "./CheckCircleIcon.vue";
 import ChevronDownIcon from "./ChevronDownIcon.vue";
 import ChevronLeftIcon from "./ChevronLeftIcon.vue";
@@ -11,6 +15,7 @@ import GridIcon from "./GridIcon.vue";
 import HorizontalDots from "./HorizontalDots.vue";
 import InfoCircleIcon from "./InfoCircleIcon.vue";
 import LogoutIcon from "./LogoutIcon.vue";
+import PackageCheckIcon from "./PackageCheckIcon.vue";
 import PackageIcon from "./PackageIcon.vue";
 import PlusIcon from "./PlusIcon.vue";
 import SearchIcon from "./SearchIcon.vue";
@@ -21,6 +26,10 @@ import SquareChartGanttIcon from "./SquareChartGanttIcon.vue";
 import UserCircleIcon from "./UserCircleIcon.vue";
 
 export {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  CalendarClockIcon,
+  CalendarDaysIcon,
   CheckCircleIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
@@ -34,6 +43,7 @@ export {
   HorizontalDots,
   InfoCircleIcon,
   LogoutIcon,
+  PackageCheckIcon,
   PackageIcon,
   PlusIcon,
   SearchIcon,
