@@ -73,7 +73,8 @@ class OrderController extends Controller
             'shipped' => Order::where('status', 'shipped')
                 ->whereBetween('created_at', [$currentMonth, $nextMonth])
                 ->count(),
-            'total_amount' => Order::whereBetween('created_at', [$currentMonth, $nextMonth])
+            'total_amount' => Order::where('status', 'shipped')
+                ->whereBetween('created_at', [$currentMonth, $nextMonth])
                 ->sum('total_amount'),
         ];
 

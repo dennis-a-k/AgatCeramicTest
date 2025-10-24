@@ -60,7 +60,7 @@
           <component :is="calendarDaysIcon" class="text-gray-800 dark:text-white/90" />
         </div>
         <div class="flex items-end justify-between mt-5">
-          <div><span class="text-sm text-gray-500 dark:text-gray-400">Общая сумма за месяц</span>
+          <div><span class="text-sm text-gray-500 dark:text-gray-400">Сумма выполненых заказов</span>
             <h4 class="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">{{ new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' }).format(statistics.total_amount) }}</h4>
           </div>
           <span
