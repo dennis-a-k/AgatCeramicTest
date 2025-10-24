@@ -1,1 +1,0 @@
-import{_ as e,a as t}from"./PageBreadcrumb.vue_vue_type_script_setup_true_lang-CV0uDE-M.js";import{r,c as s,o as c,w as o,a as _}from"./index-DgvDjfcb.js";const f={__name:"Dashboard",setup(l){const a=r("Статистика");return(n,i)=>(c(),s(t,null,{default:o(()=>[_(e,{pageTitle:a.value},null,8,["pageTitle"])]),_:1}))}};export{f as default};

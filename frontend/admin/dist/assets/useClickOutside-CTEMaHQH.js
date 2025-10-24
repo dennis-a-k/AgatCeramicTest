@@ -1,0 +1,1 @@
+import{r as u,l as c,K as i}from"./index-LY41SGDx.js";function s(t){const e=u(null),n=o=>{e.value&&!e.value.contains(o.target)&&t()};return c(()=>{document.addEventListener("click",n)}),i(()=>{document.removeEventListener("click",n)}),e}export{s as u};
