@@ -79,10 +79,24 @@ const {
 const showFilter = ref(false)
 const isOpen = ref(false)
 const orderStatistics = ref({
-  pending: 0,
-  processing: 0,
-  shipped: 0,
-  total_amount: 0
+  current: {
+    pending: 0,
+    processing: 0,
+    shipped: 0,
+    total_amount: 0
+  },
+  previous: {
+    pending: 0,
+    processing: 0,
+    shipped: 0,
+    total_amount: 0
+  },
+  percentages: {
+    pending: 0,
+    processing: 0,
+    shipped: 0,
+    total_amount: 0
+  }
 })
 
 const toggleDropdown = () => {

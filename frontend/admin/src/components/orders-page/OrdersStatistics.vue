@@ -8,12 +8,17 @@
         </div>
         <div class="flex items-end justify-between mt-5">
           <div><span class="font-bold text-sm text-gray-500 dark:text-warning-400">Новые заказы</span>
-            <h4 class="mt-2 font-bold text-warning-600 text-title-sm dark:text-white/90">{{ statistics.pending }}</h4>
+            <h4 class="mt-2 font-bold text-warning-600 text-title-sm dark:text-white/90">{{ statistics.current.pending }}</h4>
           </div>
           <span
-            class="flex items-center gap-1 rounded-full bg-success-50 py-0.5 pl-2 pr-2.5 text-sm font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
-            <component :is="arrowUpIcon" />
-            11.01%
+            :class="[
+              'flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium',
+              statistics.percentages.pending >= 0
+                ? 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500'
+                : 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
+            ]">
+            <component :is="statistics.percentages.pending >= 0 ? arrowUpIcon : arrowDownIcon" />
+            {{ Math.abs(statistics.percentages.pending) }}%
           </span>
         </div>
       </div>
@@ -26,12 +31,17 @@
         </div>
         <div class="flex items-end justify-between mt-5">
           <div><span class="font-bold text-sm text-gray-500 dark:text-blue-light-400">На выполнении</span>
-            <h4 class="mt-2 font-bold text-blue-light-600 text-title-sm dark:text-white/90">{{ statistics.processing }}</h4>
+            <h4 class="mt-2 font-bold text-blue-light-600 text-title-sm dark:text-white/90">{{ statistics.current.processing }}</h4>
           </div>
           <span
-            class="flex items-center gap-1 rounded-full bg-success-50 py-0.5 pl-2 pr-2.5 text-sm font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
-            <component :is="arrowUpIcon" />
-            11.01%
+            :class="[
+              'flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium',
+              statistics.percentages.processing >= 0
+                ? 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500'
+                : 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
+            ]">
+            <component :is="statistics.percentages.processing >= 0 ? arrowUpIcon : arrowDownIcon" />
+            {{ Math.abs(statistics.percentages.processing) }}%
           </span>
         </div>
       </div>
@@ -44,12 +54,17 @@
         </div>
         <div class="flex items-end justify-between mt-5">
           <div><span class="font-bold text-sm text-gray-500 dark:text-success-400">Доставлено</span>
-            <h4 class="mt-2 font-bold text-success-600 text-title-sm dark:text-white/90">{{ statistics.shipped }}</h4>
+            <h4 class="mt-2 font-bold text-success-600 text-title-sm dark:text-white/90">{{ statistics.current.shipped }}</h4>
           </div>
           <span
-            class="flex items-center gap-1 rounded-full bg-success-50 py-0.5 pl-2 pr-2.5 text-sm font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
-            <component :is="arrowUpIcon" />
-            11.01%
+            :class="[
+              'flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium',
+              statistics.percentages.shipped >= 0
+                ? 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500'
+                : 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
+            ]">
+            <component :is="statistics.percentages.shipped >= 0 ? arrowUpIcon : arrowDownIcon" />
+            {{ Math.abs(statistics.percentages.shipped) }}%
           </span>
         </div>
       </div>
@@ -61,12 +76,17 @@
         </div>
         <div class="flex items-end justify-between mt-5">
           <div><span class="text-sm text-gray-500 dark:text-gray-400">Сумма выполненых заказов</span>
-            <h4 class="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">{{ new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' }).format(statistics.total_amount) }}</h4>
+            <h4 class="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">{{ new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' }).format(statistics.current.total_amount) }}</h4>
           </div>
           <span
-            class="flex items-center gap-1 rounded-full bg-error-50 py-0.5 pl-2 pr-2.5 text-sm font-medium text-error-600 dark:bg-error-500/15 dark:text-error-500">
-            <component :is="arrowDownIcon" />
-            9.05%
+            :class="[
+              'flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium',
+              statistics.percentages.total_amount >= 0
+                ? 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500'
+                : 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
+            ]">
+            <component :is="statistics.percentages.total_amount >= 0 ? arrowUpIcon : arrowDownIcon" />
+            {{ Math.abs(statistics.percentages.total_amount) }}%
           </span>
         </div>
       </div>

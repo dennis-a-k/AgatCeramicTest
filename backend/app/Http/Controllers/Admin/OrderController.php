@@ -62,8 +62,11 @@ class OrderController extends Controller
     {
         $currentMonth = now()->startOfMonth();
         $nextMonth = now()->startOfMonth()->addMonth();
+        $previousMonth = now()->startOfMonth()->subMonth();
+        $currentMonthEnd = now()->startOfMonth();
 
-        $statistics = [
+        // Текущий месяц
+        $currentStats = [
             'pending' => Order::where('status', 'pending')
                 ->whereBetween('created_at', [$currentMonth, $nextMonth])
                 ->count(),
@@ -76,6 +79,39 @@ class OrderController extends Controller
             'total_amount' => Order::where('status', 'shipped')
                 ->whereBetween('created_at', [$currentMonth, $nextMonth])
                 ->sum('total_amount'),
+        ];
+
+        // Предыдущий месяц
+        $previousStats = [
+            'pending' => Order::where('status', 'pending')
+                ->whereBetween('created_at', [$previousMonth, $currentMonthEnd])
+                ->count(),
+            'processing' => Order::where('status', 'processing')
+                ->whereBetween('created_at', [$previousMonth, $currentMonthEnd])
+                ->count(),
+            'shipped' => Order::where('status', 'shipped')
+                ->whereBetween('created_at', [$previousMonth, $currentMonthEnd])
+                ->count(),
+            'total_amount' => Order::where('status', 'shipped')
+                ->whereBetween('created_at', [$previousMonth, $currentMonthEnd])
+                ->sum('total_amount'),
+        ];
+
+        // Расчет процентов
+        $calculatePercentage = function($current, $previous) {
+            if ($previous == 0) return $current > 0 ? 100 : 0;
+            return round((($current - $previous) / $previous) * 100, 2);
+        };
+
+        $statistics = [
+            'current' => $currentStats,
+            'previous' => $previousStats,
+            'percentages' => [
+                'pending' => $calculatePercentage($currentStats['pending'], $previousStats['pending']),
+                'processing' => $calculatePercentage($currentStats['processing'], $previousStats['processing']),
+                'shipped' => $calculatePercentage($currentStats['shipped'], $previousStats['shipped']),
+                'total_amount' => $calculatePercentage($currentStats['total_amount'], $previousStats['total_amount']),
+            ]
         ];
 
         return response()->json([
