@@ -65,14 +65,14 @@ class OrderController extends Controller
         $previousMonth = now()->startOfMonth()->subMonth();
         $currentMonthEnd = now()->startOfMonth();
 
-        // Текущий месяц
+        // Статистика за весь период (для pending и processing)
+        $allTimeStats = [
+            'pending' => Order::where('status', 'pending')->count(),
+            'processing' => Order::where('status', 'processing')->count(),
+        ];
+
+        // Текущий месяц (для shipped и total_amount)
         $currentStats = [
-            'pending' => Order::where('status', 'pending')
-                ->whereBetween('created_at', [$currentMonth, $nextMonth])
-                ->count(),
-            'processing' => Order::where('status', 'processing')
-                ->whereBetween('created_at', [$currentMonth, $nextMonth])
-                ->count(),
             'shipped' => Order::where('status', 'shipped')
                 ->whereBetween('created_at', [$currentMonth, $nextMonth])
                 ->count(),
@@ -81,14 +81,8 @@ class OrderController extends Controller
                 ->sum('total_amount'),
         ];
 
-        // Предыдущий месяц
+        // Предыдущий месяц (для shipped и total_amount)
         $previousStats = [
-            'pending' => Order::where('status', 'pending')
-                ->whereBetween('created_at', [$previousMonth, $currentMonthEnd])
-                ->count(),
-            'processing' => Order::where('status', 'processing')
-                ->whereBetween('created_at', [$previousMonth, $currentMonthEnd])
-                ->count(),
             'shipped' => Order::where('status', 'shipped')
                 ->whereBetween('created_at', [$previousMonth, $currentMonthEnd])
                 ->count(),
@@ -97,18 +91,18 @@ class OrderController extends Controller
                 ->sum('total_amount'),
         ];
 
-        // Расчет процентов
+        // Расчет процентов только для shipped и total_amount
         $calculatePercentage = function($current, $previous) {
             if ($previous == 0) return $current > 0 ? 100 : 0;
             return round((($current - $previous) / $previous) * 100, 2);
         };
 
         $statistics = [
-            'current' => $currentStats,
+            'current' => array_merge($allTimeStats, $currentStats),
             'previous' => $previousStats,
             'percentages' => [
-                'pending' => $calculatePercentage($currentStats['pending'], $previousStats['pending']),
-                'processing' => $calculatePercentage($currentStats['processing'], $previousStats['processing']),
+                'pending' => 0, // Не показываем проценты для pending
+                'processing' => 0, // Не показываем проценты для processing
                 'shipped' => $calculatePercentage($currentStats['shipped'], $previousStats['shipped']),
                 'total_amount' => $calculatePercentage($currentStats['total_amount'], $previousStats['total_amount']),
             ]

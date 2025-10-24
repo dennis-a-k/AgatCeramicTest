@@ -10,17 +10,8 @@
           <div><span class="font-bold text-sm text-gray-500 dark:text-warning-400">Новые заказы</span>
             <h4 class="mt-2 font-bold text-warning-600 text-title-sm dark:text-white/90">{{ statistics.current.pending }}</h4>
           </div>
-          <span
-            :class="[
-              'flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium',
-              statistics.percentages.pending > 0
-                ? 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500'
-                : statistics.percentages.pending < 0
-                ? 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
-                : 'bg-gray-50 text-gray-600 dark:bg-gray-500/15 dark:text-gray-500'
-            ]">
-            <component v-if="statistics.percentages.pending !== 0" :is="statistics.percentages.pending > 0 ? arrowUpIcon : arrowDownIcon" />
-            {{ Math.abs(statistics.percentages.pending) }}%
+          <span class="flex items-center gap-1 rounded-full bg-gray-50 py-0.5 pl-2 pr-2.5 text-sm font-medium text-gray-600 dark:bg-gray-500/15 dark:text-gray-500">
+            Всего
           </span>
         </div>
       </div>
@@ -35,17 +26,8 @@
           <div><span class="font-bold text-sm text-gray-500 dark:text-blue-light-400">На выполнении</span>
             <h4 class="mt-2 font-bold text-blue-light-600 text-title-sm dark:text-white/90">{{ statistics.current.processing }}</h4>
           </div>
-          <span
-            :class="[
-              'flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium',
-              statistics.percentages.processing > 0
-                ? 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500'
-                : statistics.percentages.processing < 0
-                ? 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
-                : 'bg-gray-50 text-gray-600 dark:bg-gray-500/15 dark:text-gray-500'
-            ]">
-            <component v-if="statistics.percentages.processing !== 0" :is="statistics.percentages.processing > 0 ? arrowUpIcon : arrowDownIcon" />
-            {{ Math.abs(statistics.percentages.processing) }}%
+          <span class="flex items-center gap-1 rounded-full bg-gray-50 py-0.5 pl-2 pr-2.5 text-sm font-medium text-gray-600 dark:bg-gray-500/15 dark:text-gray-500">
+            Всего
           </span>
         </div>
       </div>
@@ -81,7 +63,7 @@
           <component :is="calendarDaysIcon" class="text-gray-800 dark:text-white/90" />
         </div>
         <div class="flex items-end justify-between mt-5">
-          <div><span class="text-sm text-gray-500 dark:text-gray-400">Сумма выполненых заказов</span>
+          <div><span class="font-bold text-sm text-gray-500 dark:text-gray-400">Сумма выполненых заказов</span>
             <h4 class="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">{{ new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' }).format(statistics.current.total_amount) }}</h4>
           </div>
           <span
