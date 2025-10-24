@@ -58,6 +58,30 @@ class OrderController extends Controller
         return response()->json(['order' => $order]);
     }
 
+    public function statistics(): JsonResponse
+    {
+        $currentMonth = now()->startOfMonth();
+        $nextMonth = now()->startOfMonth()->addMonth();
+
+        $statistics = [
+            'pending' => Order::where('status', 'pending')
+                ->whereBetween('created_at', [$currentMonth, $nextMonth])
+                ->count(),
+            'processing' => Order::where('status', 'processing')
+                ->whereBetween('created_at', [$currentMonth, $nextMonth])
+                ->count(),
+            'shipped' => Order::where('status', 'shipped')
+                ->whereBetween('created_at', [$currentMonth, $nextMonth])
+                ->count(),
+            'total_amount' => Order::whereBetween('created_at', [$currentMonth, $nextMonth])
+                ->sum('total_amount'),
+        ];
+
+        return response()->json([
+            'statistics' => $statistics
+        ]);
+    }
+
     public function update(Request $request, $id): JsonResponse
     {
         $order = Order::find($id);
