@@ -210,6 +210,22 @@ export function useOrders() {
     fetchOrders()
   })
 
+  const fetchOrderStatistics = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/orders/statistics`)
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
+      return data.statistics
+    } catch (err) {
+      console.error('Ошибка загрузки статистики заказов:', err)
+      throw err
+    }
+  }
+
   return {
     orders,
     loading,
@@ -225,6 +241,7 @@ export function useOrders() {
     visiblePages,
     formatter,
     fetchOrders,
+    fetchOrderStatistics,
     handlePrevPage,
     handleNextPage,
     handleGoToPage,

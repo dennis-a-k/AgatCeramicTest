@@ -1,0 +1,108 @@
+<template>
+  <div class="grid grid-cols-4 gap-4 md:gap-4 mb-4 md:mb-4">
+    <div class="col-span-12 xl:col-span-1">
+      <div
+        class="rounded-2xl border border-warning-200 bg-white p-5 dark:border-warning-800 dark:bg-white/[0.03] md:p-6">
+        <div class="flex items-center justify-center w-12 h-12 bg-warning-100 rounded-xl dark:bg-warning-500/15">
+          <component :is="shoppingCartIcon" class="text-warning-600 dark:text-warning-400" />
+        </div>
+        <div class="flex items-end justify-between mt-5">
+          <div><span class="font-bold text-sm text-gray-500 dark:text-warning-400">Новые заказы</span>
+            <h4 class="mt-2 font-bold text-warning-600 text-title-sm dark:text-white/90">{{ statistics.pending }}</h4>
+          </div>
+          <span
+            class="flex items-center gap-1 rounded-full bg-success-50 py-0.5 pl-2 pr-2.5 text-sm font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
+            <component :is="arrowUpIcon" />
+            11.01%
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-12 xl:col-span-1">
+      <div
+        class="rounded-2xl border border-blue-light-200 bg-white p-5 dark:border-blue-light-800 dark:bg-white/[0.03] md:p-6">
+        <div class="flex items-center justify-center w-12 h-12 bg-blue-light-100 rounded-xl dark:bg-blue-light-500/15">
+          <component :is="calendarClockIcon" class="text-blue-light-600 dark:text-blue-light-400" />
+        </div>
+        <div class="flex items-end justify-between mt-5">
+          <div><span class="font-bold text-sm text-gray-500 dark:text-blue-light-400">На выполнении</span>
+            <h4 class="mt-2 font-bold text-blue-light-600 text-title-sm dark:text-white/90">{{ statistics.processing }}</h4>
+          </div>
+          <span
+            class="flex items-center gap-1 rounded-full bg-success-50 py-0.5 pl-2 pr-2.5 text-sm font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
+            <component :is="arrowUpIcon" />
+            11.01%
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-12 xl:col-span-1">
+      <div
+        class="rounded-2xl border border-success-200 bg-white p-5 dark:border-success-800 dark:bg-white/[0.03] md:p-6">
+        <div class="flex items-center justify-center w-12 h-12 bg-success-100 rounded-xl dark:bg-success-500/15">
+          <component :is="packageCheckIcon" class="text-success-600 dark:text-success-400" />
+        </div>
+        <div class="flex items-end justify-between mt-5">
+          <div><span class="font-bold text-sm text-gray-500 dark:text-success-400">Доставлено</span>
+            <h4 class="mt-2 font-bold text-success-600 text-title-sm dark:text-white/90">{{ statistics.shipped }}</h4>
+          </div>
+          <span
+            class="flex items-center gap-1 rounded-full bg-success-50 py-0.5 pl-2 pr-2.5 text-sm font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
+            <component :is="arrowUpIcon" />
+            11.01%
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-12 xl:col-span-1">
+      <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+        <div class="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+          <component :is="calendarDaysIcon" class="text-gray-800 dark:text-white/90" />
+        </div>
+        <div class="flex items-end justify-between mt-5">
+          <div><span class="text-sm text-gray-500 dark:text-gray-400">Общая сумма за месяц</span>
+            <h4 class="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">{{ new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' }).format(statistics.total_amount) }}</h4>
+          </div>
+          <span
+            class="flex items-center gap-1 rounded-full bg-error-50 py-0.5 pl-2 pr-2.5 text-sm font-medium text-error-600 dark:bg-error-500/15 dark:text-error-500">
+            <component :is="arrowDownIcon" />
+            9.05%
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+defineProps({
+  arrowUpIcon: {
+    type: Object,
+    required: true
+  },
+  arrowDownIcon: {
+    type: Object,
+    required: true
+  },
+  shoppingCartIcon: {
+    type: Object,
+    required: true
+  },
+  calendarClockIcon: {
+    type: Object,
+    required: true
+  },
+  calendarDaysIcon: {
+    type: Object,
+    required: true
+  },
+  packageCheckIcon: {
+    type: Object,
+    required: true
+  },
+  statistics: {
+    type: Object,
+    required: true
+  }
+})
+</script>

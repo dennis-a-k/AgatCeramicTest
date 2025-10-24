@@ -95,7 +95,7 @@
                   </span>
                   <span v-else-if="order.status === 'processing'"
                     class="px-2.5 py-0.5 rounded-full font-bold text-xs bg-blue-light-50 text-blue-light-500 dark:bg-blue-light-500/15 dark:text-blue-light-500">
-                    В обработке
+                    Выполнение
                   </span>
                   <span v-else-if="order.status === 'shipped'"
                     class="px-2.5 py-0.5 rounded-full font-bold text-xs bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500">
@@ -151,7 +151,7 @@ const handleUpdateStatus = (order, newStatus) => {
 
 const getStatusMenuItems = (order) => [
   { label: 'Новый', onClick: () => handleUpdateStatus(order, 'pending') },
-  { label: 'В обработке', onClick: () => handleUpdateStatus(order, 'processing') },
+  { label: 'Выполнение', onClick: () => handleUpdateStatus(order, 'processing') },
   { label: 'Отправлен', onClick: () => handleUpdateStatus(order, 'shipped') },
   { label: 'Отменён', onClick: () => handleUpdateStatus(order, 'cancelled') },
   { label: 'Возврат', onClick: () => handleUpdateStatus(order, 'return') },
