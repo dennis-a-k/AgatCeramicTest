@@ -108,6 +108,7 @@ const handleUpdateStatus = async (order, newStatus) => {
     const result = await updateOrder(order.id, { status: newStatus })
     if (result.success) {
         fetchOrders() // Перезагрузить список заказов
+        loadStatistics() // Обновить статистику
     } else {
         console.error('Ошибка обновления статуса:', result.errors)
     }
