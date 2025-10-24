@@ -226,6 +226,22 @@ export function useOrders() {
     }
   }
 
+  const fetchOrderById = async (id: string | number) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/orders/${id}`)
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
+      return { success: true, data: data.order }
+    } catch (err) {
+      console.error('Ошибка загрузки заказа:', err)
+      return { success: false, errors: (err as Error).message }
+    }
+  }
+
   return {
     orders,
     loading,
@@ -242,6 +258,7 @@ export function useOrders() {
     formatter,
     fetchOrders,
     fetchOrderStatistics,
+    fetchOrderById,
     handlePrevPage,
     handleNextPage,
     handleGoToPage,

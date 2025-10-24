@@ -47,15 +47,41 @@ class OrderController extends Controller
         ]);
     }
 
-    public function show($id): JsonResponse
+    public function show($orderNumber): JsonResponse
     {
-        $order = Order::with('items')->find($id);
+        $order = Order::with(['items.product' => function($query) {
+            $query->select('id', 'name', 'article')->with(['images' => function($imageQuery) {
+                $imageQuery->orderBy('sort_order')->select('product_id', 'image_path');
+            }]);
+        }])->where('order', $orderNumber)->first();
 
         if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);
         }
 
-        return response()->json(['order' => $order]);
+        // Форматируем данные для фронтенда
+        $formattedOrder = $order->toArray();
+        $formattedOrder['items'] = $order->items->map(function($item) {
+            $product = $item->product;
+            return [
+                'id' => $item->id,
+                'product_id' => $item->product_id,
+                'product_article' => $item->product_article,
+                'product_name' => $item->product_name,
+                'product_unit' => $item->product_unit,
+                'price' => $item->price,
+                'quantity' => $item->quantity,
+                'subtotal' => $item->subtotal,
+                'product' => $product ? [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'article' => $product->article,
+                    'image' => $product->images->isNotEmpty() ? $product->images->first()->image_path : null,
+                ] : null,
+            ];
+        });
+
+        return response()->json(['order' => $formattedOrder]);
     }
 
     public function statistics(): JsonResponse

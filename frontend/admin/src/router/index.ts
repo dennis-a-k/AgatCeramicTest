@@ -54,6 +54,14 @@ const router = createRouter({
         title: 'Заказы',
       },
     },
+    {
+      path: '/orders/:id',
+      name: 'Order',
+      component: () => import('../views/Pages/orders/Order.vue'),
+      meta: {
+        title: 'Заказ',
+      },
+    },
   ],
 })
 

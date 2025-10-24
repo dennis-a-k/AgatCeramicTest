@@ -114,11 +114,7 @@
                   </span>
                 </td>
                 <td class="px-5 py-4 sm:px-2 text-center">
-                  <DropdownMenu :menu-items="getStatusMenuItems(order)">
-                    <template #icon>
-                      <component :is="ellipsisIcon" width="24" height="24" />
-                    </template>
-                  </DropdownMenu>
+                  <DropdownMenu :menu-items="getStatusMenuItems(order)" />
                 </td>
               </tr>
             </tbody>
