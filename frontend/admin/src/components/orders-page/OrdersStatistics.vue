@@ -13,11 +13,13 @@
           <span
             :class="[
               'flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium',
-              statistics.percentages.pending >= 0
+              statistics.percentages.pending > 0
                 ? 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500'
-                : 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
+                : statistics.percentages.pending < 0
+                ? 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
+                : 'bg-gray-50 text-gray-600 dark:bg-gray-500/15 dark:text-gray-500'
             ]">
-            <component :is="statistics.percentages.pending >= 0 ? arrowUpIcon : arrowDownIcon" />
+            <component v-if="statistics.percentages.pending !== 0" :is="statistics.percentages.pending > 0 ? arrowUpIcon : arrowDownIcon" />
             {{ Math.abs(statistics.percentages.pending) }}%
           </span>
         </div>
@@ -36,11 +38,13 @@
           <span
             :class="[
               'flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium',
-              statistics.percentages.processing >= 0
+              statistics.percentages.processing > 0
                 ? 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500'
-                : 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
+                : statistics.percentages.processing < 0
+                ? 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
+                : 'bg-gray-50 text-gray-600 dark:bg-gray-500/15 dark:text-gray-500'
             ]">
-            <component :is="statistics.percentages.processing >= 0 ? arrowUpIcon : arrowDownIcon" />
+            <component v-if="statistics.percentages.processing !== 0" :is="statistics.percentages.processing > 0 ? arrowUpIcon : arrowDownIcon" />
             {{ Math.abs(statistics.percentages.processing) }}%
           </span>
         </div>
@@ -59,11 +63,13 @@
           <span
             :class="[
               'flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium',
-              statistics.percentages.shipped >= 0
+              statistics.percentages.shipped > 0
                 ? 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500'
-                : 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
+                : statistics.percentages.shipped < 0
+                ? 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
+                : 'bg-gray-50 text-gray-600 dark:bg-gray-500/15 dark:text-gray-500'
             ]">
-            <component :is="statistics.percentages.shipped >= 0 ? arrowUpIcon : arrowDownIcon" />
+            <component v-if="statistics.percentages.shipped !== 0" :is="statistics.percentages.shipped > 0 ? arrowUpIcon : arrowDownIcon" />
             {{ Math.abs(statistics.percentages.shipped) }}%
           </span>
         </div>
@@ -81,11 +87,13 @@
           <span
             :class="[
               'flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium',
-              statistics.percentages.total_amount >= 0
+              statistics.percentages.total_amount > 0
                 ? 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500'
-                : 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
+                : statistics.percentages.total_amount < 0
+                ? 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
+                : 'bg-gray-50 text-gray-600 dark:bg-gray-500/15 dark:text-gray-500'
             ]">
-            <component :is="statistics.percentages.total_amount >= 0 ? arrowUpIcon : arrowDownIcon" />
+            <component v-if="statistics.percentages.total_amount !== 0" :is="statistics.percentages.total_amount > 0 ? arrowUpIcon : arrowDownIcon" />
             {{ Math.abs(statistics.percentages.total_amount) }}%
           </span>
         </div>
