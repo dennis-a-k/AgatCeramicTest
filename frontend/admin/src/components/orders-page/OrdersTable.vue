@@ -127,9 +127,6 @@
 
 <script setup>
 import DropdownMenu from '../common/DropdownMenu.vue'
-import { EllipsisIcon } from "../../icons"
-
-const ellipsisIcon = EllipsisIcon
 
 defineProps({
   loading: Boolean,

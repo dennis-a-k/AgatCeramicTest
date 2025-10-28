@@ -22,7 +22,7 @@ export function useOrders() {
   const statuses = ref<StatusItem[]>([
     { id: 'all', value: null, label: 'Все статусы' },
     { id: 'pending', value: 'pending', label: 'Новый' },
-    { id: 'processing', value: 'processing', label: 'В обработке' },
+    { id: 'processing', value: 'processing', label: 'Выполняется' },
     { id: 'shipped', value: 'shipped', label: 'Отправлен' },
     { id: 'return', value: 'return', label: 'Возврат' },
     { id: 'cancelled', value: 'cancelled', label: 'Отменён' },
