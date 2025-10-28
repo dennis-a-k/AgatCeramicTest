@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('call_requests', function (Blueprint $table) {
+            $table->text('comment')->after('source')->nullable(); // комментарий к заявке
+            $table->string('source')->after('status')->nullable(); // источник заявки (клиент, партнёр или форма обратной связи)
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('call_requests', function (Blueprint $table) {
+            $table->dropColumn(['comment', 'source']);
+        });
+    }
+};
