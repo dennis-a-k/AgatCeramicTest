@@ -164,6 +164,7 @@ import {
   ChevronDownIcon,
   HorizontalDots,
   PackageIcon,
+  PhoneCallIcon,
   SquareChartGanttIcon,
   ShoppingCartIcon,
 } from "../../icons";
@@ -197,7 +198,11 @@ const menuGroups = [
         name: "Заказы",
         path: "/orders",
       },
-
+      {
+        icon: PhoneCallIcon,
+        name: "Звонки",
+        path: "/calls",
+      },
     ],
   },
 ];

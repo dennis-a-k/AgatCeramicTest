@@ -62,6 +62,14 @@ const router = createRouter({
         title: 'Заказ',
       },
     },
+    {
+      path: '/calls',
+      name: 'Calls',
+      component: () => import('../views/Pages/calls/Calls.vue'),
+      meta: {
+        title: 'Обратные звонки',
+      },
+    },
   ],
 })
 
