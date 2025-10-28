@@ -9,15 +9,9 @@
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <OrdersHeader :totalItems="totalItems" :packageIcon="shoppingCartIcon" :downloadIcon="downloadIcon" />
                 <OrdersFilters :searchQuery="searchQuery" :statuses="statuses" :selectedItem="selectedStatus"
-                    :isOpen="isOpen" :showFilter="showFilter" :checkboxSale="filters.sale.true"
-                    :checkboxNoSale="filters.sale.false" :checkboxPublished="filters.published.true"
-                    :checkboxNoPublished="filters.published.false" :searchIcon="searchIcon" :settingsIcon="settingsIcon"
+                    :isOpen="isOpen" :showFilter="showFilter" :searchIcon="searchIcon" :settingsIcon="settingsIcon"
                     @update:searchQuery="searchQuery = $event" @toggleDropdown="toggleDropdown"
-                    @toggleItem="handleToggleItem" @update:showFilter="showFilter = $event"
-                    @update:checkboxSale="filters.sale.true = $event"
-                    @update:checkboxNoSale="filters.sale.false = $event"
-                    @update:checkboxPublished="filters.published.true = $event"
-                    @update:checkboxNoPublished="filters.published.false = $event" />
+                    @toggleItem="handleToggleItem" @update:showFilter="showFilter = $event" />
                 <OrdersTable :loading="loading" :error="error" :orders="orders" :formatter="formatter"
                     @fetchOrders="fetchOrders" @edit="handleEdit" @delete="handleDelete"
                     @updateStatus="handleUpdateStatus" />
@@ -37,8 +31,18 @@ import OrdersHeader from '@/components/orders-page/OrdersHeader.vue';
 import OrdersFilters from '@/components/orders-page/OrdersFilters.vue';
 import OrdersTable from '@/components/orders-page/OrdersTable.vue';
 import Pagination from '@/components/ui/Pagination.vue'
-import { ArrowDownIcon, ArrowUpIcon, CalendarClockIcon, CalendarDaysIcon, PackageCheckIcon, ShoppingCartIcon, DownloadIcon, Settings2Icon, SearchIcon } from "../../../icons";
 import { useOrders } from '@/composables/useOrders'
+import {
+    ArrowDownIcon,
+    ArrowUpIcon,
+    CalendarClockIcon,
+    CalendarDaysIcon,
+    PackageCheckIcon,
+    ShoppingCartIcon,
+    DownloadIcon,
+    Settings2Icon,
+    SearchIcon
+} from "../../../icons";
 
 const router = useRouter()
 const currentPageTitle = ref('Заказы')
@@ -62,7 +66,6 @@ const {
     searchQuery,
     selectedStatus,
     statuses,
-    filters,
     formatter,
     fetchOrders,
     fetchOrderStatistics,
@@ -72,24 +75,24 @@ const {
 const showFilter = ref(false)
 const isOpen = ref(false)
 const orderStatistics = ref({
-  current: {
-    pending: 0,
-    processing: 0,
-    shipped: 0,
-    total_amount: 0
-  },
-  previous: {
-    pending: 0,
-    processing: 0,
-    shipped: 0,
-    total_amount: 0
-  },
-  percentages: {
-    pending: 0,
-    processing: 0,
-    shipped: 0,
-    total_amount: 0
-  }
+    current: {
+        pending: 0,
+        processing: 0,
+        shipped: 0,
+        total_amount: 0
+    },
+    previous: {
+        pending: 0,
+        processing: 0,
+        shipped: 0,
+        total_amount: 0
+    },
+    percentages: {
+        pending: 0,
+        processing: 0,
+        shipped: 0,
+        total_amount: 0
+    }
 })
 
 const toggleDropdown = () => {
