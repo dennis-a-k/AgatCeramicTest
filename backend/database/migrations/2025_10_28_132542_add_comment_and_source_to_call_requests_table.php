@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('call_requests', function (Blueprint $table) {
-            $table->text('comment')->after('source')->nullable(); // комментарий к заявке
             $table->string('source')->after('status')->nullable(); // источник заявки (клиент, партнёр или форма обратной связи)
+            $table->text('comment')->after('source')->nullable(); // комментарий к заявке
         });
     }
 
