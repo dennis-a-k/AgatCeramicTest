@@ -84,7 +84,7 @@
                             <h3 class="font-medium text-gray-900 dark:text-white mb-4">Товары в заказе</h3>
                             <div class="space-y-4">
                                 <div v-for="item in order.items" :key="item.id"
-                                    class="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 pb-4">
+                                    class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 pt-4">
                                     <div class="flex items-center space-x-4">
                                         <p class="font-medium text-gray-900 dark:text-white">{{ item.product.article }}
                                         </p>
