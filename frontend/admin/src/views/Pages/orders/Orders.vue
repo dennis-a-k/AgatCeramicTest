@@ -57,20 +57,15 @@ const {
     loading,
     error,
     page,
-    itemsPerPage,
     totalItems,
     totalPages,
     searchQuery,
     selectedStatus,
     statuses,
     filters,
-    visiblePages,
     formatter,
     fetchOrders,
     fetchOrderStatistics,
-    handlePrevPage,
-    handleNextPage,
-    handleGoToPage,
     deleteOrder
 } = useOrders()
 
