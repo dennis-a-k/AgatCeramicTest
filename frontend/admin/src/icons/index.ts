@@ -6,6 +6,7 @@ import CheckCircleIcon from "./CheckCircleIcon.vue";
 import ChevronDownIcon from "./ChevronDownIcon.vue";
 import ChevronLeftIcon from "./ChevronLeftIcon.vue";
 import ChevronRightIcon from "./ChevronRightIcon.vue";
+import CircleCheckBigIcon from "./CircleCheckBigIcon.vue";
 import DeleteIcon from "./DeleteIcon.vue";
 import DownloadIcon from "./DownloadIcon.vue";
 import EditIcon from "./EditIcon.vue";
@@ -18,6 +19,7 @@ import LogoutIcon from "./LogoutIcon.vue";
 import PackageCheckIcon from "./PackageCheckIcon.vue";
 import PackageIcon from "./PackageIcon.vue";
 import PhoneCallIcon from "./PhoneCallIcon.vue";
+import PhoneOutgoingIcon from "./PhoneOutgoingIcon.vue";
 import PlusIcon from "./PlusIcon.vue";
 import SearchIcon from "./SearchIcon.vue";
 import Settings2Icon from "./Settings2Icon.vue";
@@ -35,6 +37,7 @@ export {
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  CircleCheckBigIcon,
   DeleteIcon,
   DownloadIcon,
   EditIcon,
@@ -47,6 +50,7 @@ export {
   PackageCheckIcon,
   PackageIcon,
   PhoneCallIcon,
+  PhoneOutgoingIcon,
   PlusIcon,
   SearchIcon,
   Settings2Icon,
