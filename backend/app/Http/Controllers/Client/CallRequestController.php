@@ -17,12 +17,14 @@ class CallRequestController extends Controller
             $request->validate([
                 'name' => 'required|string|max:255',
                 'phone' => 'required|string|max:20',
+                'source' => 'required|string',
             ]);
 
             // Создание заявки (данные шифруются автоматически через мутаторы)
             $callRequest = CallRequest::create([
                 'name' => $request->input('name'),
                 'phone' => $request->input('phone'),
+                'source' => $request->input('source'),
                 'status' => 'pending',
             ]);
 

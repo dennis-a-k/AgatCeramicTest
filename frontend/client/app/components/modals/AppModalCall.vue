@@ -96,7 +96,7 @@
 </template>
 
 <script setup>
-import { ref, nextTick } from 'vue';
+import { ref } from 'vue';
 import { useRuntimeConfig } from '#imports';
 
 const form = ref({
@@ -160,12 +160,13 @@ const submitForm = async () => {
   isSubmitting.value = true;
 
   try {
+    const dataToSend = { ...form.value, source: 'client' };
     const response = await fetch(`${config.public.apiBase}/api/call-request`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(form.value),
+      body: JSON.stringify(dataToSend),
     });
 
     if (!response.ok) {
