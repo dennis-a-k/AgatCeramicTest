@@ -18,9 +18,7 @@
                     @update:checkboxNoPublished="filters.published.false = $event" />
                 <GoodsTable :loading="loading" :error="error" :products="products" :formatter="formatter" :sort="sort"
                     @sortBy="handleSortBy" @fetchProducts="fetchProducts" @edit="handleEdit" @delete="handleDelete" />
-                <GoodsPagination :page="page" :totalPages="totalPages" :totalItems="totalItems"
-                    :itemsPerPage="itemsPerPage" :visiblePages="visiblePages" @prevPage="handlePrevPage"
-                    @nextPage="handleNextPage" @goToPage="handleGoToPage" />
+                <Pagination :currentPage="page" :totalPages="totalPages" @page-change="handlePageChange" class="px-6" />
             </div>
         </div>
     </AdminLayout>
@@ -35,7 +33,7 @@ import ToastAlert from '@/components/common/ToastAlert.vue'
 import GoodsHeader from '@/components/goods-page/GoodsHeader.vue'
 import GoodsFilters from '@/components/goods-page/GoodsFilters.vue'
 import GoodsTable from '@/components/goods-page/GoodsTable.vue'
-import GoodsPagination from '@/components/goods-page/GoodsPagination.vue'
+import Pagination from '@/components/ui/Pagination.vue'
 import { PackageIcon, DownloadIcon, PlusIcon, Settings2Icon, SearchIcon } from "../../../icons";
 import { useGoods } from '@/composables/useGoods'
 import { useCategories } from '@/composables/useCategories'
@@ -58,19 +56,14 @@ const {
     error,
     sort,
     page,
-    itemsPerPage,
     totalItems,
     totalPages,
     searchQuery,
     selectedCategory,
     filters,
-    visiblePages,
     formatter,
     fetchProducts,
     handleSortBy,
-    handlePrevPage,
-    handleNextPage,
-    handleGoToPage,
     deleteProduct
 } = useGoods()
 
@@ -90,6 +83,11 @@ const handleToggleItem = (item) => {
 
 const handleEdit = (product) => {
     router.push(`/products/edit/${product.id}`)
+}
+
+const handlePageChange = (newPage) => {
+    page.value = newPage
+    fetchProducts()
 }
 
 const handleDelete = async (product, callback) => {
