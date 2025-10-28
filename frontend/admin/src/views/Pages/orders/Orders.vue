@@ -21,9 +21,7 @@
                 <OrdersTable :loading="loading" :error="error" :orders="orders" :formatter="formatter"
                     @fetchOrders="fetchOrders" @edit="handleEdit" @delete="handleDelete"
                     @updateStatus="handleUpdateStatus" />
-                <GoodsPagination :page="page" :totalPages="totalPages" :totalItems="totalItems"
-                    :itemsPerPage="itemsPerPage" :visiblePages="visiblePages" @prevPage="handlePrevPage"
-                    @nextPage="handleNextPage" @goToPage="handleGoToPage" />
+                <Pagination :currentPage="page" :totalPages="totalPages" @page-change="handlePageChange" class="px-6" />
             </div>
         </div>
     </AdminLayout>
@@ -38,7 +36,7 @@ import OrdersStatistics from '@/components/orders-page/OrdersStatistics.vue';
 import OrdersHeader from '@/components/orders-page/OrdersHeader.vue';
 import OrdersFilters from '@/components/orders-page/OrdersFilters.vue';
 import OrdersTable from '@/components/orders-page/OrdersTable.vue';
-import GoodsPagination from '@/components/goods-page/GoodsPagination.vue'
+import Pagination from '@/components/ui/Pagination.vue'
 import { ArrowDownIcon, ArrowUpIcon, CalendarClockIcon, CalendarDaysIcon, PackageCheckIcon, ShoppingCartIcon, DownloadIcon, Settings2Icon, SearchIcon } from "../../../icons";
 import { useOrders } from '@/composables/useOrders'
 
@@ -115,6 +113,11 @@ const handleEdit = (order) => {
 const handleDelete = async (order, callback) => {
     const success = await deleteOrder(order.id)
     callback(success)
+}
+
+const handlePageChange = (newPage) => {
+    page.value = newPage
+    fetchOrders()
 }
 
 const handleUpdateStatus = async (order, newStatus) => {
