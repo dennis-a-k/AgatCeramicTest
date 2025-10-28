@@ -17,6 +17,7 @@ import InfoCircleIcon from "./InfoCircleIcon.vue";
 import LogoutIcon from "./LogoutIcon.vue";
 import PackageCheckIcon from "./PackageCheckIcon.vue";
 import PackageIcon from "./PackageIcon.vue";
+import PhoneCallIcon from "./PhoneCallIcon.vue";
 import PlusIcon from "./PlusIcon.vue";
 import SearchIcon from "./SearchIcon.vue";
 import Settings2Icon from "./Settings2Icon.vue";
@@ -45,6 +46,7 @@ export {
   LogoutIcon,
   PackageCheckIcon,
   PackageIcon,
+  PhoneCallIcon,
   PlusIcon,
   SearchIcon,
   Settings2Icon,
