@@ -7,7 +7,7 @@
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Детали заказа #{{ orderId }}
                         </h2>
-                        <div class="flex items-center space-x-4">
+                        <div v-if="order" class="flex items-center space-x-4">
                             <span v-if="order.status === 'pending'"
                                 class="px-2.5 py-0.5 rounded-full font-bold text-md bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-orange-400">
                                 Новый
