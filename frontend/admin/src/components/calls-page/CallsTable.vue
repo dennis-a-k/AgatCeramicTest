@@ -1,9 +1,8 @@
 <template>
   <div class="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
     <div class="space-y-5">
-      <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
-        style="overflow: visible;">
-        <div class="max-w-full overflow-x-auto custom-scrollbar" style="overflow: visible;">
+      <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+        <div class="max-w-full overflow-x-auto custom-scrollbar">
           <div v-if="loading" class="flex justify-center items-center h-screen">
             <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-brand-500"></div>
           </div>
@@ -56,7 +55,7 @@
                     {{ new Date(call.created_at).toLocaleTimeString('ru-RU') }}
                   </p>
                 </td>
-                <td class="px-5 py-4 sm:px-6">
+                <td class="px-5 py-4 sm:px-6 cursor-pointer hover:text-brand-500" @click="openModal(call)">
                   <span class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
                     {{ call.name }}
                   </span>
@@ -94,20 +93,25 @@
                     Обработан
                   </span>
                 </td>
-                <td class="px-5 py-4 sm:px-2 text-center">
-                  <DropdownMenu :menu-items="getStatusMenuItems(call)" />
-                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
+    <CallModal
+      :is-visible="showModal"
+      :call="selectedCall"
+      @close="closeModal"
+      @update-status="handleUpdateStatus"
+    />
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import DropdownMenu from '../common/DropdownMenu.vue'
+import CallModal from './CallModal.vue'
 
 defineProps({
   loading: Boolean,
@@ -118,6 +122,9 @@ defineProps({
 
 const emit = defineEmits(['fetchCalls', 'edit', 'updateStatus'])
 
+const showModal = ref(false)
+const selectedCall = ref(null)
+
 const handleFetchCalls = () => {
   emit('fetchCalls')
 }
@@ -126,8 +133,13 @@ const handleUpdateStatus = (call, newStatus) => {
   emit('updateStatus', call, newStatus)
 }
 
-const getStatusMenuItems = (call) => [
-  { label: 'Новый', onClick: () => handleUpdateStatus(call, 'pending') },
-  { label: 'Обработан', onClick: () => handleUpdateStatus(call, 'processed') },
-]
+const openModal = (call) => {
+  selectedCall.value = call
+  showModal.value = true
+}
+
+const closeModal = () => {
+  showModal.value = false
+  selectedCall.value = null
+}
 </script>
