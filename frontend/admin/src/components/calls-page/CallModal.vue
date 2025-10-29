@@ -3,9 +3,12 @@
     <template #body>
       <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg max-w-md w-full mx-4">
         <div class="p-6">
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white text-center mb-4">
-            Информация о заявке
-          </h3>
+         <div class="flex justify-between items-center mb-4">
+           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+             Информация о заявке
+           </h3>
+           <CallDropdown @update-status="handleUpdateStatus" />
+         </div>
           <div v-if="call" class="space-y-4">
             <div>
               <label class="block text-sm font-medium text-brand-700 dark:text-brand-300">Имя клиента</label>
@@ -46,7 +49,6 @@
                 class="px-2.5 py-0.5 rounded-full font-bold text-md bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500">
                 Обработан
               </span>
-              <DropdownMenu :menu-items="getStatusMenuItems(call)" />
             </div>
           </div>
         </div>
@@ -58,7 +60,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import Modal from '../ui/Modal.vue'
-import DropdownMenu from '../common/DropdownMenu.vue'
+import CallDropdown from './CallDropdown.vue'
 
 const props = defineProps({
   isVisible: {
@@ -85,13 +87,9 @@ const closeModal = () => {
   emit('close')
 }
 
-const handleUpdateStatus = (call, newStatus) => {
+const handleUpdateStatus = (newStatus) => {
   currentStatus.value = newStatus
-  emit('updateStatus', call, newStatus)
+  emit('updateStatus', props.call, newStatus)
 }
 
-const getStatusMenuItems = (call) => [
-  { label: 'Новый', onClick: () => handleUpdateStatus(call, 'pending') },
-  { label: 'Обработан', onClick: () => handleUpdateStatus(call, 'processed') },
-]
 </script>
