@@ -19,6 +19,7 @@ class CallRequestController extends Controller
                 'phone' => 'required|string|max:20',
                 'email' => 'nullable|string|email|max:255',
                 'source' => 'required|string',
+                'comment' => 'nullable|string|max:1000',
             ]);
 
             // Создание заявки (данные шифруются автоматически через мутаторы)
@@ -27,6 +28,7 @@ class CallRequestController extends Controller
                 'phone' => $request->input('phone'),
                 'email' => $request->input('email'),
                 'source' => $request->input('source'),
+                'comment' => $request->input('comment'),
                 'status' => 'pending',
             ]);
 

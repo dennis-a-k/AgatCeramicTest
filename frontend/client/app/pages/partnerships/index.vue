@@ -151,6 +151,17 @@
           />
         </div>
 
+        <div class="form-group">
+          <label for="comment">Комментарий</label>
+          <textarea
+            class="form-control"
+            id="comment"
+            v-model="form.comment"
+            rows="4"
+            placeholder="Опишите ваш запрос или дополнительные детали..."
+          ></textarea>
+        </div>
+
         <button type="submit" class="btn" :disabled="showLoader">
           <span
             v-if="showLoader"
@@ -270,6 +281,7 @@ const form = ref({
   name: '',
   email: '',
   phone: '',
+  comment: '',
 });
 
 const sectionsData = [
@@ -346,7 +358,7 @@ const handleSubmit = async () => {
 
     // Показываем success сообщение
     showSuccessModal.value = true;
-    form.value = { name: '', email: '', phone: '' };
+    form.value = { name: '', email: '', phone: '', comment: '' };
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
