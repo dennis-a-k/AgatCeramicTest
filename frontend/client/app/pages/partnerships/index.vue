@@ -129,17 +129,26 @@
 
         <div class="form-group">
           <label for="name">Ваше имя</label>
-          <input type="text" id="name" name="name" required />
+          <input type="text" class="form-control" id="name" v-model="form.name" autocomplete="name" required />
         </div>
 
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" required />
+          <input type="email" class="form-control" id="email" v-model="form.email" autocomplete="email" required />
         </div>
 
         <div class="form-group">
           <label for="phone">Телефон</label>
-          <input type="tel" id="phone" name="phone" required />
+          <input
+            type="tel"
+            class="form-control"
+            id="phone"
+            v-model="form.phone"
+            @input="formatPhone"
+            autocomplete="phone"
+            required
+            placeholder="+7 (___) ___-__-__"
+          />
         </div>
 
         <button type="submit" class="btn">Отправить заявку</button>
@@ -246,6 +255,12 @@ const showSuccessModal = ref(false);
 const showLoader = ref(false);
 const activeSectionId = ref('hero'); // Initial active section ID
 
+const form = ref({
+  name: '',
+  email: '',
+  phone: '',
+});
+
 const sectionsData = [
   { id: 'hero', title: 'Главная' },
   { id: 'commission', title: 'Высокие комиссии' },
@@ -272,6 +287,30 @@ const scrollToSection = (sectionId) => {
   }
 };
 
+const formatPhone = (event) => {
+  let value = event.target.value.replace(/\D/g, '');
+  if (value.startsWith('7')) {
+    value = value.substring(1);
+  }
+  if (value.length > 10) {
+    value = value.substring(0, 10);
+  }
+  let formatted = '+7';
+  if (value.length > 0) {
+    formatted += ' (' + value.substring(0, 3);
+  }
+  if (value.length >= 4) {
+    formatted += ') ' + value.substring(3, 6);
+  }
+  if (value.length >= 7) {
+    formatted += '-' + value.substring(6, 8);
+  }
+  if (value.length >= 9) {
+    formatted += '-' + value.substring(8, 10);
+  }
+  form.value.phone = formatted;
+};
+
 const handleSubmit = async (e) => {
   e.preventDefault();
   showLoader.value = true;
@@ -296,7 +335,7 @@ const handleSubmit = async (e) => {
 
     if (data.success) {
       showSuccessModal.value = true;
-      partnerForm.value.reset();
+      form.value = { name: '', email: '', phone: '' };
       window.scrollTo({
         top: 0,
         behavior: 'smooth',
