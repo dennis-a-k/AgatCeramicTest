@@ -64,7 +64,7 @@ const router = createRouter({
     },
     {
       path: '/settings',
-      name: 'Calls',
+      name: 'Settings',
       component: () => import('../views/Pages/settings/Settings.vue'),
       meta: {
         title: 'Настройки сайта',
