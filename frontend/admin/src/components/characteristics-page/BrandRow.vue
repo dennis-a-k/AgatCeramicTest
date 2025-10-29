@@ -4,9 +4,9 @@
       <div class="flex items-center gap-3">
         <div class="h-[32px] w-auto overflow-hidden rounded-md">
           <img v-if="brand.image" :src="getImageUrl(brand.image)" :alt="brand.name"
-            class="w-[70px] h-full object-contain" />
+            class="w-[70px] h-full object-contain dark:bg-white" />
           <div v-else class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-            <span class="text-gray-500 dark:text-gray-400 text-sm">Нет фото</span>
+            <ImageIcon class="w-[70px] text-gray-500 dark:text-gray-400 text-sm" />
           </div>
         </div>
         <div>
@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { EditIcon, DeleteIcon, CheckCircleIcon, ErrorIcon } from '@/icons'
+import { EditIcon, DeleteIcon, CheckCircleIcon, ErrorIcon, ImageIcon } from '@/icons'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
