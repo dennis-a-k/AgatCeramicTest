@@ -14,6 +14,7 @@ import EllipsisIcon from "./EllipsisIcon.vue";
 import ErrorIcon from "./ErrorIcon.vue";
 import GridIcon from "./GridIcon.vue";
 import HorizontalDots from "./HorizontalDots.vue";
+import ImageIcon from "./ImageIcon.vue";
 import InfoCircleIcon from "./InfoCircleIcon.vue";
 import LogoutIcon from "./LogoutIcon.vue";
 import PackageCheckIcon from "./PackageCheckIcon.vue";
@@ -45,6 +46,7 @@ export {
   ErrorIcon,
   GridIcon,
   HorizontalDots,
+  ImageIcon,
   InfoCircleIcon,
   LogoutIcon,
   PackageCheckIcon,
