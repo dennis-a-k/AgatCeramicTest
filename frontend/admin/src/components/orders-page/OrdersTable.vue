@@ -1,9 +1,8 @@
 <template>
   <div class="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
     <div class="space-y-5">
-      <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
-        style="overflow: visible;">
-        <div class="max-w-full overflow-x-auto custom-scrollbar" style="overflow: visible;">
+      <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+        <div class="max-w-full overflow-x-auto custom-scrollbar">
           <div v-if="loading" class="flex justify-center items-center h-screen">
             <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-brand-500"></div>
           </div>
@@ -45,7 +44,7 @@
                 <th class="px-5 py-3 text-left w-1/12 sm:px-6">
                   <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Сумма</p>
                 </th>
-                <th class="px-5 py-3 text-center w-2/12 sm:px-6" colspan="2">
+                <th class="px-5 py-3 text-center w-2/12 sm:px-6">
                   <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Статус заказа</p>
                 </th>
               </tr>
@@ -54,11 +53,9 @@
               <tr v-for="order in orders" :key="order.id"
                 class="border-t border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800">
                 <td class="px-5 py-4 sm:px-6">
-                  <router-link :to="`/orders/${order.order}`">
-                    <p class="font-medium text-left text-gray-800 text-theme-sm dark:text-white/90 hover:text-brand-500 dark:hover:text-brand-400">
-                      {{ order.order }}
-                    </p>
-                  </router-link>
+                  <button @click="openOrderModal(order.order)" class="font-medium text-left text-gray-800 text-theme-sm dark:text-white/90 hover:text-brand-500 dark:hover:text-brand-400">
+                    {{ order.order }}
+                  </button>
                 </td>
                 <td class="px-5 py-4 sm:px-6">
                   <p class="text-gray-500 text-left text-theme-sm dark:text-gray-400">
@@ -113,20 +110,19 @@
                     Отменён
                   </span>
                 </td>
-                <td class="px-5 py-4 sm:px-2 text-center">
-                  <DropdownMenu :menu-items="getStatusMenuItems(order)" />
-                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
+    <OrderModal :is-visible="isOrderModalVisible" :order-id="selectedOrderId" @close="closeOrderModal" @status-updated="handleStatusUpdated" />
   </div>
 </template>
 
 <script setup>
-import DropdownMenu from '../common/DropdownMenu.vue'
+import { ref } from 'vue'
+import OrderModal from './OrderModal.vue'
 
 defineProps({
   loading: Boolean,
@@ -137,19 +133,24 @@ defineProps({
 
 const emit = defineEmits(['fetchOrders', 'edit', 'updateStatus'])
 
+const isOrderModalVisible = ref(false)
+const selectedOrderId = ref('')
+
 const handleFetchOrders = () => {
   emit('fetchOrders')
 }
 
-const handleUpdateStatus = (order, newStatus) => {
-  emit('updateStatus', order, newStatus)
+const openOrderModal = (orderId) => {
+  selectedOrderId.value = orderId
+  isOrderModalVisible.value = true
 }
 
-const getStatusMenuItems = (order) => [
-  { label: 'Новый', onClick: () => handleUpdateStatus(order, 'pending') },
-  { label: 'Выполнение', onClick: () => handleUpdateStatus(order, 'processing') },
-  { label: 'Отправлен', onClick: () => handleUpdateStatus(order, 'shipped') },
-  { label: 'Отменён', onClick: () => handleUpdateStatus(order, 'cancelled') },
-  { label: 'Возврат', onClick: () => handleUpdateStatus(order, 'return') },
-]
+const closeOrderModal = () => {
+  isOrderModalVisible.value = false
+  selectedOrderId.value = ''
+}
+
+const handleStatusUpdated = (orderId, newStatus) => {
+  emit('updateStatus', { id: orderId }, newStatus)
+}
 </script>
