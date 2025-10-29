@@ -11,7 +11,8 @@
               <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Телефон
               </label>
-              <input type="text" id="phone" v-model="form.phone"
+              <input type="tel" id="phone" v-model="form.phone" @input="formatPhone"
+                autocomplete="phone" placeholder="+7 (___) ___-__-__"
                 :class="inputClass(backendErrors.phone)" />
               <p v-if="backendErrors.phone" class="mt-1.5 text-theme-xs text-error-500">{{ backendErrors.phone }}</p>
             </div>
@@ -80,6 +81,30 @@ const backendErrors = ref({})
 const inputClass = (error) => {
   return error ? 'dark:bg-dark-900 shadow-theme-xs focus:border-error-300 focus:ring-error-500/10 dark:focus:border-error-800 h-11 w-full rounded-lg border border-error-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-error-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 appearance-none' : 'dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 appearance-none'
 }
+
+const formatPhone = (event) => {
+  let value = event.target.value.replace(/\D/g, '');
+  if (value.startsWith('7')) {
+    value = value.substring(1);
+  }
+  if (value.length > 10) {
+    value = value.substring(0, 10);
+  }
+  let formatted = '+7';
+  if (value.length > 0) {
+    formatted += ' (' + value.substring(0, 3);
+  }
+  if (value.length >= 4) {
+    formatted += ') ' + value.substring(3, 6);
+  }
+  if (value.length >= 7) {
+    formatted += '-' + value.substring(6, 8);
+  }
+  if (value.length >= 9) {
+    formatted += '-' + value.substring(8, 10);
+  }
+  form.value.phone = formatted;
+};
 
 watch(() => props.isVisible, (newVal) => {
   if (newVal) {
