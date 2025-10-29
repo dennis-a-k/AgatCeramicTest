@@ -9,12 +9,11 @@
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <OrdersHeader :totalItems="totalItems" :packageIcon="shoppingCartIcon" :downloadIcon="downloadIcon" />
                 <OrdersFilters :searchQuery="searchQuery" :statuses="statuses" :selectedItem="selectedStatus"
-                    :isOpen="isOpen" :showFilter="showFilter" :searchIcon="searchIcon" :settingsIcon="settingsIcon"
+                    :isOpen="isOpen" :searchIcon="searchIcon"
                     @update:searchQuery="searchQuery = $event" @toggleDropdown="toggleDropdown"
                     @toggleItem="handleToggleItem" @update:showFilter="showFilter = $event" />
                 <OrdersTable :loading="loading" :error="error" :orders="orders" :formatter="formatter"
-                    @fetchOrders="fetchOrders" @edit="handleEdit" @delete="handleDelete"
-                    @updateStatus="handleUpdateStatus" />
+                    @fetchOrders="fetchOrders" @updateStatus="handleUpdateStatus" />
                 <Pagination :currentPage="page" :totalPages="totalPages" @page-change="handlePageChange" class="px-6" />
             </div>
         </div>
@@ -23,7 +22,6 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import OrdersStatistics from '@/components/orders-page/OrdersStatistics.vue';
@@ -40,11 +38,9 @@ import {
     PackageCheckIcon,
     ShoppingCartIcon,
     DownloadIcon,
-    Settings2Icon,
     SearchIcon
 } from "../../../icons";
 
-const router = useRouter()
 const currentPageTitle = ref('Заказы')
 const arrowDownIcon = ArrowDownIcon
 const arrowUpIcon = ArrowUpIcon
@@ -53,7 +49,6 @@ const calendarDaysIcon = CalendarDaysIcon
 const packageCheckIcon = PackageCheckIcon
 const shoppingCartIcon = ShoppingCartIcon
 const downloadIcon = DownloadIcon
-const settingsIcon = Settings2Icon
 const searchIcon = SearchIcon
 
 const {
@@ -69,7 +64,6 @@ const {
     formatter,
     fetchOrders,
     fetchOrderStatistics,
-    deleteOrder
 } = useOrders()
 
 const showFilter = ref(false)
@@ -77,19 +71,19 @@ const isOpen = ref(false)
 const orderStatistics = ref({
     current: {
         pending: 0,
-        processing: 0,
+        processed: 0,
         shipped: 0,
         total_amount: 0
     },
     previous: {
         pending: 0,
-        processing: 0,
+        processed: 0,
         shipped: 0,
         total_amount: 0
     },
     percentages: {
         pending: 0,
-        processing: 0,
+        processed: 0,
         shipped: 0,
         total_amount: 0
     }
@@ -102,15 +96,6 @@ const toggleDropdown = () => {
 const handleToggleItem = (item) => {
     selectedStatus.value = item.value === null ? null : item
     isOpen.value = false
-}
-
-const handleEdit = (order) => {
-    router.push(`/orders/edit/${order.id}`)
-}
-
-const handleDelete = async (order, callback) => {
-    const success = await deleteOrder(order.id)
-    callback(success)
 }
 
 const handlePageChange = (newPage) => {
