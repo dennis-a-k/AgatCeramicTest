@@ -29,7 +29,7 @@ class CallRequestNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Новая заявка перезвонить клиенту',
+            subject: 'Новая заявка перезвонить',
         );
     }
 
