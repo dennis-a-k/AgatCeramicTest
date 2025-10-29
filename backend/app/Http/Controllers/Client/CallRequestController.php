@@ -17,6 +17,7 @@ class CallRequestController extends Controller
             $request->validate([
                 'name' => 'required|string|max:255',
                 'phone' => 'required|string|max:20',
+                'email' => 'nullable|string|email|max:255',
                 'source' => 'required|string',
             ]);
 
@@ -24,6 +25,7 @@ class CallRequestController extends Controller
             $callRequest = CallRequest::create([
                 'name' => $request->input('name'),
                 'phone' => $request->input('phone'),
+                'email' => $request->input('email'),
                 'source' => $request->input('source'),
                 'status' => 'pending',
             ]);

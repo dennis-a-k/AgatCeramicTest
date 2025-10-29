@@ -15,7 +15,10 @@ class CallRequest extends Model
     protected $fillable = [
         'name',
         'phone',
+        'email',
         'status',
+        'source',
+        'comment',
         'searchable_name',
         'searchable_phone'
     ];
@@ -33,6 +36,9 @@ class CallRequest extends Model
             if ($callRequest->isDirty('phone')) {
                 $phone = preg_replace('/[^0-9]/', '', $callRequest->getOriginal('phone'));
                 $callRequest->searchable_phone = $hasher->hash($phone);
+            }
+            if ($callRequest->isDirty('email')) {
+                $callRequest->searchable_email = $hasher->hash(strtolower($callRequest->getOriginal('email')));
             }
         });
     }
@@ -55,6 +61,15 @@ class CallRequest extends Model
         );
     }
 
+    protected function email(): Attribute
+    {
+        $encryptor = app(EncryptorInterface::class);
+        return Attribute::make(
+            get: fn($value) => $value ? $encryptor->decrypt($value) : null,
+            set: fn($value) => $value ? $encryptor->encrypt($value) : null
+        );
+    }
+
     public function scopeSearchByPhone($query, $phone)
     {
         $hasher = app(HasherInterface::class);
@@ -68,5 +83,12 @@ class CallRequest extends Model
         $hasher = app(HasherInterface::class);
         $hash = $hasher->hash(strtolower($name));
         return $query->where('searchable_name', $hash);
+    }
+
+    public function scopeSearchByEmail($query, $email)
+    {
+        $hasher = app(HasherInterface::class);
+        $hash = $hasher->hash(strtolower($email));
+        return $query->where('searchable_email', $hash);
     }
 }

@@ -151,7 +151,15 @@
           />
         </div>
 
-        <button type="submit" class="btn">Отправить заявку</button>
+        <button type="submit" class="btn" :disabled="showLoader">
+          <span
+            v-if="showLoader"
+            class="spinner-border spinner-border-sm me-2"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          {{ showLoader ? 'Отправка...' : 'Отправить заявку' }}
+        </button>
       </form>
     </div>
   </section>
@@ -164,8 +172,11 @@
   <div id="successModal" class="modal" :class="{ show: showSuccessModal }" ref="successModal">
     <div class="modal-content">
       <span class="close-modal" @click="closeModalHandler">&times;</span>
-      <h3>Спасибо за вашу заявку!</h3>
-      <p>Наш менеджер свяжется с вами в ближайшее время.</p>
+      <div class="success-message">
+        <div class="success-icon">✓</div>
+        <h3>Заявка принята!</h3>
+        <p>Спасибо за обращение. Мы свяжемся с вами в ближайшее время.</p>
+      </div>
     </div>
   </div>
 
@@ -311,43 +322,38 @@ const formatPhone = (event) => {
   form.value.phone = formatted;
 };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+const handleSubmit = async () => {
+  if (!form.value.name || !form.value.email || !form.value.phone) {
+    alert('Пожалуйста, заполните все поля');
+    return;
+  }
+
   showLoader.value = true;
 
   try {
-    const formData = new FormData(partnerForm.value);
-    // Assuming CSRF token is available via a meta tag or Nuxt configuration
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')
-      ? document.querySelector('meta[name="csrf-token"]').content
-      : '';
-
-    const response = await fetch('/partnerships-call', {
+    const dataToSend = { ...form.value, source: 'designer' };
+    const response = await fetch(`${config.public.apiBase}/api/call-request`, {
       method: 'POST',
-      body: formData,
       headers: {
-        'X-CSRF-TOKEN': csrfToken,
-        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify(dataToSend),
     });
 
-    const data = await response.json();
-
-    if (data.success) {
-      showSuccessModal.value = true;
-      form.value = { name: '', email: '', phone: '' };
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
-    } else {
-      alert(
-        'Ошибка при отправке формы: ' + (data.message || 'Попробуйте снова')
-      );
+    if (!response.ok) {
+      throw new Error('Ошибка при отправке заявки');
     }
+
+    // Показываем success сообщение
+    showSuccessModal.value = true;
+    form.value = { name: '', email: '', phone: '' };
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   } catch (error) {
-    console.error('Ошибка:', error);
-    alert('Сетевая ошибка. Проверьте соединение.');
+    console.error('Ошибка при отправке:', error);
+    alert('Произошла ошибка. Попробуйте еще раз.');
   } finally {
     showLoader.value = false;
   }
@@ -823,15 +829,37 @@ footer {
   transform: translateY(0);
 }
 
-.modal h3 {
-  color: #b8860b;
-  margin-bottom: 20px;
-  font-size: 24px;
-}
+.success-message {
+  text-align: center;
+  padding: 2rem 1rem;
 
-.modal p {
-  font-size: 18px;
-  color: #555;
+  .success-icon {
+    width: 60px;
+    height: 60px;
+    background-color: #b8860b;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0 auto 1.5rem;
+  }
+
+  h3 {
+    color: #2a2a2a;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
 }
 
 .close-modal {
@@ -964,6 +992,11 @@ footer {
   color: white;
   font-size: 18px;
   text-align: center;
+}
+
+.spinner-border {
+  width: 1rem;
+  height: 1rem;
 }
 
 @keyframes spin {
