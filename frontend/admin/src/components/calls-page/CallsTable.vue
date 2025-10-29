@@ -110,7 +110,6 @@
 
 <script setup>
 import { ref } from 'vue'
-import DropdownMenu from '../common/DropdownMenu.vue'
 import CallModal from './CallModal.vue'
 
 defineProps({
