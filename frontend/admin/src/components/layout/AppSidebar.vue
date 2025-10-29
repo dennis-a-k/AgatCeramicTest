@@ -167,6 +167,7 @@ import {
   PhoneCallIcon,
   SquareChartGanttIcon,
   ShoppingCartIcon,
+  SettingsIcon,
 } from "../../icons";
 import { useSidebar } from "@/composables/useSidebar";
 
@@ -202,6 +203,11 @@ const menuGroups = [
         icon: PhoneCallIcon,
         name: "Звонки",
         path: "/calls",
+      },
+      {
+        icon: SettingsIcon,
+        name: "Настройки сайта",
+        path: "/settings",
       },
     ],
   },
