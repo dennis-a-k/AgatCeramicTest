@@ -55,7 +55,7 @@
                 class="border-t border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800">
                 <td class="px-5 py-4 sm:px-6">
                   <router-link :to="`/orders/${order.order}`">
-                    <p class="font-medium text-left text-gray-800 text-theme-sm dark:text-white/90">
+                    <p class="font-medium text-left text-gray-800 text-theme-sm dark:text-white/90 hover:text-brand-500 dark:hover:text-brand-400">
                       {{ order.order }}
                     </p>
                   </router-link>
