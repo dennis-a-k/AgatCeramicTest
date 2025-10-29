@@ -27,6 +27,7 @@ import Settings2Icon from "./Settings2Icon.vue";
 import SettingsIcon from "./SettingsIcon.vue";
 import ShoppingCartIcon from "./ShoppingCartIcon.vue";
 import SquareChartGanttIcon from "./SquareChartGanttIcon.vue";
+import SquarePenIcon from "./SquarePenIcon.vue";
 import UserCircleIcon from "./UserCircleIcon.vue";
 
 export {
@@ -59,5 +60,6 @@ export {
   SettingsIcon,
   ShoppingCartIcon,
   SquareChartGanttIcon,
+  SquarePenIcon,
   UserCircleIcon,
 };
