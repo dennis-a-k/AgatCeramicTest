@@ -23,7 +23,10 @@
                     <UsersTable />
                 </div>
                 <div class="col-span-12 xl:col-span-7">
-                    <ContactsTable />
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <ContactsTable />
+                        <DetailsTable />
+                    </div>
                 </div>
             </div>
         </div>
@@ -34,8 +37,9 @@
 import { ref } from 'vue'
 import AdminLayout from '@/components/layout/AdminLayout.vue'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
-import UsersTable from '@/components/settings-page/usersTable.vue'
+import UsersTable from '@/components/settings-page/UsersTable.vue'
 import ContactsTable from '@/components/settings-page/ContactsTable.vue'
+import DetailsTable from '@/components/settings-page/DetailsTable.vue'
 
 const currentPageTitle = ref('Настройки сайта')
 </script>
