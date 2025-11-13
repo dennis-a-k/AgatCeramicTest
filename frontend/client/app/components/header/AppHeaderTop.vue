@@ -18,15 +18,15 @@
               </li>
               <li><a href="#" class="modal-call" @click.prevent="openCallModal">Заказать звонок</a></li>
               <li>
-                <a href="tel:+79999999999">
+                <a :href="'tel:' + siteInfoStore.getFormattedPhone">
                   <i class="fa fa-phone"></i>
-                  +7 (999) 999-99-99
+                  {{ siteInfoStore.getFormattedPhone }}
                 </a>
               </li>
               <li>
-                <a href="mailto:zakaz@agatceramic.ru">
+                <a :href="'mailto:' + siteInfoStore.getEmail">
                   <i class="fa fa-envelope-o"></i>
-                  zakaz@agatceramic.ru
+                  {{ siteInfoStore.getEmail }}
                 </a>
               </li>
             </ul>
@@ -122,7 +122,17 @@ $spacing-between-items-mobile: 10px;
 </style>
 
 <script setup>
-import { inject } from 'vue'
+import { inject, onMounted } from 'vue'
+import { useSiteInfoStore } from '~/stores/useSiteInfoStore'
 
 const openCallModal = inject('openCallModal')
+const siteInfoStore = useSiteInfoStore()
+
+onMounted(async () => {
+  try {
+    await siteInfoStore.fetchSiteInfo()
+  } catch (err) {
+    console.error('Failed to load site info:', err)
+  }
+})
 </script>

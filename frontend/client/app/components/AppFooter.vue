@@ -53,18 +53,18 @@
                   </p>
                   <p class="contact-item">
                     <i class="icon fa fa-phone"></i>
-                    <NuxtLink to="tel:+79999999999" class="phone-link"> +7 (999) 999-99-99</NuxtLink>
+                    <NuxtLink :to="'tel:' + siteInfoStore.getFormattedPhone" class="phone-link"> {{ siteInfoStore.getFormattedPhone }}</NuxtLink>
                   </p>
                   <p class="contact-item">
                     <i class="icon fa fa-envelope-o"></i>
-                    <NuxtLink to="mailto:zakaz@agatceramic.ru">zakaz@agatceramic.ru</NuxtLink>
+                    <NuxtLink :to="'mailto:' + siteInfoStore.getEmail">{{ siteInfoStore.getEmail }}</NuxtLink>
                   </p>
                 </div>
                 <div class="social-links">
-                  <NuxtLink class="social-link" target="_blank" rel="noopener noreferrer" to="https://t.me">
+                  <NuxtLink class="social-link" target="_blank" rel="noopener noreferrer" :to="'https://t.me/' + siteInfoStore.getTelegram">
                     <i class="fa fa-telegram" aria-hidden="true"></i>
                   </NuxtLink>
-                  <NuxtLink class="social-link" target="_blank" rel="noopener noreferrer" to="https://wa.me/">
+                  <NuxtLink class="social-link" target="_blank" rel="noopener noreferrer" :to="'https://wa.me/' + siteInfoStore.getWhatsapp">
                     <i class="fa fa-whatsapp" aria-hidden="true"></i>
                   </NuxtLink>
                 </div>
@@ -100,10 +100,20 @@
 </template>
 
 <script setup>
-import { inject } from 'vue'
+import { inject, onMounted } from 'vue'
+import { useSiteInfoStore } from '~/stores/useSiteInfoStore'
 
 const currentYear = ref(new Date().getFullYear())
 const openCallModal = inject('openCallModal')
+const siteInfoStore = useSiteInfoStore()
+
+onMounted(async () => {
+  try {
+    await siteInfoStore.fetchSiteInfo()
+  } catch (err) {
+    console.error('Failed to load site info:', err)
+  }
+})
 </script>
 
 <style scoped lang="scss">
