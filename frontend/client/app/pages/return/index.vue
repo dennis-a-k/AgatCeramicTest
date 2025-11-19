@@ -152,7 +152,7 @@
         </li>
         <li>
           &nbsp;&nbsp;&nbsp;• Отправьте фотографии в письме на нашу почту
-          <a href="mailto:zakaz@agatceramic.ru" class="link-dark">zakaz@agatceramic.ru</a>
+          <a :href="'mailto:' + siteInfoStore.getEmail" class="link-dark">{{ siteInfoStore.getEmail }}</a>
           с темой письма <strong>"Ошибка в отгрузке № номер заказа"</strong>.
         </li>
       </ul>
@@ -173,7 +173,7 @@
         <li>&nbsp;&nbsp;&nbsp;• Опишите брак в свободной форме.</li>
         <li>
           &nbsp;&nbsp;&nbsp;• Отправьте фотографии в письме на нашу почту
-          <a href="mailto:zakaz@agatceramic.ru" class="link-dark">zakaz@agatceramic.ru</a>
+          <a :href="'mailto:' + siteInfoStore.getEmail" class="link-dark">{{ siteInfoStore.getEmail }}</a>
           с темой письма <strong>"Брак № номер заказа"</strong>.
         </li>
       </ul>
@@ -198,7 +198,7 @@
         <li>&nbsp;&nbsp;&nbsp;• Опишите брак в свободной форме.</li>
         <li>
           &nbsp;&nbsp;&nbsp;• Отправьте фотографии в письме на нашу почту
-          <a href="mailto:zakaz@agatceramic.ru" class="link-dark">zakaz@agatceramic.ru</a>
+          <a :href="'mailto:' + siteInfoStore.getEmail" class="link-dark">{{ siteInfoStore.getEmail }}</a>
           с темой письма <strong>"Разный тон/калибр № номер заказа"</strong>.
         </li>
       </ul>
@@ -218,7 +218,7 @@
         </li>
         <li>
           &nbsp;&nbsp;&nbsp;• Отправьте фотографии в письме на нашу почту
-          <a href="mailto:zakaz@agatceramic.ru" class="link-dark">zakaz@agatceramic.ru</a>
+          <a :href="'mailto:' + siteInfoStore.getEmail" class="link-dark">{{ siteInfoStore.getEmail }}</a>
           с темой письма <strong>"Возврат № номер заказа"</strong>.
         </li>
         <li>
@@ -294,9 +294,19 @@
 
 <script setup>
 import { useRuntimeConfig } from '#imports'
+import { useSiteInfoStore } from '~/stores/useSiteInfoStore'
 
 const config = useRuntimeConfig()
 const siteUrl = config.public.siteUrl || 'https://agatceramic.ru'
+const siteInfoStore = useSiteInfoStore()
+
+onMounted(async () => {
+  try {
+    await siteInfoStore.fetchSiteInfo()
+  } catch (err) {
+    console.error('Failed to load site info:', err)
+  }
+})
 
 useHead({
   title: 'Обмен и возврат товара - AgatCeramic',

@@ -8,12 +8,12 @@
                         Заказать звонок
                     </a>
                 </li>
-                <li><a href="tel:+79999999999" class="phone-link"><i class="fa fa-phone"></i> +7 (999) 999-99-99</a>
+                <li><a :href="'tel:' + siteInfoStore.getCleanPhone" class="phone-link"><i class="fa fa-phone"></i> {{ siteInfoStore.getFormattedPhone }}</a>
                 </li>
                 <li>
-                    <a href="mailto:zakaz@agatceramic.ru">
+                    <a :href="'mailto:' + siteInfoStore.getEmail">
                         <i class="fa fa-envelope-o"></i>
-                        zakaz@agatceramic.ru
+                        {{ siteInfoStore.getEmail }}
                     </a>
                 </li>
             </ul>
@@ -93,11 +93,11 @@
             <div class="offcanvas-social">
                 <ul>
                     <li>
-                        <a href="https://t.me/{{ $appData->telegram ?? '---' }}" target="_blanc"><i
+                        <a :href="'https://t.me/' + siteInfoStore.getTelegram" target="_blanc"><i
                                 class="fa fa-telegram"></i></a>
                     </li>
                     <li>
-                        <a href="https://wa.me/{{ $appData->whatsapp ?? '---' }}" target="_blanc"><i
+                        <a :href="'https://wa.me/' + siteInfoStore.getWhatsapp" target="_blanc"><i
                                 class="fa fa-whatsapp"></i></a>
                     </li>
                 </ul>
@@ -109,11 +109,19 @@
 <script setup>
 import { onMounted, inject } from 'vue'
 import { useCategoryStore } from '~/stores/useCategoryStore'
+import { useSiteInfoStore } from '~/stores/useSiteInfoStore'
 
 const openCallModal = inject('openCallModal')
 const store = useCategoryStore()
+const siteInfoStore = useSiteInfoStore()
 
-onMounted(() => {
+onMounted(async () => {
+    try {
+        await siteInfoStore.fetchSiteInfo()
+    } catch (err) {
+        console.error('Failed to load site info:', err)
+    }
+
     // Загружаем подкатегории сантехники при монтировании компонента
     store.fetchSantexnikaSubcategories()
 

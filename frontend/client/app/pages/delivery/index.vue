@@ -73,9 +73,9 @@
                 транспортной компании <strong>жесткую упаковку груза</strong> (обрешетку).</p>
             <p class="mb-3">Информацию о том, где находится ваш груз, можно отслеживать на сайте выбранной вами
                 транспортной компаний по номеру заявки.</p>
-            <p class="mb-5">Более подробную информацию вы можете узнать по номеру телефона <a href="tel:+79999999999"
-                    class="link-dark">+7 (999) 999-99-99</a> или почтовому ящику <a href="mailto:zakaz@agatceramic.ru"
-                    class="link-dark">zakaz@agatceramic.ru</a>.</p>
+            <p class="mb-5">Более подробную информацию вы можете узнать по номеру телефона <a :href="'tel:' + siteInfoStore.getCleanPhone"
+                    class="link-dark">{{ siteInfoStore.getFormattedPhone }}</a> или почтовому ящику <a :href="'mailto:' + siteInfoStore.getEmail"
+                    class="link-dark">{{ siteInfoStore.getEmail }}</a>.</p>
 
             <div class="mb-5">
                 <div class="mb-3">
@@ -96,7 +96,7 @@
                 <li>&#9;• Для возврата денежных средств на банковскую карту необходимо заполнить
                     «Заявление о возврате денежных средств», которое высылается по требованию компанией на
                     электронный адрес и отправить его вместе с приложением копии паспорта по адресу <a
-                        href="mailto:zakaz@agatceramic.ru" class="link-dark">zakaz@agatceramic.ru</a>.
+                        :href="'mailto:' + siteInfoStore.getEmail" class="link-dark">{{ siteInfoStore.getEmail }}</a>.
                 </li>
                 <li>&#9;• Возврат денежных средств будет осуществлен на банковскую карту в течение 21
                     (двадцати одного) рабочего дня со дня получения «Заявление о возврате денежных
@@ -105,7 +105,7 @@
                 <li>&#9;• Для возврата денежных средств по операциям проведенными с ошибками
                     необходимо обратиться с письменным заявлением и приложением копии паспорта и чеков/квитанций,
                     подтверждающих ошибочное списание. Данное заявление необходимо направить по адресу <a
-                        href="mailto:zakaz@agatceramic.ru" class="link-dark">zakaz@agatceramic.ru</a>.
+                        :href="'mailto:' + siteInfoStore.getEmail" class="link-dark">{{ siteInfoStore.getEmail }}</a>.
                 </li>
                 <li>&#9;• Сумма возврата будет равняться сумме покупки. Срок рассмотрения Заявления и
                     возврата денежных средств начинает исчисляться с момента получения Компанией
@@ -118,9 +118,19 @@
 
 <script setup>
 import { useRuntimeConfig } from '#imports'
+import { useSiteInfoStore } from '~/stores/useSiteInfoStore'
 
 const config = useRuntimeConfig()
 const siteUrl = config.public.siteUrl || 'https://agatceramic.ru'
+const siteInfoStore = useSiteInfoStore()
+
+onMounted(async () => {
+  try {
+    await siteInfoStore.fetchSiteInfo()
+  } catch (err) {
+    console.error('Failed to load site info:', err)
+  }
+})
 
 useHead({
     title: 'Оплата и доставка - AgatCeramic',

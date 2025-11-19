@@ -17,7 +17,7 @@
                   <div class="info-box">
                     <h5 class="title">Телефон</h5>
                     <p>
-                      <a href="tel:+79999999999" itemprop="telephone">+7 (999) 999-99-99</a>
+                      <a :href="'tel:' + siteInfoStore.getCleanPhone" itemprop="telephone">{{ siteInfoStore.getFormattedPhone }}</a>
                     </p>
                     <small>Москва (Пн.-Пт. 10:00-18:00)</small>
                   </div>
@@ -30,10 +30,10 @@
                   <div class="info-box">
                     <h5 class="title">Telegram/WhatsApp</h5>
                     <p>
-                      <a itemprop="sameAs" href="https://t.me/agatceramic" target="_blank">@agatceramic</a>
+                      <a itemprop="sameAs" :href="'https://t.me/' + siteInfoStore.getTelegram" target="_blank">@{{ siteInfoStore.getTelegram }}</a>
                     </p>
                     <p>
-                      <a itemprop="sameAs" href="https://wa.me/79999999999" target="_blank">https://wa.me/79999999999</a>
+                      <a itemprop="sameAs" :href="'https://wa.me/' + siteInfoStore.getWhatsapp" target="_blank">https://wa.me/{{ siteInfoStore.getWhatsapp }}</a>
                     </p>
                   </div>
                 </div>
@@ -44,7 +44,7 @@
                   <div class="info-box">
                     <h5 class="title">Почта</h5>
                     <p>
-                      <a href="mailto:zakaz@agatceramic.ru" itemprop="email">zakaz@agatceramic.ru</a>
+                      <a :href="'mailto:' + siteInfoStore.getEmail" itemprop="email">{{ siteInfoStore.getEmail }}</a>
                     </p>
                   </div>
                 </div>
@@ -59,9 +59,19 @@
 
 <script setup>
 import { useRuntimeConfig } from '#imports'
+import { useSiteInfoStore } from '~/stores/useSiteInfoStore'
 
 const config = useRuntimeConfig()
 const siteUrl = config.public.siteUrl || 'https://agatceramic.ru'
+const siteInfoStore = useSiteInfoStore()
+
+onMounted(async () => {
+  try {
+    await siteInfoStore.fetchSiteInfo()
+  } catch (err) {
+    console.error('Failed to load site info:', err)
+  }
+})
 
 useHead({
   title: 'Контакты - AgatCeramic',

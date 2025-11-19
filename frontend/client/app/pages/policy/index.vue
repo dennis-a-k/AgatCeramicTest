@@ -167,14 +167,14 @@
                     <li>
                         6.3. В случае выявления неточностей в персональных данных, Пользователь может актуализировать их
                         самостоятельно, путем направления Оператору уведомление на адрес электронной почты
-                        Оператора <NuxtLink to="mailto:zakaz@agatceramic.ru" class="link-dark">zakaz@agatceramic.ru
+                        Оператора <NuxtLink :to="'mailto:' + siteInfoStore.getEmail" class="link-dark">{{ siteInfoStore.getEmail }}
                         </NuxtLink> с пометкой «Актуализация персональных данных»;
                     </li>
                     <li>
                         6.4. Срок обработки персональных данных является неограниченным. Пользователь может в любой
                         момент отозвать свое согласие на обработку персональных данных, направив Оператору
                         уведомление посредством электронной почты на электронный адрес Оператора <NuxtLink
-                            to="mailto:zakaz@agatceramic.ru" class="link-dark">zakaz@agatceramic.ru</NuxtLink> с
+                            :to="'mailto:' + siteInfoStore.getEmail" class="link-dark">{{ siteInfoStore.getEmail }}</NuxtLink> с
                         пометкой «Отзыв согласия на обработку персональных данных»;
                     </li>
                 </ul>
@@ -205,7 +205,7 @@
                     <li>
                         8.1. Пользователь может получить любые разъяснения по интересующим вопросам, касающимся
                         обработки его персональных данных, обратившись к Оператору с помощью электронной почты <NuxtLink
-                            to="mailto:zakaz@agatceramic.ru" class="link-dark">zakaz@agatceramic.ru</NuxtLink>;
+                            :to="'mailto:' + siteInfoStore.getEmail" class="link-dark">{{ siteInfoStore.getEmail }}</NuxtLink>;
                     </li>
                     <li>
                         8.2. В данном документе будут отражены любые изменения политики обработки персональных данных
@@ -230,8 +230,18 @@
 
 <script setup>
 import { useRuntimeConfig } from '#imports'
+import { useSiteInfoStore } from '~/stores/useSiteInfoStore'
 
 const config = useRuntimeConfig()
+const siteInfoStore = useSiteInfoStore()
+
+onMounted(async () => {
+  try {
+    await siteInfoStore.fetchSiteInfo()
+  } catch (err) {
+    console.error('Failed to load site info:', err)
+  }
+})
 
 useHead({
     title: 'Политика конфиденциальности - AgatCeramic',

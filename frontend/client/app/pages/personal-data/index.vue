@@ -4,9 +4,9 @@
       <h1 class="h1 text-center mb-5">Согласие на обработку персональных данных</h1>
 
       <p class="mb-5">
-        &nbsp;&nbsp;&nbsp;Настоящим я даю свое согласие {{ data.organization }} (ИНН: {{ data.inn }},
-        ОГРН: {{ data.ogrn }}, адрес: {{ data.adress }}, тел.
-        {{ data.phone }}) и третьим лицам, осуществляющим обработку моих персональных
+        &nbsp;&nbsp;&nbsp;Настоящим я даю свое согласие {{ siteInfoStore.getOrganization }} (ИНН: {{ siteInfoStore.getInn }},
+        ОГРН: {{ siteInfoStore.getOgrn }}, адрес: {{ siteInfoStore.getAdress }}, тел.
+        {{ siteInfoStore.getFormattedPhone }}) и третьим лицам, осуществляющим обработку моих персональных
         данных, на обработку моих персональных данных (фамилия, имя, отчество, номер
         телефона, адрес электронной почты, адрес доставки, сведения об адресе аккаунта в социальных сетях и
         мессенджерах, пользовательские данные (MAC-адрес, тип и версия ОС, тип и версия
@@ -21,7 +21,7 @@
         оказания услуг, предоставления мне справочной информации, получения обратной связи в
         отношении товаров/услуг, улучшения качества обслуживания покупателей, изучения и анализа рынка, изучения
         потребностей покупателей, проведения маркетинговых и иных исследований, направления
-        мне рекламных и информационных сообщений о товарах/услугах и деятельности {{ data.organization }}, о
+        мне рекламных и информационных сообщений о товарах/услугах и деятельности {{ siteInfoStore.getOrganization }}, о
         проведении стимулирующих мероприятий рекламного характера, по электронной
         почте, посредством смс-сообщений, телефонных звонков и иных способов связи, подтвержденных мною, а также
         в целях обеспечения соблюдения законов, иных нормативных правовых актов РФ.
@@ -37,8 +37,8 @@
         может
         быть
         отозвано мной в любой момент путем направления уведомления посредством электронной
-        почты на электронный адрес <NuxtLink to="mailto:{{ data.email}}" class="link-dark">{{
-          data.email }}</NuxtLink> с пометкой «Отзыв согласия на обработку персональных
+        почты на электронный адрес <NuxtLink :to="'mailto:' + siteInfoStore.getEmail" class="link-dark">{{
+          siteInfoStore.getEmail }}</NuxtLink> с пометкой «Отзыв согласия на обработку персональных
         данных».
       </p>
       <p class="mb-5">
@@ -51,16 +51,18 @@
 
 <script setup>
 import { useRuntimeConfig } from '#imports'
+import { useSiteInfoStore } from '~/stores/useSiteInfoStore'
 
 const config = useRuntimeConfig()
-const data = {
-  email: 'zakaz@agatceramic.ru',
-  phone: '+79999999999',
-  organization: 'ИП Костя',
-  inn: 77777777,
-  ogrn: 88888888,
-  adress: 'Москва Теаьральная 13',
-}
+const siteInfoStore = useSiteInfoStore()
+
+onMounted(async () => {
+  try {
+    await siteInfoStore.fetchSiteInfo()
+  } catch (err) {
+    console.error('Failed to load site info:', err)
+  }
+})
 
 useHead({
   title: 'Согласие на обработку персональных данных - AgatCeramic',
