@@ -4,9 +4,9 @@
       <h1 class="h1 text-center mb-5">Согласие на обработку персональных данных</h1>
 
       <p class="mb-5">
-        &nbsp;&nbsp;&nbsp;Настоящим я даю свое согласие {{ siteInfoStore.getOrganization }} (ИНН: {{ siteInfoStore.getInn }},
+        &nbsp;&nbsp;&nbsp;Настоящим я даю свое согласие {{ siteInfoStore.getOrganization }} ( ИНН: {{ siteInfoStore.getInn }},
         ОГРН: {{ siteInfoStore.getOgrn }}, адрес: {{ siteInfoStore.getAdress }}, тел.
-        {{ siteInfoStore.getFormattedPhone }}) и третьим лицам, осуществляющим обработку моих персональных
+        {{ siteInfoStore.getFormattedPhone }} ) и третьим лицам, осуществляющим обработку моих персональных
         данных, на обработку моих персональных данных (фамилия, имя, отчество, номер
         телефона, адрес электронной почты, адрес доставки, сведения об адресе аккаунта в социальных сетях и
         мессенджерах, пользовательские данные (MAC-адрес, тип и версия ОС, тип и версия

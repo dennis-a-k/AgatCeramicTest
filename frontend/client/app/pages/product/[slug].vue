@@ -154,8 +154,18 @@ import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useRuntimeConfig } from '#imports';
 import { useCartStore } from '~/stores/useCartStore';
+import { useSiteInfoStore } from '~/stores/useSiteInfoStore';
 
 const cartStore = useCartStore();
+const siteInfoStore = useSiteInfoStore();
+
+onMounted(async () => {
+  try {
+    await siteInfoStore.fetchSiteInfo()
+  } catch (err) {
+    console.error('Failed to load site info:', err)
+  }
+})
 const { $toast } = useNuxtApp();
 
 const route = useRoute();
@@ -396,10 +406,10 @@ useHead(
           url: siteUrl,
           logo: `${siteUrl}/images/stock/logo.png`,
           description: 'Интернет-магазин плитки, керамогранита и сантехники',
-          email: 'zakaz@agatceramic.ru',
+          email: siteInfoStore.getEmail,
           contactPoint: {
             '@type': 'ContactPoint',
-            telephone: '+7 (999) 999-99-99',
+            telephone: siteInfoStore.getFormattedPhone,
             contactType: 'customer service',
           },
         }),

@@ -355,10 +355,10 @@ useHead({
       url: siteUrl,
       logo: `${siteUrl}/images/stock/logo.png`,
       description: 'Интернет-магазин плитки, керамогранита и сантехники',
-      email: 'zakaz@agatceramic.ru',
+      email: siteInfoStore.getEmail,
       contactPoint: {
         '@type': 'ContactPoint',
-        telephone: '+7 (999) 999-99-99',
+        telephone: siteInfoStore.getFormattedPhone,
         contactType: 'customer service'
       }
     })

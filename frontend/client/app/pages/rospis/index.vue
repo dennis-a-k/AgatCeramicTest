@@ -123,9 +123,19 @@
 
 <script setup>
 import { useRuntimeConfig } from '#imports'
+import { useSiteInfoStore } from '~/stores/useSiteInfoStore'
 
 const config = useRuntimeConfig()
 const siteUrl = config.public.siteUrl || 'https://agatceramic.ru'
+const siteInfoStore = useSiteInfoStore()
+
+onMounted(async () => {
+  try {
+    await siteInfoStore.fetchSiteInfo()
+  } catch (err) {
+    console.error('Failed to load site info:', err)
+  }
+})
 
 useHead({
   title: 'Художественная роспись плитки для дома и офиса - AgatCeramic',
@@ -174,10 +184,10 @@ useHead({
       url: siteUrl,
       logo: `${siteUrl}/images/stock/logo.png`,
       description: 'Интернет-магазин плитки, керамогранита и сантехники',
-      email: 'zakaz@agatceramic.ru',
+      email: siteInfoStore.getEmail,
       contactPoint: {
         '@type': 'ContactPoint',
-        telephone: '+7 (999) 999-99-99',
+        telephone: siteInfoStore.getFormattedPhone,
         contactType: 'customer service'
       }
     })

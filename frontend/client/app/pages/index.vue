@@ -14,11 +14,13 @@
 import { ref, onMounted } from 'vue'
 import { useRuntimeConfig } from '#imports'
 import { useBrandStore } from '~/stores/useBrandStore'
+import { useSiteInfoStore } from '~/stores/useSiteInfoStore'
 
 const config = useRuntimeConfig()
 const siteUrl = config.public.siteUrl || 'https://agatceramic.ru'
 
 const brandStore = useBrandStore()
+const siteInfoStore = useSiteInfoStore()
 const loading = ref(true)
 
 // Функция для получения случайных товаров категории
@@ -62,17 +64,19 @@ const fetchRandomProducts = async (slug, targetArray) => {
 }
 
 onMounted(async () => {
-  try {
-    // Загружаем бренды для слайдера
-    await brandStore.fetchBrands()
+try {
+  // Загружаем информацию о сайте
+  await siteInfoStore.fetchSiteInfo()
+  // Загружаем бренды для слайдера
+  await brandStore.fetchBrands()
 
-    // Загружаем товары для тап-слайдера (если нужно)
-    // Здесь можно добавить загрузку товаров, если компонент AppTapSlider не загружает их сам
-  } catch (error) {
-    console.error('Error loading page data:', error)
-  } finally {
-    loading.value = false
-  }
+  // Загружаем товары для тап-слайдера (если нужно)
+  // Здесь можно добавить загрузку товаров, если компонент AppTapSlider не загружает их сам
+} catch (error) {
+  console.error('Error loading page data:', error)
+} finally {
+  loading.value = false
+}
 })
 
 useHead({
@@ -122,10 +126,10 @@ useHead({
       url: siteUrl,
       logo: `${siteUrl}/images/stock/logo.png`,
       description: 'Интернет-магазин плитки, керамогранита и сантехники',
-      email: 'zakaz@agatceramic.ru',
+      email: siteInfoStore.getEmail,
       contactPoint: {
         '@type': 'ContactPoint',
-        telephone: '+7 (999) 999-99-99',
+        telephone: siteInfoStore.getFormattedPhone,
         contactType: 'customer service'
       }
     })

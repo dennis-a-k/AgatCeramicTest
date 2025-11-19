@@ -98,14 +98,21 @@ import { computed, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useRuntimeConfig } from '#imports';
 import { useCategoryStore } from '~/stores/useCategoryStore';
+import { useSiteInfoStore } from '~/stores/useSiteInfoStore';
 
 const route = useRoute();
 const slug = route.params.slug;
 const store = useCategoryStore();
+const siteInfoStore = useSiteInfoStore();
 
 // Сбрасываем фильтры при переходе в новую категорию
-onMounted(() => {
+onMounted(async () => {
   store.resetFilters();
+  try {
+    await siteInfoStore.fetchSiteInfo()
+  } catch (err) {
+    console.error('Failed to load site info:', err)
+  }
 });
 
 const config = useRuntimeConfig();
@@ -246,10 +253,10 @@ useHead(
           url: siteUrl,
           logo: `${siteUrl}/images/stock/logo.png`,
           description: 'Интернет-магазин плитки, керамогранита и сантехники',
-          email: 'zakaz@agatceramic.ru',
+          email: siteInfoStore.getEmail,
           contactPoint: {
             '@type': 'ContactPoint',
-            telephone: '+7 (999) 999-99-99',
+            telephone: siteInfoStore.getFormattedPhone,
             contactType: 'customer service'
           }
         })
