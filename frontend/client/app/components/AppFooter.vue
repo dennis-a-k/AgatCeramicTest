@@ -53,7 +53,7 @@
                   </p>
                   <p class="contact-item">
                     <i class="icon fa fa-phone"></i>
-                    <NuxtLink :to="'tel:' + siteInfoStore.getFormattedPhone" class="phone-link"> {{ siteInfoStore.getFormattedPhone }}</NuxtLink>
+                    <NuxtLink :to="'tel:' + siteInfoStore.getCleanPhone" class="phone-link"> {{ siteInfoStore.getFormattedPhone }}</NuxtLink>
                   </p>
                   <p class="contact-item">
                     <i class="icon fa fa-envelope-o"></i>

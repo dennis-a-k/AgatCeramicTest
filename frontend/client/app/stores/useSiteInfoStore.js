@@ -40,12 +40,18 @@ export const useSiteInfoStore = defineStore('siteInfo', () => {
 
   const getValue = (key) => computed(() => siteInfo.value?.[key] || DEFAULTS[key])
 
+  const getCleanPhone = computed(() => {
+    const phone = siteInfo.value?.phone || DEFAULTS.phone
+    return phone.replace(/[\s()\-]/g, '')
+  })
+
   return {
     siteInfo: computed(() => siteInfo.value),
     isLoading: computed(() => isLoading.value),
     error: computed(() => error.value),
     fetchSiteInfo,
     getFormattedPhone: getValue('phone'),
+    getCleanPhone,
     getEmail: getValue('email'),
     getTelegram: getValue('telegram'),
     getWhatsapp: getValue('whatsapp'),

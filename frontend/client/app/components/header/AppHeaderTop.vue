@@ -18,7 +18,7 @@
               </li>
               <li><a href="#" class="modal-call" @click.prevent="openCallModal">Заказать звонок</a></li>
               <li>
-                <a :href="'tel:' + siteInfoStore.getFormattedPhone">
+                <a :href="'tel:' + siteInfoStore.getCleanPhone">
                   <i class="fa fa-phone"></i>
                   {{ siteInfoStore.getFormattedPhone }}
                 </a>
