@@ -7,11 +7,21 @@ const router = createRouter({
   },
   routes: [
     {
+      path: '/login',
+      name: 'Auth',
+      component: () => import('@/components/auth/LoginForm.vue'),
+      meta: {
+        title: 'Авторизация',
+        requiresGuest: true
+      },
+    },
+    {
       path: '/',
       name: 'Dashboard',
       component: () => import('../views/Dashboard.vue'),
       meta: {
         title: 'Статистика',
+        requiresAuth: true
       },
     },
     {
@@ -20,6 +30,7 @@ const router = createRouter({
       component: () => import('../views/Pages/product/Goods.vue'),
       meta: {
         title: 'Товары',
+        requiresAuth: true
       },
     },
     {
@@ -28,6 +39,7 @@ const router = createRouter({
       component: () => import('../views/Pages/product/CreateProduct.vue'),
       meta: {
         title: 'Создание товара',
+        requiresAuth: true
       },
     },
     {
@@ -36,6 +48,7 @@ const router = createRouter({
       component: () => import('../views/Pages/product/EditProduct.vue'),
       meta: {
         title: 'Редактирование товара',
+        requiresAuth: true
       },
     },
     {
@@ -44,6 +57,7 @@ const router = createRouter({
       component: () => import('../views/Pages/characteristics/Characteristics.vue'),
       meta: {
         title: 'Управление характеричтиками товара',
+        requiresAuth: true
       },
     },
     {
@@ -52,6 +66,7 @@ const router = createRouter({
       component: () => import('../views/Pages/orders/Orders.vue'),
       meta: {
         title: 'Заказы',
+        requiresAuth: true
       },
     },
     {
@@ -60,6 +75,7 @@ const router = createRouter({
       component: () => import('../views/Pages/calls/Calls.vue'),
       meta: {
         title: 'Обратные звонки',
+        requiresAuth: true
       },
     },
     {
@@ -68,6 +84,7 @@ const router = createRouter({
       component: () => import('../views/Pages/settings/Settings.vue'),
       meta: {
         title: 'Настройки сайта',
+        requiresAuth: true
       },
     },
   ],
@@ -76,6 +93,17 @@ const router = createRouter({
 export default router
 
 router.beforeEach((to, from, next) => {
+  // Установка заголовка страницы
   document.title = `${to.meta.title} | AgatCeramic Admin`
-  next()
+
+  // Проверка авторизации
+  const isAuthenticated = !!localStorage.getItem('auth_token') && localStorage.getItem('auth_token') !== 'undefined'
+
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next({ name: 'Auth' })
+  } else if (to.meta.requiresGuest && isAuthenticated) {
+    next({ name: 'Dashboard' })
+  } else {
+    next()
+  }
 })
