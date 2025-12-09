@@ -94,10 +94,20 @@ export default router
 
 router.beforeEach((to, from, next) => {
   // Установка заголовка страницы
-  document.title = `${to.meta.title} | AgatCeramic Admin`
+  document.title = `${to.meta?.title || 'AgatCeramic Admin'} | AgatCeramic Admin`
 
   // Проверка авторизации
   const isAuthenticated = !!localStorage.getItem('auth_token') && localStorage.getItem('auth_token') !== 'undefined'
+
+  // Если маршрут не найден, перенаправляем в зависимости от статуса авторизации
+  if (to.matched.length === 0) {
+    if (!isAuthenticated) {
+      next({ name: 'Auth' })
+    } else {
+      next({ name: 'Dashboard' })
+    }
+    return
+  }
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     next({ name: 'Auth' })
