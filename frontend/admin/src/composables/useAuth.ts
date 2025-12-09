@@ -4,7 +4,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export function useAuth() {
   const loading = ref(false)
-  const error = ref<string[]>([])
+  const error = ref<Record<string, string[]>>({})
 
   const getCsrfToken = async () => {
     try {
@@ -20,7 +20,7 @@ export function useAuth() {
 
   const register = async (credentials: { name: string; email: string; password: string; password_confirmation: string }) => {
     loading.value = true
-    error.value = []
+    error.value = {}
 
     try {
       await getCsrfToken()
@@ -38,17 +38,17 @@ export function useAuth() {
       if (!response.ok) {
         const errorData = await response.json()
         if (errorData.errors) {
-          error.value = Object.values(errorData.errors).flat() as string[]
+          error.value = errorData.errors
         } else {
-          error.value = [errorData.message || 'Registration failed']
+          error.value = { general: [errorData.message || 'Registration failed'] }
         }
         throw new Error(errorData.message || 'Registration failed')
       }
 
       return await response.json()
     } catch (err) {
-      if (error.value.length === 0) {
-        error.value = [(err as Error).message]
+      if (Object.keys(error.value).length === 0) {
+        error.value = { general: [(err as Error).message] }
       }
       throw err
     } finally {
@@ -58,7 +58,7 @@ export function useAuth() {
 
   const login = async (credentials: { email: string; password: string }) => {
     loading.value = true
-    error.value = []
+    error.value = {}
 
     try {
       await getCsrfToken()
@@ -76,9 +76,9 @@ export function useAuth() {
       if (!response.ok) {
         const errorData = await response.json()
         if (errorData.errors) {
-          error.value = Object.values(errorData.errors).flat() as string[]
+          error.value = errorData.errors
         } else {
-          error.value = [errorData.message || 'Login failed']
+          error.value = { general: [errorData.message || 'Login failed'] }
         }
         throw new Error(errorData.message || 'Login failed')
       }
@@ -88,8 +88,8 @@ export function useAuth() {
       localStorage.setItem('auth_user', JSON.stringify(data.user))
       return data
     } catch (err) {
-      if (error.value.length === 0) {
-        error.value = [(err as Error).message]
+      if (Object.keys(error.value).length === 0) {
+        error.value = { general: [(err as Error).message] }
       }
       throw err
     } finally {
@@ -99,7 +99,7 @@ export function useAuth() {
 
   const logout = async () => {
     loading.value = true
-    error.value = []
+    error.value = {}
 
     try {
       await getCsrfToken()
@@ -119,8 +119,8 @@ export function useAuth() {
 
       return await response.json()
     } catch (err) {
-      if (error.value.length === 0) {
-        error.value = [(err as Error).message]
+      if (Object.keys(error.value).length === 0) {
+        error.value = { general: [(err as Error).message] }
       }
       throw err
     } finally {
@@ -130,7 +130,7 @@ export function useAuth() {
 
   const getUser = async () => {
     loading.value = true
-    error.value = []
+    error.value = {}
 
     try {
       await getCsrfToken()
@@ -150,7 +150,7 @@ export function useAuth() {
 
       return await response.json()
     } catch (err) {
-      error.value = [(err as Error).message]
+      error.value = { general: [(err as Error).message] }
       throw err
     } finally {
       loading.value = false
@@ -159,7 +159,7 @@ export function useAuth() {
 
   const updateUser = async (userData: { name: string; email: string; password?: string; password_confirmation?: string }) => {
     loading.value = true
-    error.value = []
+    error.value = {}
 
     try {
       await getCsrfToken()
@@ -178,9 +178,9 @@ export function useAuth() {
       if (!response.ok) {
         const errorData = await response.json()
         if (errorData.errors) {
-          error.value = Object.values(errorData.errors).flat() as string[]
+          error.value = errorData.errors
         } else {
-          error.value = [errorData.message || 'Update failed']
+          error.value = { general: [errorData.message || 'Update failed'] }
         }
         throw new Error(errorData.message || 'Update failed')
       }
@@ -189,8 +189,8 @@ export function useAuth() {
       localStorage.setItem('auth_user', JSON.stringify(data.user))
       return data
     } catch (err) {
-      if (error.value.length === 0) {
-        error.value = [(err as Error).message]
+      if (Object.keys(error.value).length === 0) {
+        error.value = { general: [(err as Error).message] }
       }
       throw err
     } finally {

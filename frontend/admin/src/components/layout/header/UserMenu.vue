@@ -109,12 +109,12 @@ const saveProfile = async (formData) => {
     // Refresh user data
     user.value = await getUser()
   } catch (err) {
-    // Assuming error.value is an array of strings, convert to object for modal
+    // Assuming error.value is an object with field arrays, convert to object for modal
     profileErrors.value = {
-      name: error.value.find(e => e.includes('name')) || '',
-      email: error.value.find(e => e.includes('email')) || '',
-      password: error.value.find(e => e.includes('password')) || '',
-      password_confirmation: error.value.find(e => e.includes('password_confirmation')) || ''
+      name: error.value.name?.[0] || '',
+      email: error.value.email?.[0] || '',
+      password: error.value.password?.[0] || '',
+      password_confirmation: error.value.password_confirmation?.[0] || ''
     }
   }
 }

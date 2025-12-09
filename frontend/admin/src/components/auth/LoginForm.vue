@@ -78,11 +78,13 @@
         <span v-if="!loading">{{ isLogin ? 'Войти' : 'Зарегистрироваться' }}</span>
         <span v-else>{{ isLogin ? 'Авторизация...' : 'Регистрация...' }}</span>
       </button>
-      <div v-if="error && error.length > 0" class="mt-4 text-red-500 text-sm text-center">
-        <ul v-if="error.length > 1" class="list-none list-inside">
-          <li v-for="err in error" :key="err">{{ err }}</li>
-        </ul>
-        <span v-else>{{ error[0] }}</span>
+      <div v-if="error && Object.keys(error).length > 0" class="mt-4 text-red-500 text-sm text-center">
+        <div v-for="(messages, field) in error" :key="field">
+          <ul v-if="messages.length > 1" class="list-none list-inside">
+            <li v-for="msg in messages" :key="msg">{{ msg }}</li>
+          </ul>
+          <span v-else>{{ messages[0] }}</span>
+        </div>
       </div>
       <div v-if="successMessage" class="mt-4 p-3 text-green-500 text-center">
         {{ successMessage }}
