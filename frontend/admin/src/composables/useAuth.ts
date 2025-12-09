@@ -85,6 +85,7 @@ export function useAuth() {
 
       const data = await response.json()
       localStorage.setItem('auth_token', data.token)
+      localStorage.setItem('auth_user', JSON.stringify(data.user))
       return data
     } catch (err) {
       if (error.value.length === 0) {

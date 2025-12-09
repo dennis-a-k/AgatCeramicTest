@@ -1,11 +1,11 @@
 <template>
   <div class="relative" ref="dropdownRef">
     <button class="flex items-center text-gray-700 dark:text-gray-400" @click.prevent="toggleDropdown">
-      <span class="mr-3 overflow-hidden rounded-full h-11 w-11">
-        <img :src="user?.avatar || '/default-avatar.png'" alt="User" />
+      <span class="mr-3 overflow-hidden rounded-full h-8 w-8">
+        <component :is="UserCircleIcon" class="h-8 w-8 text-brand-500 group-hover:text-brand-700 dark:group-hover:text-brand-300" />
       </span>
 
-      <span class="block mr-1 font-medium text-theme-sm">{{ user?.name || 'Пользователь' }}</span>
+      <span class="block mr-1 font-medium text-theme-sm text-brand-500">{{ user?.name || 'Пользователь' }}</span>
 
       <ChevronDownIcon :class="{ 'rotate-180': dropdownOpen }" />
     </button>
@@ -48,7 +48,7 @@ import { RouterLink, useRouter } from 'vue-router'
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 
-const { logout, getUser } = useAuth()
+const { logout, getUser, loading } = useAuth()
 const router = useRouter()
 
 const dropdownOpen = ref(false)
@@ -79,11 +79,14 @@ const fetchUser = async () => {
 const signOut = async () => {
   try {
     await logout()
-    localStorage.removeItem('auth_token')
-    router.push('/login')
   } catch (error) {
     console.error('Logout failed:', error)
   }
+  // Always clear localStorage and redirect
+  localStorage.removeItem('auth_token')
+  localStorage.removeItem('auth_user')
+  user.value = null
+  router.push('/login')
   closeDropdown()
 }
 
@@ -95,6 +98,12 @@ const handleClickOutside = (event) => {
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
+  // Load user data from localStorage immediately
+  const storedUser = localStorage.getItem('auth_user')
+  if (storedUser) {
+    user.value = JSON.parse(storedUser)
+  }
+  // Then fetch fresh data from API
   fetchUser()
 })
 
