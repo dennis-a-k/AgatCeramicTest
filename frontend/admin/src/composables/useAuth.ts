@@ -157,12 +157,54 @@ export function useAuth() {
     }
   }
 
+  const updateUser = async (userData: { name: string; email: string; password?: string; password_confirmation?: string }) => {
+    loading.value = true
+    error.value = []
+
+    try {
+      await getCsrfToken()
+
+      const response = await fetch(`${API_BASE_URL}/api/user`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        },
+        credentials: 'include',
+        body: JSON.stringify(userData)
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        if (errorData.errors) {
+          error.value = Object.values(errorData.errors).flat() as string[]
+        } else {
+          error.value = [errorData.message || 'Update failed']
+        }
+        throw new Error(errorData.message || 'Update failed')
+      }
+
+      const data = await response.json()
+      localStorage.setItem('auth_user', JSON.stringify(data.user))
+      return data
+    } catch (err) {
+      if (error.value.length === 0) {
+        error.value = [(err as Error).message]
+      }
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     loading,
     error,
     register,
     login,
     logout,
-    getUser
+    getUser,
+    updateUser
   }
 }
