@@ -4,14 +4,14 @@
       <button
         @click="isLogin = true"
         class="px-4 py-2 font-medium"
-        :class="isLogin ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500 hover:text-gray-700'"
+        :class="isLogin ? 'text-brand-500 border-b-2 border-brand-500' : 'text-gray-500 hover:text-gray-700'"
       >
         Вход
       </button>
       <button
         @click="isLogin = false"
         class="px-4 py-2 font-medium"
-        :class="!isLogin ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500 hover:text-gray-700'"
+        :class="!isLogin ? 'text-brand-500 border-b-2 border-brand-500' : 'text-gray-500 hover:text-gray-700'"
       >
         Регистрация
       </button>
@@ -26,7 +26,7 @@
           v-model="form.name"
           id="name"
           type="text"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 appearance-none"
           required
         />
       </div>
@@ -39,7 +39,7 @@
           v-model="form.email"
           id="email"
           type="email"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 appearance-none"
           required
         />
       </div>
@@ -52,7 +52,7 @@
           v-model="form.password"
           id="password"
           type="password"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 appearance-none"
           required
         />
       </div>
@@ -65,14 +65,14 @@
           v-model="form.password_confirmation"
           id="password_confirmation"
           type="password"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 appearance-none"
           required
         />
       </div>
 
       <button
         type="submit"
-        class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
+        class="w-full bg-brand-500 text-white py-2 px-4 rounded-lg hover:bg-brand-600 transition duration-200"
         :disabled="loading"
       >
         <span v-if="!loading">{{ isLogin ? 'Войти' : 'Зарегистрироваться' }}</span>
