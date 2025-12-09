@@ -78,8 +78,8 @@
         <span v-if="!loading">{{ isLogin ? 'Войти' : 'Зарегистрироваться' }}</span>
         <span v-else>{{ isLogin ? 'Авторизация...' : 'Регистрация...' }}</span>
       </button>
-      <div v-if="error" class="mt-4 text-red-500 text-sm">{{ error }}</div>
-      <div v-if="successMessage" class="mt-4 p-3 bg-green-100 text-green-700 rounded-lg">
+      <div v-if="error" class="mt-4 text-red-500 text-sm text-center">{{ error }}</div>
+      <div v-if="successMessage" class="mt-4 p-3 text-green-500 text-center">
         {{ successMessage }}
       </div>
     </form>
