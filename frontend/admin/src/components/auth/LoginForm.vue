@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+  <div class="max-w-md mx-auto mt-8 p-4 bg-white rounded-lg shadow-md">
     <div class="flex justify-center mb-6">
       <button
         @click="isLogin = true"
@@ -78,7 +78,12 @@
         <span v-if="!loading">{{ isLogin ? 'Войти' : 'Зарегистрироваться' }}</span>
         <span v-else>{{ isLogin ? 'Авторизация...' : 'Регистрация...' }}</span>
       </button>
-      <div v-if="error" class="mt-4 text-red-500 text-sm text-center">{{ error }}</div>
+      <div v-if="error && error.length > 0" class="mt-4 text-red-500 text-sm text-center">
+        <ul v-if="error.length > 1" class="list-none list-inside">
+          <li v-for="err in error" :key="err">{{ err }}</li>
+        </ul>
+        <span v-else>{{ error[0] }}</span>
+      </div>
       <div v-if="successMessage" class="mt-4 p-3 text-green-500 text-center">
         {{ successMessage }}
       </div>
