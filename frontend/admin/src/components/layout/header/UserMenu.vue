@@ -32,11 +32,11 @@
           </router-link>
         </li>
       </ul>
-      <router-link to="/logout" @click="signOut"
-        class="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
+      <div @click="signOut"
+        class="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300 cursor-pointer">
         <LogoutIcon class="text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300" />
-        Sign out
-      </router-link>
+        Выйти
+      </div>
     </div>
     <!-- Dropdown End -->
   </div>
@@ -44,8 +44,12 @@
 
 <script setup>
 import { UserCircleIcon, ChevronDownIcon, LogoutIcon, SettingsIcon, InfoCircleIcon } from '@/icons'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useAuth } from '@/composables/useAuth'
+
+const { logout } = useAuth()
+const router = useRouter()
 
 const dropdownOpen = ref(false)
 const dropdownRef = ref(null)
@@ -64,9 +68,14 @@ const closeDropdown = () => {
   dropdownOpen.value = false
 }
 
-const signOut = () => {
-  // Implement sign out logic here
-  console.log('Signing out...')
+const signOut = async () => {
+  try {
+    await logout()
+    localStorage.removeItem('auth_token')
+    router.push('/login')
+  } catch (error) {
+    console.error('Logout failed:', error)
+  }
   closeDropdown()
 }
 
