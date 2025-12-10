@@ -28,6 +28,16 @@
             </span>
           </button>
           <div v-if="showMonthPicker" class="absolute z-10 mt-1 right-0 w-80 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg p-4">
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Год</label>
+              <select
+                v-model="selectedYear"
+                @change="onYearChange"
+                class="w-full p-2 text-sm border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300"
+              >
+                <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
+              </select>
+            </div>
             <div class="grid grid-cols-3 gap-2">
               <button
                 v-for="(month, index) in months"
@@ -141,11 +151,12 @@ const props = defineProps({
   onMonthChange: {
     type: Function,
     required: true
-  }
+  },
 })
 
 const showMonthPicker = ref(false)
 const selectedMonthIndex = ref(new Date().getMonth())
+const selectedYear = ref(new Date().getFullYear())
 
 const months = [
   'Январь', 'Февраль', 'Март',
@@ -154,8 +165,10 @@ const months = [
   'Октябрь', 'Ноябрь', 'Декабрь'
 ]
 
+const years = Array.from({ length: 6 }, (_, i) => new Date().getFullYear() - 2 + i)
+
 const selectedMonthText = computed(() => {
-  return months[selectedMonthIndex.value]
+  return `${months[selectedMonthIndex.value]} ${selectedYear.value}`
 })
 
 const toggleMonthPicker = () => {
@@ -165,9 +178,13 @@ const toggleMonthPicker = () => {
 const selectMonth = (index) => {
   selectedMonthIndex.value = index
   showMonthPicker.value = false
-  const year = new Date().getFullYear()
   const month = String(index + 1).padStart(2, '0')
-  props.onMonthChange(`${year}-${month}`)
+  props.onMonthChange(`${selectedYear.value}-${month}`)
+}
+
+const onYearChange = () => {
+  const month = String(selectedMonthIndex.value + 1).padStart(2, '0')
+  props.onMonthChange(`${selectedYear.value}-${month}`)
 }
 
 onMounted(() => {
