@@ -68,6 +68,7 @@ const {
 
 const showFilter = ref(false)
 const isOpen = ref(false)
+const selectedMonth = ref('')
 const orderStatistics = ref({
     current: {
         pending: 0,
@@ -115,13 +116,13 @@ const handleUpdateStatus = async (order, newStatus) => {
 }
 
 const onMonthChange = (month) => {
-    console.log('Selected month:', month)
+    selectedMonth.value = month
     loadStatistics()
 }
 
 const loadStatistics = async () => {
     try {
-        const stats = await fetchOrderStatistics()
+        const stats = await fetchOrderStatistics(selectedMonth.value)
         orderStatistics.value = stats
     } catch (err) {
         console.error('Ошибка загрузки статистики:', err)

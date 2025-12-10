@@ -84,12 +84,17 @@ class OrderController extends Controller
         return response()->json(['order' => $formattedOrder]);
     }
 
-    public function statistics(): JsonResponse
+    public function statistics(Request $request): JsonResponse
     {
-        $currentMonth = now()->startOfMonth();
-        $nextMonth = now()->startOfMonth()->addMonth();
-        $previousMonth = now()->startOfMonth()->subMonth();
-        $currentMonthEnd = now()->startOfMonth();
+        // Получаем выбранный месяц или используем текущий
+        $selectedMonth = $request->has('month') && !empty($request->month)
+            ? \Carbon\Carbon::createFromFormat('Y-m', $request->month)->startOfMonth()
+            : now()->startOfMonth();
+
+        $currentMonthStart = $selectedMonth;
+        $currentMonthEnd = $selectedMonth->copy()->endOfMonth();
+        $previousMonthStart = $selectedMonth->copy()->subMonth();
+        $previousMonthEnd = $selectedMonth->copy()->subMonth()->endOfMonth();
 
         // Статистика за весь период (для pending и processing)
         $allTimeStats = [
@@ -100,20 +105,20 @@ class OrderController extends Controller
         // Текущий месяц (для shipped и total_amount)
         $currentStats = [
             'shipped' => Order::where('status', 'shipped')
-                ->whereBetween('created_at', [$currentMonth, $nextMonth])
+                ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
                 ->count(),
             'total_amount' => Order::where('status', 'shipped')
-                ->whereBetween('created_at', [$currentMonth, $nextMonth])
+                ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
                 ->sum('total_amount'),
         ];
 
         // Предыдущий месяц (для shipped и total_amount)
         $previousStats = [
             'shipped' => Order::where('status', 'shipped')
-                ->whereBetween('created_at', [$previousMonth, $currentMonthEnd])
+                ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
                 ->count(),
             'total_amount' => Order::where('status', 'shipped')
-                ->whereBetween('created_at', [$previousMonth, $currentMonthEnd])
+                ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
                 ->sum('total_amount'),
         ];
 

@@ -81,7 +81,7 @@
           </div>
           <span
             class="flex items-center gap-1 rounded-full bg-gray-50 py-0.5 pl-2 pr-2.5 text-xs font-medium text-gray-600 dark:bg-gray-500/15 dark:text-gray-500">
-            за текущий месяц
+            за выбранный месяц
           </span>
         </div>
         <div class="flex items-end justify-between mt-5">

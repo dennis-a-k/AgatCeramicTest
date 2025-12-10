@@ -210,9 +210,15 @@ export function useOrders() {
     fetchOrders()
   })
 
-  const fetchOrderStatistics = async () => {
+  const fetchOrderStatistics = async (month?: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/orders/statistics`)
+      const params = new URLSearchParams()
+      if (month) {
+        params.append('month', month)
+      }
+      const url = `${API_BASE_URL}/api/orders/statistics${params.toString() ? '?' + params.toString() : ''}`
+
+      const response = await fetch(url)
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
