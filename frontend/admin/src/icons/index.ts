@@ -28,7 +28,9 @@ import SettingsIcon from "./SettingsIcon.vue";
 import ShoppingCartIcon from "./ShoppingCartIcon.vue";
 import SquareChartGanttIcon from "./SquareChartGanttIcon.vue";
 import SquarePenIcon from "./SquarePenIcon.vue";
+import SwatchBookIcon from "./SwatchBookIcon.vue";
 import UserCircleIcon from "./UserCircleIcon.vue";
+import UsersRoundIcon from "./UsersRoundIcon.vue";
 
 export {
   ArrowDownIcon,
@@ -61,5 +63,7 @@ export {
   ShoppingCartIcon,
   SquareChartGanttIcon,
   SquarePenIcon,
+  SwatchBookIcon,
   UserCircleIcon,
+  UsersRoundIcon,
 };
