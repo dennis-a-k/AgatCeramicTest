@@ -5,9 +5,12 @@
             <CallsStatistics :arrowDownIcon="arrowDownIcon" :arrowUpIcon="arrowUpIcon"
                 :phoneOutgoingIcon="phoneOutgoingIcon" :calendarClockIcon="calendarClockIcon"
                 :calendarDaysIcon="calendarDaysIcon" :circleCheckBigIcon="circleCheckBigIcon"
-                :statistics="callStatistics" :onMonthChange="handleMonthChange" />
+                :swatchBookIcon="swatchBookIcon" :usersRoundIcon="usersRoundIcon" :statistics="callStatistics"
+                :onMonthChange="handleMonthChange" />
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-                <CallsHeader :totalItems="totalItems" :packageIcon="phoneCallIcon" :statuses="statuses" :selectedItem="selectedStatus" :isOpen="isOpen" @toggleDropdown="toggleDropdown" @toggleItem="handleToggleItem" />
+                <CallsHeader :totalItems="totalItems" :packageIcon="phoneCallIcon" :statuses="statuses"
+                    :selectedItem="selectedStatus" :isOpen="isOpen" @toggleDropdown="toggleDropdown"
+                    @toggleItem="handleToggleItem" />
                 <CallsTable :loading="loading" :error="error" :calls="calls" :formatter="formatter"
                     @fetchCalls="fetchCalls" @edit="handleEdit" @delete="handleDelete"
                     @updateStatus="handleUpdateStatus" />
@@ -35,6 +38,8 @@ import {
     CircleCheckBigIcon,
     PhoneCallIcon,
     PhoneOutgoingIcon,
+    UsersRoundIcon,
+    SwatchBookIcon,
 } from "../../../icons";
 
 const router = useRouter()
@@ -46,6 +51,8 @@ const calendarDaysIcon = CalendarDaysIcon
 const circleCheckBigIcon = CircleCheckBigIcon
 const phoneCallIcon = PhoneCallIcon
 const phoneOutgoingIcon = PhoneOutgoingIcon
+const usersRoundIcon = UsersRoundIcon
+const swatchBookIcon = SwatchBookIcon
 
 const {
     calls,
