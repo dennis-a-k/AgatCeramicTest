@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-md mx-auto mt-8 p-4 bg-white rounded-lg shadow-md">
+  <div class="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
     <div class="flex justify-center mb-6">
       <button
         @click="isLogin = true"
@@ -43,7 +43,7 @@
           :class="inputClass('email')"
           required
         />
-        <div v-if="fieldErrors.email" class="text-red-500 text-sm">{{ fieldErrors.email }}</div>
+        <div v-if="fieldErrors.email" class="mt-1.5 text-theme-xs text-error-500">{{ fieldErrors.email }}</div>
       </div>
 
       <div class="mb-4">
@@ -57,7 +57,7 @@
           :class="inputClass('password')"
           required
         />
-        <div v-if="fieldErrors.password" class="text-red-500 text-sm">{{ fieldErrors.password }}</div>
+        <div v-if="fieldErrors.password" class="mt-1.5 text-theme-xs text-error-500">{{ fieldErrors.password }}</div>
       </div>
 
       <div v-if="!isLogin" class="mb-6">
@@ -71,7 +71,7 @@
           :class="inputClass('password_confirmation')"
           required
         />
-        <div v-if="fieldErrors.password_confirmation" class="text-red-500 text-sm">{{ fieldErrors.password_confirmation }}</div>
+        <div v-if="fieldErrors.password_confirmation" class="mt-1.5 text-theme-xs text-error-500">{{ fieldErrors.password_confirmation }}</div>
       </div>
 
       <button
