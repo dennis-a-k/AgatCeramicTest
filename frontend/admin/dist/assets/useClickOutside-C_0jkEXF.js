@@ -1,1 +1,0 @@
-import{r as s,s as u,J as c}from"./index-Dl7gN0eW.js";function r(t){const e=s(null),n=o=>{e.value&&!e.value.contains(o.target)&&t()};return u(()=>{document.addEventListener("click",n)}),c(()=>{document.removeEventListener("click",n)}),e}export{r as u};

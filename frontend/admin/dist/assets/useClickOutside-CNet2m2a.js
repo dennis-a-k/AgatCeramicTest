@@ -1,0 +1,1 @@
+import{r as u,x as c,J as i}from"./index-aP64LZ8f.js";function s(t){const e=u(null),n=o=>{e.value&&!e.value.contains(o.target)&&t()};return c(()=>{document.addEventListener("click",n)}),i(()=>{document.removeEventListener("click",n)}),e}export{s as u};
