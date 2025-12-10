@@ -1,5 +1,10 @@
 <template>
-  <div class="grid grid-cols-4 gap-4 md:gap-4 mb-4 md:mb-4">
+  <div class="mb-6">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-semibold text-gray-800 dark:text-white/90">Статистика заказов</h2>
+      <MonthPicker :onMonthChange="onMonthChange" />
+    </div>
+    <div class="grid grid-cols-4 gap-4 md:gap-4 mb-4 md:mb-4">
     <div class="col-span-12 xl:col-span-1">
       <div
         class="rounded-2xl border border-warning-200 bg-white p-5 dark:border-warning-800 dark:bg-white/[0.03] md:p-6">
@@ -99,10 +104,13 @@
         </div>
       </div>
     </div>
+    </div>
   </div>
 </template>
 
 <script setup>
+import MonthPicker from '@/components/common/MonthPicker.vue'
+
 defineProps({
   arrowUpIcon: {
     type: Object,
@@ -130,6 +138,10 @@ defineProps({
   },
   statistics: {
     type: Object,
+    required: true
+  },
+  onMonthChange: {
+    type: Function,
     required: true
   }
 })

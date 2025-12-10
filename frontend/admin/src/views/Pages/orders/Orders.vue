@@ -5,7 +5,7 @@
             <OrdersStatistics :arrowDownIcon="arrowDownIcon" :arrowUpIcon="arrowUpIcon"
                 :shoppingCartIcon="shoppingCartIcon" :calendarClockIcon="calendarClockIcon"
                 :calendarDaysIcon="calendarDaysIcon" :packageCheckIcon="packageCheckIcon"
-                :statistics="orderStatistics" />
+                :statistics="orderStatistics" :onMonthChange="onMonthChange" />
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <OrdersHeader :totalItems="totalItems" :packageIcon="shoppingCartIcon" :downloadIcon="downloadIcon" />
                 <OrdersFilters :searchQuery="searchQuery" :statuses="statuses" :selectedItem="selectedStatus"
@@ -112,6 +112,11 @@ const handleUpdateStatus = async (order, newStatus) => {
     } else {
         console.error('Ошибка обновления статуса:', result.errors)
     }
+}
+
+const onMonthChange = (month) => {
+    console.log('Selected month:', month)
+    loadStatistics()
 }
 
 const loadStatistics = async () => {
