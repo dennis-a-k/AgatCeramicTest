@@ -98,6 +98,43 @@ class CallRequestController extends Controller
             }
         }
 
+        // Статистика по источникам
+        $currentSources = CallRequest::selectRaw('source, COUNT(*) as count')
+            ->whereBetween('created_at', [$selectedMonth, $nextMonth])
+            ->whereNotNull('source')
+            ->groupBy('source')
+            ->pluck('count', 'source')
+            ->toArray();
+
+        $previousSources = CallRequest::selectRaw('source, COUNT(*) as count')
+            ->whereBetween('created_at', [$previousMonth, $selectedMonth])
+            ->whereNotNull('source')
+            ->groupBy('source')
+            ->pluck('count', 'source')
+            ->toArray();
+
+        $sources = array_unique(array_merge(array_keys($currentSources), array_keys($previousSources)));
+
+        $sourceStats = [
+            'current' => array_fill_keys($sources, 0),
+            'previous' => array_fill_keys($sources, 0),
+            'percentages' => array_fill_keys($sources, 0),
+        ];
+
+        foreach ($sources as $source) {
+            $sourceStats['current'][$source] = $currentSources[$source] ?? 0;
+            $sourceStats['previous'][$source] = $previousSources[$source] ?? 0;
+
+            if ($sourceStats['previous'][$source] > 0) {
+                $sourceStats['percentages'][$source] = round(
+                    (($sourceStats['current'][$source] - $sourceStats['previous'][$source]) / $sourceStats['previous'][$source]) * 100,
+                    2
+                );
+            }
+        }
+
+        $statistics['sources'] = $sourceStats;
+
         return response()->json([
             'statistics' => $statistics
         ]);
