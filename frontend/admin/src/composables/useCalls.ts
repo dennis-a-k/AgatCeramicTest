@@ -206,9 +206,15 @@ export function useCalls() {
     fetchCalls()
   })
 
-  const fetchCallStatistics = async () => {
+  const fetchCallStatistics = async (month?: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/call-requests/statistics`)
+      const params = new URLSearchParams()
+      if (month) {
+        params.append('month', month)
+      }
+      const url = `${API_BASE_URL}/api/call-requests/statistics${params.toString() ? '?' + params.toString() : ''}`
+
+      const response = await fetch(url)
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)

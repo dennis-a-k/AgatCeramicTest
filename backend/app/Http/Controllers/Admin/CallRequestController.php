@@ -59,19 +59,21 @@ class CallRequestController extends Controller
         ]);
     }
 
-    public function statistics(): JsonResponse
+    public function statistics(Request $request): JsonResponse
     {
-        $currentMonth = now()->startOfMonth();
-        $previousMonth = now()->subMonth()->startOfMonth();
+        $month = $request->get('month', now()->format('Y-m'));
+        $selectedMonth = \Carbon\Carbon::createFromFormat('Y-m', $month)->startOfMonth();
+        $nextMonth = $selectedMonth->copy()->addMonth();
+        $previousMonth = $selectedMonth->copy()->subMonth();
 
         $currentStats = CallRequest::selectRaw('status, COUNT(*) as count')
-            ->where('created_at', '>=', $currentMonth)
+            ->whereBetween('created_at', [$selectedMonth, $nextMonth])
             ->groupBy('status')
             ->pluck('count', 'status')
             ->toArray();
 
         $previousStats = CallRequest::selectRaw('status, COUNT(*) as count')
-            ->whereBetween('created_at', [$previousMonth, $currentMonth])
+            ->whereBetween('created_at', [$previousMonth, $selectedMonth])
             ->groupBy('status')
             ->pluck('count', 'status')
             ->toArray();

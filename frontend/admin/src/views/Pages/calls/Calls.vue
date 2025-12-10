@@ -5,7 +5,7 @@
             <CallsStatistics :arrowDownIcon="arrowDownIcon" :arrowUpIcon="arrowUpIcon"
                 :phoneOutgoingIcon="phoneOutgoingIcon" :calendarClockIcon="calendarClockIcon"
                 :calendarDaysIcon="calendarDaysIcon" :circleCheckBigIcon="circleCheckBigIcon"
-                :statistics="callStatistics" />
+                :statistics="callStatistics" :onMonthChange="handleMonthChange" />
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <CallsHeader :totalItems="totalItems" :packageIcon="phoneCallIcon" :statuses="statuses" :selectedItem="selectedStatus" :isOpen="isOpen" @toggleDropdown="toggleDropdown" @toggleItem="handleToggleItem" />
                 <CallsTable :loading="loading" :error="error" :calls="calls" :formatter="formatter"
@@ -118,13 +118,20 @@ const handleUpdateStatus = async (call, newStatus) => {
     }
 }
 
-const loadStatistics = async () => {
+const selectedMonth = ref(new Date().toISOString().slice(0, 7))
+
+const loadStatistics = async (month) => {
     try {
-        const stats = await fetchCallStatistics()
+        const stats = await fetchCallStatistics(month)
         callStatistics.value = stats
     } catch (err) {
         console.error('Ошибка загрузки статистики:', err)
     }
+}
+
+const handleMonthChange = (month) => {
+    selectedMonth.value = month
+    loadStatistics(month)
 }
 
 onMounted(() => {
