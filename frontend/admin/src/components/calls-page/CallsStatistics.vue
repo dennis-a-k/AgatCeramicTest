@@ -2,10 +2,10 @@
   <div class="mb-6">
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-lg font-semibold text-gray-800 dark:text-white/90">Статистика звонков</h2>
-      <div class="flex items-center gap-3">
-        <label class="text-sm text-gray-600 dark:text-gray-400">Выберите месяц:</label>
+      <div class="flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-3 py-2 dark:border-gray-800 dark:bg-white/[0.03]">
+        <label class="text-sm text-gray-600 dark:text-gray-400">Месяц:</label>
         <input type="month" v-model="selectedMonth" @change="handleMonthChange"
-          class="px-3 py-2 border border-gray-300 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+          class="bg-transparent text-sm text-gray-900 dark:text-white focus:outline-none" />
       </div>
     </div>
     <div class="grid grid-cols-4 gap-4 md:gap-4">
