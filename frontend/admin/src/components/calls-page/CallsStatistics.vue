@@ -27,7 +27,7 @@
               </svg>
             </span>
           </button>
-          <div v-if="showMonthPicker" class="absolute z-10 mt-1 w-80 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg p-4">
+          <div v-if="showMonthPicker" class="absolute z-10 mt-1 right-0 w-80 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg p-4">
             <div class="grid grid-cols-3 gap-2">
               <button
                 v-for="(month, index) in months"
