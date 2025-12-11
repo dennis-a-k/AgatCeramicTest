@@ -1,5 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+declare module 'vue-router' {
+  interface RouteMeta {
+    title?: string
+    requiresAuth?: boolean
+    requiresGuest?: boolean
+    roles?: string[]
+  }
+}
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   scrollBehavior(to, from, savedPosition) {
@@ -21,7 +30,8 @@ const router = createRouter({
       component: () => import('../views/Dashboard.vue'),
       meta: {
         title: 'Статистика',
-        requiresAuth: true
+        requiresAuth: true,
+        roles: ['admin', 'moderator', 'user']
       },
     },
     {
@@ -30,7 +40,8 @@ const router = createRouter({
       component: () => import('../views/Pages/product/Goods.vue'),
       meta: {
         title: 'Товары',
-        requiresAuth: true
+        requiresAuth: true,
+        roles: ['admin', 'moderator']
       },
     },
     {
@@ -39,7 +50,8 @@ const router = createRouter({
       component: () => import('../views/Pages/product/CreateProduct.vue'),
       meta: {
         title: 'Создание товара',
-        requiresAuth: true
+        requiresAuth: true,
+        roles: ['admin', 'moderator']
       },
     },
     {
@@ -48,7 +60,8 @@ const router = createRouter({
       component: () => import('../views/Pages/product/EditProduct.vue'),
       meta: {
         title: 'Редактирование товара',
-        requiresAuth: true
+        requiresAuth: true,
+        roles: ['admin', 'moderator']
       },
     },
     {
@@ -57,7 +70,8 @@ const router = createRouter({
       component: () => import('../views/Pages/characteristics/Characteristics.vue'),
       meta: {
         title: 'Управление характеричтиками товара',
-        requiresAuth: true
+        requiresAuth: true,
+        roles: ['admin']
       },
     },
     {
@@ -66,7 +80,8 @@ const router = createRouter({
       component: () => import('../views/Pages/orders/Orders.vue'),
       meta: {
         title: 'Заказы',
-        requiresAuth: true
+        requiresAuth: true,
+        roles: ['admin', 'moderator']
       },
     },
     {
@@ -75,7 +90,8 @@ const router = createRouter({
       component: () => import('../views/Pages/calls/Calls.vue'),
       meta: {
         title: 'Обратные звонки',
-        requiresAuth: true
+        requiresAuth: true,
+        roles: ['admin', 'moderator']
       },
     },
     {
@@ -84,7 +100,8 @@ const router = createRouter({
       component: () => import('../views/Pages/settings/Settings.vue'),
       meta: {
         title: 'Настройки сайта',
-        requiresAuth: true
+        requiresAuth: true,
+        roles: ['admin']
       },
     },
   ],
@@ -99,6 +116,22 @@ router.beforeEach((to, from, next) => {
   // Проверка авторизации
   const isAuthenticated = !!localStorage.getItem('auth_token') && localStorage.getItem('auth_token') !== 'undefined'
 
+  // Получение роли пользователя
+  const getUserRole = () => {
+    const user = localStorage.getItem('auth_user')
+    if (user) {
+      try {
+        const userData = JSON.parse(user)
+        return userData.role
+      } catch {
+        return null
+      }
+    }
+    return null
+  }
+
+  const userRole = getUserRole()
+
   // Если маршрут не найден, перенаправляем в зависимости от статуса авторизации
   if (to.matched.length === 0) {
     if (!isAuthenticated) {
@@ -112,6 +145,9 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !isAuthenticated) {
     next({ name: 'Auth' })
   } else if (to.meta.requiresGuest && isAuthenticated) {
+    next({ name: 'Dashboard' })
+  } else if (to.meta.requiresAuth && to.meta.roles && !to.meta.roles.includes(userRole)) {
+    // Если пользователь не имеет нужной роли, перенаправляем на Dashboard
     next({ name: 'Dashboard' })
   } else {
     next()

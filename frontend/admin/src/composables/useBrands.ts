@@ -26,7 +26,12 @@ export function useBrands() {
     const url = `${API_BASE_URL}/api/brands${params.toString() ? '?' + params.toString() : ''}`
 
     try {
-      const response = await fetch(url)
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -56,7 +61,12 @@ export function useBrands() {
     const url = `${API_BASE_URL}/api/brands${params.toString() ? '?' + params.toString() : ''}`
 
     try {
-      const response = await fetch(url)
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -98,6 +108,7 @@ export function useBrands() {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         },
         body: formData,
       })
@@ -150,6 +161,7 @@ export function useBrands() {
         method: 'POST', // Используем POST с _method=PUT для FormData
         headers: {
           'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         },
         body: formData,
       })
@@ -177,6 +189,10 @@ export function useBrands() {
     try {
       const response = await fetch(`${API_BASE_URL}/api/brands/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
       })
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -195,7 +211,12 @@ export function useBrands() {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/brands/${id}`)
+      const response = await fetch(`${API_BASE_URL}/api/brands/${id}`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }

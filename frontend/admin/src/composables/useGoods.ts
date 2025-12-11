@@ -95,7 +95,12 @@ export function useGoods() {
     const url = `${API_BASE_URL}/api/products?${params.toString()}`
 
     try {
-      const response = await fetch(url)
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -145,6 +150,10 @@ export function useGoods() {
     try {
       const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
       })
 
       if (!response.ok) {
@@ -160,7 +169,12 @@ export function useGoods() {
 
   const getProduct = async (id: number) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/products/${id}`)
+      const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -236,6 +250,7 @@ export function useGoods() {
         method: 'POST', // Используем POST с _method=PUT для FormData
         headers: {
           Accept: 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         },
         body: formData,
       })
@@ -342,6 +357,7 @@ export function useGoods() {
         method: 'POST',
         headers: {
           Accept: 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         },
         body: formData,
       })

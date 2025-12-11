@@ -26,7 +26,12 @@ export function useCategories() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/categories?per_page=all`)
+      const response = await fetch(`${API_BASE_URL}/api/categories?per_page=all`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -39,7 +44,12 @@ export function useCategories() {
 
   const fetchCategoryAttributes = async (categoryId: number) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/categories/${categoryId}`)
+      const response = await fetch(`${API_BASE_URL}/api/categories/${categoryId}`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }

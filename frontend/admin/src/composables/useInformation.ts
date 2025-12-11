@@ -27,7 +27,12 @@ export function useInformation() {
     error.value = null
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/information`)
+      const response = await fetch(`${API_BASE_URL}/api/information`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -51,6 +56,7 @@ export function useInformation() {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         },
         body: JSON.stringify(informationData),
       })

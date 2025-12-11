@@ -83,7 +83,12 @@ export function useCalls() {
     const url = `${API_BASE_URL}/api/call-requests?${params.toString()}`
 
     try {
-      const response = await fetch(url)
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -121,7 +126,12 @@ export function useCalls() {
 
   const getCall = async (id: number) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/call-requests/${id}`)
+      const response = await fetch(`${API_BASE_URL}/api/call-requests/${id}`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -158,6 +168,7 @@ export function useCalls() {
         method: 'POST', // Используем POST с _method=PUT для FormData
         headers: {
           Accept: 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         },
         body: formData,
       })
@@ -214,7 +225,12 @@ export function useCalls() {
       }
       const url = `${API_BASE_URL}/api/call-requests/statistics${params.toString() ? '?' + params.toString() : ''}`
 
-      const response = await fetch(url)
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -230,7 +246,12 @@ export function useCalls() {
 
   const fetchCallById = async (id: string | number) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/call-requests/${id}`)
+      const response = await fetch(`${API_BASE_URL}/api/call-requests/${id}`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)

@@ -156,7 +156,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import {
@@ -175,43 +175,66 @@ const route = useRoute();
 
 const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
 
+const getUserRole = () => {
+  const user = localStorage.getItem('auth_user')
+  if (user) {
+    try {
+      const userData = JSON.parse(user)
+      return userData.role
+    } catch {
+      return null
+    }
+  }
+  return null
+}
+
+const userRole = ref(getUserRole())
+
+const allMenuItems = [
+  {
+    icon: GridIcon,
+    name: "Статистика",
+    path: "/",
+    roles: ['admin', 'moderator', 'user']
+  },
+  {
+    icon: PackageIcon,
+    name: "Товары",
+    path: "/products",
+    roles: ['admin', 'moderator']
+  },
+  {
+    icon: SquareChartGanttIcon,
+    name: "Характеричтики",
+    path: "/characteristics",
+    roles: ['admin']
+  },
+  {
+    icon: ShoppingCartIcon,
+    name: "Заказы",
+    path: "/orders",
+    roles: ['admin', 'moderator']
+  },
+  {
+    icon: PhoneCallIcon,
+    name: "Звонки",
+    path: "/calls",
+    roles: ['admin', 'moderator']
+  },
+  {
+    icon: SettingsIcon,
+    name: "Настройки сайта",
+    path: "/settings",
+    roles: ['admin']
+  },
+]
+
 const menuGroups = [
   {
     title: "Меню",
-    items: [
-      {
-        icon: GridIcon,
-        name: "Статистика",
-        path: "/",
-      },
-      {
-        icon: PackageIcon,
-        name: "Товары",
-        path: "/products",
-      },
-      {
-        icon: SquareChartGanttIcon,
-        name: "Характеричтики",
-        path: "/characteristics",
-      },
-      {
-        icon: ShoppingCartIcon,
-        name: "Заказы",
-        path: "/orders",
-      },
-      {
-        icon: PhoneCallIcon,
-        name: "Звонки",
-        path: "/calls",
-      },
-      {
-        icon: SettingsIcon,
-        name: "Настройки сайта",
-        path: "/settings",
-      },
-    ],
+    items: allMenuItems.filter(item => item.roles.includes(userRole.value)),
   },
-];
+]
 
 const isActive = (path) => route.path === path;
 

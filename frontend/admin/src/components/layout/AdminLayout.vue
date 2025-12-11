@@ -1,9 +1,9 @@
 <template>
   <div class="min-h-screen xl:flex">
-    <app-sidebar />
+    <app-sidebar v-if="userRole !== 'user'" />
     <Backdrop />
     <div class="flex-1 transition-all duration-300 ease-in-out"
-      :class="[isExpanded || isHovered ? 'lg:ml-[290px]' : 'lg:ml-[90px]']">
+      :class="userRole !== 'user' ? (isExpanded || isHovered ? 'lg:ml-[290px]' : 'lg:ml-[90px]') : ''">
       <app-header />
       <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
         <slot></slot>
@@ -18,4 +18,19 @@ import AppHeader from './AppHeader.vue'
 import { useSidebar } from '@/composables/useSidebar'
 import Backdrop from './Backdrop.vue'
 const { isExpanded, isHovered } = useSidebar()
+
+const getUserRole = () => {
+  const user = localStorage.getItem('auth_user')
+  if (user) {
+    try {
+      const userData = JSON.parse(user)
+      return userData.role
+    } catch {
+      return null
+    }
+  }
+  return null
+}
+
+const userRole = getUserRole()
 </script>

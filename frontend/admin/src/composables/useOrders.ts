@@ -86,7 +86,12 @@ export function useOrders() {
     const url = `${API_BASE_URL}/api/orders?${params.toString()}`
 
     try {
-      const response = await fetch(url)
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -125,7 +130,12 @@ export function useOrders() {
 
   const getOrder = async (id: number) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/orders/${id}`)
+      const response = await fetch(`${API_BASE_URL}/api/orders/${id}`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -162,6 +172,7 @@ export function useOrders() {
         method: 'POST', // Используем POST с _method=PUT для FormData
         headers: {
           Accept: 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         },
         body: formData,
       })
@@ -218,7 +229,12 @@ export function useOrders() {
       }
       const url = `${API_BASE_URL}/api/orders/statistics${params.toString() ? '?' + params.toString() : ''}`
 
-      const response = await fetch(url)
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -234,7 +250,12 @@ export function useOrders() {
 
   const fetchOrderById = async (id: string | number) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/orders/${id}`)
+      const response = await fetch(`${API_BASE_URL}/api/orders/${id}`, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
