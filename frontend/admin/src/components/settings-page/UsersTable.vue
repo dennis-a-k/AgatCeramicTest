@@ -38,24 +38,34 @@
           </span>
           <button
             class="inline-flex items-center justify-center gap-2 rounded-lg transition bg-white text-gray-700 ring-0 ring-gray-300 hover:bg-error-50 hover:ring-error-300 hover:text-error-700 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-error-500/15 dark:hover:ring-error-500/50 dark:hover:text-error-500 cursor-pointer p-1"
-            @click="deleteUser(user)" :aria-label="`Удалить пользователя ${user.name}`">
+            @click="openDeleteModal(user)" :aria-label="`Удалить пользователя ${user.name}`">
             <DeleteIcon />
           </button>
         </div>
       </div>
     </div>
+    <UserDeleteConfirmationModal
+      :isVisible="isDeleteModalVisible"
+      :userName="selectedUser?.name"
+      :userEmail="selectedUser?.email"
+      @close="closeDeleteModal"
+      @confirm="confirmDelete"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { DeleteIcon } from '@/icons'
+import UserDeleteConfirmationModal from '@/components/common/UserDeleteConfirmationModal.vue'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 const users = ref([])
 const loading = ref(false)
 const error = ref(null)
+const isDeleteModalVisible = ref(false)
+const selectedUser = ref(null)
 
 const fetchUsers = async () => {
   loading.value = true
@@ -84,10 +94,6 @@ const fetchUsers = async () => {
 }
 
 const deleteUser = async (user) => {
-  if (!confirm(`Вы уверены, что хотите удалить пользователя ${user.name}?`)) {
-    return
-  }
-
   try {
     const response = await fetch(`${API_BASE_URL}/api/users/${user.id}`, {
       method: 'DELETE',
@@ -108,6 +114,21 @@ const deleteUser = async (user) => {
     alert(`Ошибка при удалении: ${err.message || 'Unknown error'}`)
     console.error('Error deleting user:', err)
   }
+}
+
+const openDeleteModal = (user) => {
+  selectedUser.value = user
+  isDeleteModalVisible.value = true
+}
+
+const closeDeleteModal = () => {
+  isDeleteModalVisible.value = false
+  selectedUser.value = null
+}
+
+const confirmDelete = () => {
+  deleteUser(selectedUser.value)
+  closeDeleteModal()
 }
 
 onMounted(() => {
