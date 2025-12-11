@@ -49,14 +49,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import SquarePenIcon from '@/icons/SquarePenIcon.vue'
 import ContactsModal from './ContactsModal.vue'
 import { useInformation } from '@/composables/useInformation'
 
-const { information, loading, error, fetchInformation, updateInformation } = useInformation()
+const props = defineProps({
+  contacts: Object
+})
 
-const contacts = ref({ phone: '', email: '', telegram: '', whatsapp: '' })
+const { updateInformation } = useInformation()
+
 const isModalVisible = ref(false)
 const errors = ref({})
 
@@ -73,7 +76,7 @@ const saveContacts = async (data) => {
   try {
     const result = await updateInformation(data)
     if (result.success) {
-      contacts.value = result.data
+      // Обновление произойдет через props
       closeModal()
     } else {
       errors.value = result.errors || {}
@@ -82,13 +85,4 @@ const saveContacts = async (data) => {
     console.error('Error saving contacts:', error)
   }
 }
-
-const fetchContacts = async () => {
-  await fetchInformation()
-  contacts.value = information.value
-}
-
-onMounted(() => {
-  fetchContacts()
-})
 </script>

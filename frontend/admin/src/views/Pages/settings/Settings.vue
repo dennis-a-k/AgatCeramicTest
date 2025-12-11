@@ -9,13 +9,9 @@
             Ошибка при загрузке<br />
             <button
                 class="inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-4 py-3 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300 mt-2"
-                @click="">
+                @click="fetchInformation">
                 Попробовать снова
             </button>
-        </div>
-        <div v-else-if="loading"
-            class="flex flex-col justify-center items-center h-screen menu-item-icon-active text-center font-bold text-theme-xl m-5">
-            Характеристики не найден
         </div>
         <div v-else>
             <div class="grid grid-cols-12 gap-4 md:gap-6 mb-4 md:mb-6">
@@ -24,8 +20,8 @@
                 </div>
                 <div class="col-span-12 xl:col-span-7">
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                        <ContactsTable />
-                        <DetailsTable />
+                        <ContactsTable :contacts="information" />
+                        <DetailsTable :details="information" />
                     </div>
                 </div>
             </div>
@@ -34,12 +30,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import AdminLayout from '@/components/layout/AdminLayout.vue'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import UsersTable from '@/components/settings-page/UsersTable.vue'
 import ContactsTable from '@/components/settings-page/ContactsTable.vue'
 import DetailsTable from '@/components/settings-page/DetailsTable.vue'
+import { useInformation } from '@/composables/useInformation'
 
 const currentPageTitle = ref('Настройки сайта')
+const { information, loading, error, fetchInformation } = useInformation()
+
+onMounted(() => {
+  fetchInformation()
+})
 </script>

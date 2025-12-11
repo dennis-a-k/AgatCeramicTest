@@ -84,25 +84,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import SquarePenIcon from '@/icons/SquarePenIcon.vue'
 import DetailsModal from './DetailsModal.vue'
 import { useInformation } from '@/composables/useInformation'
 
-const { information, loading, error, fetchInformation, updateInformation } = useInformation()
-
-const details = ref({
-  organization: '',
-  adress: '',
-  inn: '',
-  ogrn: '',
-  okato: '',
-  okpo: '',
-  bank: '',
-  bik: '',
-  ks: '',
-  rs: '',
+const props = defineProps({
+  details: Object
 })
+
+const { updateInformation } = useInformation()
+
 const isModalVisible = ref(false)
 const errors = ref({})
 
@@ -119,7 +111,7 @@ const saveDetails = async (data) => {
   try {
     const result = await updateInformation(data)
     if (result.success) {
-      details.value = result.data
+      // Обновление произойдет через props
       closeModal()
     } else {
       errors.value = result.errors || {}
@@ -128,13 +120,4 @@ const saveDetails = async (data) => {
     console.error('Error saving details:', error)
   }
 }
-
-const fetchDetails = async () => {
-  await fetchInformation()
-  details.value = information.value
-}
-
-onMounted(() => {
-  fetchDetails()
-})
 </script>
