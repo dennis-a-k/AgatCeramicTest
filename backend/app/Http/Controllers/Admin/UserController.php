@@ -33,6 +33,28 @@ class UserController extends Controller
         }
     }
 
+    public function store(Request $request): JsonResponse
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+            'role' => 'required|in:admin,moderator,user',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password,
+            'role' => $request->role,
+        ]);
+
+        return response()->json([
+            'data' => $user,
+            'message' => 'User created successfully'
+        ], 201);
+    }
+
     public function update(Request $request, $id): JsonResponse
     {
         $user = User::find($id);

@@ -2,6 +2,15 @@
   <div class="rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
     <div class="flex items-start justify-between">
       <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Пользователи</h3>
+      <div class="relative">
+        <div class="relative">
+          <div
+            class="inline-flex items-center justify-center gap-2 rounded-lg transition bg-white text-brand-700 hover:bg-success-50 hover:ring-success-300 hover:text-success-700 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-success-500/15 dark:hover:ring-success-500/50 dark:hover:text-success-500 cursor-pointer p-1"
+            @click="openModal">
+            <UserRoundPlusIcon />
+          </div>
+        </div>
+      </div>
     </div>
     <div class="my-6">
       <div v-if="loading" class="flex justify-center items-center h-32">
@@ -71,14 +80,16 @@
       :userEmail="selectedUser?.email" @close="closeDeleteModal" @confirm="confirmDelete" />
     <UserEditModal :isVisible="isEditModalVisible" :user="selectedEditUser" :errors="editErrors" @close="closeEditModal"
       @save="saveUser" />
+    <UserAddModal :isVisible="isAddModalVisible" :errors="addErrors" @close="closeAddModal" @save="saveAddUser" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { DeleteIcon } from '@/icons'
+import { DeleteIcon, UserRoundPlusIcon } from '@/icons'
 import UserDeleteConfirmationModal from '@/components/common/UserDeleteConfirmationModal.vue'
 import UserEditModal from './UserEditModal.vue'
+import UserAddModal from './UserAddModal.vue'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -90,6 +101,8 @@ const selectedUser = ref(null)
 const isEditModalVisible = ref(false)
 const selectedEditUser = ref(null)
 const editErrors = ref({})
+const isAddModalVisible = ref(false)
+const addErrors = ref({})
 
 const fetchUsers = async () => {
   loading.value = true
@@ -196,6 +209,42 @@ const saveUser = async (form) => {
     if (!editErrors.value.general) {
       alert(`Ошибка при обновлении: ${err.message || 'Unknown error'}`)
     }
+  }
+}
+
+const openModal = () => {
+  isAddModalVisible.value = true
+}
+
+const closeAddModal = () => {
+  isAddModalVisible.value = false
+  addErrors.value = {}
+}
+
+const saveAddUser = async (form) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/users`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+      },
+      body: JSON.stringify(form)
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      addErrors.value = errorData.errors || { general: errorData.message }
+      return // Не закрывать модальное окно, показать ошибки
+    }
+
+    const newUser = await response.json()
+    users.value.push(newUser.data || newUser)
+    closeAddModal()
+  } catch (err) {
+    console.error('Error creating user:', err)
+    alert(`Ошибка при создании: ${err.message || 'Unknown error'}`)
   }
 }
 
