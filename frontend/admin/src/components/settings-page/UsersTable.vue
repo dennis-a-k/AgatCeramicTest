@@ -24,7 +24,7 @@
         </div>
         <div v-for="user in users" :key="user.id" class="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-800">
           <span class="text-gray-500 text-theme-sm dark:text-gray-400">
-            <button @click="" class="text-left">
+            <button @click="openEditModal(user)" class="text-left">
               <span class="block font-medium text-gray-800 text-theme-sm dark:text-white/90 hover:text-brand-500 dark:hover:text-brand-400">
                 {{ user.name }}
               </span>
@@ -34,7 +34,7 @@
             </button>
           </span>
           <span class="px-2.5 py-0.5 rounded-full font-bold text-xs bg-blue-light-50 text-blue-light-500 dark:bg-blue-light-500/15 dark:text-blue-light-500">
-            {{ user.role === 'admin' ? 'администратор' : 'пользователь' }}
+            {{ user.role === 'admin' ? 'администратор' : user.role === 'moderator' ? 'модератор' : 'пользователь' }}
           </span>
           <button
             class="inline-flex items-center justify-center gap-2 rounded-lg transition bg-white text-gray-700 ring-0 ring-gray-300 hover:bg-error-50 hover:ring-error-300 hover:text-error-700 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-error-500/15 dark:hover:ring-error-500/50 dark:hover:text-error-500 cursor-pointer p-1"
@@ -51,6 +51,13 @@
       @close="closeDeleteModal"
       @confirm="confirmDelete"
     />
+    <UserEditModal
+      :isVisible="isEditModalVisible"
+      :user="selectedEditUser"
+      :errors="editErrors"
+      @close="closeEditModal"
+      @save="saveUser"
+    />
   </div>
 </template>
 
@@ -58,6 +65,7 @@
 import { ref, onMounted } from 'vue'
 import { DeleteIcon } from '@/icons'
 import UserDeleteConfirmationModal from '@/components/common/UserDeleteConfirmationModal.vue'
+import UserEditModal from './UserEditModal.vue'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
@@ -66,6 +74,9 @@ const loading = ref(false)
 const error = ref(null)
 const isDeleteModalVisible = ref(false)
 const selectedUser = ref(null)
+const isEditModalVisible = ref(false)
+const selectedEditUser = ref(null)
+const editErrors = ref({})
 
 const fetchUsers = async () => {
   loading.value = true
@@ -129,6 +140,50 @@ const closeDeleteModal = () => {
 const confirmDelete = () => {
   deleteUser(selectedUser.value)
   closeDeleteModal()
+}
+
+const openEditModal = (user) => {
+  selectedEditUser.value = user
+  isEditModalVisible.value = true
+}
+
+const closeEditModal = () => {
+  isEditModalVisible.value = false
+  selectedEditUser.value = null
+  editErrors.value = {}
+}
+
+const saveUser = async (form) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/users/${selectedEditUser.value.id}`, {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+      },
+      body: JSON.stringify({ role: form.role })
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      editErrors.value = errorData.errors || { general: errorData.message }
+      throw new Error(errorData.message || 'Failed to update user')
+    }
+
+    // Update user in list
+    const index = users.value.findIndex(u => u.id === selectedEditUser.value.id)
+    if (index !== -1) {
+      users.value[index] = { ...users.value[index], role: form.role }
+    }
+
+    closeEditModal()
+  } catch (err) {
+    console.error('Error updating user:', err)
+    if (!editErrors.value.general) {
+      alert(`Ошибка при обновлении: ${err.message || 'Unknown error'}`)
+    }
+  }
 }
 
 onMounted(() => {
