@@ -25,7 +25,7 @@
             </div>
             <div>
               <div class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Роль</div>
-              <div class="flex space-x-6">
+              <div class="space-y-3">
                 <label for="role-admin"
                   class="flex cursor-pointer items-center text-sm font-medium text-gray-700 select-none dark:text-gray-400">
                   <input id="role-admin" type="radio" v-model="form.role" value="admin" class="sr-only" />

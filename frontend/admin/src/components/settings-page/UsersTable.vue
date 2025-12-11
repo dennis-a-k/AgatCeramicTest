@@ -7,9 +7,12 @@
       <div v-if="loading" class="flex justify-center items-center h-32">
         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500"></div>
       </div>
-      <div v-else-if="error" class="flex flex-col justify-center items-center h-32 font-bold text-error-700 text-theme-xl dark:text-error-500">
+      <div v-else-if="error"
+        class="flex flex-col justify-center items-center h-32 font-bold text-error-700 text-theme-xl dark:text-error-500">
         Ошибка при загрузке<br />
-        <button class="inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-4 py-3 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300 mt-2" @click="fetchUsers">
+        <button
+          class="inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-4 py-3 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300 mt-2"
+          @click="fetchUsers">
           Попробовать снова
         </button>
       </div>
@@ -17,47 +20,57 @@
         Пользователи не найдены
       </div>
       <div v-else>
-        <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-800">
-          <span class="text-gray-400 text-theme-xs">Пользователь</span>
-          <span class="text-right text-gray-400 text-theme-xs">Роль</span>
-          <span class="text-right text-gray-400 text-theme-xs"></span>
-        </div>
-        <div v-for="user in users" :key="user.id" class="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-800">
-          <span class="text-gray-500 text-theme-sm dark:text-gray-400">
-            <button @click="openEditModal(user)" class="text-left">
-              <span class="block font-medium text-gray-800 text-theme-sm dark:text-white/90 hover:text-brand-500 dark:hover:text-brand-400">
-                {{ user.name }}
-              </span>
-              <span class="block text-gray-500 text-theme-xs dark:text-gray-400">
-                {{ user.email }}
-              </span>
-            </button>
-          </span>
-          <span class="px-2.5 py-0.5 rounded-full font-bold text-xs bg-blue-light-50 text-blue-light-500 dark:bg-blue-light-500/15 dark:text-blue-light-500">
-            {{ user.role === 'admin' ? 'администратор' : user.role === 'moderator' ? 'модератор' : 'пользователь' }}
-          </span>
-          <button
-            class="inline-flex items-center justify-center gap-2 rounded-lg transition bg-white text-gray-700 ring-0 ring-gray-300 hover:bg-error-50 hover:ring-error-300 hover:text-error-700 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-error-500/15 dark:hover:ring-error-500/50 dark:hover:text-error-500 cursor-pointer p-1"
-            @click="openDeleteModal(user)" :aria-label="`Удалить пользователя ${user.name}`">
-            <DeleteIcon />
-          </button>
-        </div>
+        <table class="w-full">
+          <thead>
+            <tr class="border-b border-gray-100 dark:border-gray-800">
+              <th class="text-left text-gray-400 text-theme-xs pb-4">Пользователь</th>
+              <th class="text-center text-gray-400 text-theme-xs pb-4">Роль</th>
+              <th class="text-right text-gray-400 text-theme-xs pb-4">Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="user in users" :key="user.id" class="border-b border-gray-100 dark:border-gray-800">
+              <td class="py-3">
+                <button @click="openEditModal(user)" class="text-left">
+                  <span
+                    class="block font-medium text-gray-800 text-theme-sm dark:text-white/90 hover:text-brand-500 dark:hover:text-brand-400">
+                    {{ user.name }}
+                  </span>
+                  <span class="block text-gray-500 text-theme-xs dark:text-gray-400">
+                    {{ user.email }}
+                  </span>
+                </button>
+              </td>
+              <td class="text-center py-3">
+                <span v-if="user.role === 'user'"
+                  class="px-2.5 py-0.5 rounded-full font-bold text-xs bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-orange-400">
+                  Пользователь
+                </span>
+                <span v-else-if="user.role === 'moderator'"
+                  class="px-2.5 py-0.5 rounded-full font-bold text-xs bg-blue-light-50 text-blue-light-500 dark:bg-blue-light-500/15 dark:text-blue-light-500">
+                  Модератор
+                </span>
+                <span v-else-if="user.role === 'admin'"
+                  class="px-2.5 py-0.5 rounded-full font-bold text-xs bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500">
+                  Администратор
+                </span>
+              </td>
+              <td class="text-right py-3">
+                <button
+                  class="inline-flex items-center justify-center gap-2 rounded-lg transition bg-white text-gray-700 ring-0 ring-gray-300 hover:bg-error-50 hover:ring-error-300 hover:text-error-700 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-error-500/15 dark:hover:ring-error-500/50 dark:hover:text-error-500 cursor-pointer p-1"
+                  @click="openDeleteModal(user)" :aria-label="`Удалить пользователя ${user.name}`">
+                  <DeleteIcon />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    <UserDeleteConfirmationModal
-      :isVisible="isDeleteModalVisible"
-      :userName="selectedUser?.name"
-      :userEmail="selectedUser?.email"
-      @close="closeDeleteModal"
-      @confirm="confirmDelete"
-    />
-    <UserEditModal
-      :isVisible="isEditModalVisible"
-      :user="selectedEditUser"
-      :errors="editErrors"
-      @close="closeEditModal"
-      @save="saveUser"
-    />
+    <UserDeleteConfirmationModal :isVisible="isDeleteModalVisible" :userName="selectedUser?.name"
+      :userEmail="selectedUser?.email" @close="closeDeleteModal" @confirm="confirmDelete" />
+    <UserEditModal :isVisible="isEditModalVisible" :user="selectedEditUser" :errors="editErrors" @close="closeEditModal"
+      @save="saveUser" />
   </div>
 </template>
 
