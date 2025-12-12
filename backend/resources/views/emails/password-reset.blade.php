@@ -113,7 +113,7 @@
                 <p>Здравствуйте, {{ $user->name }}!</p>
                 <p>Вы запросили восстановление пароля для вашей учетной записи.</p>
                 <p>Для сброса пароля нажмите на кнопку ниже:</p>
-                <a href="{{ env('CRM_URL') }}/reset-password?token={{ $token }}&email={{ urlencode($user->email) }}" class="btn">Сбросить пароль</a>
+                <a href="{{ config('app.crm_url') }}/reset-password?token={{ $token }}&email={{ urlencode($user->email) }}" class="btn">Сбросить пароль</a>
                 <p>Если вы не запрашивали восстановление пароля, просто игнорируйте это письмо.</p>
                 <p>Ссылка действительна в течение 60 минут.</p>
             </div>
