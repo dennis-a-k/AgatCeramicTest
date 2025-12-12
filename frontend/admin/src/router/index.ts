@@ -25,6 +25,15 @@ const router = createRouter({
       },
     },
     {
+      path: '/reset-password',
+      name: 'ResetPassword',
+      component: () => import('@/components/auth/ResetPassword.vue'),
+      meta: {
+        title: 'Сброс пароля',
+        requiresGuest: true
+      },
+    },
+    {
       path: '/',
       name: 'Dashboard',
       component: () => import('../views/Dashboard.vue'),

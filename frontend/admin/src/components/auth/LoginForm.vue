@@ -74,7 +74,43 @@
         <div v-if="fieldErrors.password_confirmation" class="mt-1.5 text-theme-xs text-error-500">{{ fieldErrors.password_confirmation }}</div>
       </div>
 
+      <div v-if="isLogin && !forgotPasswordForm.show" class="mb-4 text-center">
+        <a href="#" @click.prevent="forgotPasswordForm.show = true" class="text-brand-500 hover:text-brand-600 text-sm">
+          Восстановить пароль
+        </a>
+      </div>
+
+      <div v-if="forgotPasswordForm.show" class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="forgot_email">
+          Почта для восстановления
+        </label>
+        <input
+          v-model="forgotPasswordForm.email"
+          id="forgot_email"
+          type="email"
+          class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 appearance-none"
+          required
+        />
+        <div class="mt-6 flex gap-2">
+          <button
+            @click="handleForgotPassword"
+            class="flex-1 bg-brand-500 text-white py-2 px-4 rounded-lg hover:bg-brand-600 transition duration-200"
+            :disabled="loading"
+          >
+            <span v-if="!loading">Отправить</span>
+            <span v-else>Отправка...</span>
+          </button>
+          <button
+            @click="forgotPasswordForm.show = false; forgotPasswordForm.email = ''"
+            class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-200"
+          >
+            Отмена
+          </button>
+        </div>
+      </div>
+
       <button
+        v-if="!forgotPasswordForm.show"
         type="submit"
         class="w-full bg-brand-500 text-white py-2 px-4 rounded-lg hover:bg-brand-600 transition duration-200"
         :disabled="loading"
@@ -95,7 +131,7 @@ import { useRouter } from 'vue-router';
 import { useAuth } from '@/composables/useAuth';
 
 const router = useRouter();
-const { login, register, loading, error } = useAuth();
+const { login, register, forgotPassword, loading, error } = useAuth();
 
 const isLogin = ref(true);
 
@@ -105,6 +141,11 @@ const form = reactive({
   password: '',
   password_confirmation: '',
   remember: false
+});
+
+const forgotPasswordForm = reactive({
+  email: '',
+  show: false
 });
 
 const fieldErrors = computed(() => {
@@ -132,6 +173,8 @@ watch(isLogin, () => {
   form.email = '';
   form.password = '';
   form.password_confirmation = '';
+  forgotPasswordForm.show = false;
+  forgotPasswordForm.email = '';
   error.value = {};
 });
 
@@ -164,6 +207,21 @@ const handleLogin = async () => {
     if (user) {
       router.push('/');
     }
+  } catch (err) {
+    // Error is already handled in useAuth
+  }
+};
+
+const handleForgotPassword = async () => {
+  try {
+    await forgotPassword(forgotPasswordForm.email);
+    forgotPasswordForm.show = false;
+    forgotPasswordForm.email = '';
+    // Show success message
+    successMessage.value = 'Ссылка для восстановления пароля отправлена на ваш email.';
+    setTimeout(() => {
+      successMessage.value = '';
+    }, 5000);
   } catch (err) {
     // Error is already handled in useAuth
   }

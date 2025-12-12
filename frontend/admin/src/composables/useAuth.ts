@@ -198,6 +198,82 @@ export function useAuth() {
     }
   }
 
+  const forgotPassword = async (email: string) => {
+    loading.value = true
+    error.value = {}
+
+    try {
+      await getCsrfToken()
+
+      const response = await fetch(`${API_BASE_URL}/api/forgot-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({ email })
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        if (errorData.errors) {
+          error.value = errorData.errors
+        } else {
+          error.value = { general: [errorData.message || 'Failed to send reset email'] }
+        }
+        throw new Error(errorData.message || 'Failed to send reset email')
+      }
+
+      return await response.json()
+    } catch (err) {
+      if (Object.keys(error.value).length === 0) {
+        error.value = { general: [(err as Error).message] }
+      }
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const resetPassword = async (data: { email: string; token: string; password: string; password_confirmation: string }) => {
+    loading.value = true
+    error.value = {}
+
+    try {
+      await getCsrfToken()
+
+      const response = await fetch(`${API_BASE_URL}/api/reset-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(data)
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        if (errorData.errors) {
+          error.value = errorData.errors
+        } else {
+          error.value = { general: [errorData.message || 'Failed to reset password'] }
+        }
+        throw new Error(errorData.message || 'Failed to reset password')
+      }
+
+      return await response.json()
+    } catch (err) {
+      if (Object.keys(error.value).length === 0) {
+        error.value = { general: [(err as Error).message] }
+      }
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     loading,
     error,
@@ -205,6 +281,8 @@ export function useAuth() {
     login,
     logout,
     getUser,
-    updateUser
+    updateUser,
+    forgotPassword,
+    resetPassword
   }
 }
