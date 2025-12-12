@@ -78,7 +78,7 @@
     </div>
     <UserDeleteConfirmationModal :isVisible="isDeleteModalVisible" :userName="selectedUser?.name"
       :userEmail="selectedUser?.email" @close="closeDeleteModal" @confirm="confirmDelete" />
-    <UserEditModal :isVisible="isEditModalVisible" :user="selectedEditUser" :errors="editErrors" @close="closeEditModal"
+    <UserEditModal :isVisible="isEditModalVisible" :user="selectedEditUser" :errors="editErrors" :isCurrentUser="isCurrentUserEditing" @close="closeEditModal"
       @save="saveUser" />
     <UserAddModal :isVisible="isAddModalVisible" :errors="addErrors" @close="closeAddModal" @save="saveAddUser" />
   </div>
@@ -103,6 +103,8 @@ const selectedEditUser = ref(null)
 const editErrors = ref({})
 const isAddModalVisible = ref(false)
 const addErrors = ref({})
+const currentUser = ref(null)
+const isCurrentUserEditing = ref(false)
 
 const fetchUsers = async () => {
   loading.value = true
@@ -127,6 +129,24 @@ const fetchUsers = async () => {
     console.error('Error fetching users:', err)
   } finally {
     loading.value = false
+  }
+}
+
+const fetchCurrentUser = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/user`, {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+      }
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      currentUser.value = data.data || data
+    }
+  } catch (err) {
+    console.error('Error fetching current user:', err)
   }
 }
 
@@ -170,6 +190,7 @@ const confirmDelete = () => {
 
 const openEditModal = (user) => {
   selectedEditUser.value = user
+  isCurrentUserEditing.value = user.id === currentUser.value?.id
   isEditModalVisible.value = true
 }
 
@@ -250,5 +271,6 @@ const saveAddUser = async (form) => {
 
 onMounted(() => {
   fetchUsers()
+  fetchCurrentUser()
 })
 </script>
