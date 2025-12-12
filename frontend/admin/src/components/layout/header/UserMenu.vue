@@ -3,10 +3,10 @@
     <button class="flex items-center text-gray-700 dark:text-gray-400" @click.prevent="toggleDropdown">
       <span class="mr-3 overflow-hidden rounded-full h-8 w-8">
         <component :is="UserCircleIcon"
-          class="h-8 w-8 text-brand-500 group-hover:text-brand-700 dark:group-hover:text-brand-300" />
+          class="h-8 w-8 text-brand-500 group-hover:text-brand-700 dark:group-hover:text-brand-300 dark:text-brand-400" />
       </span>
 
-      <span class="block mr-1 font-medium text-theme-sm text-brand-500">{{ user?.name || 'Пользователь' }}</span>
+      <span class="block mr-1 font-bold text-theme-sm text-brand-500 dark:text-brand-400">{{ user?.name || 'Пользователь' }}</span>
 
       <ChevronDownIcon :class="{ 'rotate-180': dropdownOpen }" />
     </button>
