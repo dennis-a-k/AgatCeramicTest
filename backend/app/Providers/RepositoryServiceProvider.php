@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\BrandRepository;
 use App\Repositories\CategoryRepository;
+use App\Repositories\ColorRepository;
 use App\Repositories\FilterRepository;
 use App\Repositories\FilterBuilder;
 use App\Repositories\AvailableFiltersRetriever;
@@ -19,6 +21,7 @@ use App\Repositories\ProductRepository;
 use App\Repositories\SearchRepository;
 use App\Services\BrandService;
 use App\Services\CategoryService;
+use App\Services\ColorService;
 use App\Services\ProductService;
 use App\Services\SearchService;
 use App\Services\ImageService;
@@ -33,6 +36,10 @@ class RepositoryServiceProvider extends ServiceProvider
 
         $this->app->bind(CategoryRepository::class, function ($app) {
             return new CategoryRepository($app->make(Category::class));
+        });
+
+        $this->app->bind(ColorRepository::class, function ($app) {
+            return new ColorRepository($app->make(Color::class));
         });
 
         $this->app->bind(CategoryHelperInterface::class, function ($app) {
@@ -74,6 +81,10 @@ class RepositoryServiceProvider extends ServiceProvider
 
         $this->app->bind(CategoryService::class, function ($app) {
             return new CategoryService($app->make(CategoryRepository::class));
+        });
+
+        $this->app->bind(ColorService::class, function ($app) {
+            return new ColorService($app->make(ColorRepository::class));
         });
 
         $this->app->bind(ImageService::class, function ($app) {

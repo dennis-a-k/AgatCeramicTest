@@ -18,7 +18,7 @@ class BrandController extends Controller
     public function index(): JsonResponse
     {
         $brands = $this->brandService->getAllBrands();
-        return response()->json($brands);
+        return response()->json(['data' => $brands]);
     }
 
     public function show($id): JsonResponse

@@ -17,7 +17,12 @@ export function useAllBrands() {
     const url = `${API_BASE_URL}/api/brands${params.toString() ? '?' + params.toString() : ''}`
 
     try {
-      const response = await fetch(url)
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
