@@ -66,7 +66,7 @@ export function useProductManager() {
     images: [],
   })
 
-  const loading = ref(false)
+  const loading = ref(true)
   const error = ref(false)
   const alert = ref<any>(null)
 

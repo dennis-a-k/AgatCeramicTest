@@ -12,7 +12,7 @@
                 Попробовать снова
             </button>
         </div>
-        <div v-else-if="!product.id"
+        <div v-else-if="!loading && !error && !product.id"
             class="flex flex-col justify-center items-center h-screen menu-item-icon-active text-center font-bold text-theme-xl m-5">
             Товар не найден
         </div>
