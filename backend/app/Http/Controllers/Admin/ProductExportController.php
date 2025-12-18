@@ -46,6 +46,22 @@ class ProductExportController extends Controller
         $headers = array_merge($headers, $uniqueAttributes, ['Изображение 1', 'Изображение 2', 'Изображение 3', 'Изображение 4', 'Изображение 5']);
         $sheet->fromArray($headers, null, 'A1');
 
+        // Стилизация заголовков
+        $highestColumn = $sheet->getHighestColumn();
+        $headerRange = 'A1:' . $highestColumn . '1';
+        $sheet->getStyle($headerRange)->getFont()->setBold(true);
+        $sheet->getStyle($headerRange)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('95B3D7'); // Светло-серый цвет
+        $sheet->getStyle($headerRange)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        // Установка ширины колонок по ширине заголовков
+        $col = 0;
+        foreach ($headers as $header) {
+            $columnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col + 1);
+            $width = strlen($header) * 1.2; // Коэффициент для отступа
+            $sheet->getColumnDimension($columnLetter)->setWidth($width);
+            $col++;
+        }
+
         $row = 2;
         foreach ($products as $product) {
             // Собираем карту характеристик для продукта
