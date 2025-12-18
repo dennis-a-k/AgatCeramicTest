@@ -26,7 +26,7 @@ class ProductExportController extends Controller
 
         // Заголовки
         $headers = [
-            'ID', 'Артикул', 'Название', 'Цена', 'Единица', 'Код товара', 'Описание',
+            'Артикул', 'Название', 'Цена', 'Единица', 'Код товара', 'Описание',
             'Категория', 'Бренд', 'Цвет', 'Опубликовано', 'Распродажа', 'Текстура',
             'Узор', 'Страна', 'Коллекция', 'Характеристики', 'Изображения'
         ];
@@ -57,7 +57,6 @@ class ProductExportController extends Controller
             }
 
             $data = [
-                $product['id'],
                 $product['article'],
                 $product['name'],
                 $product['price'],

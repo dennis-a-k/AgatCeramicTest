@@ -9,7 +9,6 @@ use App\Services\ProductService;
 use App\Services\SearchService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -44,10 +43,6 @@ class ProductController extends Controller
     {
         $validated = $request->validated();
 
-        // Debug: log the request data
-        Log::info('Update Product Request Data:', $request->all());
-        Log::info('Validated Data:', $validated);
-
         $updated = $this->productService->updateProductWithAttributesAndImages($id, $validated, $request);
 
         if (!$updated) {
@@ -61,10 +56,6 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request): JsonResponse
     {
         $validated = $request->validated();
-
-        // Debug: log the request data
-        Log::info('Store Product Request Data:', $request->all());
-        Log::info('Validated Data:', $validated);
 
         $product = $this->productService->createProductWithAttributesAndImages($validated, $request);
 
