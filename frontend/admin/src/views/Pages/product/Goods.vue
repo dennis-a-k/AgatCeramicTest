@@ -5,7 +5,7 @@
         <div class="space-y-5 sm:space-y-6">
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <GoodsHeader :totalItems="totalItems" :packageIcon="packageIcon" :downloadIcon="downloadIcon"
-                    :plusIcon="plusIcon" />
+                    :plusIcon="plusIcon" @bulkUpload="handleBulkUpload" />
                 <GoodsFilters :searchQuery="searchQuery" :categories="categories" :selectedItem="selectedCategory"
                     :isOpen="isOpen" :showFilter="showFilter" :checkboxSale="filters.sale.true"
                     :checkboxNoSale="filters.sale.false" :checkboxPublished="filters.published.true"
@@ -21,6 +21,7 @@
                 <Pagination :currentPage="page" :totalPages="totalPages" @page-change="handlePageChange" class="px-6" />
             </div>
         </div>
+        <BulkUploadModal :isVisible="showBulkUploadModal" @close="showBulkUploadModal = false" @upload="handleFileUpload" />
     </AdminLayout>
 </template>
 
@@ -33,6 +34,7 @@ import ToastAlert from '@/components/common/ToastAlert.vue'
 import GoodsHeader from '@/components/goods-page/GoodsHeader.vue'
 import GoodsFilters from '@/components/goods-page/GoodsFilters.vue'
 import GoodsTable from '@/components/goods-page/GoodsTable.vue'
+import BulkUploadModal from '@/components/goods-page/BulkUploadModal.vue'
 import Pagination from '@/components/ui/Pagination.vue'
 import { PackageIcon, DownloadIcon, PlusIcon, Settings2Icon, SearchIcon } from "../../../icons";
 import { useGoods } from '@/composables/useGoods'
@@ -71,6 +73,7 @@ const { categories, fetchCategories } = useCategories()
 
 const showFilter = ref(false)
 const isOpen = ref(false)
+const showBulkUploadModal = ref(false)
 
 const toggleDropdown = () => {
     isOpen.value = !isOpen.value
@@ -93,6 +96,16 @@ const handlePageChange = (newPage) => {
 const handleDelete = async (product, callback) => {
     const success = await deleteProduct(product.id)
     callback(success)
+}
+
+const handleBulkUpload = () => {
+    showBulkUploadModal.value = true
+}
+
+const handleFileUpload = async (file) => {
+    showBulkUploadModal.value = false
+    // TODO: Send file to backend
+    console.log('File selected:', file)
 }
 
 onMounted(() => {
