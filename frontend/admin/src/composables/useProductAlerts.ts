@@ -16,7 +16,7 @@ export function useProductAlerts() {
     setTimeout(() => {
       const index = alerts.value.indexOf(newAlert)
       if (index > -1) alerts.value.splice(index, 1)
-    }, 3000)
+    }, 5000)
   }
 
   const clearAlerts = () => {

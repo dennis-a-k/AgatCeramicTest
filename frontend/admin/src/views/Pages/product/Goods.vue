@@ -42,6 +42,8 @@ import { useGoods } from '@/composables/useGoods'
 import { useCategories } from '@/composables/useCategories'
 import { useProductAlerts } from '@/composables/useProductAlerts'
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
 const router = useRouter()
 const route = useRoute()
 const currentPageTitle = ref('Товары')
@@ -110,7 +112,7 @@ const handleFileUpload = async (file) => {
     formData.append('file', file)
 
     try {
-        const response = await fetch('/api/admin/products/bulk-upload', {
+        const response = await fetch(`${API_BASE_URL}/api/products/bulk-upload`, {
             method: 'POST',
             body: formData,
             headers: {
@@ -120,14 +122,17 @@ const handleFileUpload = async (file) => {
 
         const result = await response.json()
 
-        if (response.ok) {
+        if (result.success_count > 0) {
             showAlert('success', 'Успешно', result.message)
+        }
+        if (result.warnings && result.warnings.length > 0) {
+            result.warnings.forEach(warning => showAlert('warning', 'Предупреждение', warning))
+        }
+        if (result.errors && result.errors.length > 0) {
+            result.errors.forEach(err => showAlert('error', 'Ошибка', err))
+        }
+        if (result.success_count > 0 || result.errors.length > 0 || result.warnings.length > 0) {
             fetchProducts() // Refresh the product list
-        } else {
-            showAlert('error', 'Ошибка', result.message || 'Не удалось загрузить товары')
-            if (result.errors) {
-                console.error('Import errors:', result.errors)
-            }
         }
     } catch (error) {
         showAlert('error', 'Ошибка', 'Произошла ошибка при загрузке файла')

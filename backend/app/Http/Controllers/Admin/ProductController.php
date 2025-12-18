@@ -103,9 +103,8 @@ class ProductController extends Controller
             array_shift($rows);
 
             $successCount = 0;
-            $errors = [];
-
-            DB::beginTransaction();
+            $errorCount = 0;
+            $warningCount = 0;
 
             foreach ($rows as $index => $row) {
                 try {
@@ -114,25 +113,30 @@ class ProductController extends Controller
                         $this->productService->createProductWithAttributesAndImages($productData, $request);
                         $successCount++;
                     }
+                } catch (\Illuminate\Database\QueryException $e) {
+                    if ($e->getCode() == 23000) { // Integrity constraint violation (duplicate entry)
+                        $warningCount++;
+                    } else {
+                        $errorCount++;
+                    }
                 } catch (\Exception $e) {
-                    $errors[] = "Row " . ($index + 2) . ": " . $e->getMessage();
+                    $errorCount++;
                 }
             }
 
-            if (empty($errors)) {
-                DB::commit();
-                return response()->json([
-                    'message' => "Successfully imported {$successCount} products",
-                    'success_count' => $successCount
-                ]);
-            } else {
-                DB::rollBack();
-                return response()->json([
-                    'message' => 'Import failed',
-                    'errors' => $errors,
-                    'success_count' => $successCount
-                ], 422);
-            }
+            $totalFailed = $errorCount + $warningCount;
+            $message = $totalFailed === 0 ? "Успешно загруженных товаров {$successCount} шт." : "Успешно загруженных товаров {$successCount} шт.";
+            $statusCode = $totalFailed === 0 ? 200 : 422;
+
+            $errors = $totalFailed > 0 ? ["Не удалось загрузить {$totalFailed} товаров"] : [];
+            $warnings = [];
+
+            return response()->json([
+                'message' => $message,
+                'success_count' => $successCount,
+                'warnings' => $warnings,
+                'errors' => $errors
+            ], $statusCode);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to process file: ' . $e->getMessage()], 500);
         }
