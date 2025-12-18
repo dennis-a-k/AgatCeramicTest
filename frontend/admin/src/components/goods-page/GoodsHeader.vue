@@ -12,6 +12,7 @@
         Редактировать
       </button>
       <button
+        @click="downloadExcel"
         class="inline-flex items-center gap-2 px-4 py-3 -ml-px text-sm font-medium bg-transparent text-gray-700 ring-1 ring-inset ring-gray-300 first:rounded-l-lg last:rounded-r-lg hover:bg-gray-50 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
         Скачать
         <component :is="uploadIcon" width="18" height="18" />
@@ -31,6 +32,8 @@
 </template>
 
 <script setup>
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
 defineProps({
   totalItems: {
     type: Number,
@@ -59,4 +62,32 @@ defineProps({
 })
 
 defineEmits(['bulkUpload'])
+
+const downloadExcel = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/export/products`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+      }
+    })
+
+    if (!response.ok) {
+      throw new Error('Ошибка при скачивании файла')
+    }
+
+    const blob = await response.blob()
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'products_export.xlsx'
+    document.body.appendChild(a)
+    a.click()
+    window.URL.revokeObjectURL(url)
+    document.body.removeChild(a)
+  } catch (error) {
+    console.error('Download error:', error)
+    alert('Произошла ошибка при скачивании файла')
+  }
+}
 </script>

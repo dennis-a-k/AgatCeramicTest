@@ -31,6 +31,11 @@ class ProductService
         return $this->repository->all()->pluck('slug')->toArray();
     }
 
+    public function getAllProductsForExport(): array
+    {
+        return Product::with(['category', 'brand', 'color', 'attributeValues.attribute', 'images'])->get()->toArray();
+    }
+
     public function getProductById($id): ?Product
     {
         return $this->repository->find($id);
