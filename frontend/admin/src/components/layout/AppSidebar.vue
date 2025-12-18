@@ -168,6 +168,7 @@ import {
   SquareChartGanttIcon,
   ShoppingCartIcon,
   SettingsIcon,
+  PanelsTopLeftIcon,
 } from "../../icons";
 import { useSidebar } from "@/composables/useSidebar";
 
@@ -222,6 +223,12 @@ const allMenuItems = [
     roles: ['admin', 'moderator']
   },
   {
+    icon: PanelsTopLeftIcon,
+    name: "Контент",
+    path: "/",
+    roles: ['admin']
+  },
+    {
     icon: SettingsIcon,
     name: "Настройки сайта",
     path: "/settings",
