@@ -36,7 +36,7 @@ defineProps({
   isVisible: Boolean,
 })
 
-defineEmits(['close', 'upload'])
+const emit = defineEmits(['close', 'upload'])
 
 const selectedFile = ref(null)
 
@@ -46,7 +46,7 @@ const handleFileSelect = (event) => {
 
 const handleUpload = () => {
   if (selectedFile.value) {
-    $emit('upload', selectedFile.value)
+    emit('upload', selectedFile.value)
   }
 }
 </script>

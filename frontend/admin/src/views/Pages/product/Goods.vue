@@ -21,7 +21,8 @@
                 <Pagination :currentPage="page" :totalPages="totalPages" @page-change="handlePageChange" class="px-6" />
             </div>
         </div>
-        <BulkUploadModal :isVisible="showBulkUploadModal" @close="showBulkUploadModal = false" @upload="handleFileUpload" />
+        <BulkUploadModal :isVisible="showBulkUploadModal" @close="showBulkUploadModal = false"
+            @upload="handleFileUpload" />
     </AdminLayout>
 </template>
 
@@ -104,8 +105,34 @@ const handleBulkUpload = () => {
 
 const handleFileUpload = async (file) => {
     showBulkUploadModal.value = false
-    // TODO: Send file to backend
-    console.log('File selected:', file)
+
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+        const response = await fetch('/api/admin/products/bulk-upload', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+            }
+        })
+
+        const result = await response.json()
+
+        if (response.ok) {
+            showAlert('success', 'Успешно', result.message)
+            fetchProducts() // Refresh the product list
+        } else {
+            showAlert('error', 'Ошибка', result.message || 'Не удалось загрузить товары')
+            if (result.errors) {
+                console.error('Import errors:', result.errors)
+            }
+        }
+    } catch (error) {
+        showAlert('error', 'Ошибка', 'Произошла ошибка при загрузке файла')
+        console.error('Upload error:', error)
+    }
 }
 
 onMounted(() => {
