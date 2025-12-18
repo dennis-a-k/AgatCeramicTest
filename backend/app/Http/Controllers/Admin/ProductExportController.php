@@ -21,6 +21,19 @@ class ProductExportController extends Controller
     {
         $products = $this->productService->getAllProductsForExport();
 
+        // Собираем уникальные характеристики
+        $uniqueAttributes = [];
+        foreach ($products as $product) {
+            if (!empty($product['attribute_values'])) {
+                foreach ($product['attribute_values'] as $attr) {
+                    $name = $attr['attribute']['name'] ?? '';
+                    if ($name && !in_array($name, $uniqueAttributes)) {
+                        $uniqueAttributes[] = $name;
+                    }
+                }
+            }
+        }
+
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -28,32 +41,37 @@ class ProductExportController extends Controller
         $headers = [
             'Артикул', 'Название', 'Цена', 'Единица', 'Код товара', 'Описание',
             'Категория', 'Бренд', 'Цвет', 'Опубликовано', 'Распродажа', 'Текстура',
-            'Узор', 'Страна', 'Коллекция', 'Характеристики', 'Изображения'
+            'Узор', 'Страна', 'Коллекция'
         ];
+        $headers = array_merge($headers, $uniqueAttributes, ['Изображение 1', 'Изображение 2', 'Изображение 3', 'Изображение 4', 'Изображение 5']);
         $sheet->fromArray($headers, null, 'A1');
 
         $row = 2;
         foreach ($products as $product) {
-            // Собираем характеристики
-            $attributes = '';
+            // Собираем карту характеристик для продукта
+            $attributeMap = [];
             if (!empty($product['attribute_values'])) {
-                $attrList = [];
                 foreach ($product['attribute_values'] as $attr) {
                     $name = $attr['attribute']['name'] ?? '';
-                    $value = $attr['string_value'] ?? $attr['number_value'] ?? $attr['boolean_value'] ?? '';
-                    $attrList[] = $name . ': ' . $value;
+                    if (isset($attr['string_value'])) {
+                        $value = $attr['string_value'];
+                    } elseif (isset($attr['number_value'])) {
+                        $value = $attr['number_value'];
+                    } elseif (isset($attr['boolean_value'])) {
+                        $value = $attr['boolean_value'] ? 'Да' : 'Нет';
+                    } else {
+                        $value = '';
+                    }
+                    $attributeMap[$name] = $value;
                 }
-                $attributes = implode('; ', $attrList);
             }
 
             // Собираем ссылки на изображения
-            $images = '';
+            $imageUrls = [];
             if (!empty($product['images'])) {
-                $imageUrls = [];
                 foreach ($product['images'] as $image) {
                     $imageUrls[] = asset('storage/' . $image['image_path']);
                 }
-                $images = implode('; ', $imageUrls);
             }
 
             $data = [
@@ -71,10 +89,18 @@ class ProductExportController extends Controller
                 $product['texture'],
                 $product['pattern'],
                 $product['country'],
-                $product['collection'],
-                $attributes,
-                $images
+                $product['collection']
             ];
+
+            // Добавляем значения характеристик
+            foreach ($uniqueAttributes as $attrName) {
+                $data[] = $attributeMap[$attrName] ?? '';
+            }
+
+            // Добавляем изображения
+            for ($i = 0; $i < 5; $i++) {
+                $data[] = $imageUrls[$i] ?? '';
+            }
 
             $sheet->fromArray($data, null, 'A' . $row);
             $row++;
