@@ -19,6 +19,7 @@ import InfoCircleIcon from "./InfoCircleIcon.vue";
 import LogoutIcon from "./LogoutIcon.vue";
 import PackageCheckIcon from "./PackageCheckIcon.vue";
 import PackageIcon from "./PackageIcon.vue";
+import PanelsTopLeftIcon from "./PanelsTopLeftIcon.vue";
 import PhoneCallIcon from "./PhoneCallIcon.vue";
 import PhoneOutgoingIcon from "./PhoneOutgoingIcon.vue";
 import PlusIcon from "./PlusIcon.vue";
@@ -55,6 +56,7 @@ export {
   LogoutIcon,
   PackageCheckIcon,
   PackageIcon,
+  PanelsTopLeftIcon,
   PhoneCallIcon,
   PhoneOutgoingIcon,
   PlusIcon,
