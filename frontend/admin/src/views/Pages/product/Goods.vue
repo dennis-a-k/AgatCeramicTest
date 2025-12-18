@@ -4,8 +4,8 @@
         <PageBreadcrumb :pageTitle="currentPageTitle" />
         <div class="space-y-5 sm:space-y-6">
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-                <GoodsHeader :totalItems="totalItems" :packageIcon="packageIcon" :downloadIcon="downloadIcon"
-                    :plusIcon="plusIcon" @bulkUpload="handleBulkUpload" />
+                <GoodsHeader :totalItems="totalItems" :packageIcon="packageIcon" :downloadIcon="downloadIcon" :uploadIcon="uploadIcon"
+                    :plusIcon="plusIcon" :editIcon="editIcon" @bulkUpload="handleBulkUpload" />
                 <GoodsFilters :searchQuery="searchQuery" :categories="categories" :selectedItem="selectedCategory"
                     :isOpen="isOpen" :showFilter="showFilter" :checkboxSale="filters.sale.true"
                     :checkboxNoSale="filters.sale.false" :checkboxPublished="filters.published.true"
@@ -37,7 +37,7 @@ import GoodsFilters from '@/components/goods-page/GoodsFilters.vue'
 import GoodsTable from '@/components/goods-page/GoodsTable.vue'
 import BulkUploadModal from '@/components/goods-page/BulkUploadModal.vue'
 import Pagination from '@/components/ui/Pagination.vue'
-import { PackageIcon, DownloadIcon, PlusIcon, Settings2Icon, SearchIcon } from "../../../icons";
+import { PackageIcon, DownloadIcon, PlusIcon, Settings2Icon, SearchIcon, UploadIcon, EditIcon } from "../../../icons";
 import { useGoods } from '@/composables/useGoods'
 import { useCategories } from '@/composables/useCategories'
 import { useProductAlerts } from '@/composables/useProductAlerts'
@@ -52,6 +52,8 @@ const downloadIcon = DownloadIcon
 const plusIcon = PlusIcon
 const settingsIcon = Settings2Icon
 const searchIcon = SearchIcon
+const uploadIcon = UploadIcon
+const editIcon = EditIcon
 
 const { alerts, showAlert } = useProductAlerts()
 

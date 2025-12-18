@@ -5,21 +5,26 @@
       <component :is="packageIcon" class="menu-item-icon-active mr-2" />
       Список товаров ({{ totalItems }})
     </h3>
-    <div class="flex flex-col md:flex-row gap-3">
+    <div class="inline-flex items-center shadow-theme-xs">
       <button
-        class="shadow-theme-xs inline-flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 ring-1 ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
-        Скачать товары
+        class="inline-flex items-center gap-2 px-4 py-3 -ml-px text-sm font-medium bg-transparent text-gray-700 ring-1 ring-inset ring-gray-300 first:rounded-l-lg last:rounded-r-lg hover:bg-gray-50 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
+        <component :is="editIcon" />
+        Редактировать
+      </button>
+      <button
+        class="inline-flex items-center gap-2 px-4 py-3 -ml-px text-sm font-medium bg-transparent text-gray-700 ring-1 ring-inset ring-gray-300 first:rounded-l-lg last:rounded-r-lg hover:bg-gray-50 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
+        Скачать
+        <component :is="uploadIcon" width="18" height="18" />
+      </button>
+      <button @click="$emit('bulkUpload')"
+        class="inline-flex items-center gap-2 px-4 py-3 -ml-px text-sm font-medium bg-transparent text-gray-700 ring-1 ring-inset ring-gray-300 first:rounded-l-lg last:rounded-r-lg hover:bg-gray-50 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
+        Загрузить
         <component :is="downloadIcon" />
       </button>
-      <button
-        class="shadow-theme-xs inline-flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 ring-1 ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]"
-        @click="$emit('bulkUpload')">
-        Массовая загрузка
-      </button>
       <router-link to="/products/create"
-        class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white transition">
+        class="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition bg-brand-500 ring-1 ring-inset ring-brand-500 first:rounded-l-lg last:rounded-r-lg hover:bg-brand-500">
         <component :is="plusIcon" width="20" height="20" />
-        Добавить товар
+        Добавить
       </router-link>
     </div>
   </div>
@@ -36,6 +41,14 @@ defineProps({
     required: true
   },
   downloadIcon: {
+    type: Object,
+    required: true
+  },
+  uploadIcon: {
+    type: Object,
+    required: true
+  },
+  editIcon: {
     type: Object,
     required: true
   },
