@@ -21,7 +21,7 @@
                 <Pagination :currentPage="page" :totalPages="totalPages" @page-change="handlePageChange" class="px-6" />
             </div>
         </div>
-        <BulkUploadModal :isVisible="showBulkUploadModal" @close="showBulkUploadModal = false"
+        <BulkUploadModal :isVisible="showBulkUploadModal" :isLoading="isUploadingBulk" @close="showBulkUploadModal = false"
             @upload="handleFileUpload" />
     </AdminLayout>
 </template>
@@ -77,6 +77,7 @@ const { categories, fetchCategories } = useCategories()
 const showFilter = ref(false)
 const isOpen = ref(false)
 const showBulkUploadModal = ref(false)
+const isUploadingBulk = ref(false)
 
 const toggleDropdown = () => {
     isOpen.value = !isOpen.value
@@ -106,7 +107,7 @@ const handleBulkUpload = () => {
 }
 
 const handleFileUpload = async (file) => {
-    showBulkUploadModal.value = false
+    isUploadingBulk.value = true
 
     const formData = new FormData()
     formData.append('file', file)
@@ -137,6 +138,9 @@ const handleFileUpload = async (file) => {
     } catch (error) {
         showAlert('error', 'Ошибка', 'Произошла ошибка при загрузке файла')
         console.error('Upload error:', error)
+    } finally {
+        isUploadingBulk.value = false
+        showBulkUploadModal.value = false
     }
 }
 

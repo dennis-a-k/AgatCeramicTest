@@ -18,8 +18,10 @@
             />
           </div>
           <div class="mt-4 flex justify-end gap-3">
-            <Button variant="outline" @click="$emit('close')">Отмена</Button>
-            <Button variant="primary" :disabled="!selectedFile" @click="handleUpload">Загрузить</Button>
+            <Button variant="outline" :disabled="isLoading" @click="$emit('close')">Отмена</Button>
+            <Button variant="primary" :disabled="!selectedFile || isLoading" @click="handleUpload">
+              {{ isLoading ? 'Загрузка...' : 'Загрузить' }}
+            </Button>
           </div>
         </div>
       </div>
@@ -34,6 +36,7 @@ import Button from '@/components/ui/Button.vue'
 
 defineProps({
   isVisible: Boolean,
+  isLoading: Boolean,
 })
 
 const emit = defineEmits(['close', 'upload'])
