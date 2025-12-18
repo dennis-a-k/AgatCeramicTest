@@ -30,6 +30,7 @@ import ShoppingCartIcon from "./ShoppingCartIcon.vue";
 import SquareChartGanttIcon from "./SquareChartGanttIcon.vue";
 import SquarePenIcon from "./SquarePenIcon.vue";
 import SwatchBookIcon from "./SwatchBookIcon.vue";
+import UploadIcon from "./UploadIcon.vue";
 import UserCircleIcon from "./UserCircleIcon.vue";
 import UserRoundPlusIcon from "./UserRoundPlusIcon.vue";
 import UsersRoundIcon from "./UsersRoundIcon.vue";
@@ -67,6 +68,7 @@ export {
   SquareChartGanttIcon,
   SquarePenIcon,
   SwatchBookIcon,
+  UploadIcon,
   UserCircleIcon,
   UserRoundPlusIcon,
   UsersRoundIcon,
