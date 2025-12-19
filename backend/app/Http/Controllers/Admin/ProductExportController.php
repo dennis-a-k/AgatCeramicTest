@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Color;
 use App\Services\ProductService;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -160,8 +163,21 @@ class ProductExportController extends Controller
             })->toArray();
         }
 
+        // Получить списки для выпадающих меню
+        $allCategories = Category::orderBy('name')->pluck('name')->toArray();
+        $allBrands = Brand::orderBy('name')->pluck('name')->toArray();
+        $allColors = Color::orderBy('name')->pluck('name')->toArray();
+
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
+
+        // Создать скрытый лист с данными для выпадающих списков
+        $dataSheet = $spreadsheet->createSheet();
+        $dataSheet->setTitle('Data');
+        $dataSheet->fromArray(array_map(function($item) { return [$item]; }, $allCategories), null, 'A1');
+        $dataSheet->fromArray(array_map(function($item) { return [$item]; }, $allBrands), null, 'B1');
+        $dataSheet->fromArray(array_map(function($item) { return [$item]; }, $allColors), null, 'C1');
+        $dataSheet->setSheetState(Worksheet::SHEETSTATE_HIDDEN);
 
         // Заголовки
         $headers = [
@@ -204,7 +220,10 @@ class ProductExportController extends Controller
             $col++;
         }
 
-        // Добавление выпадающих списков для булевых полей
+        // Добавление выпадающих списков
+        $categoryIndex = array_search('Категория', $headers);
+        $brandIndex = array_search('Бренд', $headers);
+        $colorIndex = array_search('Цвет', $headers);
         $publishedIndex = array_search('Опубликовано', $headers);
         $saleIndex = array_search('Распродажа', $headers);
         $booleanColumns = [];
@@ -218,6 +237,60 @@ class ProductExportController extends Controller
         }
 
         $allBooleanColumns = array_merge($booleanColumns, array_filter([$publishedIndex, $saleIndex]));
+
+        // Для Категория
+        if ($categoryIndex !== false) {
+            $columnLetter = Coordinate::stringFromColumnIndex($categoryIndex + 1);
+            $validation = $sheet->getDataValidation($columnLetter . '2');
+            $validation->setType(DataValidation::TYPE_LIST);
+            $validation->setErrorStyle(DataValidation::STYLE_INFORMATION);
+            $validation->setAllowBlank(false);
+            $validation->setShowInputMessage(true);
+            $validation->setShowErrorMessage(true);
+            $validation->setShowDropDown(true);
+            $validation->setErrorTitle('Ошибка ввода');
+            $validation->setError('Значение отсутствует в списке.');
+            $validation->setPromptTitle('Выберите из списка');
+            $validation->setPrompt('Пожалуйста, выберите значение из выпадающего списка.');
+            $validation->setFormula1('Data!$A:$A');
+            $validation->setSqref($columnLetter . '2:' . $columnLetter . '1000');
+        }
+
+        // Для Бренд
+        if ($brandIndex !== false) {
+            $columnLetter = Coordinate::stringFromColumnIndex($brandIndex + 1);
+            $validation = $sheet->getDataValidation($columnLetter . '2');
+            $validation->setType(DataValidation::TYPE_LIST);
+            $validation->setErrorStyle(DataValidation::STYLE_INFORMATION);
+            $validation->setAllowBlank(false);
+            $validation->setShowInputMessage(true);
+            $validation->setShowErrorMessage(true);
+            $validation->setShowDropDown(true);
+            $validation->setErrorTitle('Ошибка ввода');
+            $validation->setError('Значение отсутствует в списке.');
+            $validation->setPromptTitle('Выберите из списка');
+            $validation->setPrompt('Пожалуйста, выберите значение из выпадающего списка.');
+            $validation->setFormula1('Data!$B:$B');
+            $validation->setSqref($columnLetter . '2:' . $columnLetter . '1000');
+        }
+
+        // Для Цвет
+        if ($colorIndex !== false) {
+            $columnLetter = Coordinate::stringFromColumnIndex($colorIndex + 1);
+            $validation = $sheet->getDataValidation($columnLetter . '2');
+            $validation->setType(DataValidation::TYPE_LIST);
+            $validation->setErrorStyle(DataValidation::STYLE_INFORMATION);
+            $validation->setAllowBlank(false);
+            $validation->setShowInputMessage(true);
+            $validation->setShowErrorMessage(true);
+            $validation->setShowDropDown(true);
+            $validation->setErrorTitle('Ошибка ввода');
+            $validation->setError('Значение отсутствует в списке.');
+            $validation->setPromptTitle('Выберите из списка');
+            $validation->setPrompt('Пожалуйста, выберите значение из выпадающего списка.');
+            $validation->setFormula1('Data!$C:$C');
+            $validation->setSqref($columnLetter . '2:' . $columnLetter . '1000');
+        }
 
         foreach ($allBooleanColumns as $colIndex) {
             if ($colIndex !== false) {
