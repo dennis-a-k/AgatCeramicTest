@@ -126,9 +126,13 @@ class ProductExportService
                 $headers = ['Артикул'];
         }
 
+        $dataSheet = $this->createDataSheet($spreadsheet);
+
         $this->setHeaders($sheet, $headers);
         $this->styleHeaders($sheet, self::HEADER_FILL_COLOR_TEMPLATE);
         $this->setColumnWidths($sheet, $headers);
+
+        $this->applyEditDataValidations($sheet, $headers, $type, $dataSheet);
 
         $filename = 'edit_template_' . $type . '_' . date('Y-m-d_H-i-s') . '.xlsx';
 
@@ -312,6 +316,14 @@ class ProductExportService
 
         foreach ($allBooleanColumns as $colIndex) {
             $this->applyListValidation($sheet, $colIndex, '"Да,Нет"');
+        }
+    }
+
+    protected function applyEditDataValidations(Worksheet $sheet, array $headers, string $type, Worksheet $dataSheet): void
+    {
+        if (in_array($type, ['statuses', 'sales'])) {
+            // For statuses and sales, apply validation to the second column (index 1)
+            $this->applyListValidation($sheet, 1, '"Да,Нет"');
         }
     }
 
