@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Services\ProductService;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -154,7 +155,9 @@ class ProductExportController extends Controller
 
         $attributes = [];
         if ($category) {
-            $attributes = $category->attributes->pluck('name')->toArray();
+            $attributes = $category->attributes->map(function($attr) {
+                return ['name' => $attr->name, 'type' => $attr->type];
+            })->toArray();
         }
 
         $spreadsheet = new Spreadsheet();
@@ -181,7 +184,8 @@ class ProductExportController extends Controller
         if ($category && in_array($category->name, $specificCategories)) {
             $headers = array_merge($headers, ['Поверхность', 'Рисунок', 'Коллекция']);
         }
-        $headers = array_merge($headers, $attributes, ['Изображение 1', 'Изображение 2', 'Изображение 3', 'Изображение 4', 'Изображение 5']);
+        $attributeNames = array_column($attributes, 'name');
+        $headers = array_merge($headers, $attributeNames, ['Изображение 1', 'Изображение 2', 'Изображение 3', 'Изображение 4', 'Изображение 5']);
         $sheet->fromArray($headers, null, 'A1');
 
         // Стилизация заголовков
@@ -198,6 +202,40 @@ class ProductExportController extends Controller
             $width = strlen($header) * 1.2; // Коэффициент для отступа
             $sheet->getColumnDimension($columnLetter)->setWidth($width);
             $col++;
+        }
+
+        // Добавление выпадающих списков для булевых полей
+        $publishedIndex = array_search('Опубликовано', $headers);
+        $saleIndex = array_search('Распродажа', $headers);
+        $booleanColumns = [];
+        foreach ($attributes as $attr) {
+            if ($attr['type'] === 'boolean') {
+                $index = array_search($attr['name'], $headers);
+                if ($index !== false) {
+                    $booleanColumns[] = $index;
+                }
+            }
+        }
+
+        $allBooleanColumns = array_merge($booleanColumns, array_filter([$publishedIndex, $saleIndex]));
+
+        foreach ($allBooleanColumns as $colIndex) {
+            if ($colIndex !== false) {
+                $columnLetter = Coordinate::stringFromColumnIndex($colIndex + 1);
+                $validation = $sheet->getDataValidation($columnLetter . '2');
+                $validation->setType(DataValidation::TYPE_LIST);
+                $validation->setErrorStyle(DataValidation::STYLE_INFORMATION);
+                $validation->setAllowBlank(false);
+                $validation->setShowInputMessage(true);
+                $validation->setShowErrorMessage(true);
+                $validation->setShowDropDown(true);
+                $validation->setErrorTitle('Ошибка ввода');
+                $validation->setError('Значение отсутствует в списке.');
+                $validation->setPromptTitle('Выберите из списка');
+                $validation->setPrompt('Пожалуйста, выберите значение из выпадающего списка.');
+                $validation->setFormula1('"Да,Нет"');
+                $validation->setSqref($columnLetter . '2:' . $columnLetter . '1000');
+            }
         }
 
         $writer = new Xlsx($spreadsheet);
