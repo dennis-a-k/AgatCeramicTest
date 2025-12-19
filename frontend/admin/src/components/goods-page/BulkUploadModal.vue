@@ -7,8 +7,25 @@
             Массовая загрузка товаров
           </h3>
           <p class="mt-2 text-sm text-gray-600 dark:text-gray-400 text-center">
-            Выберите Excel файл с товарами для загрузки
+            Выберите категорию и скачайте шаблон, или загрузите Excel файл с товарами
           </p>
+          <div class="mt-4">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Категория</label>
+            <select
+              v-model="selectedCategoryId"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            >
+              <option value="">Выберите категорию</option>
+              <option v-for="category in categories.filter(c => c.value !== null)" :key="category.id" :value="category.value">
+                {{ category.label }}
+              </option>
+            </select>
+          </div>
+          <div class="mt-4">
+            <Button variant="outline" :disabled="!selectedCategoryId" @click="handleDownloadTemplate">
+              Скачать шаблон
+            </Button>
+          </div>
           <div class="mt-4">
             <input
               type="file"
@@ -34,14 +51,16 @@ import { ref } from 'vue'
 import Modal from '@/components/ui/Modal.vue'
 import Button from '@/components/ui/Button.vue'
 
-defineProps({
+const props = defineProps({
   isVisible: Boolean,
   isLoading: Boolean,
+  categories: Array,
 })
 
-const emit = defineEmits(['close', 'upload'])
+const emit = defineEmits(['close', 'upload', 'downloadTemplate'])
 
 const selectedFile = ref(null)
+const selectedCategoryId = ref('')
 
 const handleFileSelect = (event) => {
   selectedFile.value = event.target.files[0]
@@ -50,6 +69,12 @@ const handleFileSelect = (event) => {
 const handleUpload = () => {
   if (selectedFile.value) {
     emit('upload', selectedFile.value)
+  }
+}
+
+const handleDownloadTemplate = () => {
+  if (selectedCategoryId.value) {
+    emit('downloadTemplate', selectedCategoryId.value)
   }
 }
 </script>

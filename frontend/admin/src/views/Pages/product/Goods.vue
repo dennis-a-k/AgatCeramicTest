@@ -21,8 +21,8 @@
                 <Pagination :currentPage="page" :totalPages="totalPages" @page-change="handlePageChange" class="px-6" />
             </div>
         </div>
-        <BulkUploadModal :isVisible="showBulkUploadModal" :isLoading="isUploadingBulk" @close="showBulkUploadModal = false"
-            @upload="handleFileUpload" />
+        <BulkUploadModal :isVisible="showBulkUploadModal" :isLoading="isUploadingBulk" :categories="categories" @close="showBulkUploadModal = false"
+            @upload="handleFileUpload" @downloadTemplate="handleDownloadTemplate" />
     </AdminLayout>
 </template>
 
@@ -143,6 +143,34 @@ const handleFileUpload = async (file) => {
     } finally {
         isUploadingBulk.value = false
         showBulkUploadModal.value = false
+    }
+}
+
+const handleDownloadTemplate = async (categoryId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/export/template/${categoryId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+            }
+        })
+
+        if (!response.ok) {
+            throw new Error('Failed to download template')
+        }
+
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `template_${categoryId}.xlsx`
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+        window.URL.revokeObjectURL(url)
+    } catch (error) {
+        showAlert('error', 'Ошибка', 'Произошла ошибка при скачивании шаблона')
+        console.error('Download error:', error)
     }
 }
 

@@ -39,9 +39,21 @@ class ProductExportController extends Controller
 
         // Заголовки
         $headers = [
-            'Артикул', 'Название', 'Цена', 'Единица', 'Код товара', 'Описание',
-            'Категория', 'Бренд', 'Цвет', 'Опубликовано', 'Распродажа', 'Текстура',
-            'Узор', 'Страна', 'Коллекция'
+            'Артикул',
+            'Название',
+            'Цена',
+            'Единица',
+            'Код товара',
+            'Описание',
+            'Категория',
+            'Бренд',
+            'Цвет',
+            'Опубликовано',
+            'Распродажа',
+            'Текстура',
+            'Узор',
+            'Страна',
+            'Коллекция'
         ];
         $headers = array_merge($headers, $uniqueAttributes, ['Изображение 1', 'Изображение 2', 'Изображение 3', 'Изображение 4', 'Изображение 5']);
         $sheet->fromArray($headers, null, 'A1');
@@ -129,6 +141,67 @@ class ProductExportController extends Controller
         }, 200, [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'Content-Disposition' => 'attachment; filename="products_export_' . date('Y-m-d_H-i-s') . '.xlsx"',
+        ]);
+    }
+
+    public function template($categoryId): StreamedResponse
+    {
+        $category = \App\Models\Category::with('attributes')->find($categoryId);
+
+        $attributes = [];
+        if ($category) {
+            $attributes = $category->attributes->pluck('name')->toArray();
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Заголовки
+        $headers = [
+            'Артикул',
+            'Название',
+            'Цена',
+            'Единица',
+            'Код товара',
+            'Описание',
+            'Категория',
+            'Бренд',
+            'Цвет',
+            'Опубликовано',
+            'Распродажа',
+            'Текстура',
+            'Узор',
+            'Страна',
+            'Коллекция'
+        ];
+        $headers = array_merge($headers, $attributes, ['Изображение 1', 'Изображение 2', 'Изображение 3', 'Изображение 4', 'Изображение 5']);
+        $sheet->fromArray($headers, null, 'A1');
+
+        // Стилизация заголовков
+        $highestColumn = $sheet->getHighestColumn();
+        $headerRange = 'A1:' . $highestColumn . '1';
+        $sheet->getStyle($headerRange)->getFont()->setBold(true);
+        $sheet->getStyle($headerRange)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('C4D79B'); // Светло-серый цвет
+        $sheet->getStyle($headerRange)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        // Установка ширины колонок по ширине заголовков
+        $col = 0;
+        foreach ($headers as $header) {
+            $columnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col + 1);
+            $width = strlen($header) * 1.2; // Коэффициент для отступа
+            $sheet->getColumnDimension($columnLetter)->setWidth($width);
+            $col++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+
+        $filename = $category ? 'template_' . $category->slug . '_' . date('Y-m-d_H-i-s') . '.xlsx' : 'template_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        return response()->stream(function () use ($writer) {
+            $writer->save('php://output');
+        }, 200, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ]);
     }
 }
