@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\BulkProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('export/edit-template/{template_type}', [ProductExportController::class, 'editTemplate']);
+Route::get('export/edit-template-category/{category}', [ProductExportController::class, 'editTemplateCategory']);
 Route::get('export/products', [ProductExportController::class, 'export']);
 Route::get('export/template/{category}', [ProductExportController::class, 'template']);
 Route::apiResource('products', ProductController::class);

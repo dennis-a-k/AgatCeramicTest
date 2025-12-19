@@ -36,6 +36,14 @@ class ProductService
         return Product::with(['category', 'brand', 'color', 'attributeValues.attribute', 'images'])->get()->toArray();
     }
 
+    public function getProductsByCategory($categoryId): array
+    {
+        return Product::with(['category', 'brand', 'color', 'attributeValues.attribute', 'images'])
+            ->where('category_id', $categoryId)
+            ->get()
+            ->toArray();
+    }
+
     public function getProductById($id): ?Product
     {
         return $this->repository->find($id);
@@ -81,7 +89,26 @@ class ProductService
 
         unset($updateData['article']); // Don't update article
 
-        return $this->repository->update($product->id, $updateData);
+        $attributeValues = $updateData['attribute_values'] ?? [];
+        unset($updateData['attribute_values']);
+
+        try {
+            return DB::transaction(function () use ($product, $updateData, $attributeValues) {
+                // Update basic fields
+                if (!empty($updateData)) {
+                    $this->repository->update($product->id, $updateData);
+                }
+
+                // Update attributes if provided
+                if (!empty($attributeValues)) {
+                    $this->updateAttributeValues($product->id, $attributeValues);
+                }
+
+                return true;
+            });
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to update product: ' . $e->getMessage());
+        }
     }
 
     public function deleteProduct($id): bool

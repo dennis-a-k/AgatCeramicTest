@@ -33,4 +33,9 @@ class ProductExportController extends Controller
         }
         return $this->productExportService->editTemplate($type);
     }
+
+    public function editTemplateCategory($categoryId): StreamedResponse
+    {
+        return $this->productExportService->editTemplateCategory($categoryId);
+    }
 }

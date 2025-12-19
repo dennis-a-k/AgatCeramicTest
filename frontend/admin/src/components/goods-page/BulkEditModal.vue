@@ -22,8 +22,21 @@
               <option value="sales">Распродажи</option>
             </select>
           </div>
+          <div v-if="selectedTemplateType === 'products'" class="mt-4">
+            <label for="selectedCategory" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Категория</label>
+            <select
+              id="selectedCategory"
+              v-model="selectedCategoryId"
+              class="mt-1 dark:bg-dark-900 h-11 flex items-center w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+            >
+              <option value="">Выберите категорию</option>
+              <option v-for="category in categories.filter(c => c.value !== null)" :key="category.id" :value="category.value">
+                {{ category.label }}
+              </option>
+            </select>
+          </div>
           <div class="flex justify-end mt-4">
-            <Button variant="outline" :disabled="!selectedTemplateType" @click="handleDownloadTemplate">
+            <Button variant="outline" :disabled="!selectedTemplateType || (selectedTemplateType === 'products' && !selectedCategoryId)" @click="handleDownloadTemplate">
               Скачать шаблон
             </Button>
           </div>
@@ -54,12 +67,14 @@ import Button from '@/components/ui/Button.vue'
 const props = defineProps({
   isVisible: Boolean,
   isLoading: Boolean,
+  categories: Array,
 })
 
 const emit = defineEmits(['close', 'upload', 'downloadTemplate'])
 
 const selectedFile = ref(null)
 const selectedTemplateType = ref('')
+const selectedCategoryId = ref('')
 
 const handleFileSelect = (event) => {
   selectedFile.value = event.target.files[0]
@@ -72,8 +87,10 @@ const handleUpload = () => {
 }
 
 const handleDownloadTemplate = () => {
-  if (selectedTemplateType.value) {
-    emit('downloadTemplate', selectedTemplateType.value)
+  if (selectedTemplateType.value === 'products') {
+    emit('downloadTemplate', selectedCategoryId.value, 'products')
+  } else {
+    emit('downloadTemplate', selectedTemplateType.value, selectedTemplateType.value)
   }
 }
 </script>

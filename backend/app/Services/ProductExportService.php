@@ -57,6 +57,7 @@ class ProductExportService
 
     const HEADER_FILL_COLOR_EXPORT = '95B3D7';
     const HEADER_FILL_COLOR_TEMPLATE = 'C4D79B';
+    const HEADER_FILL_COLOR_EDIT_TEMPLATE = 'DA9694';
     const COLUMN_WIDTH_FACTOR = 1.2;
 
     public function __construct(ProductService $productService)
@@ -110,9 +111,6 @@ class ProductExportService
         $sheet = $spreadsheet->getActiveSheet();
 
         switch ($type) {
-            case 'products':
-                $headers = ['Артикул', 'Название', 'Цена', 'Описание', 'Категория', 'Бренд', 'Цвет', 'Опубликовано', 'Распродажа'];
-                break;
             case 'prices':
                 $headers = ['Артикул', 'Цена'];
                 break;
@@ -129,12 +127,37 @@ class ProductExportService
         $dataSheet = $this->createDataSheet($spreadsheet);
 
         $this->setHeaders($sheet, $headers);
-        $this->styleHeaders($sheet, self::HEADER_FILL_COLOR_TEMPLATE);
+        $this->styleHeaders($sheet, self::HEADER_FILL_COLOR_EDIT_TEMPLATE);
         $this->setColumnWidths($sheet, $headers);
 
         $this->applyEditDataValidations($sheet, $headers, $type, $dataSheet);
 
         $filename = 'edit_template_' . $type . '_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        return $this->createResponse($spreadsheet, $filename);
+    }
+
+    public function editTemplateCategory($categoryId): StreamedResponse
+    {
+        $category = Category::with('attributes')->find($categoryId);
+        $attributes = $this->getCategoryAttributes($category);
+        $products = $this->productService->getProductsByCategory($categoryId);
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $dataSheet = $this->createDataSheet($spreadsheet);
+
+        $headers = $this->buildTemplateHeaders($category, $attributes);
+        $this->setHeaders($sheet, $headers);
+        $this->styleHeaders($sheet, self::HEADER_FILL_COLOR_EDIT_TEMPLATE);
+        $this->setColumnWidths($sheet, $headers);
+
+        $this->populateCategoryEditData($sheet, $products, $attributes, $headers);
+
+        $this->applyDataValidations($sheet, $headers, $attributes, $dataSheet);
+
+        $filename = $category ? 'edit_template_' . $category->slug . '_' . date('Y-m-d_H-i-s') . '.xlsx' : 'edit_template_' . date('Y-m-d_H-i-s') . '.xlsx';
 
         return $this->createResponse($spreadsheet, $filename);
     }
@@ -250,6 +273,51 @@ class ProductExportService
                 $data[] = $attributeMap[$attrName] ?? '';
             }
 
+            for ($i = 0; $i < 5; $i++) {
+                $data[] = $imageUrls[$i] ?? '';
+            }
+
+            $sheet->fromArray($data, null, 'A' . $row);
+            $row++;
+        }
+    }
+
+    protected function populateCategoryEditData(Worksheet $sheet, array $products, array $attributes, array $headers): void
+    {
+        $row = 2;
+        $attributeNames = array_column($attributes, 'name');
+        foreach ($products as $product) {
+            $attributeMap = $this->buildAttributeMap($product);
+            $imageUrls = $this->getImageUrls($product);
+
+            $data = [
+                $product['article'],
+                $product['name'],
+                $product['price'],
+                $product['unit'],
+                $product['product_code'],
+                $product['description'],
+                $product['category']['name'] ?? '',
+                $product['brand']['name'] ?? '',
+                $product['color']['name'] ?? '',
+                $product['is_published'] ? 'Да' : 'Нет',
+                $product['is_sale'] ? 'Да' : 'Нет',
+                $product['country']
+            ];
+
+            // Add specific headers if category is specific
+            if (in_array($product['category']['name'] ?? '', self::SPECIFIC_CATEGORIES)) {
+                $data[] = $product['texture'];
+                $data[] = $product['pattern'];
+                $data[] = $product['collection'];
+            }
+
+            // Add attribute values in order of attributeNames
+            foreach ($attributeNames as $attrName) {
+                $data[] = $attributeMap[$attrName] ?? '';
+            }
+
+            // Add image URLs
             for ($i = 0; $i < 5; $i++) {
                 $data[] = $imageUrls[$i] ?? '';
             }

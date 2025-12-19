@@ -25,8 +25,8 @@ class BulkUploadService
         $worksheet = $spreadsheet->getActiveSheet();
         $rows = $worksheet->toArray();
 
-        // Remove header row
-        array_shift($rows);
+        // Get header row
+        $headers = array_shift($rows);
 
         $successCount = 0;
         $errorCount = 0;
@@ -34,7 +34,7 @@ class BulkUploadService
 
         foreach ($rows as $index => $row) {
             try {
-                $productData = $this->parseProductRow($row);
+                $productData = $this->parseProductRow($row, $headers);
                 if ($productData) {
                     $this->productService->createProductWithAttributesAndImages($productData, $request);
                     $successCount++;
@@ -66,7 +66,7 @@ class BulkUploadService
         ];
     }
 
-    private function parseProductRow(array $row): ?array
+    private function parseProductRow(array $row, array $headers): ?array
     {
         // Skip completely empty rows
         if (empty(array_filter($row))) {
@@ -90,10 +90,7 @@ class BulkUploadService
             'color_id' => $this->getColorIdByName(trim($row[8] ?? '')),
             'is_published' => in_array(strtolower(trim($row[9] ?? '1')), ['1', 'да', 'Да', 'yes', 'true']),
             'is_sale' => in_array(strtolower(trim($row[10] ?? '0')), ['1', 'да', 'Да', 'yes', 'true']),
-            'texture' => trim($row[11] ?? ''),
-            'pattern' => trim($row[12] ?? ''),
-            'country' => trim($row[13] ?? ''),
-            'collection' => trim($row[14] ?? ''),
+            'country' => trim($row[11] ?? ''),
             'attribute_values' => []
         ];
 
@@ -102,24 +99,38 @@ class BulkUploadService
             throw new \Exception('Категория "' . trim($row[6] ?? '') . '" не найдена');
         }
 
-        // Parse dynamic attributes starting from column 15
-        // Assuming columns 15+ are attribute values, and we need to map them to existing attributes
-        $allAttributes = Attribute::orderBy('id')->get();
-        $attributeIndex = 0;
+        // Determine if category is specific
+        $categoryName = trim($row[6] ?? '');
+        $isSpecific = in_array($categoryName, ['Керамогранит', 'Плитка', 'Мозаика', 'Клинкер', 'Ступени']);
 
-        for ($i = 15; $i < count($row); $i++) {
-            $value = trim($row[$i] ?? '');
-            if (!empty($value) && isset($allAttributes[$attributeIndex])) {
-                $attribute = $allAttributes[$attributeIndex];
-                $productData['attribute_values'][] = [
-                    'attribute_id' => $attribute->id,
-                    'string_value' => $attribute->type === 'string' ? $value : null,
-                    'number_value' => $attribute->type === 'number' && is_numeric($value) ? (float)$value : null,
-                    'boolean_value' => $attribute->type === 'boolean' ? in_array(strtolower($value), ['1', 'да', 'Да', 'yes', 'true']) : null,
-                    'text_value' => $attribute->type === 'text' ? $value : null,
-                ];
+        $baseHeadersCount = 12; // Up to 'country'
+        if ($isSpecific) {
+            $productData['texture'] = trim($row[12] ?? '');
+            $productData['pattern'] = trim($row[13] ?? '');
+            $productData['collection'] = trim($row[14] ?? '');
+            $baseHeadersCount = 15;
+        }
+
+        // Parse attributes starting from baseHeadersCount
+        for ($i = $baseHeadersCount; $i < count($headers); $i++) {
+            $header = trim($headers[$i] ?? '');
+            if (in_array($header, ['Изображение 1', 'Изображение 2', 'Изображение 3', 'Изображение 4', 'Изображение 5'])) {
+                // Skip image columns
+                continue;
             }
-            $attributeIndex++;
+            $value = trim($row[$i] ?? '');
+            if (!empty($value) || $value === '0' || $value === 0) {
+                $attribute = Attribute::where('name', $header)->first();
+                if ($attribute) {
+                    $productData['attribute_values'][] = [
+                        'attribute_id' => $attribute->id,
+                        'string_value' => $attribute->type === 'string' ? $value : null,
+                        'number_value' => $attribute->type === 'number' && is_numeric($value) ? (float)$value : null,
+                        'boolean_value' => $attribute->type === 'boolean' ? in_array(strtolower($value), ['1', 'да', 'Да', 'yes', 'true']) : null,
+                        'text_value' => $attribute->type === 'text' ? $value : null,
+                    ];
+                }
+            }
         }
 
         return $productData;
@@ -151,8 +162,8 @@ class BulkUploadService
         $worksheet = $spreadsheet->getActiveSheet();
         $rows = $worksheet->toArray();
 
-        // Remove header row
-        array_shift($rows);
+        // Get header row
+        $headers = array_shift($rows);
 
         $successCount = 0;
         $errorCount = 0;
@@ -160,7 +171,7 @@ class BulkUploadService
 
         foreach ($rows as $index => $row) {
             try {
-                $updateData = $this->parseEditRow($row, $type);
+                $updateData = $this->parseEditRow($row, $type, $headers);
                 if ($updateData) {
                     $this->productService->updateProductBulk($updateData);
                     $successCount++;
@@ -186,7 +197,7 @@ class BulkUploadService
         ];
     }
 
-    private function parseEditRow(array $row, string $type): ?array
+    private function parseEditRow(array $row, string $type, array $headers): ?array
     {
         // Skip completely empty rows
         if (empty(array_filter($row))) {
@@ -199,20 +210,73 @@ class BulkUploadService
         }
 
         $article = trim($row[0]);
+        $updateData = ['article' => $article];
 
         switch ($type) {
             case 'products':
-                return [
-                    'article' => $article,
-                    'name' => trim($row[1] ?? ''),
-                    'price' => is_numeric($row[2] ?? 0) ? (float)$row[2] : null,
-                    'description' => trim($row[3] ?? ''),
-                    'category_id' => $this->getCategoryIdByName(trim($row[4] ?? '')),
-                    'brand_id' => $this->getBrandIdByName(trim($row[5] ?? '')),
-                    'color_id' => $this->getColorIdByName(trim($row[6] ?? '')),
-                    'is_published' => isset($row[7]) ? in_array(strtolower(trim($row[7])), ['1', 'да', 'Да', 'yes', 'true']) : null,
-                    'is_sale' => isset($row[8]) ? in_array(strtolower(trim($row[8])), ['1', 'да', 'Да', 'yes', 'true']) : null,
-                ];
+                // Parse based on headers
+                for ($i = 1; $i < count($headers); $i++) {
+                    $header = trim($headers[$i] ?? '');
+                    $value = trim($row[$i] ?? '');
+                    switch ($header) {
+                        case 'Название':
+                            $updateData['name'] = $value;
+                            break;
+                        case 'Цена':
+                            $updateData['price'] = is_numeric($value) ? (float)$value : null;
+                            break;
+                        case 'Описание':
+                            $updateData['description'] = $value;
+                            break;
+                        case 'Категория':
+                            $updateData['category_id'] = $this->getCategoryIdByName($value);
+                            break;
+                        case 'Бренд':
+                            $updateData['brand_id'] = $this->getBrandIdByName($value);
+                            break;
+                        case 'Цвет':
+                            $updateData['color_id'] = $this->getColorIdByName($value);
+                            break;
+                        case 'Опубликовано':
+                            $updateData['is_published'] = in_array(strtolower($value), ['1', 'да', 'Да', 'yes', 'true']);
+                            break;
+                        case 'Распродажа':
+                            $updateData['is_sale'] = in_array(strtolower($value), ['1', 'да', 'Да', 'yes', 'true']);
+                            break;
+                        case 'Страна':
+                            $updateData['country'] = $value;
+                            break;
+                        case 'Поверхность':
+                            $updateData['texture'] = $value;
+                            break;
+                        case 'Рисунок':
+                            $updateData['pattern'] = $value;
+                            break;
+                        case 'Коллекция':
+                            $updateData['collection'] = $value;
+                            break;
+                        case 'Единица':
+                            $updateData['unit'] = $value;
+                            break;
+                        case 'Код товара':
+                            $updateData['product_code'] = $value;
+                            break;
+                        default:
+                            // Check if it's an attribute
+                            $attribute = Attribute::where('name', $header)->first();
+                            if ($attribute) {
+                                $updateData['attribute_values'][] = [
+                                    'attribute_id' => $attribute->id,
+                                    'string_value' => $attribute->type === 'string' ? $value : null,
+                                    'number_value' => $attribute->type === 'number' && is_numeric($value) ? (float)$value : null,
+                                    'boolean_value' => $attribute->type === 'boolean' ? in_array(strtolower($value), ['1', 'да', 'Да', 'yes', 'true']) : null,
+                                    'text_value' => $attribute->type === 'text' ? $value : null,
+                                ];
+                            }
+                            break;
+                    }
+                }
+                return $updateData;
             case 'prices':
                 return [
                     'article' => $article,

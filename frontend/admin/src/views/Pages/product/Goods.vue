@@ -23,7 +23,7 @@
         </div>
         <BulkUploadModal :isVisible="showBulkUploadModal" :isLoading="isUploadingBulk" :categories="categories" @close="showBulkUploadModal = false"
             @upload="handleFileUpload" @downloadTemplate="handleDownloadTemplate" />
-        <BulkEditModal :isVisible="showBulkEditModal" :isLoading="isUploadingBulkEdit" @close="showBulkEditModal = false"
+        <BulkEditModal :isVisible="showBulkEditModal" :isLoading="isUploadingBulkEdit" :categories="categories" @close="showBulkEditModal = false"
             @upload="handleFileUploadEdit" @downloadTemplate="handleDownloadEditTemplate" />
     </AdminLayout>
 </template>
@@ -222,31 +222,36 @@ const handleFileUploadEdit = async (file, templateType) => {
     }
 }
 
-const handleDownloadEditTemplate = async (templateType) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/export/edit-template/${templateType}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+const handleDownloadEditTemplate = async (value, type) => {
+    if (type === 'products') {
+        // For products, use the existing template download
+        await handleDownloadTemplate(value)
+    } else {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/export/edit-template/${type}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+                }
+            })
+
+            if (!response.ok) {
+                throw new Error('Failed to download template')
             }
-        })
 
-        if (!response.ok) {
-            throw new Error('Failed to download template')
+            const blob = await response.blob()
+            const url = window.URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = `edit_template_${type}.xlsx`
+            document.body.appendChild(a)
+            a.click()
+            a.remove()
+            window.URL.revokeObjectURL(url)
+        } catch (error) {
+            showAlert('error', 'Ошибка', 'Произошла ошибка при скачивании шаблона')
+            console.error('Download error:', error)
         }
-
-        const blob = await response.blob()
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `edit_template_${templateType}.xlsx`
-        document.body.appendChild(a)
-        a.click()
-        a.remove()
-        window.URL.revokeObjectURL(url)
-    } catch (error) {
-        showAlert('error', 'Ошибка', 'Произошла ошибка при скачивании шаблона')
-        console.error('Download error:', error)
     }
 }
 
