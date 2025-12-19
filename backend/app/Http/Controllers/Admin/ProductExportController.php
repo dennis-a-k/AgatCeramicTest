@@ -24,4 +24,13 @@ class ProductExportController extends Controller
     {
         return $this->productExportService->template($categoryId);
     }
+
+    public function editTemplate($type): StreamedResponse
+    {
+        $validTypes = ['products', 'prices', 'statuses', 'sales'];
+        if (!in_array($type, $validTypes)) {
+            abort(404);
+        }
+        return $this->productExportService->editTemplate($type);
+    }
 }

@@ -104,6 +104,37 @@ class ProductExportService
         return $this->createResponse($spreadsheet, $filename);
     }
 
+    public function editTemplate($type): StreamedResponse
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        switch ($type) {
+            case 'products':
+                $headers = ['Артикул', 'Название', 'Цена', 'Описание', 'Категория', 'Бренд', 'Цвет', 'Опубликовано', 'Распродажа'];
+                break;
+            case 'prices':
+                $headers = ['Артикул', 'Цена'];
+                break;
+            case 'statuses':
+                $headers = ['Артикул', 'Опубликовано'];
+                break;
+            case 'sales':
+                $headers = ['Артикул', 'Распродажа'];
+                break;
+            default:
+                $headers = ['Артикул'];
+        }
+
+        $this->setHeaders($sheet, $headers);
+        $this->styleHeaders($sheet, self::HEADER_FILL_COLOR_TEMPLATE);
+        $this->setColumnWidths($sheet, $headers);
+
+        $filename = 'edit_template_' . $type . '_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        return $this->createResponse($spreadsheet, $filename);
+    }
+
     protected function getUniqueAttributes(array $products): array
     {
         $uniqueAttributes = [];
@@ -223,6 +254,7 @@ class ProductExportService
             $row++;
         }
     }
+
 
     protected function buildAttributeMap(array $product): array
     {

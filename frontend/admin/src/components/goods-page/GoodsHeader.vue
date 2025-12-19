@@ -6,7 +6,7 @@
       Список товаров ({{ totalItems }})
     </h3>
     <div class="inline-flex items-center shadow-theme-xs">
-      <button
+      <button @click="$emit('bulkEdit')"
         class="inline-flex items-center gap-2 px-4 py-3 -ml-px text-sm font-medium bg-transparent text-gray-700 ring-1 ring-inset ring-gray-300 first:rounded-l-lg last:rounded-r-lg hover:bg-gray-50 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
         <component :is="editIcon" />
         Редактировать
@@ -61,7 +61,7 @@ defineProps({
   }
 })
 
-defineEmits(['bulkUpload'])
+defineEmits(['bulkUpload', 'bulkEdit'])
 
 const downloadExcel = async () => {
   try {

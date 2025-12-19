@@ -5,7 +5,7 @@
         <div class="space-y-5 sm:space-y-6">
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <GoodsHeader :totalItems="totalItems" :packageIcon="packageIcon" :downloadIcon="downloadIcon" :uploadIcon="uploadIcon"
-                    :plusIcon="plusIcon" :editIcon="editIcon" @bulkUpload="handleBulkUpload" />
+                    :plusIcon="plusIcon" :editIcon="editIcon" @bulkUpload="handleBulkUpload" @bulkEdit="handleBulkEdit" />
                 <GoodsFilters :searchQuery="searchQuery" :categories="categories" :selectedItem="selectedCategory"
                     :isOpen="isOpen" :showFilter="showFilter" :checkboxSale="filters.sale.true"
                     :checkboxNoSale="filters.sale.false" :checkboxPublished="filters.published.true"
@@ -23,6 +23,8 @@
         </div>
         <BulkUploadModal :isVisible="showBulkUploadModal" :isLoading="isUploadingBulk" :categories="categories" @close="showBulkUploadModal = false"
             @upload="handleFileUpload" @downloadTemplate="handleDownloadTemplate" />
+        <BulkEditModal :isVisible="showBulkEditModal" :isLoading="isUploadingBulkEdit" @close="showBulkEditModal = false"
+            @upload="handleFileUploadEdit" @downloadTemplate="handleDownloadEditTemplate" />
     </AdminLayout>
 </template>
 
@@ -36,6 +38,7 @@ import GoodsHeader from '@/components/goods-page/GoodsHeader.vue'
 import GoodsFilters from '@/components/goods-page/GoodsFilters.vue'
 import GoodsTable from '@/components/goods-page/GoodsTable.vue'
 import BulkUploadModal from '@/components/goods-page/BulkUploadModal.vue'
+import BulkEditModal from '@/components/goods-page/BulkEditModal.vue'
 import Pagination from '@/components/ui/Pagination.vue'
 import { PackageIcon, DownloadIcon, PlusIcon, Settings2Icon, SearchIcon, UploadIcon, EditIcon } from "../../../icons";
 import { useGoods } from '@/composables/useGoods'
@@ -80,6 +83,8 @@ const showFilter = ref(false)
 const isOpen = ref(false)
 const showBulkUploadModal = ref(false)
 const isUploadingBulk = ref(false)
+const showBulkEditModal = ref(false)
+const isUploadingBulkEdit = ref(false)
 
 const toggleDropdown = () => {
     isOpen.value = !isOpen.value
@@ -106,6 +111,10 @@ const handleDelete = async (product, callback) => {
 
 const handleBulkUpload = () => {
     showBulkUploadModal.value = true
+}
+
+const handleBulkEdit = () => {
+    showBulkEditModal.value = true
 }
 
 const handleFileUpload = async (file) => {
@@ -164,6 +173,73 @@ const handleDownloadTemplate = async (categoryId) => {
         const a = document.createElement('a')
         a.href = url
         a.download = `template_${categoryId}.xlsx`
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+        window.URL.revokeObjectURL(url)
+    } catch (error) {
+        showAlert('error', 'Ошибка', 'Произошла ошибка при скачивании шаблона')
+        console.error('Download error:', error)
+    }
+}
+
+const handleFileUploadEdit = async (file, templateType) => {
+    isUploadingBulkEdit.value = true
+
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('type', templateType)
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/products/bulk-edit`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+            }
+        })
+
+        const result = await response.json()
+
+        if (result.success_count > 0) {
+            showAlert('success', 'Успешно', result.message)
+        }
+        if (result.warnings && result.warnings.length > 0) {
+            result.warnings.forEach(warning => showAlert('warning', 'Предупреждение', warning))
+        }
+        if (result.errors && result.errors.length > 0) {
+            result.errors.forEach(err => showAlert('error', 'Ошибка', err))
+        }
+        if (result.success_count > 0 || result.errors.length > 0 || result.warnings.length > 0) {
+            fetchProducts() // Refresh the product list
+        }
+    } catch (error) {
+        showAlert('error', 'Ошибка', 'Произошла ошибка при загрузке файла')
+        console.error('Upload error:', error)
+    } finally {
+        isUploadingBulkEdit.value = false
+        showBulkEditModal.value = false
+    }
+}
+
+const handleDownloadEditTemplate = async (templateType) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/export/edit-template/${templateType}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+            }
+        })
+
+        if (!response.ok) {
+            throw new Error('Failed to download template')
+        }
+
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `edit_template_${templateType}.xlsx`
         document.body.appendChild(a)
         a.click()
         a.remove()

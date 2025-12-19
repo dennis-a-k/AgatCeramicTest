@@ -67,6 +67,23 @@ class ProductService
         return $this->repository->update($id, $data);
     }
 
+    public function updateProductBulk(array $data): bool
+    {
+        $product = Product::where('article', $data['article'])->first();
+        if (!$product) {
+            throw new \Exception('Product with article ' . $data['article'] . ' not found');
+        }
+
+        // Filter out null values to only update provided fields
+        $updateData = array_filter($data, function($value) {
+            return $value !== null;
+        });
+
+        unset($updateData['article']); // Don't update article
+
+        return $this->repository->update($product->id, $updateData);
+    }
+
     public function deleteProduct($id): bool
     {
         return $this->repository->delete($id);

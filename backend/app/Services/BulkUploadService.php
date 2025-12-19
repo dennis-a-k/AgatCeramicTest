@@ -142,4 +142,94 @@ class BulkUploadService
         if (empty($name)) return null;
         return Color::where('name', $name)->value('id');
     }
+
+    public function processBulkEdit(Request $request): array
+    {
+        $file = $request->file('file');
+        $type = $request->input('type');
+        $spreadsheet = IOFactory::load($file->getPathname());
+        $worksheet = $spreadsheet->getActiveSheet();
+        $rows = $worksheet->toArray();
+
+        // Remove header row
+        array_shift($rows);
+
+        $successCount = 0;
+        $errorCount = 0;
+        $warningCount = 0;
+
+        foreach ($rows as $index => $row) {
+            try {
+                $updateData = $this->parseEditRow($row, $type);
+                if ($updateData) {
+                    $this->productService->updateProductBulk($updateData);
+                    $successCount++;
+                }
+            } catch (\Exception $e) {
+                $errorCount++;
+            }
+        }
+
+        $totalFailed = $errorCount + $warningCount;
+        $message = $totalFailed === 0 ? "Успешно обновленных товаров {$successCount} шт." : "Успешно обновленных товаров {$successCount} шт.";
+        $statusCode = $totalFailed === 0 ? 200 : 422;
+
+        $errors = $totalFailed > 0 ? ["Не удалось обновить {$totalFailed} товаров"] : [];
+        $warnings = [];
+
+        return [
+            'message' => $message,
+            'success_count' => $successCount,
+            'warnings' => $warnings,
+            'errors' => $errors,
+            'status_code' => $statusCode
+        ];
+    }
+
+    private function parseEditRow(array $row, string $type): ?array
+    {
+        // Skip completely empty rows
+        if (empty(array_filter($row))) {
+            return null;
+        }
+
+        // Required fields validation
+        if (empty(trim($row[0] ?? ''))) {
+            throw new \Exception('Артикул обязателен');
+        }
+
+        $article = trim($row[0]);
+
+        switch ($type) {
+            case 'products':
+                return [
+                    'article' => $article,
+                    'name' => trim($row[1] ?? ''),
+                    'price' => is_numeric($row[2] ?? 0) ? (float)$row[2] : null,
+                    'description' => trim($row[3] ?? ''),
+                    'category_id' => $this->getCategoryIdByName(trim($row[4] ?? '')),
+                    'brand_id' => $this->getBrandIdByName(trim($row[5] ?? '')),
+                    'color_id' => $this->getColorIdByName(trim($row[6] ?? '')),
+                    'is_published' => isset($row[7]) ? in_array(strtolower(trim($row[7])), ['1', 'да', 'Да', 'yes', 'true']) : null,
+                    'is_sale' => isset($row[8]) ? in_array(strtolower(trim($row[8])), ['1', 'да', 'Да', 'yes', 'true']) : null,
+                ];
+            case 'prices':
+                return [
+                    'article' => $article,
+                    'price' => is_numeric($row[1] ?? 0) ? (float)$row[1] : null,
+                ];
+            case 'statuses':
+                return [
+                    'article' => $article,
+                    'is_published' => in_array(strtolower(trim($row[1] ?? '')), ['1', 'да', 'Да', 'yes', 'true']),
+                ];
+            case 'sales':
+                return [
+                    'article' => $article,
+                    'is_sale' => in_array(strtolower(trim($row[1] ?? '')), ['1', 'да', 'Да', 'yes', 'true']),
+                ];
+            default:
+                return null;
+        }
+    }
 }
