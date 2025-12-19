@@ -23,7 +23,7 @@
         <component :is="downloadIcon" />
       </button>
       <router-link to="/products/create"
-        class="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition bg-brand-500 ring-1 ring-inset ring-brand-500 first:rounded-l-lg last:rounded-r-lg hover:bg-brand-500">
+        class="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition bg-brand-500 ring-1 ring-inset ring-brand-500 first:rounded-l-lg last:rounded-r-lg hover:bg-brand-600">
         <component :is="plusIcon" width="20" height="20" />
         Добавить
       </router-link>
