@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Services\ProductService;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -50,8 +54,8 @@ class ProductExportController extends Controller
             'Цвет',
             'Опубликовано',
             'Распродажа',
-            'Текстура',
-            'Узор',
+            'Поверхность',
+            'Рисунок',
             'Страна',
             'Коллекция'
         ];
@@ -62,13 +66,13 @@ class ProductExportController extends Controller
         $highestColumn = $sheet->getHighestColumn();
         $headerRange = 'A1:' . $highestColumn . '1';
         $sheet->getStyle($headerRange)->getFont()->setBold(true);
-        $sheet->getStyle($headerRange)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('95B3D7'); // Светло-серый цвет
-        $sheet->getStyle($headerRange)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle($headerRange)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('95B3D7');
+        $sheet->getStyle($headerRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         // Установка ширины колонок по ширине заголовков
         $col = 0;
         foreach ($headers as $header) {
-            $columnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col + 1);
+            $columnLetter = Coordinate::stringFromColumnIndex($col + 1);
             $width = strlen($header) * 1.2; // Коэффициент для отступа
             $sheet->getColumnDimension($columnLetter)->setWidth($width);
             $col++;
@@ -146,7 +150,7 @@ class ProductExportController extends Controller
 
     public function template($categoryId): StreamedResponse
     {
-        $category = \App\Models\Category::with('attributes')->find($categoryId);
+        $category = Category::with('attributes')->find($categoryId);
 
         $attributes = [];
         if ($category) {
@@ -169,11 +173,14 @@ class ProductExportController extends Controller
             'Цвет',
             'Опубликовано',
             'Распродажа',
-            'Текстура',
-            'Узор',
-            'Страна',
-            'Коллекция'
+            'Страна'
         ];
+
+        // Добавить специфические поля для определенных категорий
+        $specificCategories = ['Керамогранит', 'Плитка', 'Мозаика', 'Клинкер', 'Ступени'];
+        if ($category && in_array($category->name, $specificCategories)) {
+            $headers = array_merge($headers, ['Поверхность', 'Рисунок', 'Коллекция']);
+        }
         $headers = array_merge($headers, $attributes, ['Изображение 1', 'Изображение 2', 'Изображение 3', 'Изображение 4', 'Изображение 5']);
         $sheet->fromArray($headers, null, 'A1');
 
@@ -181,13 +188,13 @@ class ProductExportController extends Controller
         $highestColumn = $sheet->getHighestColumn();
         $headerRange = 'A1:' . $highestColumn . '1';
         $sheet->getStyle($headerRange)->getFont()->setBold(true);
-        $sheet->getStyle($headerRange)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('C4D79B'); // Светло-серый цвет
-        $sheet->getStyle($headerRange)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle($headerRange)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('C4D79B');
+        $sheet->getStyle($headerRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         // Установка ширины колонок по ширине заголовков
         $col = 0;
         foreach ($headers as $header) {
-            $columnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col + 1);
+            $columnLetter = Coordinate::stringFromColumnIndex($col + 1);
             $width = strlen($header) * 1.2; // Коэффициент для отступа
             $sheet->getColumnDimension($columnLetter)->setWidth($width);
             $col++;

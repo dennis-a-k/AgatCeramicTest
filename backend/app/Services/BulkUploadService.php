@@ -88,8 +88,8 @@ class BulkUploadService
             'category_id' => $this->getCategoryIdByName(trim($row[6] ?? '')),
             'brand_id' => $this->getBrandIdByName(trim($row[7] ?? '')),
             'color_id' => $this->getColorIdByName(trim($row[8] ?? '')),
-            'is_published' => in_array(strtolower(trim($row[9] ?? '1')), ['1', 'да', 'yes', 'true']),
-            'is_sale' => in_array(strtolower(trim($row[10] ?? '0')), ['1', 'да', 'yes', 'true']),
+            'is_published' => in_array(strtolower(trim($row[9] ?? '1')), ['1', 'да', 'Да', 'yes', 'true']),
+            'is_sale' => in_array(strtolower(trim($row[10] ?? '0')), ['1', 'да', 'Да', 'yes', 'true']),
             'texture' => trim($row[11] ?? ''),
             'pattern' => trim($row[12] ?? ''),
             'country' => trim($row[13] ?? ''),
@@ -115,7 +115,7 @@ class BulkUploadService
                     'attribute_id' => $attribute->id,
                     'string_value' => $attribute->type === 'string' ? $value : null,
                     'number_value' => $attribute->type === 'number' && is_numeric($value) ? (float)$value : null,
-                    'boolean_value' => $attribute->type === 'boolean' ? in_array(strtolower($value), ['1', 'да', 'yes', 'true']) : null,
+                    'boolean_value' => $attribute->type === 'boolean' ? in_array(strtolower($value), ['1', 'да', 'Да', 'yes', 'true']) : null,
                     'text_value' => $attribute->type === 'text' ? $value : null,
                 ];
             }
