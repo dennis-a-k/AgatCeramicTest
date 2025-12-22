@@ -61,6 +61,7 @@ export function useCategoriesTable() {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         },
         body: JSON.stringify(categoryData),
       })
@@ -91,6 +92,7 @@ export function useCategoriesTable() {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         },
         body: JSON.stringify(categoryData),
       })
@@ -118,6 +120,9 @@ export function useCategoriesTable() {
     try {
       const response = await fetch(`${API_BASE_URL}/api/categories/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
       })
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)

@@ -92,6 +92,7 @@ export function useColors() {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         },
         body: JSON.stringify(colorData),
       })
@@ -122,6 +123,7 @@ export function useColors() {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         },
         body: JSON.stringify(colorData),
       })
@@ -149,6 +151,9 @@ export function useColors() {
     try {
       const response = await fetch(`${API_BASE_URL}/api/colors/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
       })
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -167,7 +172,11 @@ export function useColors() {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/colors/${id}`)
+      const response = await fetch(`${API_BASE_URL}/api/colors/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
