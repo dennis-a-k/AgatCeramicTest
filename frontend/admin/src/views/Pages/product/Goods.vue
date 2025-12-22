@@ -224,8 +224,32 @@ const handleFileUploadEdit = async (file, templateType) => {
 
 const handleDownloadEditTemplate = async (value, type) => {
     if (type === 'products') {
-        // For products, use the existing template download
-        await handleDownloadTemplate(value)
+        // For products, use the edit template for category
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/export/edit-template-category/${value}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+                }
+            })
+
+            if (!response.ok) {
+                throw new Error('Failed to download template')
+            }
+
+            const blob = await response.blob()
+            const url = window.URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = `edit_template_${value}.xlsx`
+            document.body.appendChild(a)
+            a.click()
+            a.remove()
+            window.URL.revokeObjectURL(url)
+        } catch (error) {
+            showAlert('error', 'Ошибка', 'Произошла ошибка при скачивании шаблона')
+            console.error('Download error:', error)
+        }
     } else {
         try {
             const response = await fetch(`${API_BASE_URL}/api/export/edit-template/${type}`, {
