@@ -1,6 +1,6 @@
 <template>
   <div
-    class="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
+    class="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 h-full flex flex-col">
     <div class="flex flex-col md:gap-1 gap-3 mb-4 sm:flex-row sm:items-center sm:justify-end">
       <button type="button"
         class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-1 rounded-lg px-3 py-3 text-sm font-medium text-white transition"
@@ -9,7 +9,7 @@
         Добавить категорию
       </button>
     </div>
-    <div class="max-w-full overflow-x-auto custom-scrollbar">
+    <div class="max-w-full overflow-x-auto overflow-y-auto custom-scrollbar flex-grow">
       <table class="min-w-full">
         <thead>
           <tr class="border-t border-gray-100 dark:border-gray-800">

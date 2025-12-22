@@ -19,16 +19,16 @@
         </div>
         <div v-else>
             <div class="grid grid-cols-12 gap-4 md:gap-6 mb-4 md:mb-6">
-                <div class="col-span-12 xl:col-span-6">
+                <div class="col-span-12 xl:col-span-6 h-[500px] overflow-hidden">
                     <ColorsTable />
                 </div>
-                <div class="col-span-12 xl:col-span-6">
+                <div class="col-span-12 xl:col-span-6 h-[500px] overflow-hidden">
                     <BrandsTable />
                 </div>
-                <div class="col-span-12 xl:col-span-8">
+                <div class="col-span-12 xl:col-span-8 h-[500px] overflow-hidden">
                     <AttributesTable />
                 </div>
-                <div class="col-span-12 xl:col-span-4">
+                <div class="col-span-12 xl:col-span-4 h-[500px] overflow-hidden">
                     <CategoriesTable />
                 </div>
             </div>

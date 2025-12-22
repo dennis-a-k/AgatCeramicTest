@@ -1,6 +1,6 @@
 <template>
   <div
-    class="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
+    class="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 h-full flex flex-col">
     <div class="flex flex-col md:gap-1 gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
       <div class="relative sm:w-auto sm:min-w-[240px]">
         <span class="absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
@@ -21,7 +21,7 @@
         Добавить бренд
       </button>
     </div>
-    <div class="max-w-full overflow-x-auto custom-scrollbar">
+    <div class="max-w-full overflow-x-auto overflow-y-auto custom-scrollbar flex-grow">
       <table class="min-w-full">
         <thead>
           <tr class="border-t border-gray-100 dark:border-gray-800">
