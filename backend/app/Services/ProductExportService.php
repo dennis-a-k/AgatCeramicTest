@@ -366,6 +366,7 @@ class ProductExportService
         $colorIndex = array_search('Цвет', $headers);
         $publishedIndex = array_search('Опубликовано', $headers);
         $saleIndex = array_search('Распродажа', $headers);
+        $unitIndex = array_search('Единица', $headers);
         $booleanColumns = [];
         foreach ($attributes as $attr) {
             if ($attr['type'] === 'boolean') {
@@ -380,6 +381,7 @@ class ProductExportService
         $this->applyListValidation($sheet, $categoryIndex, 'Data!$A:$A');
         $this->applyListValidation($sheet, $brandIndex, 'Data!$B:$B');
         $this->applyListValidation($sheet, $colorIndex, 'Data!$C:$C');
+        $this->applyListValidation($sheet, $unitIndex, '"кв.м,шт"');
 
         foreach ($allBooleanColumns as $colIndex) {
             $this->applyListValidation($sheet, $colIndex, '"Да,Нет"');
