@@ -74,23 +74,22 @@ class BulkUploadService
         }
 
         // Required fields validation
-        if (empty(trim($row[0] ?? '')) || empty(trim($row[1] ?? ''))) {
-            throw new \Exception('Артикул и название товара обязательны');
+        if (empty(trim($row[0] ?? ''))) {
+            throw new \Exception('Название товара обязательно');
         }
 
         $productData = [
-            'article' => trim($row[0]),
-            'name' => trim($row[1]),
-            'price' => is_numeric($row[2] ?? 0) ? (float)$row[2] : 0,
-            'unit' => trim($row[3] ?? 'шт'),
-            'product_code' => trim($row[4] ?? ''),
-            'description' => trim($row[5] ?? ''),
-            'category_id' => $this->getCategoryIdByName(trim($row[6] ?? '')),
-            'brand_id' => $this->getBrandIdByName(trim($row[7] ?? '')),
-            'color_id' => $this->getColorIdByName(trim($row[8] ?? '')),
-            'is_published' => in_array(strtolower(trim($row[9] ?? '1')), ['1', 'да', 'Да', 'yes', 'true']),
-            'is_sale' => in_array(strtolower(trim($row[10] ?? '0')), ['1', 'да', 'Да', 'yes', 'true']),
-            'country' => trim($row[11] ?? ''),
+            'name' => trim($row[0]),
+            'price' => is_numeric($row[1] ?? 0) ? (float)$row[1] : 0,
+            'unit' => trim($row[2] ?? 'шт'),
+            'product_code' => trim($row[3] ?? ''),
+            'description' => trim($row[4] ?? ''),
+            'category_id' => $this->getCategoryIdByName(trim($row[5] ?? '')),
+            'brand_id' => $this->getBrandIdByName(trim($row[6] ?? '')),
+            'color_id' => $this->getColorIdByName(trim($row[7] ?? '')),
+            'is_published' => in_array(strtolower(trim($row[8] ?? '1')), ['1', 'да', 'Да', 'yes', 'true']),
+            'is_sale' => in_array(strtolower(trim($row[9] ?? '0')), ['1', 'да', 'Да', 'yes', 'true']),
+            'country' => trim($row[10] ?? ''),
             'attribute_values' => []
         ];
 

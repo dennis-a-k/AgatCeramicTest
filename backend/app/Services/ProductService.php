@@ -127,6 +127,20 @@ class ProductService
                 $slug = Str::slug($data['name']);
                 $data['slug'] = $slug;
 
+                // Генерируем артикул
+                $categoryId = $data['category_id'];
+                $prefix = str_pad($categoryId, 2, '0', STR_PAD_RIGHT);
+                $maxArticle = Product::where('category_id', $categoryId)
+                    ->where('article', 'like', $prefix . '%')
+                    ->orderByRaw('CAST(article AS UNSIGNED) DESC')
+                    ->value('article');
+                if ($maxArticle) {
+                    $nextNumber = (int)substr($maxArticle, 2) + 1;
+                } else {
+                    $nextNumber = 1;
+                }
+                $data['article'] = $prefix . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+
                 // Создаем продукт
                 $product = $this->repository->create($data);
 

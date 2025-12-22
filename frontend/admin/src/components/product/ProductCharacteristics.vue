@@ -6,22 +6,11 @@
       </h2>
     </div>
     <div class="space-y-5 p-4 sm:p-6 dark:border-gray-800">
-      <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-        <div>
-          <label for="product-name"
-            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Наименование</label>
-          <input type="text" id="product-name" :class="inputClass(errors.name)" placeholder="Наименование товара"
-            v-model="product.name">
-          <p v-if="errors.name" class="mt-1.5 text-theme-xs text-error-500">{{ errors.name }}</p>
-        </div>
-        <div>
-          <label for="product-country"
-            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Страна</label>
-          <input type="text" id="product-country" :class="inputClass(errors.country)" placeholder="Страна производитель"
-            v-model="product.country">
-          <p v-if="errors.country" class="mt-1.5 text-theme-xs text-error-500">{{ errors.country }}</p>
-        </div>
-      </div>
+      <label for="product-name"
+        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Наименование</label>
+      <input type="text" id="product-name" :class="inputClass(errors.name)" placeholder="Наименование товара"
+        v-model="product.name">
+      <p v-if="errors.name" class="mt-1.5 text-theme-xs text-error-500">{{ errors.name }}</p>
       <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
         <div class="relative z-20 bg-transparent">
           <label for="product-category"
@@ -97,15 +86,15 @@
           <p v-if="errors.price" class="mt-1.5 text-theme-xs text-error-500">{{ errors.price }}</p>
         </div>
         <div>
-          <label for="product-article"
-            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Артикул</label>
-          <input type="text" id="product-article" :class="inputClass(errors.article)" placeholder="Артикул товара"
-            v-model="product.article">
-          <p v-if="errors.article" class="mt-1.5 text-theme-xs text-error-500">{{ errors.article }}</p>
+          <label for="product-country"
+            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Страна</label>
+          <input type="text" id="product-country" :class="inputClass(errors.country)" placeholder="Страна производитель"
+            v-model="product.country">
+          <p v-if="errors.country" class="mt-1.5 text-theme-xs text-error-500">{{ errors.country }}</p>
         </div>
         <div>
           <label for="product-product_code"
-            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Код товара</label>
+            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Код товара поставщика</label>
           <input type="text" id="product-product_code" :class="inputClass(errors.productCode)" placeholder="Код товара"
             v-model="product.product_code">
           <p v-if="errors.productCode" class="mt-1.5 text-theme-xs text-error-500">{{ errors.productCode }}</p>

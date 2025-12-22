@@ -38,7 +38,6 @@ class ProductExportService
     ];
 
     const TEMPLATE_BASE_HEADERS = [
-        'Артикул',
         'Название',
         'Цена',
         'Единица',
@@ -148,7 +147,7 @@ class ProductExportService
 
         $dataSheet = $this->createDataSheet($spreadsheet);
 
-        $headers = $this->buildTemplateHeaders($category, $attributes);
+        $headers = array_merge(['Артикул'], $this->buildTemplateHeaders($category, $attributes));
         $this->setHeaders($sheet, $headers);
         $this->styleHeaders($sheet, self::HEADER_FILL_COLOR_EDIT_TEMPLATE);
         $this->setColumnWidths($sheet, $headers);

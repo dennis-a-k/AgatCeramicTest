@@ -2,7 +2,7 @@ import { reactive, watch, type Ref } from 'vue'
 
 interface Product {
   name: string
-  article: string
+  article?: string
   price: number
   product_code: string
   unit: string
@@ -44,14 +44,6 @@ export function useProductValidation(product: Ref<Product>) {
       errors.name = 'Наименование не должно превышать 255 символов.'
     } else {
       errors.name = ''
-    }
-  }
-
-  const validateArticle = () => {
-    if (!product.value.article.trim()) {
-      errors.article = 'Артикул обязателен.'
-    } else {
-      errors.article = ''
     }
   }
 
@@ -158,7 +150,6 @@ export function useProductValidation(product: Ref<Product>) {
   }
 
   const validateAll = () => {
-    validateArticle()
     validateName()
     validatePrice()
     validateProductCode()
@@ -180,7 +171,6 @@ export function useProductValidation(product: Ref<Product>) {
 
   // Watchers - validate on change
   watch(() => product.value.description, validateDescription)
-  watch(() => product.value.article, validateArticle)
   watch(() => product.value.name, (newName) => {
     validateName()
     if (newName) {
