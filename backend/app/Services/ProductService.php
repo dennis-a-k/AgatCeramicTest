@@ -212,6 +212,7 @@ class ProductService
                     'string_value' => $attrValue['string_value'] ?? null,
                     'number_value' => $attrValue['number_value'] ?? null,
                     'boolean_value' => $attrValue['boolean_value'] ?? null,
+                    'text_value' => $attrValue['text_value'] ?? null,
                 ]);
             }
         }

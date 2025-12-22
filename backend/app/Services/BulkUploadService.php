@@ -102,12 +102,12 @@ class BulkUploadService
         $categoryName = trim($row[6] ?? '');
         $isSpecific = in_array($categoryName, ['Керамогранит', 'Плитка', 'Мозаика', 'Клинкер', 'Ступени']);
 
-        $baseHeadersCount = 12; // Up to 'country'
+        $baseHeadersCount = 11; // Up to 'country'
         if ($isSpecific) {
-            $productData['texture'] = trim($row[12] ?? '');
-            $productData['pattern'] = trim($row[13] ?? '');
-            $productData['collection'] = trim($row[14] ?? '');
-            $baseHeadersCount = 15;
+            $productData['texture'] = trim($row[11] ?? '');
+            $productData['pattern'] = trim($row[12] ?? '');
+            $productData['collection'] = trim($row[13] ?? '');
+            $baseHeadersCount = 14;
         }
 
         // Parse attributes starting from baseHeadersCount
