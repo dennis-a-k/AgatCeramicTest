@@ -19,9 +19,6 @@ class OrderController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('order', 'like', '%' . $search . '%')
                   ->orWhere(function ($sq) use ($search) {
-                      $sq->searchByCustomerName($search);
-                  })
-                  ->orWhere(function ($sq) use ($search) {
                       $sq->searchByName($search);
                   })
                   ->orWhere(function ($sq) use ($search) {

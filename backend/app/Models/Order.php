@@ -32,19 +32,17 @@ class Order extends Model
 
         $hasher = app(HasherInterface::class);
 
-        static::saving(function ($order) use ($hasher) {
-            if ($order->isDirty('name')) {
-                $order->searchable_name = $hasher->hash(strtolower($order->getOriginal('name')));
+        static::saving(function ($order) {
+            $hasher = app(HasherInterface::class);
+            if ($order->isDirty('name') && $order->name) {
+                $order->searchable_name = strtolower($order->name);
             }
-            if ($order->isDirty('email')) {
-                $order->searchable_email = $hasher->hash(strtolower($order->getOriginal('email')));
+            if ($order->isDirty('email') && $order->email) {
+                $order->searchable_email = $hasher->hash(strtolower($order->email));
             }
-            if ($order->isDirty('phone')) {
-                $phone = preg_replace('/[^0-9]/', '', $order->getOriginal('phone'));
+            if ($order->isDirty('phone') && $order->phone) {
+                $phone = preg_replace('/[^0-9]/', '', $order->phone);
                 $order->searchable_phone = $hasher->hash($phone);
-            }
-            if ($order->isDirty('customer_name')) {
-                $order->searchable_customer_name = $hasher->hash(strtolower($order->getOriginal('customer_name')));
             }
         });
     }
@@ -86,14 +84,6 @@ class Order extends Model
         );
     }
 
-    protected function customerName(): Attribute
-    {
-        $encryptor = app(EncryptorInterface::class);
-        return Attribute::make(
-            get: fn($value) => $value ? $encryptor->decrypt($value) : null,
-            set: fn($value) => $value ? $encryptor->encrypt($value) : null
-        );
-    }
 
 
     public function scopeSearchByEmail($query, $email)
@@ -113,17 +103,9 @@ class Order extends Model
 
     public function scopeSearchByName($query, $name)
     {
-        $hasher = app(HasherInterface::class);
-        $hash = $hasher->hash(strtolower($name));
-        return $query->where('searchable_name', $hash);
+        return $query->where('searchable_name', 'like', '%' . strtolower($name) . '%');
     }
 
-    public function scopeSearchByCustomerName($query, $customerName)
-    {
-        $hasher = app(HasherInterface::class);
-        $hash = $hasher->hash(strtolower($customerName));
-        return $query->where('searchable_customer_name', $hash);
-    }
 
     public function items()
     {

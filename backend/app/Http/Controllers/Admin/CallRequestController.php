@@ -13,12 +13,17 @@ class CallRequestController extends Controller
     {
         $query = CallRequest::query();
 
-        // Поиск по имени или телефону
+        // Поиск по имени, телефону или email
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%");
+                $q->searchByName($search)
+                  ->orWhere(function ($sq) use ($search) {
+                      $sq->searchByPhone($search);
+                  })
+                  ->orWhere(function ($sq) use ($search) {
+                      $sq->searchByEmail($search);
+                  });
             });
         }
 

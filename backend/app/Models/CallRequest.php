@@ -20,7 +20,8 @@ class CallRequest extends Model
         'source',
         'comment',
         'searchable_name',
-        'searchable_phone'
+        'searchable_phone',
+        'searchable_email'
     ];
 
     protected static function boot()
@@ -29,16 +30,17 @@ class CallRequest extends Model
 
         $hasher = app(HasherInterface::class);
 
-        static::saving(function ($callRequest) use ($hasher) {
-            if ($callRequest->isDirty('name')) {
-                $callRequest->searchable_name = $hasher->hash(strtolower($callRequest->getOriginal('name')));
+        static::saving(function ($callRequest) {
+            $hasher = app(HasherInterface::class);
+            if ($callRequest->isDirty('name') && $callRequest->name) {
+                $callRequest->searchable_name = strtolower($callRequest->name);
             }
-            if ($callRequest->isDirty('phone')) {
-                $phone = preg_replace('/[^0-9]/', '', $callRequest->getOriginal('phone'));
+            if ($callRequest->isDirty('phone') && $callRequest->phone) {
+                $phone = preg_replace('/[^0-9]/', '', $callRequest->phone);
                 $callRequest->searchable_phone = $hasher->hash($phone);
             }
-            if ($callRequest->isDirty('email')) {
-                $callRequest->searchable_email = $hasher->hash(strtolower($callRequest->getOriginal('email')));
+            if ($callRequest->isDirty('email') && $callRequest->email) {
+                $callRequest->searchable_email = $hasher->hash(strtolower($callRequest->email));
             }
         });
     }
@@ -80,9 +82,7 @@ class CallRequest extends Model
 
     public function scopeSearchByName($query, $name)
     {
-        $hasher = app(HasherInterface::class);
-        $hash = $hasher->hash(strtolower($name));
-        return $query->where('searchable_name', $hash);
+        return $query->where('searchable_name', 'like', '%' . strtolower($name) . '%');
     }
 
     public function scopeSearchByEmail($query, $email)
