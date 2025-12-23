@@ -4,9 +4,9 @@
       <div class="flex flex-col md:flex-row gap-3">
         <OrdersSearch :searchQuery="searchQuery" :searchIcon="searchIcon"
           @update:searchQuery="emit('update:searchQuery', $event)" />
-        <OrdersStatusSelector :statuses="statuses" :selectedItem="selectedItem" :isOpen="isOpen"
-          @toggleDropdown="emit('toggleDropdown')" @toggleItem="emit('toggleItem', $event)" />
       </div>
+      <OrdersStatusSelector :statuses="statuses" :selectedItem="selectedItem" :isOpen="isOpen"
+        @toggleDropdown="emit('toggleDropdown')" @toggleItem="emit('toggleItem', $event)" />
     </div>
   </div>
 </template>
