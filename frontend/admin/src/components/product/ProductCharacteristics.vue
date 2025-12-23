@@ -151,7 +151,7 @@ interface Product {
   brand_id: string
   color_id: string
   price: number
-  article: string
+  article?: string
   product_code: string
   unit: string
   is_published: boolean

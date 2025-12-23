@@ -2,7 +2,7 @@ import { reactive, watch, type Ref } from 'vue'
 
 interface Product {
   name: string
-  article?: string
+  article: string
   price: number
   product_code: string
   unit: string
