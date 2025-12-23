@@ -23,10 +23,15 @@ class OrderController extends Controller
                   })
                   ->orWhere(function ($sq) use ($search) {
                       $sq->searchByEmail($search);
-                  })
-                  ->orWhere(function ($sq) use ($search) {
-                      $sq->searchByPhone($search);
                   });
+            });
+        }
+
+        // Поиск по телефону
+        if ($request->has('phone') && !empty($request->phone)) {
+            $phone = $request->phone;
+            $query->where(function ($q) use ($phone) {
+                $q->searchByPhone($phone);
             });
         }
 

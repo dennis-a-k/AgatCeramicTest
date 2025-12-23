@@ -8,9 +8,9 @@
                 :statistics="orderStatistics" :onMonthChange="onMonthChange" />
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <OrdersHeader :totalItems="totalItems" :packageIcon="shoppingCartIcon" :downloadIcon="downloadIcon" />
-                <OrdersFilters :searchQuery="searchQuery" :statuses="statuses" :selectedItem="selectedStatus"
+                <OrdersFilters :searchQuery="searchQuery" :searchQueryPhone="searchQueryPhone" :statuses="statuses" :selectedItem="selectedStatus"
                     :isOpen="isOpen" :searchIcon="searchIcon"
-                    @update:searchQuery="searchQuery = $event" @toggleDropdown="toggleDropdown"
+                    @update:searchQuery="searchQuery = $event" @update:searchQueryPhone="searchQueryPhone = $event" @toggleDropdown="toggleDropdown"
                     @toggleItem="handleToggleItem" @update:showFilter="showFilter = $event" />
                 <OrdersTable :loading="loading" :error="error" :orders="orders" :formatter="formatter"
                     @fetchOrders="fetchOrders" @updateStatus="handleUpdateStatus" />
@@ -59,6 +59,7 @@ const {
     totalItems,
     totalPages,
     searchQuery,
+    searchQueryPhone,
     selectedStatus,
     statuses,
     formatter,

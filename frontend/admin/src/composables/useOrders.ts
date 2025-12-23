@@ -18,6 +18,7 @@ export function useOrders() {
   const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value))
 
   const searchQuery = ref('')
+  const searchQueryPhone = ref('')
   const selectedStatus = ref<StatusItem | null>(null)
   const statuses = ref<StatusItem[]>([
     { id: 'all', value: null, label: 'Все статусы' },
@@ -77,6 +78,10 @@ export function useOrders() {
 
     if (searchQuery.value.trim()) {
       params.append('search', searchQuery.value.trim())
+    }
+
+    if (searchQueryPhone.value.trim()) {
+      params.append('phone', searchQueryPhone.value.trim())
     }
 
     if (selectedStatus.value && selectedStatus.value.value !== null) {
@@ -207,6 +212,14 @@ export function useOrders() {
     }, 500)
   })
 
+  watch(searchQueryPhone, (newQuery) => {
+    if (searchTimeout) clearTimeout(searchTimeout)
+    searchTimeout = setTimeout(() => {
+      resetPage()
+      fetchOrders()
+    }, 500)
+  })
+
   watch(
     () => filters.value,
     () => {
@@ -278,6 +291,7 @@ export function useOrders() {
     totalItems,
     totalPages,
     searchQuery,
+    searchQueryPhone,
     selectedStatus,
     statuses,
     filters,
