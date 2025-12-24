@@ -12,3 +12,4 @@ Route::get('export/template/{category}', [ProductExportController::class, 'templ
 Route::apiResource('products', ProductController::class);
 Route::post('/products/bulk-upload', [BulkProductController::class, 'bulkUpload']);
 Route::post('/products/bulk-edit', [BulkProductController::class, 'bulkEdit']);
+Route::post('/products/bulk-photo-upload', [BulkProductController::class, 'bulkPhotoUpload']);

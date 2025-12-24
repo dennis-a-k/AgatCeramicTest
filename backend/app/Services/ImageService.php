@@ -53,6 +53,134 @@ class ImageService
     }
 
     /**
+     * Сохранить изображения для продукта из путей к файлам
+     */
+    public function saveProductImagesFromPaths(int $productId, string $article, array $filePaths): array
+    {
+        $savedImages = [];
+
+        // Сортируем по индексу в имени файла
+        usort($filePaths, function($a, $b) {
+            $indexA = $this->getImageIndex(basename($a));
+            $indexB = $this->getImageIndex(basename($b));
+            return $indexA <=> $indexB;
+        });
+
+        foreach ($filePaths as $filePath) {
+            $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+            if (!in_array($extension, $this->allowedExtensions)) {
+                continue;
+            }
+
+            $index = $this->getImageIndex(basename($filePath));
+            // Генерируем имя файла: артикул_порядковый номер
+            $filename = $article . '_' . $index . '.' . $extension;
+            $path = 'products/' . $filename;
+
+            // Ресайзим и сохраняем изображение
+            $resizedImage = $this->resizeImageFromPath($filePath, $this->maxWidth, $this->maxHeight);
+            Storage::disk('public')->put($path, $resizedImage);
+
+            // Сохраняем в базу данных
+            $image = ProductImage::create([
+                'product_id' => $productId,
+                'image_path' => $path,
+                'sort_order' => $index,
+            ]);
+
+            $savedImages[] = $image;
+        }
+
+        return $savedImages;
+    }
+
+    /**
+     * Получить индекс изображения из имени файла
+     */
+    private function getImageIndex(string $filename): int
+    {
+        // Предполагаем формат article_index.ext
+        $parts = explode('_', pathinfo($filename, PATHINFO_FILENAME));
+        $lastPart = end($parts);
+        return is_numeric($lastPart) ? (int)$lastPart : 0;
+    }
+
+    /**
+     * Ресайзить изображение из пути
+     */
+    private function resizeImageFromPath(string $filePath, int $maxWidth, int $maxHeight): string
+    {
+        $imageInfo = getimagesize($filePath);
+        if (!$imageInfo) {
+            throw new \Exception('Invalid image file');
+        }
+
+        $width = $imageInfo[0];
+        $height = $imageInfo[1];
+        $mime = $imageInfo['mime'];
+
+        // Если изображение уже меньше или равно максимальным размерам, возвращаем оригинал
+        if ($width <= $maxWidth && $height <= $maxHeight) {
+            return file_get_contents($filePath);
+        }
+
+        // Вычисляем новые размеры, сохраняя пропорции
+        $ratio = min($maxWidth / $width, $maxHeight / $height);
+        $newWidth = round($width * $ratio);
+        $newHeight = round($height * $ratio);
+
+        // Создаем новое изображение
+        $newImage = imagecreatetruecolor($newWidth, $newHeight);
+
+        // Загружаем оригинальное изображение
+        $sourceImage = null;
+        switch ($mime) {
+            case 'image/jpeg':
+                $sourceImage = imagecreatefromjpeg($filePath);
+                break;
+            case 'image/png':
+                $sourceImage = imagecreatefrompng($filePath);
+                // Сохраняем прозрачность для PNG
+                imagealphablending($newImage, false);
+                imagesavealpha($newImage, true);
+                break;
+            case 'image/webp':
+                $sourceImage = imagecreatefromwebp($filePath);
+                break;
+            default:
+                throw new \Exception('Unsupported image type');
+        }
+
+        if (!$sourceImage) {
+            throw new \Exception('Failed to create image from file');
+        }
+
+        // Ресайзим
+        imagecopyresampled($newImage, $sourceImage, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+        // Сохраняем в буфер
+        ob_start();
+        switch ($mime) {
+            case 'image/jpeg':
+                imagejpeg($newImage, null, 90);
+                break;
+            case 'image/png':
+                imagepng($newImage, null, 9);
+                break;
+            case 'image/webp':
+                imagewebp($newImage, null, 90);
+                break;
+        }
+        $resizedData = ob_get_clean();
+
+        // Освобождаем память
+        imagedestroy($sourceImage);
+        imagedestroy($newImage);
+
+        return $resizedData;
+    }
+
+    /**
      * Обновить порядок изображений
      */
     public function updateImageOrder(int $productId, array $images): void

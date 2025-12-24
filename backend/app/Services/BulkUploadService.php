@@ -6,16 +6,22 @@ use App\Models\Attribute;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use ZipArchive;
 
 class BulkUploadService
 {
     protected $productService;
+    protected $imageService;
 
-    public function __construct(ProductService $productService)
+    public function __construct(ProductService $productService, ImageService $imageService)
     {
         $this->productService = $productService;
+        $this->imageService = $imageService;
     }
 
     public function processBulkUpload(Request $request): array
@@ -294,5 +300,121 @@ class BulkUploadService
             default:
                 return null;
         }
+    }
+
+    public function processBulkPhotoUpload(Request $request): array
+    {
+        $file = $request->file('file');
+        $zipPath = $file->getPathname();
+
+        // Создаем временную директорию для распаковки
+        $tempDir = sys_get_temp_dir() . '/bulk_photos_' . uniqid();
+        mkdir($tempDir, 0755, true);
+
+        try {
+            // Распаковываем ZIP
+            $zip = new ZipArchive();
+            if ($zip->open($zipPath) !== true) {
+                throw new \Exception('Не удалось открыть ZIP файл');
+            }
+
+            $zip->extractTo($tempDir);
+            $zip->close();
+
+            // Группируем файлы по артикулам
+            $filesByArticle = $this->groupFilesByArticle($tempDir);
+
+            $successCount = 0;
+            $errorCount = 0;
+            $warningCount = 0;
+            $errors = [];
+            $warnings = [];
+
+            foreach ($filesByArticle as $article => $filePaths) {
+                try {
+                    $product = Product::where('article', $article)->first();
+                    if (!$product) {
+                        $warnings[] = "Товар с артикулом {$article} не найден";
+                        $warningCount++;
+                        continue;
+                    }
+
+                    // Удаляем существующие изображения
+                    $existingImages = ProductImage::where('product_id', $product->id)->pluck('id')->toArray();
+                    if (!empty($existingImages)) {
+                        $this->imageService->deleteImages($existingImages);
+                    }
+
+                    // Сохраняем новые изображения
+                    $this->imageService->saveProductImagesFromPaths($product->id, $article, $filePaths);
+                    $successCount++;
+                } catch (\Exception $e) {
+                    $errors[] = "Ошибка при обработке артикула {$article}: " . $e->getMessage();
+                    $errorCount++;
+                }
+            }
+
+            // Очищаем временную директорию
+            $this->deleteDirectory($tempDir);
+
+            $totalFailed = $errorCount + $warningCount;
+            $message = $totalFailed === 0 ? "Успешно загружено фото для {$successCount} товаров" : "Загружено фото для {$successCount} товаров";
+            $statusCode = $totalFailed === 0 ? 200 : 422;
+
+            return [
+                'message' => $message,
+                'success_count' => $successCount,
+                'warnings' => $warnings,
+                'errors' => $errors,
+                'status_code' => $statusCode
+            ];
+        } catch (\Exception $e) {
+            // Очищаем временную директорию в случае ошибки
+            if (is_dir($tempDir)) {
+                $this->deleteDirectory($tempDir);
+            }
+            throw $e;
+        }
+    }
+
+    private function groupFilesByArticle(string $dir): array
+    {
+        $filesByArticle = [];
+        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir));
+
+        foreach ($iterator as $file) {
+            if ($file->isFile()) {
+                $filename = $file->getFilename();
+                // Проверяем формат: article_index.ext
+                if (preg_match('/^(\d+)_(\d+)\.(jpg|jpeg|png|webp)$/i', $filename, $matches)) {
+                    $article = $matches[1];
+                    $filesByArticle[$article][] = $file->getPathname();
+                }
+            }
+        }
+
+        return $filesByArticle;
+    }
+
+    private function deleteDirectory(string $dir): void
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ($iterator as $file) {
+            if ($file->isDir()) {
+                rmdir($file->getPathname());
+            } else {
+                unlink($file->getPathname());
+            }
+        }
+
+        rmdir($dir);
     }
 }

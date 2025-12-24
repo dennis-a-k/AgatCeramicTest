@@ -21,8 +21,8 @@
                 <Pagination :currentPage="page" :totalPages="totalPages" @page-change="handlePageChange" class="px-6" />
             </div>
         </div>
-        <BulkUploadModal :isVisible="showBulkUploadModal" :isLoading="isUploadingBulk" :categories="categories" @close="showBulkUploadModal = false"
-            @upload="handleFileUpload" @downloadTemplate="handleDownloadTemplate" />
+        <BulkUploadModal :isVisible="showBulkUploadModal" :isLoading="isUploadingBulk" :categories="categories" :photoUploadProgress="photoUploadProgress" @close="showBulkUploadModal = false"
+            @upload="handleFileUpload" @downloadTemplate="handleDownloadTemplate" @uploadPhotos="handleUploadPhotos" />
         <BulkEditModal :isVisible="showBulkEditModal" :isLoading="isUploadingBulkEdit" :categories="categories" @close="showBulkEditModal = false"
             @upload="handleFileUploadEdit" @downloadTemplate="handleDownloadEditTemplate" />
     </AdminLayout>
@@ -85,6 +85,7 @@ const showBulkUploadModal = ref(false)
 const isUploadingBulk = ref(false)
 const showBulkEditModal = ref(false)
 const isUploadingBulkEdit = ref(false)
+const photoUploadProgress = ref(0)
 
 const toggleDropdown = () => {
     isOpen.value = !isOpen.value
@@ -276,6 +277,60 @@ const handleDownloadEditTemplate = async (value, type) => {
             showAlert('error', 'Ошибка', 'Произошла ошибка при скачивании шаблона')
             console.error('Download error:', error)
         }
+    }
+}
+
+const handleUploadPhotos = async (file) => {
+    photoUploadProgress.value = 0
+
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+        const xhr = new XMLHttpRequest()
+
+        xhr.upload.addEventListener('progress', (event) => {
+            if (event.lengthComputable) {
+                photoUploadProgress.value = Math.round((event.loaded / event.total) * 100)
+            }
+        })
+
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                const result = JSON.parse(xhr.responseText)
+                if (result.success_count > 0) {
+                    showAlert('success', 'Успешно', result.message)
+                }
+                if (result.warnings && result.warnings.length > 0) {
+                    result.warnings.forEach(warning => showAlert('warning', 'Предупреждение', warning))
+                }
+                if (result.errors && result.errors.length > 0) {
+                    result.errors.forEach(err => showAlert('error', 'Ошибка', err))
+                }
+                if (result.success_count > 0 || result.errors.length > 0 || result.warnings.length > 0) {
+                    fetchProducts() // Refresh the product list
+                }
+            } else {
+                showAlert('error', 'Ошибка', 'Произошла ошибка при загрузке фото')
+            }
+            photoUploadProgress.value = 0
+            showBulkUploadModal.value = false
+        })
+
+        xhr.addEventListener('error', () => {
+            showAlert('error', 'Ошибка', 'Произошла ошибка при загрузке фото')
+            photoUploadProgress.value = 0
+            showBulkUploadModal.value = false
+        })
+
+        xhr.open('POST', `${API_BASE_URL}/api/products/bulk-photo-upload`)
+        xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('auth_token')}`)
+        xhr.send(formData)
+    } catch (error) {
+        showAlert('error', 'Ошибка', 'Произошла ошибка при загрузке фото')
+        console.error('Upload error:', error)
+        photoUploadProgress.value = 0
+        showBulkUploadModal.value = false
     }
 }
 

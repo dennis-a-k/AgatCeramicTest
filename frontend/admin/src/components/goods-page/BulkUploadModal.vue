@@ -32,7 +32,7 @@
               type="file"
               accept=".xlsx,.xls"
               @change="handleFileSelect"
-              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 dark:file:bg-gray-700 dark:hover:file:bg-gray-600 dark:file:text-gray-400"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 dark:file:bg-gray-700 dark:hover:file:bg-blue-900 dark:file:text-blue-400"
             />
           </div>
           <div class="mt-4 flex justify-end gap-3">
@@ -49,14 +49,14 @@
             Выберите .zip файл с фото товаров
           </p>
           <p class="mt-2 text-xs text-warning-500 dark:text-warning-400 text-center">
-            Фото должны быть названы по артикулу товара и порядковым номером фото, например: <span class="text-error-500 dark:text-error-400">123456_0.jpg, 123456_1.jpg</span> и т.д.
+            Фото должны быть названы по артикулу товара и порядковым номером фото, например: <span class="text-error-500 dark:text-error-400">123456_0.jpg, 123456_1.jpg</span> и т.д<br>Максимум 5 фото на товар.
           </p>
           <div class="mt-4">
             <input
               type="file"
               accept=".zip"
               @change="handleZipSelect"
-              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-100 file:text-green-700 hover:file:bg-green-200 dark:file:bg-gray-700 dark:hover:file:bg-gray-600 dark:file:text-gray-400"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-100 file:text-green-700 hover:file:bg-green-200 dark:file:bg-gray-700 dark:hover:file:bg-green-900 dark:file:text-green-600"
             />
           </div>
           <div v-if="photoUploadProgress > 0" class="mt-4">

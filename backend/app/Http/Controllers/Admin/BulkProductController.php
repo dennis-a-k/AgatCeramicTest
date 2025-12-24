@@ -56,4 +56,24 @@ class BulkProductController extends Controller
             return response()->json(['message' => 'Failed to process file: ' . $e->getMessage()], 500);
         }
     }
+
+    public function bulkPhotoUpload(Request $request): JsonResponse
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:zip|max:51200', // 50MB max for zip
+        ]);
+
+        try {
+            $result = $this->bulkUploadService->processBulkPhotoUpload($request);
+
+            return response()->json([
+                'message' => $result['message'],
+                'success_count' => $result['success_count'],
+                'warnings' => $result['warnings'],
+                'errors' => $result['errors']
+            ], $result['status_code']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to process file: ' . $e->getMessage()], 500);
+        }
+    }
 }
