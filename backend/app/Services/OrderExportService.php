@@ -6,6 +6,7 @@ use App\Models\Order;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -19,13 +20,9 @@ class OrderExportService
         'Телефон',
         'Адрес',
         'Комментарий',
+        'Количество товаров в заказе',
         'Статус',
         'Общая сумма',
-        'Артикул товара',
-        'Название товара',
-        'Цена товара',
-        'Количество',
-        'Сумма товара',
     ];
 
     const HEADER_FILL_COLOR = '95B3D7';
@@ -43,6 +40,7 @@ class OrderExportService
         $this->setColumnWidths($sheet, self::EXPORT_HEADERS);
 
         $this->populateExportData($sheet, $orders);
+        $this->formatCurrencyColumn($sheet, $orders);
 
         return $this->createResponse($spreadsheet, 'orders_export_' . date('Y-m-d_H-i-s') . '.xlsx');
     }
@@ -77,6 +75,8 @@ class OrderExportService
         $row = 2;
         foreach ($orders as $order) {
             $statusText = $this->getStatusText($order->status);
+            $itemsCount = $order->items ? $order->items->sum('quantity') : 0;
+
             $orderData = [
                 $order->order,
                 $order->created_at->format('d.m.Y H:i'),
@@ -85,29 +85,21 @@ class OrderExportService
                 $order->phone,
                 $order->address,
                 $order->comment,
+                $itemsCount,
                 $statusText,
                 $order->total_amount,
             ];
 
-            if ($order->items->isNotEmpty()) {
-                foreach ($order->items as $item) {
-                    $itemData = array_merge($orderData, [
-                        $item->product_article,
-                        $item->product_name,
-                        $item->price,
-                        $item->quantity,
-                        $item->subtotal,
-                    ]);
-                    $sheet->fromArray($itemData, null, 'A' . $row);
-                    $row++;
-                }
-            } else {
-                // Если нет товаров, все равно добавить строку заказа
-                $itemData = array_merge($orderData, ['', '', '', '', '']);
-                $sheet->fromArray($itemData, null, 'A' . $row);
-                $row++;
-            }
+            $sheet->fromArray($orderData, null, 'A' . $row);
+            $row++;
         }
+    }
+
+    protected function formatCurrencyColumn($sheet, $orders): void
+    {
+        $rowCount = count($orders) + 1; // +1 для заголовка
+        $range = 'J2:J' . $rowCount;
+        $sheet->getStyle($range)->getNumberFormat()->setFormatCode('# ##0.00 ₽');
     }
 
     protected function getStatusText($status): string
