@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick, watch } from 'vue'
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import OrdersStatistics from '@/components/orders-page/OrdersStatistics.vue';
@@ -148,6 +148,13 @@ onMounted(async () => {
     await nextTick()
     if (route.query.openModal) {
         ordersTable.value?.openOrderModal(route.query.openModal)
+    }
+})
+
+watch(() => route.query.openModal, async (newVal) => {
+    if (newVal) {
+        await nextTick()
+        ordersTable.value?.openOrderModal(newVal)
     }
 })
 </script>

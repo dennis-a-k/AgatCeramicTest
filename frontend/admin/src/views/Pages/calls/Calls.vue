@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
@@ -149,6 +149,13 @@ onMounted(async () => {
     await nextTick()
     if (route.query.openModal) {
         callsTable.value?.openModalById(route.query.openModal)
+    }
+})
+
+watch(() => route.query.openModal, async (newVal) => {
+    if (newVal) {
+        await nextTick()
+        callsTable.value?.openModalById(newVal)
     }
 })
 </script>
