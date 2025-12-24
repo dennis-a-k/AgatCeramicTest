@@ -12,7 +12,7 @@
                     :isOpen="isOpen" :searchIcon="searchIcon"
                     @update:searchQuery="searchQuery = $event" @update:searchQueryPhone="searchQueryPhone = $event" @toggleDropdown="toggleDropdown"
                     @toggleItem="handleToggleItem" @update:showFilter="showFilter = $event" />
-                <OrdersTable :loading="loading" :error="error" :orders="orders" :formatter="formatter"
+                <OrdersTable ref="ordersTable" :loading="loading" :error="error" :orders="orders" :formatter="formatter"
                     @fetchOrders="fetchOrders" @updateStatus="handleUpdateStatus" />
                 <Pagination :currentPage="page" :totalPages="totalPages" @page-change="handlePageChange" class="px-6" />
             </div>
@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import OrdersStatistics from '@/components/orders-page/OrdersStatistics.vue';
@@ -30,6 +30,7 @@ import OrdersFilters from '@/components/orders-page/OrdersFilters.vue';
 import OrdersTable from '@/components/orders-page/OrdersTable.vue';
 import Pagination from '@/components/ui/Pagination.vue'
 import { useOrders } from '@/composables/useOrders'
+import { useRoute } from 'vue-router'
 import {
     ArrowDownIcon,
     ArrowUpIcon,
@@ -41,6 +42,7 @@ import {
     SearchIcon
 } from "../../../icons";
 
+const route = useRoute()
 const currentPageTitle = ref('Заказы')
 const arrowDownIcon = ArrowDownIcon
 const arrowUpIcon = ArrowUpIcon
@@ -68,6 +70,7 @@ const {
     exportOrders,
 } = useOrders()
 
+const ordersTable = ref(null)
 const showFilter = ref(false)
 const isOpen = ref(false)
 const selectedMonth = ref(new Date().toISOString().slice(0, 7)) // Текущий месяц в формате Y-m
@@ -139,8 +142,12 @@ const loadStatistics = async () => {
     }
 }
 
-onMounted(() => {
-    fetchOrders()
+onMounted(async () => {
+    await fetchOrders()
     loadStatistics()
+    await nextTick()
+    if (route.query.openModal) {
+        ordersTable.value?.openOrderModal(route.query.openModal)
+    }
 })
 </script>

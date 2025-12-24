@@ -124,7 +124,7 @@
 import { ref } from 'vue'
 import OrderModal from './OrderModal.vue'
 
-defineProps({
+const props = defineProps({
   loading: Boolean,
   error: String,
   orders: Array,
@@ -153,4 +153,8 @@ const closeOrderModal = () => {
 const handleStatusUpdated = (orderId, newStatus) => {
   emit('updateStatus', { id: orderId }, newStatus)
 }
+
+defineExpose({
+  openOrderModal
+})
 </script>

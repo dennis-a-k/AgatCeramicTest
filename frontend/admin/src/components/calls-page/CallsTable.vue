@@ -112,7 +112,7 @@
 import { ref } from 'vue'
 import CallModal from './CallModal.vue'
 
-defineProps({
+const props = defineProps({
   loading: Boolean,
   error: String,
   calls: Array,
@@ -141,4 +141,15 @@ const closeModal = () => {
   showModal.value = false
   selectedCall.value = null
 }
+
+const openModalById = (id) => {
+  const call = props.calls.find(c => c.id == id)
+  if (call) {
+    openModal(call)
+  }
+}
+
+defineExpose({
+  openModalById
+})
 </script>

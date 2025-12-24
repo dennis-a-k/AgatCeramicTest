@@ -11,7 +11,7 @@
                 <CallsHeader :totalItems="totalItems" :packageIcon="phoneCallIcon" :statuses="statuses"
                     :selectedItem="selectedStatus" :isOpen="isOpen" @toggleDropdown="toggleDropdown"
                     @toggleItem="handleToggleItem" />
-                <CallsTable :loading="loading" :error="error" :calls="calls" :formatter="formatter"
+                <CallsTable ref="callsTable" :loading="loading" :error="error" :calls="calls" :formatter="formatter"
                     @fetchCalls="fetchCalls" @edit="handleEdit" @delete="handleDelete"
                     @updateStatus="handleUpdateStatus" />
                 <Pagination :currentPage="page" :totalPages="totalPages" @page-change="handlePageChange" class="px-6" />
@@ -21,8 +21,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted, nextTick } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import CallsStatistics from '@/components/calls-page/CallsStatistics.vue';
@@ -43,6 +43,7 @@ import {
 } from "../../../icons";
 
 const router = useRouter()
+const route = useRoute()
 const currentPageTitle = ref('Обратные звонки')
 const arrowDownIcon = ArrowDownIcon
 const arrowUpIcon = ArrowUpIcon
@@ -69,6 +70,7 @@ const {
     deleteCall
 } = useCalls()
 
+const callsTable = ref(null)
 const isOpen = ref(false)
 const callStatistics = ref({
     current: {
@@ -141,8 +143,12 @@ const handleMonthChange = (month) => {
     loadStatistics(month)
 }
 
-onMounted(() => {
-    fetchCalls()
+onMounted(async () => {
+    await fetchCalls()
     loadStatistics()
+    await nextTick()
+    if (route.query.openModal) {
+        callsTable.value?.openModalById(route.query.openModal)
+    }
 })
 </script>

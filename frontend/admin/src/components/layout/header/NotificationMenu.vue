@@ -30,9 +30,9 @@
         </button>
       </div>
       <ul class="flex flex-col h-auto overflow-y-auto custom-scrollbar">
-        <li v-for="notification in notifications" :key="notification.id" @click="handleItemClick">
-          <a class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-            href="#">
+        <li v-for="notification in notifications" :key="notification.id">
+          <a class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5 cursor-pointer"
+            @click.prevent="() => handleItemClick(notification)">
             <span class="relative block w-full h-10 rounded-full z-1 max-w-10">
               <span
                 :class="notification.status === 'online' ? 'inline-flex h-10 w-10 items-center justify-center rounded-full bg-success-100 dark:bg-success-500/15' : 'inline-flex h-10 w-10 items-center justify-center rounded-full bg-warning-100 dark:bg-warning-500/15'">
@@ -67,12 +67,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed, markRaw } from 'vue'
+import { useRouter } from 'vue-router'
 import {
   ShoppingCartIcon,
   PhoneOutgoingIcon,
 } from "@/icons";
 
+const router = useRouter()
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 const dropdownOpen = ref(false)
@@ -109,26 +111,28 @@ const fetchNotifications = async () => {
       ...orders.map(order => ({
         id: `order-${order.id}`,
         userName: 'Клиент',
-        icon: ShoppingCartIcon,
+        icon: markRaw(ShoppingCartIcon),
         action: 'оформил заказ.',
         project: `Заказ #${order.order}`,
         type: 'Заказ',
         time: formatTime(order.created_at),
         status: 'online',
         isNew: !lastViewed.value || new Date(order.created_at) > new Date(lastViewed.value),
-        created_at: order.created_at
+        created_at: order.created_at,
+        orderNumber: order.order
       })),
       ...callRequests.map(call => ({
         id: `call-${call.id}`,
         userName: call.name || 'Клиент',
-        icon: PhoneOutgoingIcon,
+        icon: markRaw(PhoneOutgoingIcon),
         action: 'оставил заявку на звонок.',
         project: `Телефон ${call.phone}`,
         type: 'Звонок',
         time: formatTime(call.created_at),
         status: 'offline',
         isNew: !lastViewed.value || new Date(call.created_at) > new Date(lastViewed.value),
-        created_at: call.created_at
+        created_at: call.created_at,
+        callId: call.id
       }))
     ]
 
@@ -176,10 +180,12 @@ const handleClickOutside = (event) => {
   }
 }
 
-const handleItemClick = (event) => {
-  event.preventDefault()
-  // Handle the item click action here
-  console.log('Notification item clicked')
+const handleItemClick = (notification) => {
+  if (notification.type === 'Заказ') {
+    router.push({ path: '/orders', query: { openModal: notification.orderNumber } })
+  } else if (notification.type === 'Звонок') {
+    router.push({ path: '/calls', query: { openModal: notification.callId } })
+  }
   closeDropdown()
 }
 
