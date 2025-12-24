@@ -122,6 +122,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import OrderModal from './OrderModal.vue'
 
 const props = defineProps({
@@ -130,6 +131,9 @@ const props = defineProps({
   orders: Array,
   formatter: Object,
 })
+
+const router = useRouter()
+const route = useRoute()
 
 const emit = defineEmits(['fetchOrders', 'edit', 'updateStatus'])
 
@@ -148,6 +152,9 @@ const openOrderModal = (orderId) => {
 const closeOrderModal = () => {
   isOrderModalVisible.value = false
   selectedOrderId.value = ''
+  const newQuery = { ...route.query }
+  delete newQuery.openModal
+  router.replace({ query: newQuery })
 }
 
 const handleStatusUpdated = (orderId, newStatus) => {

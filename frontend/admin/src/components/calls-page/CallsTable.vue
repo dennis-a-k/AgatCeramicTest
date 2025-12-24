@@ -110,6 +110,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import CallModal from './CallModal.vue'
 
 const props = defineProps({
@@ -118,6 +119,9 @@ const props = defineProps({
   calls: Array,
   formatter: Object,
 })
+
+const router = useRouter()
+const route = useRoute()
 
 const emit = defineEmits(['fetchCalls', 'edit', 'updateStatus'])
 
@@ -140,6 +144,9 @@ const openModal = (call) => {
 const closeModal = () => {
   showModal.value = false
   selectedCall.value = null
+  const newQuery = { ...route.query }
+  delete newQuery.openModal
+  router.replace({ query: newQuery })
 }
 
 const openModalById = (id) => {
