@@ -41,7 +41,7 @@
                 <th class="px-5 py-3 text-left w-1/12 sm:px-6">
                   <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Товары</p>
                 </th>
-                <th class="px-5 py-3 text-left w-1/12 sm:px-6">
+                <th class="px-5 py-3 text-right w-1/12 sm:px-6">
                   <p class="font-bold text-gray-500 text-theme-xs dark:text-gray-400">Сумма</p>
                 </th>
                 <th class="px-5 py-3 text-center w-2/12 sm:px-6">
@@ -84,7 +84,7 @@
                   </p>
                 </td>
                 <td class="px-5 py-4 sm:px-6">
-                  <p class="font-medium text-left text-gray-800 text-theme-sm dark:text-white/90">
+                  <p class="font-medium text-right text-gray-800 text-theme-sm dark:text-white/90">
                     {{ formatter.format(order.total_amount) }}
                   </p>
                 </td>

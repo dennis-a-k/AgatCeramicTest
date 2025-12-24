@@ -123,7 +123,7 @@
                     {{ product.category.name }}</span>
                 </td>
                 <td class="px-5 py-4 sm:px-6">
-                  <p class="font-medium text-center text-gray-800 text-theme-sm dark:text-white/90">
+                  <p class="font-medium text-right text-gray-800 text-theme-sm dark:text-white/90">
                     {{ formatter.format(product.price) }}
                   </p>
                 </td>
