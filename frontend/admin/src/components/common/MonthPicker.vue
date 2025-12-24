@@ -41,12 +41,16 @@ const props = defineProps({
   onMonthChange: {
     type: Function,
     required: true
+  },
+  value: {
+    type: String,
+    default: () => new Date().toISOString().slice(0, 7)
   }
 })
 
 const showMonthPicker = ref(false)
-const selectedMonthIndex = ref(new Date().getMonth())
-const selectedYear = ref(new Date().getFullYear())
+const selectedMonthIndex = ref(0)
+const selectedYear = ref(0)
 
 const months = [
   'Январь', 'Февраль', 'Март',
@@ -78,8 +82,9 @@ const onYearChange = () => {
 }
 
 onMounted(() => {
-  // Устанавливаем текущий месяц по умолчанию
-  const currentMonth = new Date().getMonth()
-  selectedMonthIndex.value = currentMonth
+  // Инициализируем на основе props.value
+  const [year, month] = props.value.split('-').map(Number)
+  selectedYear.value = year
+  selectedMonthIndex.value = month - 1 // Месяцы начинаются с 0
 })
 </script>

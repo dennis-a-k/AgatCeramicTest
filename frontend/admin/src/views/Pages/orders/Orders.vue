@@ -5,7 +5,7 @@
             <OrdersStatistics :arrowDownIcon="arrowDownIcon" :arrowUpIcon="arrowUpIcon"
                 :shoppingCartIcon="shoppingCartIcon" :calendarClockIcon="calendarClockIcon"
                 :calendarDaysIcon="calendarDaysIcon" :packageCheckIcon="packageCheckIcon"
-                :statistics="orderStatistics" :onMonthChange="onMonthChange" />
+                :statistics="orderStatistics" :onMonthChange="onMonthChange" :selectedMonth="selectedMonth" />
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <OrdersHeader :totalItems="totalItems" :packageIcon="shoppingCartIcon" :downloadIcon="downloadIcon" @download="handleDownload" />
                 <OrdersFilters :searchQuery="searchQuery" :searchQueryPhone="searchQueryPhone" :statuses="statuses" :selectedItem="selectedStatus"
@@ -70,7 +70,7 @@ const {
 
 const showFilter = ref(false)
 const isOpen = ref(false)
-const selectedMonth = ref('')
+const selectedMonth = ref(new Date().toISOString().slice(0, 7)) // Текущий месяц в формате Y-m
 const orderStatistics = ref({
     current: {
         pending: 0,
@@ -119,7 +119,7 @@ const handleUpdateStatus = async (order, newStatus) => {
 
 const handleDownload = async () => {
     try {
-        await exportOrders()
+        await exportOrders(selectedMonth.value)
     } catch (err) {
         console.error('Ошибка экспорта:', err)
     }

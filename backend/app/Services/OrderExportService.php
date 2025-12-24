@@ -28,9 +28,17 @@ class OrderExportService
     const HEADER_FILL_COLOR = '95B3D7';
     const COLUMN_WIDTH_FACTOR = 1.2;
 
-    public function export(): StreamedResponse
+    public function export(?string $month = null): StreamedResponse
     {
-        $orders = Order::with('items')->orderBy('created_at', 'desc')->get();
+        $query = Order::with('items')->orderBy('created_at', 'desc');
+
+        if ($month) {
+            $startOfMonth = \Carbon\Carbon::createFromFormat('Y-m', $month)->startOfMonth();
+            $endOfMonth = $startOfMonth->copy()->endOfMonth();
+            $query->whereBetween('created_at', [$startOfMonth, $endOfMonth]);
+        }
+
+        $orders = $query->get();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();

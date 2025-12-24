@@ -2,7 +2,7 @@
   <div class="mb-6">
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-lg font-semibold text-gray-800 dark:text-white/90">Статистика заказов</h2>
-      <MonthPicker :onMonthChange="onMonthChange" />
+      <MonthPicker :onMonthChange="onMonthChange" :value="selectedMonth" />
     </div>
     <div class="grid grid-cols-1 grid-rows-[repeat(4,1fr)] xl:grid-cols-4 xl:grid-rows-none gap-4 md:gap-4 mb-4 md:mb-4">
     <div class="h-full">
@@ -155,6 +155,10 @@ defineProps({
   },
   onMonthChange: {
     type: Function,
+    required: true
+  },
+  selectedMonth: {
+    type: String,
     required: true
   }
 })

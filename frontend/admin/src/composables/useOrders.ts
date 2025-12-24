@@ -282,9 +282,15 @@ export function useOrders() {
     }
   }
 
-  const exportOrders = async () => {
+  const exportOrders = async (month?: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/orders/export`, {
+      const params = new URLSearchParams()
+      if (month) {
+        params.append('month', month)
+      }
+      const url = `${API_BASE_URL}/api/orders/export${params.toString() ? '?' + params.toString() : ''}`
+
+      const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         }
@@ -295,13 +301,13 @@ export function useOrders() {
       }
 
       const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
+      const urlBlob = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
-      a.href = url
+      a.href = urlBlob
       a.download = 'orders_export.xlsx'
       document.body.appendChild(a)
       a.click()
-      window.URL.revokeObjectURL(url)
+      window.URL.revokeObjectURL(urlBlob)
       document.body.removeChild(a)
     } catch (err) {
       console.error('Ошибка экспорта заказов:', err)

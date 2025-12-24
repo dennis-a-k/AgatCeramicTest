@@ -18,9 +18,10 @@ class OrderController extends Controller
         $this->orderExportService = $orderExportService;
     }
 
-    public function export(): StreamedResponse
+    public function export(Request $request): StreamedResponse
     {
-        return $this->orderExportService->export();
+        $month = $request->query('month');
+        return $this->orderExportService->export($month);
     }
 
     public function index(Request $request): JsonResponse
