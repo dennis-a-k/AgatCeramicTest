@@ -7,7 +7,7 @@
                 :calendarDaysIcon="calendarDaysIcon" :packageCheckIcon="packageCheckIcon"
                 :statistics="orderStatistics" :onMonthChange="onMonthChange" />
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-                <OrdersHeader :totalItems="totalItems" :packageIcon="shoppingCartIcon" :downloadIcon="downloadIcon" />
+                <OrdersHeader :totalItems="totalItems" :packageIcon="shoppingCartIcon" :downloadIcon="downloadIcon" @download="handleDownload" />
                 <OrdersFilters :searchQuery="searchQuery" :searchQueryPhone="searchQueryPhone" :statuses="statuses" :selectedItem="selectedStatus"
                     :isOpen="isOpen" :searchIcon="searchIcon"
                     @update:searchQuery="searchQuery = $event" @update:searchQueryPhone="searchQueryPhone = $event" @toggleDropdown="toggleDropdown"
@@ -65,6 +65,7 @@ const {
     formatter,
     fetchOrders,
     fetchOrderStatistics,
+    exportOrders,
 } = useOrders()
 
 const showFilter = ref(false)
@@ -113,6 +114,14 @@ const handleUpdateStatus = async (order, newStatus) => {
         loadStatistics() // Обновить статистику
     } else {
         console.error('Ошибка обновления статуса:', result.errors)
+    }
+}
+
+const handleDownload = async () => {
+    try {
+        await exportOrders()
+    } catch (err) {
+        console.error('Ошибка экспорта:', err)
     }
 }
 

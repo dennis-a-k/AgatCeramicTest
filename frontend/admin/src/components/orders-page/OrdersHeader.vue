@@ -7,6 +7,7 @@
     </h3>
     <div class="flex flex-col md:flex-row gap-3">
       <button
+        @click="handleDownload"
         class="shadow-theme-xs inline-flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 ring-1 ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
         Скачать
         <component :is="downloadIcon" />
@@ -16,6 +17,8 @@
 </template>
 
 <script setup>
+const emit = defineEmits(['download'])
+
 defineProps({
   totalItems: {
     type: Number,
@@ -30,4 +33,8 @@ defineProps({
     required: true
   },
 })
+
+const handleDownload = () => {
+  emit('download')
+}
 </script>

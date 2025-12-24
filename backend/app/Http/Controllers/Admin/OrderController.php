@@ -4,11 +4,25 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Services\OrderExportService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class OrderController extends Controller
 {
+    protected $orderExportService;
+
+    public function __construct(OrderExportService $orderExportService)
+    {
+        $this->orderExportService = $orderExportService;
+    }
+
+    public function export(): StreamedResponse
+    {
+        return $this->orderExportService->export();
+    }
+
     public function index(Request $request): JsonResponse
     {
         $query = Order::with('items');

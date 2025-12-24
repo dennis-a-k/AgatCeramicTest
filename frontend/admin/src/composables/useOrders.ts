@@ -282,6 +282,33 @@ export function useOrders() {
     }
   }
 
+  const exportOrders = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/orders/export`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'orders_export.xlsx'
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } catch (err) {
+      console.error('Ошибка экспорта заказов:', err)
+      throw err
+    }
+  }
+
   return {
     orders,
     loading,
@@ -300,6 +327,7 @@ export function useOrders() {
     fetchOrders,
     fetchOrderStatistics,
     fetchOrderById,
+    exportOrders,
     handlePrevPage,
     handleNextPage,
     handleGoToPage,
