@@ -169,7 +169,7 @@ import {
   ShoppingCartIcon,
   SettingsIcon,
   PanelsTopLeftIcon,
-} from "../../icons";
+} from "@/icons";
 import { useSidebar } from "@/composables/useSidebar";
 
 const route = useRoute();

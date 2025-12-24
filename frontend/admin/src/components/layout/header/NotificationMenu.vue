@@ -18,7 +18,7 @@
     <div v-if="dropdownOpen"
       class="absolute -right-[240px] mt-[17px] flex h-[480px] w-[350px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark sm:w-[361px] lg:right-0">
       <div class="flex items-center justify-between pb-3 mb-3 border-b border-gray-100 dark:border-gray-800">
-        <h5 class="text-lg font-semibold text-gray-800 dark:text-white/90">Notification</h5>
+        <h5 class="text-lg font-semibold text-gray-800 dark:text-white/90">Уведомления</h5>
 
         <button @click="closeDropdown" class="text-gray-500 dark:text-gray-400">
           <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -34,7 +34,11 @@
           <a class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
             href="#">
             <span class="relative block w-full h-10 rounded-full z-1 max-w-10">
-              <img :src="notification.userImage" alt="User" class="overflow-hidden rounded-full" />
+              <span
+                :class="notification.status === 'online' ? 'inline-flex h-10 w-10 items-center justify-center rounded-full bg-success-100 dark:bg-success-500/15' : 'inline-flex h-10 w-10 items-center justify-center rounded-full bg-warning-100 dark:bg-warning-500/15'">
+                <component :is="notification.icon"
+                  :class="notification.status === 'online' ? 'text-success-500 dark:text-success-400 w-5 h-5' : 'text-warning-500 dark:text-warning-400 w-5 h-5'" />
+              </span>
               <span :class="notification.status === 'online' ? 'bg-success-500' : 'bg-error-500'"
                 class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
             </span>
@@ -57,111 +61,109 @@
           </a>
         </li>
       </ul>
-      <router-link to="#"
-        class="mt-3 flex justify-center rounded-lg border border-gray-300 bg-white p-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
-        @click="handleViewAllClick">
-        View All Notification
-      </router-link>
     </div>
     <!-- Dropdown End -->
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { RouterLink } from 'vue-router'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import {
+  ShoppingCartIcon,
+  PhoneOutgoingIcon,
+} from "@/icons";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 const dropdownOpen = ref(false)
-const notifying = ref(true)
 const dropdownRef = ref(null)
+const notifications = ref([])
+const lastViewed = ref(localStorage.getItem('notificationsLastViewed') || null)
+const intervalId = ref(null)
 
-const notifications = ref([
-  {
-    id: 1,
-    userName: 'Terry Franci',
-    userImage: '/images/user/user-02.jpg',
-    action: 'requests permission to change',
-    project: 'Project - Nganter App',
-    type: 'Project',
-    time: '5 min ago',
-    status: 'online',
-  },
-  {
-    id: 2,
-    userName: 'Terry Franci',
-    userImage: '/images/user/user-03.jpg',
-    action: 'requests permission to change',
-    project: 'Project - Nganter App',
-    type: 'Project',
-    time: '5 min ago',
-    status: 'offline',
-  },
-  {
-    id: 3,
-    userName: 'Terry Franci',
-    userImage: '/images/user/user-04.jpg',
-    action: 'requests permission to change',
-    project: 'Project - Nganter App',
-    type: 'Project',
-    time: '5 min ago',
-    status: 'online',
-  },
-  {
-    id: 4,
-    userName: 'Terry Franci',
-    userImage: '/images/user/user-05.jpg',
-    action: 'requests permission to change',
-    project: 'Project - Nganter App',
-    type: 'Project',
-    time: '5 min ago',
-    status: 'online',
-  },
-  {
-    id: 5,
-    userName: 'Terry Franci',
-    userImage: '/images/user/user-06.jpg',
-    action: 'requests permission to change',
-    project: 'Project - Nganter App',
-    type: 'Project',
-    time: '5 min ago',
-    status: 'offline',
-  },
-  {
-    id: 6,
-    userName: 'Terry Franci',
-    userImage: '/images/user/user-07.jpg',
-    action: 'requests permission to change',
-    project: 'Project - Nganter App',
-    type: 'Project',
-    time: '5 min ago',
-    status: 'online',
-  },
-  {
-    id: 7,
-    userName: 'Terry Franci',
-    userImage: '/images/user/user-08.jpg',
-    action: 'requests permission to change',
-    project: 'Project - Nganter App',
-    type: 'Project',
-    time: '5 min ago',
-    status: 'online',
-  },
-  {
-    id: 7,
-    userName: 'Terry Franci',
-    userImage: '/images/user/user-09.jpg',
-    action: 'requests permission to change',
-    project: 'Project - Nganter App',
-    type: 'Project',
-    time: '5 min ago',
-    status: 'online',
-  },
-  // Add more notifications here...
-])
+const notifying = computed(() => notifications.value.some(n => n.isNew))
+
+const fetchNotifications = async () => {
+  try {
+    const headers = {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+    }
+
+    const [ordersRes, callRequestsRes] = await Promise.all([
+      fetch(`${API_BASE_URL}/api/orders?per_page=5`, { headers }),
+      fetch(`${API_BASE_URL}/api/call-requests?per_page=5`, { headers })
+    ])
+
+    if (!ordersRes.ok || !callRequestsRes.ok) {
+      throw new Error('Failed to fetch notifications')
+    }
+
+    const ordersData = await ordersRes.json()
+    const callRequestsData = await callRequestsRes.json()
+
+    const orders = ordersData.orders?.data || []
+    const callRequests = callRequestsData.call_requests?.data || []
+
+    const allNotifications = [
+      ...orders.map(order => ({
+        id: `order-${order.id}`,
+        userName: 'Клиент',
+        icon: ShoppingCartIcon,
+        action: 'оформил заказ.',
+        project: `Заказ #${order.order}`,
+        type: 'Заказ',
+        time: formatTime(order.created_at),
+        status: 'online',
+        isNew: !lastViewed.value || new Date(order.created_at) > new Date(lastViewed.value),
+        created_at: order.created_at
+      })),
+      ...callRequests.map(call => ({
+        id: `call-${call.id}`,
+        userName: call.name || 'Клиент',
+        icon: PhoneOutgoingIcon,
+        action: 'оставил заявку на звонок.',
+        project: `Телефон ${call.phone}`,
+        type: 'Звонок',
+        time: formatTime(call.created_at),
+        status: 'offline',
+        isNew: !lastViewed.value || new Date(call.created_at) > new Date(lastViewed.value),
+        created_at: call.created_at
+      }))
+    ]
+
+    notifications.value = allNotifications
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      .slice(0, 10)
+  } catch (error) {
+    console.error('Error fetching notifications:', error)
+  }
+}
+
+const formatTime = (dateString) => {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffMs = now - date
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMins / 60)
+  const diffDays = Math.floor(diffHours / 24)
+
+  if (diffMins < 1) return 'только что'
+  if (diffMins < 60) return `${diffMins} мин назад`
+  if (diffHours < 24) return `${diffHours} ч назад`
+  return `${diffDays} д назад`
+}
 
 const toggleDropdown = () => {
   dropdownOpen.value = !dropdownOpen.value
-  notifying.value = false
+  if (dropdownOpen.value) {
+    lastViewed.value = new Date().toISOString()
+    localStorage.setItem('notificationsLastViewed', lastViewed.value)
+    // Пересчитать isNew после обновления lastViewed
+    notifications.value.forEach(n => {
+      n.isNew = new Date(n.created_at) > new Date(lastViewed.value)
+    })
+  }
 }
 
 const closeDropdown = () => {
@@ -190,9 +192,14 @@ const handleViewAllClick = (event) => {
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
+  fetchNotifications()
+  intervalId.value = setInterval(fetchNotifications, 30000) // Обновлять каждые 30 секунд
 })
 
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
+  if (intervalId.value) {
+    clearInterval(intervalId.value)
+  }
 })
 </script>
