@@ -80,7 +80,7 @@ onMounted(async () => {
 const config = useRuntimeConfig()
 const siteUrl = config.public.siteUrl || 'https://agatceramic.ru'
 
-const { data: fetchData, pending, error, execute } = useAsyncData(`brand-products-${slug}`, () => $fetch(`${config.public.apiBase}/api/brand/${slug}/products`, {
+const { data: fetchData, pending, error, execute } = useAsyncData(`brand-products-${slug}`, () => $fetch(`${config.public.apiBase}/api/client/brand/${slug}/products`, {
   query: store.queryParams
 }), {
   immediate: false

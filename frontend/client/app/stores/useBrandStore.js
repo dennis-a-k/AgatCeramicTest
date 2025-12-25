@@ -189,7 +189,7 @@ export const useBrandStore = defineStore('brand', () => {
     try {
       brandsLoading.value = true
       const config = useRuntimeConfig()
-      const response = await $fetch(`${config.public.apiBase}/api/brands`)
+      const response = await $fetch(`${config.public.apiBase}/api/client/brands`)
       brands.value = response.data || response
     } catch (error) {
       console.error('Error fetching brands:', error)

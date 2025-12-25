@@ -70,7 +70,7 @@ const mozaikaProducts = ref([])
 // Функция для получения случайных товаров категории
 const fetchRandomProducts = async (slug, targetArray) => {
     try {
-        const response = await $fetch(`${apiBase}/api/category/${slug}/products?per_page=1000`)
+        const response = await $fetch(`${apiBase}/api/client/category/${slug}/products?per_page=1000`)
         if (response && response.products && response.products.data) {
             // Трансформируем данные к формату компонента
             const transformedProducts = response.products.data.map(product => ({

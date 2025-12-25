@@ -13,7 +13,7 @@ export const useAlphabetStore = defineStore('alphabet', () => {
     loading.value = true
     error.value = null
     try {
-      const response = await $fetch(`${config.public.apiBase}/api/brands/categories`)
+      const response = await $fetch(`${config.public.apiBase}/api/client/brands/categories`)
       brands.value = response
       groupBrands()
     } catch (err) {

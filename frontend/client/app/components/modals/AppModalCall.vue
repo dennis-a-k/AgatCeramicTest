@@ -161,7 +161,7 @@ const submitForm = async () => {
 
   try {
     const dataToSend = { ...form.value, source: 'client' };
-    const response = await fetch(`${config.public.apiBase}/api/call-request`, {
+    const response = await fetch(`${config.public.apiBase}/api/client/call-request`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

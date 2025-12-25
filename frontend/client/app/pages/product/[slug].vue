@@ -212,7 +212,7 @@ const {
   execute,
 } = useAsyncData(
   `product-${slug}`,
-  () => $fetch(`${config.public.apiBase}/api/products/slug/${slug}`),
+  () => $fetch(`${config.public.apiBase}/api/client/products/slug/${slug}`),
   {
     immediate: true,
   }

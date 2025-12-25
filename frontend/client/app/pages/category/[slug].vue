@@ -126,7 +126,7 @@ const {
 } = useAsyncData(
   `category-products-${slug}`,
   () =>
-    $fetch(`${config.public.apiBase}/api/category/${slug}/products`, {
+    $fetch(`${config.public.apiBase}/api/client/category/${slug}/products`, {
       query: store.queryParams,
     }),
   {

@@ -192,7 +192,7 @@ export const useCategoryStore = defineStore('category', () => {
     santexnikaLoading.value = true
     santexnikaError.value = null
     try {
-      const response = await $fetch(`${config.public.apiBase}/api/categories/santexnika/children`)
+      const response = await $fetch(`${config.public.apiBase}/api/client/categories/santexnika/children`)
       santexnikaSubcategories.value = response
     } catch (err) {
       santexnikaError.value = err.message

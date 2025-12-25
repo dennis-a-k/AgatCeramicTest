@@ -239,7 +239,7 @@ const submitOrder = async () => {
       total: cartStore.total,
     };
 
-    const response = await $fetch(`${config.public.apiBase}/api/checkout`, {
+    const response = await $fetch(`${config.public.apiBase}/api/client/checkout`, {
       method: 'POST',
       body: orderData,
     });
