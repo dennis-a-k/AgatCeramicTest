@@ -6,7 +6,7 @@
         class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-1 rounded-lg px-3 py-3 text-sm font-medium text-white transition"
         @click="openCreateModal" aria-label="Добавить новую категорию">
         <component :is="plusIcon" width="20" height="20" />
-        Добавить категорию
+        Добавить категорию сантехники
       </button>
     </div>
     <div class="max-w-full overflow-x-auto overflow-y-auto custom-scrollbar flex-grow">
@@ -28,12 +28,11 @@
           </tr>
         </thead>
         <tbody>
-          <CategoryRow v-for="category in categories" :key="category.id" :category="category" @edit="openEditModal"
+          <CategoryRow v-for="category in searchedCategories" :key="category.id" :category="category" @edit="openEditModal"
             @delete="deleteCategory" />
         </tbody>
       </table>
     </div>
-    <Pagination :current-page="currentPage" :total-pages="totalPages" @page-change="goToPage" />
   </div>
 
   <CategoryModal :is-visible="showModal" :is-editing="isEditing" :category="currentCategory" :errors="backendErrors"
@@ -45,7 +44,7 @@
 </template>
 
 <script setup>
-import { ref, inject } from 'vue'
+import { ref, inject, computed } from 'vue'
 import { useCategoryModal } from '@/composables/useCategoryModal'
 import { useCategoryForm } from '@/composables/useCategoryForm'
 import { useCategoryAlerts } from '@/composables/useCategoryAlerts'
@@ -53,13 +52,12 @@ import { useCategoryValidation } from '@/composables/useCategoryValidation'
 import { PlusIcon } from "../../icons"
 import CategoryRow from './CategoryRow.vue'
 import CategoryModal from './CategoryModal.vue'
-import Pagination from '@/components/ui/Pagination.vue'
 import DeleteConfirmationModal from '@/components/common/DeleteConfirmationModal.vue'
 import ToastAlert from '@/components/common/ToastAlert.vue'
 
 const plusIcon = PlusIcon
 const categoriesComposable = inject('categoriesData')
-const { categories, searchQuery, currentPage, totalPages, fetchCategories, createCategory, updateCategory, deleteCategory: deleteCategoryApi } = categoriesComposable
+const { categories, searchQuery, fetchCategories, createCategory, updateCategory, deleteCategory: deleteCategoryApi } = categoriesComposable
 const { showModal, isEditing, currentCategory, openCreateModal, openEditModal: originalOpenEditModal, closeModal } = useCategoryModal()
 
 const openEditModal = (category) => {
@@ -74,16 +72,22 @@ const backendErrors = ref({})
 const showDeleteModal = ref(false)
 const selectedCategory = ref(null)
 
+const plumbingCategory = computed(() => categories.value.find(cat => cat.slug === 'santexnika'))
+const plumbingId = computed(() => plumbingCategory.value?.id)
+const filteredCategories = computed(() => categories.value.filter(cat => cat.parent_id === plumbingId.value))
+const searchedCategories = computed(() => {
+  const query = searchQuery.value.toLowerCase()
+  return filteredCategories.value.filter(cat =>
+    cat.name.toLowerCase().includes(query) ||
+    cat.slug.toLowerCase().includes(query) ||
+    (cat.description && cat.description.toLowerCase().includes(query))
+  )
+})
+
 const emit = defineEmits(['update:searchQuery'])
 
 const clearSearch = () => {
   searchQuery.value = ''
-}
-
-const goToPage = (page) => {
-  if (page >= 1 && page <= totalPages.value) {
-    fetchCategories(page)
-  }
 }
 
 const openDeleteModal = (category) => {

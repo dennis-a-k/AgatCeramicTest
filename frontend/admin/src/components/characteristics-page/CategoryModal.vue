@@ -30,9 +30,6 @@
               <input type="number" id="order" v-model.number="form.order" min="0" :class="inputClass(errors.order)" />
               <p v-if="errors.order" class="mt-1.5 text-theme-xs text-error-500">{{ errors.order }}</p>
             </div>
-            <div class="flex items-center">
-              <Checkbox id="is_active" label="Относится к сантехнике" v-model:checked="form.is_plumbing" />
-            </div>
             <div class="flex justify-end gap-3 pt-4">
               <Button variant="outline" @click="closeModal">Отмена</Button>
               <Button variant="primary" type="submit">
@@ -50,7 +47,6 @@
 import { ref, watch, inject, computed } from 'vue'
 import Modal from '@/components/ui/Modal.vue'
 import Button from '@/components/ui/Button.vue'
-import Checkbox from '@/components/ui/Checkbox.vue'
 
 const props = defineProps({
   isVisible: {
@@ -121,17 +117,17 @@ watch(() => props.isVisible, async (newVal) => {
         is_plumbing: props.category.parent_id === plumbingCategory.value?.id // Check by parent ID, but using the found category
       }
     } else {
-      form.value = { name: '', description: '', order: null, parent_id: null, is_plumbing: false }
+      form.value = { name: '', description: '', order: null, parent_id: plumbingCategory.value?.id, is_plumbing: true }
     }
+    // Ensure parent_id is set for plumbing
+    form.value.parent_id = plumbingCategory.value?.id
   } else {
     form.value = { name: '', description: '', order: null, parent_id: null, is_plumbing: false }
   }
 })
 
-// Watcher to update parent_id when is_plumbing changes
-watch(() => form.value.is_plumbing, (newVal) => {
-  form.value.parent_id = newVal ? plumbingCategory.value?.id : null
-})
+// parent_id is always set to plumbing category since is_plumbing is always true
+form.value.parent_id = plumbingCategory.value?.id
 
 const closeModal = () => {
   emit('close')
@@ -144,3 +140,4 @@ const saveCategory = () => {
   })
 }
 </script>
+

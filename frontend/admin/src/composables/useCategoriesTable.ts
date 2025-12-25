@@ -12,7 +12,7 @@ export function useCategoriesTable() {
   const error = ref<string | null>(null)
   const searchQuery = ref('')
   const currentPage = ref(1)
-  const perPage = ref(5)
+  const perPage = ref('all')
   const totalPages = ref(1)
   const totalItems = ref(0)
 
@@ -21,9 +21,6 @@ export function useCategoriesTable() {
     error.value = null
 
     const params = new URLSearchParams()
-    if (searchQuery.value.trim()) {
-      params.append('search', searchQuery.value.trim())
-    }
     params.append('page', page.toString())
     params.append('per_page', perPage.value.toString())
 
@@ -138,13 +135,7 @@ export function useCategoriesTable() {
   }
 
   // Watchers
-  let searchTimeout: number | null = null
-  watch(searchQuery, (newQuery: string) => {
-    if (searchTimeout) clearTimeout(searchTimeout)
-    searchTimeout = setTimeout(() => {
-      fetchCategories()
-    }, 500)
-  })
+  // Removed search watcher since search is now on frontend
 
   return {
     categories,
