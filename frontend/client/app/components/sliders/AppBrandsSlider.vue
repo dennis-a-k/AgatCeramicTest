@@ -31,7 +31,7 @@
                 <SwiperSlide class="swiper-slide brand-slider-item text-center px-2" v-for="(brand, index) in brandsWithImages"
                     :key="brand.id || index">
                     <a href="/">
-                        <img :src="`${config.public.apiBase}/storage/${brand.image}`" class="img-fluid" :alt="brand.name" />
+                        <img :src="`${config.public.apiBase}/backend/storage/${brand.image}`" class="img-fluid" :alt="brand.name" />
                     </a>
                 </SwiperSlide>
             </Swiper>
