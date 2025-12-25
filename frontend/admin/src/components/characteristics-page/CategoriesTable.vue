@@ -28,11 +28,12 @@
           </tr>
         </thead>
         <tbody>
-          <CategoryRow v-for="category in searchedCategories" :key="category.id" :category="category" @edit="openEditModal"
+          <CategoryRow v-for="category in paginatedCategories" :key="category.id" :category="category" @edit="openEditModal"
             @delete="deleteCategory" />
         </tbody>
       </table>
     </div>
+    <Pagination :current-page="currentPage" :total-pages="totalPages" @page-change="goToPage" />
   </div>
 
   <CategoryModal :is-visible="showModal" :is-editing="isEditing" :category="currentCategory" :errors="backendErrors"
@@ -44,7 +45,7 @@
 </template>
 
 <script setup>
-import { ref, inject, computed } from 'vue'
+import { ref, inject, computed, watch } from 'vue'
 import { useCategoryModal } from '@/composables/useCategoryModal'
 import { useCategoryForm } from '@/composables/useCategoryForm'
 import { useCategoryAlerts } from '@/composables/useCategoryAlerts'
@@ -52,6 +53,7 @@ import { useCategoryValidation } from '@/composables/useCategoryValidation'
 import { PlusIcon } from "../../icons"
 import CategoryRow from './CategoryRow.vue'
 import CategoryModal from './CategoryModal.vue'
+import Pagination from '@/components/ui/Pagination.vue'
 import DeleteConfirmationModal from '@/components/common/DeleteConfirmationModal.vue'
 import ToastAlert from '@/components/common/ToastAlert.vue'
 
@@ -71,6 +73,8 @@ const backendErrors = ref({})
 
 const showDeleteModal = ref(false)
 const selectedCategory = ref(null)
+const currentPage = ref(1)
+const itemsPerPage = 5
 
 const plumbingCategory = computed(() => categories.value.find(cat => cat.slug === 'santexnika'))
 const plumbingId = computed(() => plumbingCategory.value?.id)
@@ -83,11 +87,23 @@ const searchedCategories = computed(() => {
     (cat.description && cat.description.toLowerCase().includes(query))
   )
 })
+const totalPages = computed(() => Math.ceil(searchedCategories.value.length / itemsPerPage))
+const paginatedCategories = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  return searchedCategories.value.slice(start, start + itemsPerPage)
+})
 
 const emit = defineEmits(['update:searchQuery'])
 
 const clearSearch = () => {
   searchQuery.value = ''
+  currentPage.value = 1
+}
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page
+  }
 }
 
 const openDeleteModal = (category) => {
@@ -166,4 +182,9 @@ const confirmDelete = async () => {
     showAlert('error', 'Ошибка', 'Не удалось удалить категорию')
   }
 }
+
+// Watch for search changes to reset page
+watch(searchQuery, () => {
+  currentPage.value = 1
+})
 </script>
