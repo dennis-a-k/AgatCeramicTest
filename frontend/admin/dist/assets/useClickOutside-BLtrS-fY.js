@@ -1,0 +1,1 @@
+import{r as i,i as u,K as c}from"./index-C1kSt3j9.js";function s(t){const e=i(null),n=o=>{e.value&&!e.value.contains(o.target)&&t()};return u(()=>{document.addEventListener("click",n)}),c(()=>{document.removeEventListener("click",n)}),e}export{s as u};
