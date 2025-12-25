@@ -5,7 +5,7 @@
                 <div class="col-md-6" v-for="(banner, index) in banners" :key="index">
                     <NuxtLink :to="banner.href">
                         <div class="single-banner mb-30px">
-                            <NuxtImg :src="banner.imgSrc" :alt="banner.imgAlt" />
+                            <img :src="banner.imgSrc" :alt="banner.imgAlt" />
                             <div class="banner-content">
                                 <h3 class="title">{{ banner.title }}</h3>
                                 <span class="category" v-if="banner.category" v-html="banner.category"></span>
