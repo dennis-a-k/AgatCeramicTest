@@ -23,7 +23,7 @@ export function useBrands() {
     params.append('page', page.toString())
     params.append('per_page', perPage.value.toString())
 
-    const url = `${API_BASE_URL}/api/brands${params.toString() ? '?' + params.toString() : ''}`
+    const url = `${API_BASE_URL}/api/admin/brands${params.toString() ? '?' + params.toString() : ''}`
 
     try {
       const response = await fetch(url, {
@@ -58,7 +58,7 @@ export function useBrands() {
     }
     params.append('per_page', 'all')
 
-    const url = `${API_BASE_URL}/api/brands${params.toString() ? '?' + params.toString() : ''}`
+    const url = `${API_BASE_URL}/api/admin/brands${params.toString() ? '?' + params.toString() : ''}`
 
     try {
       const response = await fetch(url, {
@@ -104,7 +104,7 @@ export function useBrands() {
         formData.append('image', newFile)
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/brands`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/brands`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -157,7 +157,7 @@ export function useBrands() {
       // Добавляем _method для Laravel
       formData.append('_method', 'PUT')
 
-      const response = await fetch(`${API_BASE_URL}/api/brands/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/brands/${id}`, {
         method: 'POST', // Используем POST с _method=PUT для FormData
         headers: {
           'Accept': 'application/json',
@@ -187,7 +187,7 @@ export function useBrands() {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/brands/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/brands/${id}`, {
         method: 'DELETE',
         headers: {
           'Accept': 'application/json',
@@ -211,7 +211,7 @@ export function useBrands() {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/brands/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/brands/${id}`, {
         headers: {
           'Accept': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`

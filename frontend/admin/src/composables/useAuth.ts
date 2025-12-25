@@ -25,7 +25,7 @@ export function useAuth() {
     try {
       await getCsrfToken()
 
-      const response = await fetch(`${API_BASE_URL}/api/register`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ export function useAuth() {
     try {
       await getCsrfToken()
 
-      const response = await fetch(`${API_BASE_URL}/api/login`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ export function useAuth() {
     try {
       await getCsrfToken()
 
-      const response = await fetch(`${API_BASE_URL}/api/logout`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/logout`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -135,7 +135,7 @@ export function useAuth() {
     try {
       await getCsrfToken()
 
-      const response = await fetch(`${API_BASE_URL}/api/user`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/user`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -164,7 +164,7 @@ export function useAuth() {
     try {
       await getCsrfToken()
 
-      const response = await fetch(`${API_BASE_URL}/api/user`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/user`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -205,7 +205,7 @@ export function useAuth() {
     try {
       await getCsrfToken()
 
-      const response = await fetch(`${API_BASE_URL}/api/forgot-password`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -243,7 +243,7 @@ export function useAuth() {
     try {
       await getCsrfToken()
 
-      const response = await fetch(`${API_BASE_URL}/api/reset-password`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

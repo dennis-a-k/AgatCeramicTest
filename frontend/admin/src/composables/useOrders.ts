@@ -88,7 +88,7 @@ export function useOrders() {
       params.append('status', selectedStatus.value.value)
     }
 
-    const url = `${API_BASE_URL}/api/orders?${params.toString()}`
+    const url = `${API_BASE_URL}/api/admin/orders?${params.toString()}`
 
     try {
       const response = await fetch(url, {
@@ -135,7 +135,7 @@ export function useOrders() {
 
   const getOrder = async (id: number) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/orders/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/orders/${id}`, {
         headers: {
           'Accept': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
@@ -173,7 +173,7 @@ export function useOrders() {
       // Добавляем _method для Laravel
       formData.append('_method', 'PUT')
 
-      const response = await fetch(`${API_BASE_URL}/api/orders/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/orders/${id}`, {
         method: 'POST', // Используем POST с _method=PUT для FormData
         headers: {
           Accept: 'application/json',
@@ -240,7 +240,7 @@ export function useOrders() {
       if (month) {
         params.append('month', month)
       }
-      const url = `${API_BASE_URL}/api/orders/statistics${params.toString() ? '?' + params.toString() : ''}`
+      const url = `${API_BASE_URL}/api/admin/orders/statistics${params.toString() ? '?' + params.toString() : ''}`
 
       const response = await fetch(url, {
         headers: {
@@ -263,7 +263,7 @@ export function useOrders() {
 
   const fetchOrderById = async (id: string | number) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/orders/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/orders/${id}`, {
         headers: {
           'Accept': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
@@ -288,7 +288,7 @@ export function useOrders() {
       if (month) {
         params.append('month', month)
       }
-      const url = `${API_BASE_URL}/api/orders/export${params.toString() ? '?' + params.toString() : ''}`
+      const url = `${API_BASE_URL}/api/admin/orders/export${params.toString() ? '?' + params.toString() : ''}`
 
       const response = await fetch(url, {
         headers: {

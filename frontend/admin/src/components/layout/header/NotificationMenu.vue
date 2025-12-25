@@ -93,8 +93,8 @@ const fetchNotifications = async () => {
     }
 
     const [ordersRes, callRequestsRes] = await Promise.all([
-      fetch(`${API_BASE_URL}/api/orders?per_page=5`, { headers }),
-      fetch(`${API_BASE_URL}/api/call-requests?per_page=5`, { headers })
+      fetch(`${API_BASE_URL}/api/admin/orders?per_page=5`, { headers }),
+      fetch(`${API_BASE_URL}/api/admin/call-requests?per_page=5`, { headers })
     ])
 
     if (!ordersRes.ok || !callRequestsRes.ok) {

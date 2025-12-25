@@ -92,7 +92,7 @@ export function useGoods() {
       publishedFilters.forEach((val) => params.append('is_published[]', val))
     }
 
-    const url = `${API_BASE_URL}/api/products?${params.toString()}`
+    const url = `${API_BASE_URL}/api/admin/products?${params.toString()}`
 
     try {
       const response = await fetch(url, {
@@ -148,7 +148,7 @@ export function useGoods() {
 
   const deleteProduct = async (id: number): Promise<boolean> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/products/${id}`, {
         method: 'DELETE',
         headers: {
           'Accept': 'application/json',
@@ -169,7 +169,7 @@ export function useGoods() {
 
   const getProduct = async (id: number) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/products/${id}`, {
         headers: {
           'Accept': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
@@ -246,7 +246,7 @@ export function useGoods() {
         })
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/products/${id}`, {
         method: 'POST', // Используем POST с _method=PUT для FormData
         headers: {
           Accept: 'application/json',
@@ -353,7 +353,7 @@ export function useGoods() {
         })
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/products`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/products`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',

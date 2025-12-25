@@ -80,7 +80,7 @@ const allCategories = ref([])
 // Function to fetch all categories without pagination
 const fetchAllCategories = async () => {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/categories?per_page=1000`, {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/categories?per_page=1000`, {
       headers: {
         'Accept': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('auth_token')}`

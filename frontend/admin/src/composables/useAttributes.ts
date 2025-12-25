@@ -23,7 +23,7 @@ export function useAttributes() {
     params.append('page', page.toString())
     params.append('per_page', perPage.value.toString())
 
-    const url = `${API_BASE_URL}/api/attributes${params.toString() ? '?' + params.toString() : ''}`
+    const url = `${API_BASE_URL}/api/admin/attributes${params.toString() ? '?' + params.toString() : ''}`
 
     try {
       const response = await fetch(url, {
@@ -52,7 +52,7 @@ export function useAttributes() {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/attributes`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/attributes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export function useAttributes() {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/attributes/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/attributes/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ export function useAttributes() {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/attributes/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/attributes/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
@@ -137,7 +137,7 @@ export function useAttributes() {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/attributes/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/attributes/${id}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         }

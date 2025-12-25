@@ -24,7 +24,7 @@ export function useCategoriesTable() {
     params.append('page', page.toString())
     params.append('per_page', perPage.value.toString())
 
-    const url = `${API_BASE_URL}/api/categories${params.toString() ? '?' + params.toString() : ''}`
+    const url = `${API_BASE_URL}/api/admin/categories${params.toString() ? '?' + params.toString() : ''}`
 
     try {
       const response = await fetch(url, {
@@ -53,7 +53,7 @@ export function useCategoriesTable() {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/categories`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/categories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ export function useCategoriesTable() {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/categories/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/categories/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ export function useCategoriesTable() {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/categories/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/categories/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`

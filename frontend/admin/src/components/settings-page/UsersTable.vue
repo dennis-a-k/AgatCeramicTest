@@ -111,7 +111,7 @@ const fetchUsers = async () => {
   error.value = null
 
   try {
-    const response = await fetch(`${API_BASE_URL}/api/users`, {
+    const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
       headers: {
         'Accept': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
@@ -134,7 +134,7 @@ const fetchUsers = async () => {
 
 const fetchCurrentUser = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/user`, {
+    const response = await fetch(`${API_BASE_URL}/api/admin/user`, {
       headers: {
         'Accept': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
@@ -152,7 +152,7 @@ const fetchCurrentUser = async () => {
 
 const deleteUser = async (user) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/users/${user.id}`, {
+    const response = await fetch(`${API_BASE_URL}/api/admin/users/${user.id}`, {
       method: 'DELETE',
       headers: {
         'Accept': 'application/json',
@@ -202,7 +202,7 @@ const closeEditModal = () => {
 
 const saveUser = async (form) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/users/${selectedEditUser.value.id}`, {
+    const response = await fetch(`${API_BASE_URL}/api/admin/users/${selectedEditUser.value.id}`, {
       method: 'PUT',
       headers: {
         'Accept': 'application/json',
@@ -244,7 +244,7 @@ const closeAddModal = () => {
 
 const saveAddUser = async (form) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/users`, {
+    const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

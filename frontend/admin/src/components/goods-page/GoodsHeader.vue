@@ -65,7 +65,7 @@ defineEmits(['bulkUpload', 'bulkEdit'])
 
 const downloadExcel = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/export/products`, {
+    const response = await fetch(`${API_BASE_URL}/api/admin/export/products`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('auth_token')}`

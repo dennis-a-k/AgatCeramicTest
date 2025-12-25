@@ -3,5 +3,5 @@
 use App\Http\Controllers\Admin\InformationController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/information', [InformationController::class, 'index']);
-Route::put('/information', [InformationController::class, 'update']);
+Route::get('/admin/information', [InformationController::class, 'index']);
+Route::put('/admin/information', [InformationController::class, 'update']);

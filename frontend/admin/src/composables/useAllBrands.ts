@@ -14,7 +14,7 @@ export function useAllBrands() {
     const params = new URLSearchParams()
     params.append('per_page', 'all')
 
-    const url = `${API_BASE_URL}/api/brands${params.toString() ? '?' + params.toString() : ''}`
+    const url = `${API_BASE_URL}/api/admin/brands${params.toString() ? '?' + params.toString() : ''}`
 
     try {
       const response = await fetch(url, {

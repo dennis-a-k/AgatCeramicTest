@@ -14,7 +14,7 @@ export function useAllColors() {
     const params = new URLSearchParams()
     params.append('per_page', 'all')
 
-    const url = `${API_BASE_URL}/api/colors${params.toString() ? '?' + params.toString() : ''}`
+    const url = `${API_BASE_URL}/api/admin/colors${params.toString() ? '?' + params.toString() : ''}`
 
     try {
       const response = await fetch(url, {

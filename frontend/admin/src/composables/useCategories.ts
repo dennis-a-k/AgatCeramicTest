@@ -26,7 +26,7 @@ export function useCategories() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/categories?per_page=all`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/categories?per_page=all`, {
         headers: {
           'Accept': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
@@ -44,7 +44,7 @@ export function useCategories() {
 
   const fetchCategoryAttributes = async (categoryId: number) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/categories/${categoryId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/categories/${categoryId}`, {
         headers: {
           'Accept': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`

@@ -23,7 +23,7 @@ export function useColors() {
     params.append('page', page.toString())
     params.append('per_page', perPage.value.toString())
 
-    const url = `${API_BASE_URL}/api/colors${params.toString() ? '?' + params.toString() : ''}`
+    const url = `${API_BASE_URL}/api/admin/colors${params.toString() ? '?' + params.toString() : ''}`
 
     try {
       const response = await fetch(url, {
@@ -58,7 +58,7 @@ export function useColors() {
     }
     params.append('per_page', 'all')
 
-    const url = `${API_BASE_URL}/api/colors${params.toString() ? '?' + params.toString() : ''}`
+    const url = `${API_BASE_URL}/api/admin/colors${params.toString() ? '?' + params.toString() : ''}`
 
     try {
       const response = await fetch(url, {
@@ -87,7 +87,7 @@ export function useColors() {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/colors`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/colors`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ export function useColors() {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/colors/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/colors/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ export function useColors() {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/colors/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/colors/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
@@ -172,7 +172,7 @@ export function useColors() {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_BASE_URL}/api/colors/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/colors/${id}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         }

@@ -27,7 +27,7 @@ export function useInformation() {
     error.value = null
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/information`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/information`, {
         headers: {
           'Accept': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
@@ -51,7 +51,7 @@ export function useInformation() {
     error.value = null
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/information`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/information`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

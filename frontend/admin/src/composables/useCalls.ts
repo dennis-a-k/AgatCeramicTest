@@ -80,7 +80,7 @@ export function useCalls() {
       params.append('status', selectedStatus.value.value)
     }
 
-    const url = `${API_BASE_URL}/api/call-requests?${params.toString()}`
+    const url = `${API_BASE_URL}/api/admin/call-requests?${params.toString()}`
 
     try {
       const response = await fetch(url, {
@@ -126,7 +126,7 @@ export function useCalls() {
 
   const getCall = async (id: number) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/call-requests/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/call-requests/${id}`, {
         headers: {
           'Accept': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
@@ -164,7 +164,7 @@ export function useCalls() {
       // Добавляем _method для Laravel
       formData.append('_method', 'PUT')
 
-      const response = await fetch(`${API_BASE_URL}/api/call-requests/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/call-requests/${id}`, {
         method: 'POST', // Используем POST с _method=PUT для FormData
         headers: {
           Accept: 'application/json',
@@ -223,7 +223,7 @@ export function useCalls() {
       if (month) {
         params.append('month', month)
       }
-      const url = `${API_BASE_URL}/api/call-requests/statistics${params.toString() ? '?' + params.toString() : ''}`
+      const url = `${API_BASE_URL}/api/admin/call-requests/statistics${params.toString() ? '?' + params.toString() : ''}`
 
       const response = await fetch(url, {
         headers: {
@@ -246,7 +246,7 @@ export function useCalls() {
 
   const fetchCallById = async (id: string | number) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/call-requests/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/call-requests/${id}`, {
         headers: {
           'Accept': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`

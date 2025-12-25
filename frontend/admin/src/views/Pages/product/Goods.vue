@@ -125,7 +125,7 @@ const handleFileUpload = async (file) => {
     formData.append('file', file)
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/products/bulk-upload`, {
+        const response = await fetch(`${API_BASE_URL}/api/admin/products/bulk-upload`, {
             method: 'POST',
             body: formData,
             headers: {
@@ -158,7 +158,7 @@ const handleFileUpload = async (file) => {
 
 const handleDownloadTemplate = async (categoryId) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/export/template/${categoryId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/admin/export/template/${categoryId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
@@ -192,7 +192,7 @@ const handleFileUploadEdit = async (file, templateType) => {
     formData.append('type', templateType)
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/products/bulk-edit`, {
+        const response = await fetch(`${API_BASE_URL}/api/admin/products/bulk-edit`, {
             method: 'POST',
             body: formData,
             headers: {
@@ -227,7 +227,7 @@ const handleDownloadEditTemplate = async (value, type) => {
     if (type === 'products') {
         // For products, use the edit template for category
         try {
-            const response = await fetch(`${API_BASE_URL}/api/export/edit-template-category/${value}`, {
+            const response = await fetch(`${API_BASE_URL}/api/admin/export/edit-template-category/${value}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
@@ -253,7 +253,7 @@ const handleDownloadEditTemplate = async (value, type) => {
         }
     } else {
         try {
-            const response = await fetch(`${API_BASE_URL}/api/export/edit-template/${type}`, {
+            const response = await fetch(`${API_BASE_URL}/api/admin/export/edit-template/${type}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
@@ -323,7 +323,7 @@ const handleUploadPhotos = async (file) => {
             showBulkUploadModal.value = false
         })
 
-        xhr.open('POST', `${API_BASE_URL}/api/products/bulk-photo-upload`)
+        xhr.open('POST', `${API_BASE_URL}/api/admin/products/bulk-photo-upload`)
         xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('auth_token')}`)
         xhr.send(formData)
     } catch (error) {
