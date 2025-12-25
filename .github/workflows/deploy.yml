@@ -59,7 +59,9 @@ jobs:
             cp -r frontend/client/.output/public/* public_html/
             cd public_html
             # Симлинк на Laravel (для API)
-            ln -s ../backend/public backend
+            mkdir -p backend
+            ln -s ../../backend/public backend/public
+            ln -s ../../backend/storage/app/public backend/storage
             # Симлинк на админку
             ln -s ../frontend/admin/dist admin
             cd ..
