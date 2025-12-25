@@ -7,8 +7,8 @@
 
       <div class="thumb d-flex justify-content-center align-items-center" style="aspect-ratio: 1 / 1">
         <NuxtLink :to="`/product/${product.slug}`" class="image">
-          <NuxtImg :src="productImage" :alt="product.name" />
-          <NuxtImg :src="productImage" :alt="product.name" class="hover-image" />
+          <img :src="productImage" :alt="product.name" />
+          <img :src="productImage" :alt="product.name" class="hover-image" />
         </NuxtLink>
       </div>
       <div class="content text-center">
