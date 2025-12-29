@@ -32,6 +32,12 @@ class BrandController extends Controller
         return response()->json($brand);
     }
 
+    public function slugs(): JsonResponse
+    {
+        $slugs = $this->brandService->getAllBrandSlugs();
+        return response()->json($slugs);
+    }
+
     /**
      * Получает список брендов, связанных с заданными категориями.
      * Метод извлекает бренды для следующих категорий: керамогранит, плитка, мозаика, клинкер, ступени.

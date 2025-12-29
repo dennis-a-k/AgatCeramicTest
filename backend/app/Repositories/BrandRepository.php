@@ -55,4 +55,11 @@ class BrandRepository implements RepositoryInterface
             ->orderBy('brands.name')
             ->get();
     }
+
+    public function getAllSlugs(): array
+    {
+        return $this->model->where('is_active', true)
+            ->pluck('slug')
+            ->toArray();
+    }
 }

@@ -44,4 +44,9 @@ class BrandService
     {
         return $this->repository->getByCategories($categorySlugs);
     }
+
+    public function getAllBrandSlugs(): array
+    {
+        return $this->repository->getAllSlugs();
+    }
 }

@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 // Получение товара по slug
 Route::get('/client/products/slug/{slug}', [ProductController::class, 'showBySlug']);
+// Получение всех slugs товаров
+Route::get('/client/products/slugs', [ProductController::class, 'slugs']);
 // Получение списка товаров по выбранному бренду
 Route::get('/client/brand/{slug}/products', [ProductController::class, 'getByBrand']);
 // Получение списка товаров по выбранной категории
