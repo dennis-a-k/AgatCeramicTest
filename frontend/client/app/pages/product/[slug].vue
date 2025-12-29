@@ -128,7 +128,7 @@
                     <ul v-if="productData.brand && productData.brand.image && productData.brand.image.trim()" class="product-anotherinfo-img-list">
                       <li class="product-anotherinfo-img">
                         <NuxtLink :to="`/brand/${productData.brand.slug}`">
-                          <img :src="`${productData.brand.image.startsWith('http') ? productData.brand.image : `${config.public.apiBase}/storage/${productData.brand.image}`}`"
+                          <img :src="`${productData.brand.image.startsWith('http') ? productData.brand.image : `${imgsSiteUrl}/storage/${productData.brand.image}`}`"
                             :alt="`${productData.brand.name}`">
                         </NuxtLink>
                       </li>
@@ -158,6 +158,7 @@ import { useSiteInfoStore } from '~/stores/useSiteInfoStore';
 
 const cartStore = useCartStore();
 const siteInfoStore = useSiteInfoStore();
+const imgsSiteUrl = config.public.imgsSiteUrl || 'https://agatceramic.ru/backend';
 
 onMounted(async () => {
   try {
@@ -179,7 +180,7 @@ const getImageUrl = (image) => {
   if (image.image_path.startsWith('http')) {
     return image.image_path;
   }
-  return `${config.public.apiBase}/storage/${image.image_path}`;
+  return `${imgsSiteUrl}/storage/${image.image_path}`;
 };
 
 const productImages = computed(() => {

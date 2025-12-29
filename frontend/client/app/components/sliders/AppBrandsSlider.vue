@@ -31,7 +31,7 @@
                 <SwiperSlide class="swiper-slide brand-slider-item text-center px-2" v-for="(brand, index) in brandsWithImages"
                     :key="brand.id || index">
                     <a href="/">
-                        <img :src="`${config.public.apiBase}/backend/storage/${brand.image}`" class="img-fluid" :alt="brand.name" />
+                        <img :src="`${imgsSiteUrl}/storage/${brand.image}`" class="img-fluid" :alt="brand.name" />
                     </a>
                 </SwiperSlide>
             </Swiper>
@@ -47,7 +47,7 @@ import { useRuntimeConfig } from '#imports';
 
 const brandStore = useBrandStore();
 const config = useRuntimeConfig();
-const siteUrl = config.public.siteUrl || 'https://agatceramic.ru';
+const imgsSiteUrl = config.public.imgsSiteUrl || 'https://agatceramic.ru/backend';
 
 // Получаем бренды при монтировании компонента
 onMounted(async () => {

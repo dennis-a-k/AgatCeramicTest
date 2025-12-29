@@ -78,7 +78,7 @@ const getImageUrl = (image) => {
   if (image.image_path.startsWith('http')) {
     return image.image_path;
   }
-  return `${config.public.apiBase}/storage/${image.image_path}`;
+  return `${config.public.imgsSiteUrl}/storage/${image.image_path}`;
 };
 
 const productImage = computed(() => {
