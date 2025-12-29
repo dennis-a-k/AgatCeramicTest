@@ -156,9 +156,15 @@ import { useRuntimeConfig } from '#imports';
 import { useCartStore } from '~/stores/useCartStore';
 import { useSiteInfoStore } from '~/stores/useSiteInfoStore';
 
+const { $toast } = useNuxtApp();
 const cartStore = useCartStore();
 const siteInfoStore = useSiteInfoStore();
+const route = useRoute();
+const slug = route.params.slug;
+const config = useRuntimeConfig();
+const siteUrl = config.public.siteUrl || 'https://agatceramic.ru';
 const imgsSiteUrl = config.public.imgsSiteUrl || 'https://agatceramic.ru/backend';
+const quantity = ref(1);
 
 onMounted(async () => {
   try {
@@ -167,14 +173,6 @@ onMounted(async () => {
     console.error('Failed to load site info:', err)
   }
 })
-const { $toast } = useNuxtApp();
-
-const route = useRoute();
-const slug = route.params.slug;
-const config = useRuntimeConfig();
-const siteUrl = config.public.siteUrl || 'https://agatceramic.ru';
-
-const quantity = ref(1);
 
 const getImageUrl = (image) => {
   if (image.image_path.startsWith('http')) {
